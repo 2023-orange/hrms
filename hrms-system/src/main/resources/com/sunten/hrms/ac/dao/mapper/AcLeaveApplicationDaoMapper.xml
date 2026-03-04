@@ -1,0 +1,1427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcLeaveApplicationDao">
+<!--    <resultMap id="BaseResultMapLeave" type="com.sunten.hrms.ac.domain.AcLeaveForm">-->
+<!--        <id column="id" property="id" />-->
+<!--        <result column="user_name" property="workCard" />-->
+<!--        <result column="start_time" property="startTime" />-->
+<!--        <result column="end_time" property="endTime" />-->
+<!--    </resultMap>-->
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcLeaveApplication">
+        <id column="id" property="id" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="nick_name" property="nickName" />
+        <result column="user_name" property="userName" />
+        <result column="user_department" property="userDepartment" />
+        <result column="user_section" property="userSection" />
+        <result column="groups" property="groups" />
+        <result column="position" property="position" />
+        <result column="reason" property="reason" />
+        <result column="total_number" property="totalNumber" />
+        <result column="hr_total" property="hrTotal" />
+        <result column="modify_reason" property="modifyReason" />
+        <result column="version" property="version" />
+        <result column="to_be_uploaded_flag" property="toBeUploadedFlag" />
+        <result column="approval_node" property="approvalNode" />
+        <result column="approval_employee" property="approvalEmployee" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="leave_type" property="leaveType" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="number" property="number" />
+        <result column="work_number" property="workNumber" />
+    </resultMap>
+
+    <resultMap id="AcLeaveApplicationMap" type="com.sunten.hrms.ac.domain.AcLeaveApplication" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+           <![CDATA[
+            ala.id, ala.oa_order, ala.nick_name, ala.user_name, ala.user_department, ala.user_section,
+            ala.groups, ala.position, ala.reason, ala.total_number, ala.hr_total, ala.version,
+            ala.to_be_uploaded_flag, ala.approval_node, ala.approval_employee, ala.approval_result,
+            ala.enabled_flag, ala.attribute1, ala.attribute2, ala.attribute3, ala.attribute4, ala.attribute5,
+            ala.create_by, ala.create_time, alal.leave_type, alal.start_time, alal.end_time, alal.number, alal.work_number
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+        ${tAlias}.id as ${tAlias}_id, ${tAlias}.oa_order as ${tAlias}_oa_order,
+        ${tAlias}.nick_name as ${tAlias}_nick_name, ${tAlias}.user_name as ${tAlias}_user_name,
+        ${tAlias}.user_department as ${tAlias}_user_department,
+        ${tAlias}.user_section as ${tAlias}_user_section, ${tAlias}.groups as ${tAlias}_groups,
+        ${tAlias}.position as ${tAlias}_position, ${tAlias}.reason as ${tAlias}_reason,
+        ${tAlias}.total_number as ${tAlias}_total_number, ${tAlias}.hr_total as ${tAlias}_hr_total,
+        ${tAlias}.modify_reason as ${tAlias}_modify_reason, ${tAlias}.version as ${tAlias}_version,
+        ${tAlias}.to_be_uploaded_flag as ${tAlias}_to_be_uploaded_flag,
+        ${tAlias}.approval_node as ${tAlias}_approval_node,
+        ${tAlias}.approval_employee as ${tAlias}_approval_employee,
+        ${tAlias}.approval_result as ${tAlias}_approval_result,
+        ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+        ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+        ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+        ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_leave_application ala inner join ac_leave_application_line alal on ala.oa_order = alal.oa_order and ala.version = alal.version
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.user_name != null">
+                <![CDATA[ and (ala.user_name = #{criteria.user_name,jdbcType=VARCHAR} OR ala.create_by = #{criteria.user_name,jdbcType=VARCHAR}) ]]>
+            </if>
+            <if test="criteria.approvalResult != null">
+                <![CDATA[ and ala.approval_result = #{criteria.approvalResult,jdbcType=VARCHAR} ]]>
+            </if>
+            <if test="criteria.beginDate != null &amp;&amp; criteria.endDate != null">
+<!--                <![CDATA[ and alal.start_time BETWEEN #{criteria.beginDate, jdbcType = DATE} and #{criteria.endDate, jdbcType = DATE} ]]>-->
+                <![CDATA[ and alal.start_time >= #{criteria.beginDate, jdbcType = DATE}  and alal.start_time <= #{criteria.endDate, jdbcType = DATE} ]]>
+            </if>
+            <choose>
+                <when test='criteria.reqStatus eq "全部申请"'>
+                    and 1 = 1
+                </when>
+                <when test='criteria.reqStatus eq "已结束申请单"'>
+                    and (ala.approval_result = 'Pass' or ala.approval_result = 'notPass' or ala.approval_result = 'Cancel')
+                </when>
+                <when test='criteria.reqStatus eq "审批中申请单"'>
+                    and ala.approval_result is null
+                </when>
+                <when test='criteria.reqStatus eq "未修改"'>
+                    and (ala.version = 0 or ala.modify_reason is null)
+                </when>
+                <when test='criteria.reqStatus eq "已修改"'>
+                    and ala.version > 0
+                </when>
+                <when test='criteria.reqStatus eq "需上传附件"'>
+                    AND ( alal.leave_type != '事假' AND alal.leave_type != '年假' AND alal.leave_type  != '调休' )
+                </when>
+            </choose>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+       <![CDATA[
+        insert into ac_leave_application (oa_order, nick_name, user_name,
+                                          user_department, user_section,
+                                          groups, position, reason,
+                                          total_number, hr_total, modify_reason,
+                                          version, to_be_uploaded_flag,
+                                          approval_node, approval_employee,
+                                          approval_result, enabled_flag,
+                                          attribute1, attribute2,
+                                          attribute3, attribute4,
+                                          attribute5, create_by,
+                                          create_time)
+        values (#{oaOrder,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+                #{userDepartment,jdbcType=VARCHAR}, #{userSection,jdbcType=VARCHAR},
+                #{groups,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR},
+                #{totalNumber,jdbcType=DOUBLE}, #{hrTotal,jdbcType=DOUBLE}, #{modify_reason,jdbcType=VARCHAR},
+                #{version,jdbcType=INTEGER}, #{to_be_uploaded_flag,jdbcType=INTEGER},
+                #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                #{approvalResult,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=BIGINT},
+                #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                #{attribute5,jdbcType=VARCHAR}, #{createBy,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+    <insert id="addMainTableInfo" parameterType="java.util.HashMap">
+        INSERT INTO ac_leave_application (oa_order, nick_name, user_name, user_department, user_section, groups,
+                                          position, reason, total_number, version, create_by, create_time)
+        VALUES (#{oa_order}, #{nick_name}, #{user_name}, #{user_department}, #{user_section}, #{groups}, #{position},
+                #{reason}, #{total_number}, 0, #{create_by}, GETDATE())
+    </insert>
+
+    <insert id="addSubLeaveInfo" parameterType="java.util.List">
+        INSERT INTO ac_leave_application_line (oa_order, leave_type, start_time, end_time, number, version, work_number,
+        create_by, create_time)
+        VALUES
+        <foreach collection="subDataList" item="item" index="index" separator=",">
+            (#{item.oa_order}, #{item.leave_type}, CONVERT(datetime, #{item.start_time}), CONVERT(datetime,
+            #{item.end_time}), CONVERT(float, #{item.total_number}), 0, CONVERT(float, #{item.work_number}),
+            #{item.create_by}, GETDATE())
+        </foreach>
+    </insert>
+    <insert id="insertHrSubInfo" parameterType="java.util.List">
+        INSERT INTO ac_leave_application_line (oa_order, leave_type, start_time, end_time, number, version, work_number,
+        create_by, hr_nick_name, hr_time, create_time)
+        VALUES
+        <foreach collection="subDataList" item="item" index="index" separator=",">
+            (#{item.oa_order}, #{item.leave_type}, CONVERT(datetime, #{item.start_time}), CONVERT(datetime,
+            #{item.end_time}), #{item.total_number}, #{item.version},  #{item.work_number},
+            #{item.create_by}, #{item.hr_nick_name}, #{item.modify_time}, GETDATE())
+        </foreach>
+    </insert>
+    <insert id="addApprovalDetail">
+        insert into ac_leave_management(dept_id, team_leader_job_id, department_head_job_id, manger_job_id, leader_job_id,
+                                        team_authorize_work_card, department_authorize_work_card, manger_authorize_work_card,
+                                        leader_authorize_work_card, enabled_flag)
+        values (#{deptId}, #{teamLeaderJobId},#{departmentHeadJobId},#{mangerJobId},#{leaderJobId},#{teamAuthorizeWorkCard},
+                #{departmentAuthorizeWorkCard}, #{mangerAuthorizeWorkCard}, #{leaderAuthorizeWorkCard},#{enabled_flag})
+    </insert>
+
+
+    <sql id="Delete_Sql">
+          <![CDATA[
+        delete
+        from ac_leave_application
+        where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+        <include refid="Delete_Sql"/>
+    </delete>
+    <update id="cancelLeaveMain">
+        update ac_leave_application set enabled_flag = 0
+        where oa_order = #{oaOrder}
+    </update>
+<!--    <update id="deleteHrLeaveEditInfo">-->
+
+<!--    </update>-->
+    <update id="cancelLeaveSub">
+        update ac_leave_application_line set enabled_flag = 0
+        where oa_order = #{oaOrder}
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+       <![CDATA[
+        update ac_leave_application
+        set oa_order          = #{oaOrder,jdbcType=VARCHAR},
+            nick_name         = #{nickName,jdbcType=VARCHAR},
+            user_name         = #{userName,jdbcType=VARCHAR},
+            user_department   = #{userDepartment,jdbcType=VARCHAR},
+            user_section      = #{userSection,jdbcType=VARCHAR},
+            groups            = #{groups,jdbcType=VARCHAR},
+            position          = #{position,jdbcType=VARCHAR},
+            reason            = #{reason,jdbcType=VARCHAR},
+            total_number      = #{totalNumber,jdbcType=DOUBLE},
+            hr_total          = #{hrTotal,jdbcType=DOUBLE},
+            modify_reason            = #{modify_reason,jdbcType=VARCHAR},
+            version           = #{version,jdbcType=INTEGER},
+            to_be_uploaded_flag  = #{to_be_uploaded_flag,jdbcType=INTEGER},
+            approval_node     = #{approvalNode,jdbcType=VARCHAR},
+            approval_employee = #{approvalEmployee,jdbcType=VARCHAR},
+            approval_result   = #{approvalResult,jdbcType=VARCHAR},
+            enabled_flag      = #{enabledFlag,jdbcType=BIT},
+            attribute1        = #{attribute1,jdbcType=VARCHAR},
+            attribute2        = #{attribute2,jdbcType=BIGINT},
+            attribute3        = #{attribute3,jdbcType=VARCHAR},
+            attribute4        = #{attribute4,jdbcType=VARCHAR},
+            attribute5        = #{attribute5,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </update>
+    <update id="updateOaReq">
+        update ac_leave_application
+        set approval_node     = #{approval_node},
+            approval_employee = #{approval_employee}
+        where oa_order = #{oa_order}
+    </update>
+    <update id="updateResultToHrLeave">
+        update ac_leave_application
+        set approval_result = #{approvalResult}
+        where oa_order = #{oa_order}
+    </update>
+    <update id="updateMainInfo">
+        update ac_leave_application
+        set version = #{version} , hr_total = #{hrTotal} , modify_reason = #{modifyReason}
+        where oa_order = #{oaOrder} and enabled_flag = 1
+    </update>
+    <update id="updateHrLeaveEditInfo">
+        update ac_leave_application_line
+        set enabled_flag = 0
+        where oa_order = #{oaOrder} and version = #{version}
+    </update>
+    <update id="updateToBeUploadedFlag">
+        update ac_leave_application
+        set to_be_uploaded_flag = 2
+        where oa_order = #{oaOrder}
+    </update>
+
+    <select id="getByKey" resultMap="AcLeaveApplicationMap">
+        <![CDATA[
+             select ala.id, ala.oa_order, ala.nick_name, ala.user_name, ala.user_department, ala.user_section,
+                ala.groups, ala.position, ala.reason, ala.total_number, ala.hr_total, ala.version,
+                ala.to_be_uploaded_flag, ala.approval_node, ala.approval_employee, ala.approval_result,
+                ala.enabled_flag, ala.attribute1, ala.attribute2, ala.attribute3, ala.attribute4, ala.attribute5,
+                 ala.create_by, ala.create_time
+            from ac_leave_application ala
+             where ala.id=#{id,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcLeaveApplicationMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcLeaveApplicationMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+    <select id="getAnnualLeave" resultType="java.lang.Double">
+        SELECT ISNULL(njts, 0) as njts
+        FROM (SELECT njts
+              FROM V_DXNJ
+              WHERE GPH = #{workCard}
+                AND ND = YEAR (getdate())) a RIGHT JOIN (SELECT 0 AS aa) B
+        ON 1=1;
+    </select>
+    <select id="getUserViews" resultType="java.util.Map">
+        select pe.work_card                                                                    as workCard,
+               pe.name                                                                         as name,
+               (select temp.dept_name from fnd_dept temp where fd.ext_dept_id = temp.id)       as deptName,
+               (select temp.dept_name from fnd_dept temp where fd.ext_department_id = temp.id) as department,
+               (select temp.dept_name from fnd_dept temp where fd.ext_team_id = temp.id)       as groupName,
+               (select temp.dept_name from fnd_dept temp where fd.ext_dept_id = temp.id)       as DName,
+               (select fj.job_name
+                from fnd_job fj
+                where fj.id = pej.job_id
+                  and fj.enabled_flag = 1
+                  and fj.deleted_flag = 0) as position,
+             pe.email_inside as Email_NB
+        from pm_employee pe join pm_employee_job pej
+        on pe.id = pej.employee_id
+            left join fnd_dept fd
+            on pej.dept_id = fd.id
+        where
+            pe.enabled_flag =1
+          and pej.job_main_flag = 1
+          and pej.enabled_flag = 1
+          and fd.enabled_flag = 1
+          and fd.deleted_flag = 0
+          and pe.work_card = #{workCard}
+    </select>
+    <select id="getUserForemanList" resultMap="resultReqForeMan" parameterType="hashmap">
+        SELECT pe.work_card                AS workCard,
+               pe.name                     AS nickname,
+               pe.ext_dept_name            AS deptName,
+               pe.name + '|' + pe.job_name AS employeeName,
+               pe.job_name                 AS positionName,
+               ISNULL(pe.ext_department_name, '') AS section
+        FROM v_employee_job_dept pe
+            INNER JOIN ac_emp_depts ed
+        ON pe.employee_id = ed.employee_id
+            INNER JOIN fnd_dept_ext_v fd ON ed.dept_id = fd.id
+        WHERE pe.enabled_flag = 1
+          AND pe.leave_flag = 0
+          AND ed.data_type = 'team'
+          AND ed.enabled_flag = 1
+          AND ed.role_id = 17
+          AND fd.ext_dept_name = #{deptName,javaType=String,jdbcType=VARCHAR}
+          AND fd.ext_department_name = #{section,javaType=String,jdbcType=VARCHAR}
+          AND fd.ext_team_name = #{group,javaType=String,jdbcType=VARCHAR}
+        ORDER BY pe.ext_dept_name, pe.job_name DESC
+    </select>
+    <select id="getDepartmentHeads" resultMap="resultReqForeMan" parameterType="hashmap">
+        SELECT pe.work_card                AS workCard,
+               pe.name                     AS nickname,
+               pe.ext_dept_name            AS deptName,
+               pe.name + '|' + pe.job_name AS employeeName,
+               pe.job_name                 AS positionName,
+               ISNULL(pe.ext_department_name, '') AS section
+        FROM v_employee_job_dept pe
+        WHERE pe.enabled_flag = 1
+          AND pe.leave_flag = 0
+          AND pe.ext_dept_name = #{deptName,javaType=String,jdbcType=VARCHAR}
+          AND pe.ext_department_name = #{section,javaType=String,jdbcType=VARCHAR}
+          AND pe.job_name = '主管'
+    </select>
+    <select id="getMangerList" resultMap="resultReqForeMan" parameterType="hashmap">
+        SELECT pe.work_card                AS workCard,
+               pe.name                     AS nickname,
+               pe.ext_dept_name            AS deptName,
+               pe.name + '|' + pe.job_name AS employeeName,
+               pe.job_name                 AS positionName,
+               ISNULL(pe.ext_department_name, '') AS section
+        FROM v_employee_job_dept pe
+        WHERE pe.enabled_flag = 1
+          AND pe.leave_flag = 0
+          AND pe.ext_dept_name = #{deptName,javaType=String,jdbcType=VARCHAR}
+          AND (pe.job_name = '经理'
+           OR pe.job_name = '事业部经理')
+        order by pe.ext_dept_name, pe.ext_department_name desc
+    </select>
+    <select id="getUsedAnnualLeave" resultType="java.lang.Double">
+        SELECT
+            ISNULL(SUM(alasub.work_number),0 ) as usedday
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order and ala.version = alasub.version
+        WHERE ala.enabled_flag = 1
+            AND alasub.version = ala.version
+            AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+            AND alasub.enabled_flag = 1
+            AND alasub.leave_type = '年假'
+            AND YEAR (
+            alasub.start_time) = YEAR (GETDATE())
+          AND ala.user_name = #{workCard}
+    </select>
+    <select id="getUsedAbsenceLeaveDays" resultType="java.lang.Double">
+        SELECT
+            ISNULL( SUM ( alasub.work_number  ), 0 ) AS usedday
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order and ala.version = alasub.version
+        WHERE ala.enabled_flag = 1
+            AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+            AND alasub.enabled_flag = 1
+            AND alasub.leave_type = '事假'
+            AND alasub.version = ala.version
+            AND YEAR (
+            alasub.start_time) = YEAR (GETDATE())
+          AND ala.user_name = #{workCard}
+    </select>
+    <select id="checkLeaveSubDataContinuous" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order
+        WHERE ala.enabled_flag = 1
+          AND alasub.enabled_flag = 1
+          AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+          AND ala.user_name = #{workCard}
+          AND (alasub.start_time = #{start_time}
+            OR alasub.end_time = #{end_time})
+          and ala.hr_total != 0
+    </select>
+
+    <select id="getFirsminWorkDate" resultType="java.lang.String">
+        SELECT TOP 1 rq
+        FROM v_kq_date_line
+        WHERE rq > #{rEndTime}
+        ORDER BY rq DESC;
+    </select>
+    <select id="getFirstMaxWorkDate" resultType="java.lang.String">
+        SELECT TOP 1 rq
+        FROM v_kq_date_line
+        WHERE rq &lt; #{startTime}
+        ORDER BY rq DESC;
+    </select>
+
+    <select id="GetRigthLeaveNotCancel" resultType="java.util.HashMap">
+        SELECT ala.oa_order,
+               ala.nick_name,
+               ala.user_name,
+               ala.user_department,
+               ala.user_section,
+               ala.groups,
+               ala.position,
+               ala.reason,
+               ala.total_number,
+               ala.hr_total,
+               ala.modify_reason,
+               ala.to_be_uploaded_flag,
+               ala.approval_node,
+               ala.approval_employee,
+               ala.enabled_flag,
+               ala.create_by,
+               ala.create_time,
+               alasub.leave_type,
+               CONVERT(varchar, alasub.start_time, 120) AS 'start_time', CONVERT(varchar, alasub.end_time, 120) AS 'end_time',
+                alasub.number,
+               alasub.version,
+               alasub.work_number,
+               alasub.hr_nick_name,
+               CONVERT(varchar, alasub.hr_time, 120) AS 'hr_time', alasub.enabled_flag
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order
+        WHERE ala.enabled_flag = 1
+          AND alasub.version = ala.version
+          AND alasub.enabled_flag = 1
+          AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+          AND ala.hr_total != 0
+          AND ala.user_name = #{workCard} AND alasub.start_time > #{endTime}
+        ORDER BY alasub.start_time ASC
+    </select>
+    <select id="GetLeftLeaveNotCancel" resultType="java.util.HashMap">
+        SELECT ala.oa_order,
+               ala.nick_name,
+               ala.user_name,
+               ala.user_department,
+               ala.user_section,
+               ala.groups,
+               ala.position,
+               ala.reason,
+               ala.total_number,
+               ala.hr_total,
+               ala.modify_reason,
+               ala.to_be_uploaded_flag,
+               ala.approval_node,
+               ala.approval_employee,
+               ala.enabled_flag,
+               ala.create_by,
+               ala.create_time,
+               alasub.leave_type,
+               CONVERT(varchar, alasub.start_time, 120) AS 'start_time', CONVERT(varchar, alasub.end_time, 120) AS 'end_time',
+               alasub.number,
+               alasub.version,
+               alasub.work_number,
+               alasub.hr_nick_name,
+               CONVERT(varchar, alasub.hr_time, 120) AS 'hr_time', alasub.enabled_flag
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order
+        WHERE ala.enabled_flag = 1
+          AND alasub.version = ala.version
+          AND alasub.enabled_flag = 1
+          AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+          AND ala.hr_total != 0
+          AND ala.user_name = #{workCard} AND alasub.end_time &lt; #{startTime}
+        ORDER BY alasub.end_time DESC
+    </select>
+    <select id="GetUserNotCancel" resultType="java.util.HashMap">
+        SELECT ala.oa_order,
+               ala.nick_name,
+               ala.user_name,
+               ala.user_department,
+               ala.user_section,
+               ala.groups,
+               ala.position,
+               ala.reason,
+               ala.total_number,
+               ala.hr_total,
+               ala.modify_reason,
+               ala.to_be_uploaded_flag,
+               ala.approval_node,
+               ala.approval_employee,
+               ala.enabled_flag,
+               ala.create_by,
+               ala.create_time,
+               alasub.leave_type,
+               CONVERT(varchar, alasub.start_time, 120) AS 'start_time', CONVERT(varchar, alasub.end_time, 120) AS 'end_time', alasub.number,
+               alasub.version,
+               alasub.work_number,
+               alasub.hr_nick_name,
+               CONVERT(varchar, alasub.hr_time, 120) AS 'hr_time', alasub.enabled_flag
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order
+        WHERE ala.enabled_flag = 1
+          AND alasub.version = ala.version
+          AND alasub.enabled_flag = 1
+          AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+          and ala.hr_total != 0
+          AND ala.user_name = #{workCard}
+        ORDER BY alasub.start_time DESC
+    </select>
+    <select id="checkContinuousDate" resultType="java.lang.Integer">
+        select dbo.leavedatecheck(
+                       #{newST,jdbcType=VARCHAR},
+                       #{newET,jdbcType=VARCHAR},
+                       #{oldST,jdbcType=VARCHAR},
+                       #{oldET,jdbcType=VARCHAR}
+                   ) AS result
+    </select>
+    <select id="getWorkDays" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM ac_calendar_line
+        WHERE now_date between #{startTime} AND #{endTime}
+          AND day_off_flag = 1
+          and enabled_flag = 1
+          and calendar_header_id in (select id from ac_calendar_header where calendar_name='默认日历')
+    </select>
+
+    <select id="getWorkDaysSecond" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM ac_calendar_line
+        WHERE now_date > #{startTime} AND now_date &lt; #{endTime}
+          AND day_off_flag = 1
+          and enabled_flag = 1
+          and calendar_header_id in (select id from ac_calendar_header where calendar_name='默认日历')
+    </select>
+
+    <resultMap id="LeaveBaseResultMap" type="com.sunten.hrms.ac.domain.AcLeaveForm">
+        <id column="id" property="id" />
+        <result column="workCard" property="workCard" />
+        <result column="StartTime" property="startTime" />
+        <result column="EndTime" property="endTime" />
+    </resultMap>
+    <select id="getLeaveFormByDate" resultMap="LeaveBaseResultMap">
+    <![CDATA[
+        SELECT
+        alal.id AS id,
+        ala.user_name AS workCard,
+        CONVERT(varchar(19), alal.start_time, 120) AS startTime,
+        CONVERT(varchar(19), alal.end_time, 120) AS endTime
+        FROM
+        ac_leave_application ala
+        JOIN
+        ac_leave_application_line alal ON ala.oa_order = alal.oa_order
+        WHERE
+        ala.enabled_flag = 1
+        AND ala.approval_result = 'Pass'
+        AND (ala.hr_total != 0 OR ala.hr_total IS NULL)
+        AND (
+        (alal.start_time >= CAST(#{dateFrom, jdbcType = DATE} AS DATETIME) AND alal.start_time < DATEADD(DAY, 1, CAST(#{dateTo, jdbcType = DATE} AS DATETIME)))
+        OR (alal.end_time >= CAST(#{dateFrom, jdbcType = DATE} AS DATETIME) AND alal.end_time < DATEADD(DAY, 1, CAST(#{dateTo, jdbcType = DATE} AS DATETIME)))
+        OR (alal.start_time < CAST(#{dateFrom, jdbcType = DATE} AS DATETIME) AND alal.end_time >= CAST(#{dateTo, jdbcType = DATE} AS DATETIME))
+        )]]>
+    </select>
+<!--    <select id="getLeaveFormByDate" resultMap="LeaveBaseResultMap">-->
+<!--        SELECT-->
+<!--        alal.id as id,-->
+<!--        ala.user_name as workCard,-->
+<!--        CONVERT(varchar(19), alal.start_time, 120) AS startTime,  &#45;&#45; 使用样式代码 120 转换为 'YYYY-MM-DD HH:MI:SS' 格式-->
+<!--        CONVERT(varchar(19), alal.end_time, 120) AS endTime       &#45;&#45; 使用样式代码 120 转换为 'YYYY-MM-DD HH:MI:SS' 格式-->
+<!--        FROM-->
+<!--        ac_leave_application ala JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order-->
+<!--        WHERE ala.enabled_flag = 1 AND ala.approval_result = 'Pass'-->
+<!--        AND (ala.hr_total != 0 or ala.hr_total is NULL)-->
+<!--        AND-->
+<!--        (-->
+<!--        CONVERT(DATE, alal.start_time) BETWEEN #{dateFrom, jdbcType = DATE} AND #{dateTo, jdbcType = DATE}-->
+<!--        OR CONVERT(DATE, alal.end_time) BETWEEN #{dateFrom, jdbcType = DATE} AND #{dateTo, jdbcType = DATE}-->
+<!--        OR (CONVERT(DATE, alal.start_time) &lt; #{dateFrom, jdbcType = DATE} AND CONVERT(DATE, alal.end_time) > #{dateTo, jdbcType = DATE})-->
+<!--        )-->
+<!--    </select>-->
+
+    <select id="getLeaveInfoByReqCode" resultType="java.util.HashMap">
+        SELECT TOP (1)
+        id as ID,  oa_order as requisitionCode,nick_name as nickName  ,user_name  as userName,user_department as userDepartment,
+        user_section   as userSection  ,  groups    as groups   ,position   as  posiTion, reason   as  reason , hr_total  as  hrTotal,
+	    isnull(modify_reason,'')   as    modify,  version   as  version  ,  to_be_uploaded_flag  as   toBeUploadedFlag,enabled_flag as  enabledFlag,
+		CONVERT(VARCHAR,create_time,120)     as  createtime   ,total_number  as  totalNumber
+        FROM ac_leave_application
+        where oa_order = #{reqCode}
+        order by createtime  desc
+    </select>
+
+    <select id="getLeaveSubInfoByReqCode" resultType="java.util.HashMap">
+        SELECT id  as ID,CONVERT(VARCHAR,end_time,120)  as  endTime,hr_nick_name as hrNickName,  hr_time  as hrTime,
+               leave_type     as  leaveType, number  as  number , oa_order  as  requisitionCode,
+	           CONVERT(VARCHAR,start_time,120)  as  startTime  ,version   as  version, work_number  as   workNumber
+        FROM ac_leave_application_line
+        where oa_order = #{reqCode}
+		order by  version  desc
+    </select>
+
+    <update id="updateByApprovalEnd" parameterType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+        <![CDATA[
+        update ac_leave_application
+          set   approval_result   = #{approvalResult,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByApprovalUnderwar" parameterType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+       <![CDATA[
+        update ac_leave_application
+          set    approval_node      = #{approvalNode,jdbcType=VARCHAR},
+                 approval_employee  = #{approvalEmployee,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+    <update id="updateApproval">
+        update ac_leave_management
+        set
+            team_leader_job_id=#{team_leader_job_id},
+            team_leader_employee_id=#{team_leader_id},
+            department_head_job_id=#{department_head_job_id},
+            department_head_employee_id=#{department_head_id},
+            manger_job_id=#{manger_job_id},
+            manger_employee_id=#{manger_id},
+            leader_job_id=#{leader_job_id},
+            leader_employee_id=#{leader_id},
+            team_authorize_work_card=#{teamAuthorizeWorkCard}, department_authorize_work_card=#{departmentAuthorizeWorkCard},
+            manger_authorize_work_card=#{mangerAuthorizeWorkCard}, leader_authorize_work_card=#{leaderAuthorizeWorkCard}
+        where id=#{id} and dept_id =  #{deptId}
+    </update>
+    <update id="changeAcApprovalDepartmentStatus">
+        update ac_leave_management
+        set enabled_flag = #{enabledFlag}
+        where id = #{id} and dept_id = #{deptId}
+    </update>
+
+
+    <select id="getPmLeaveInfo" resultType="java.util.HashMap">
+        SELECT *
+        FROM ac_leave_application ala
+        where oa_order = #{oa_order} and ala.enabled_flag = 1
+    </select>
+    <select id="getPmLeaveSubInfo" resultType="java.util.HashMap">
+        SELECT
+            distinct alal.id,leave_type,start_time,end_time,number,work_number
+        FROM ac_leave_application_line alal inner join ac_leave_application ala on ala.version = alal.version and ala.oa_order = alal.oa_order
+        where ala.oa_order = #{oa_order} and ala.enabled_flag = 1 and alal.enabled_flag = 1
+    </select>
+    <select id="getUsedParentalLeave" resultType="java.lang.Integer">
+--         SELECT ISNULL(SUM(pla.total_number), 0) as usedday
+    SELECT ISNULL(SUM(plasub.number), 0) as usedday
+        FROM ac_leave_application as pla
+                 INNER JOIN ac_leave_application_line as plasub ON pla.oa_order = plasub.oa_order and pla.version = plasub.version
+        WHERE pla.enabled_flag = 1
+          AND (pla.approval_result = 'Pass' OR pla.approval_result IS NULL OR pla.approval_result = 'pass')
+          AND plasub.enabled_flag = 1
+          AND plasub.leave_type = '育儿假'
+          AND plasub.version = pla.version
+          AND plasub.start_time >= #{childDate}
+          AND plasub.start_time &lt; DATEADD(year, 1, #{endDate})
+          AND pla.user_name = #{workCard}
+    </select>
+    <select id="getParentalLeaveCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM ac_leave_application as pla
+                 INNER JOIN ac_leave_application_line as plasub ON pla.oa_order = plasub.oa_order
+        WHERE pla.enabled_flag = 1
+          AND (pla.approval_result = 'Pass' OR pla.approval_result IS NULL OR pla.approval_result = 'pass')
+          AND plasub.enabled_flag = 1
+          AND plasub.leave_type = '育儿假'
+          AND plasub.version = pla.version
+          AND plasub.start_time >= #{childDate}
+          AND plasub.start_time &lt; DATEADD(year, 1, #{endDate})
+          AND pla.user_name = #{workCard}
+    </select>
+    <select id="getLeaveFormList" resultMap="AcLeaveApplicationResultMap">
+        select ala.id,
+               ala.oa_order,
+               ala.nick_name,
+               ala.user_name,
+               ala.user_department,
+               ala.user_section,
+               ala.groups,
+               ala.position,
+               ala.reason,
+               ala.total_number,
+               ala.hr_total,
+               ala.version,
+               ala.to_be_uploaded_flag,
+               ala.approval_node,
+               ala.approval_employee,
+               ala.approval_result,
+               ala.enabled_flag,
+               ala.attribute1,
+               ala.attribute2,
+               ala.attribute3,
+               ala.attribute4,
+               ala.attribute5,
+               ala.create_by,
+               ala.create_time
+        from ac_leave_application ala
+        where ala.user_name = #{workCard}
+        order by ala.id
+    </select>
+    <select id="getUsedNurseDays" resultType="java.lang.Integer">
+--         SELECT ISNULL(SUM(ala.total_number), 0) as usedday
+        SELECT ISNULL(SUM(alasub.number), 0) as usedday
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order and ala.version = alasub.version
+        WHERE ala.enabled_flag = 1
+            AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+            AND alasub.enabled_flag = 1
+            AND alasub.leave_type = '护理假'
+            AND alasub.version = ala.version
+            AND YEAR (
+            alasub.start_time) = YEAR (GETDATE())
+          AND ala.user_name = #{workCard}
+    </select>
+    <select id="getUsedNurseDaysCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alasub ON ala.oa_order = alasub.oa_order
+        WHERE ala.enabled_flag = 1
+            AND (ala.approval_result = 'Pass' OR ala.approval_result IS NULL OR ala.approval_result = 'pass')
+            AND alasub.enabled_flag = 1
+            AND alasub.leave_type = '护理假'
+            AND alasub.version = ala.version
+            AND YEAR (
+            alasub.start_time) = YEAR (GETDATE())
+          AND ala.user_name = #{workCard}
+    </select>
+    <select id="getDepartmentList" resultType="java.util.HashMap">
+        SELECT
+            DISTINCT
+            temp.dept_name AS departmentName,
+            pej.dept_id AS departmentId
+        FROM
+            (
+                SELECT MAX
+                           ( id ) AS id,
+                       MAX ( dept_name ) AS dept_name
+                FROM
+                    fnd_dept
+                WHERE
+                    enabled_flag = 1
+                  AND deleted_flag = 0
+                GROUP BY
+                    ext_dept_id
+            ) temp
+                JOIN pm_employee_job pej ON temp.id = pej.dept_id
+                JOIN pm_employee pe ON pej.employee_id = pe.id
+        WHERE
+            pe.enabled_flag = 1
+          AND pej.job_main_flag = 1
+          AND pej.enabled_flag = 1
+    </select>
+    <select id="getUserByDepartmentID" resultType="java.util.HashMap">
+        select
+            pe.work_card AS gph,
+            pe.name AS xm,
+            pe.ext_dept_name as szbm,pe.ext_dept_id as bmbh,
+            pe.ext_department_name as szks,pe.ext_department_id as ksbh,
+            pe.ext_team_name as szbz,pe.ext_team_id as bzbh,
+            pe.job_name as gwmc,pe.job_id as gwbh,
+            pe.ext_dept_name as bmmc
+        from v_employee_job_dept pe
+        where pe.enabled_flag=1 and pe.leave_flag=0 and pe.ext_dept_id=#{departmentID}
+        order by pe.work_card desc
+    </select>
+    <select id="getMonthOverTime" resultType="java.lang.Double">
+        SELECT COALESCE(SUM(aoal.review_hours), 0) AS monthOverTime
+        FROM ac_overtime_application as aoa JOIN ac_overtime_application_line aoal ON aoa.oa_order = aoal.oa_order
+        INNER JOIN ac_calendar_line acl ON acl.now_date = CONVERT(VARCHAR(10), aoal.start_time,120)
+        where aoa.enabled_flag = 1 and aoal.enabled_flag = 1
+        AND aoal.start_time  >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
+        AND aoal.end_time &lt;= GETDATE()
+        AND (approval_result = 'Pass' OR approval_result = 'pass')
+        AND aoa.user_name = #{work_card}
+        AND acl.day_off_flag=1
+    </select>
+    <select id="getUsedMonthOverTime" resultType="java.lang.Double">
+--         SELECT ISNULL(SUM(pla.total_number), 0) as usedday
+        SELECT ISNULL(SUM(plasub.number), 0) as usedday
+        FROM ac_leave_application as pla
+        INNER JOIN ac_leave_application_line as plasub ON pla.oa_order = plasub.oa_order and pla.version = plasub.version
+        WHERE pla.enabled_flag = 1
+        AND (pla.approval_result = 'Pass' OR pla.approval_result IS NULL OR pla.approval_result = 'pass')
+        AND plasub.enabled_flag = 1
+        AND plasub.leave_type = '调休'
+        AND plasub.version = pla.version
+        AND plasub.start_time >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
+        AND plasub.start_time &lt;= GETDATE()
+        AND pla.user_name = #{workCard}
+    </select>
+    <select id="autoMatchLeaderUser" resultType="java.util.HashMap">
+        SELECT DISTINCT name, work_card FROM ac_overtime_limit where dept_name = #{department} or department_name = #{administrativeOffice}
+    </select>
+    <select id="getMainInfo" resultType="java.util.HashMap">
+        select TOP 1 * from ac_leave_application where oa_order = #{oaOrder} AND enabled_flag = 1 order by create_time, version desc
+    </select>
+    <select id="getHrChangeNewLeaveSubInfo" resultType="java.util.HashMap">
+        select TOP 1 * from ac_leave_application_line where oa_order = #{oaOrder} and enabled_flag = 1
+        order by create_time desc
+    </select>
+    <select id="getDeptId" resultType="java.lang.Integer">
+        select parent_id from fnd_dept fd where dept_name=#{dept_name}
+    </select>
+    <select id="getParentId" resultType="java.util.HashMap">
+        select pe.name,pe.work_card, fd.dept_level,fd.parent_id from pm_employee_job pej left join pm_employee pe on pej.employee_id=pe.id left join fnd_dept fd on fd.admin_job_id=pej.job_id
+        where fd.id=#{parentID} and pe.leave_flag=0
+    </select>
+    <select id="getHrManger" resultType="java.util.HashMap">
+        select * from fnd_job fd left join pm_employee_job pej on fd.id=pej.job_id left join pm_employee pe on pej.employee_id=pe.id
+        where fd.dept_id=65
+    </select>
+    <select id="getHrInfo" resultType="java.util.HashMap">
+        select * from fnd_job fd left join pm_employee_job pej on fd.id=pej.job_id left join pm_employee pe on pej.employee_id=pe.id
+        where fd.job_name='人事专员'
+    </select>
+    <select id="getHrManagerEmail" resultType="java.lang.String">
+        select pe.email_inside from fnd_job fd left join pm_employee_job pej on fd.id=pej.job_id left join pm_employee pe on pej.employee_id=pe.id
+        where fd.dept_id=65
+    </select>
+    <select id="getHrEmails" resultType="String">
+        select pe.email_inside from fnd_job fd left join pm_employee_job pej on fd.id=pej.job_id left join pm_employee pe on pej.employee_id=pe.id
+        where fd.job_name='人事专员'
+    </select>
+    <select id="getAuthorizationList" resultType="java.util.HashMap">
+        SELECT
+            alm.id,
+            alm.dept_id,
+            fd.dept_name,
+            alm.enabled_flag,
+            alm.team_leader_employee_id,
+            alm.department_head_employee_id,
+            alm.manger_employee_id,
+            alm.leader_employee_id,
+            alm.team_authorize_work_card,
+            alm.department_authorize_work_card,
+            alm.manger_authorize_work_card,
+            alm.leader_authorize_work_card
+        FROM   ac_leave_management alm
+                   INNER join fnd_dept fd  on alm.dept_id=fd.id
+        where fd.id = #{deptId}
+        ORDER BY alm.id
+    </select>
+    <select id="getTeamList" resultType="java.util.HashMap">
+        SELECT TOP 1
+	    alm.dept_id,
+                alm.team_leader_employee_id,
+               alm.department_head_employee_id,
+               alm.manger_employee_id,
+               alm.leader_employee_id,
+               fd.dept_name
+        FROM
+            fnd_dept fd
+                LEFT JOIN ac_leave_management alm ON alm.dept_id= fd.id
+        WHERE
+            alm.dept_id= #{deptId} AND fd.enabled_flag = 1
+    </select>
+    <select id="getDepartmentMap" resultType="java.util.HashMap">
+        SELECT TOP 1
+	    alm.dept_id,
+                alm.team_leader_employee_id,
+               alm.department_head_employee_id,
+               alm.manger_employee_id,
+               alm.leader_employee_id,
+               fd.dept_name
+        FROM
+            fnd_dept fd
+                LEFT JOIN ac_leave_management alm ON alm.dept_id= fd.id
+        WHERE
+            alm.dept_id= #{deptId} AND fd.enabled_flag = 1
+    </select>
+    <select id="getMangerMap" resultType="java.util.HashMap">
+        SELECT TOP 1
+	    alm.dept_id,
+                alm.team_leader_employee_id,
+               alm.department_head_employee_id,
+               alm.manger_employee_id,
+               alm.leader_employee_id,
+               fd.dept_name
+        FROM
+            fnd_dept fd
+                LEFT JOIN ac_leave_management alm ON alm.dept_id= fd.id
+        WHERE
+            alm.dept_id= #{deptId} AND fd.enabled_flag = 1
+    </select>
+    <select id="getLeaderMap" resultType="java.util.HashMap">
+        SELECT TOP 1
+	    alm.dept_id,
+                alm.team_leader_employee_id,
+               alm.department_head_employee_id,
+               alm.manger_employee_id,
+               alm.leader_employee_id,
+               fd.dept_name
+        FROM
+            fnd_dept fd
+                LEFT JOIN ac_leave_management alm ON alm.dept_id= fd.id
+        WHERE
+            alm.dept_id= #{deptId} AND fd.enabled_flag = 1
+    </select>
+    <select id="getApprovalDetail" resultType="java.util.HashMap">
+        SELECT
+            alm.id,
+            alm.dept_id,
+            fd.dept_name,
+            alm.enabled_flag,
+            alm.team_leader_employee_id,
+            alm.department_head_employee_id,
+            alm.manger_employee_id,
+            alm.leader_employee_id,
+            alm.team_authorize_work_card,
+            alm.department_authorize_work_card,
+            alm.manger_authorize_work_card,
+            alm.leader_authorize_work_card
+        FROM   ac_leave_management alm
+                   INNER join fnd_dept fd  on alm.dept_id=fd.id
+        where alm.id=#{id} and alm.dept_id = #{deptId}
+    </select>
+    <select id="getNewDeptId" resultType="java.lang.Integer">
+select TOP 1 fd.id from fnd_dept as fd inner JOIN pm_employee_job as pej ON fd.id = pej.dept_id  where fd.dept_name = #{deptName} and pej.attribute1 = #{department}
+    </select>
+    <select id="getNewJobId" resultType="java.lang.Integer">
+        select pej.job_id from pm_employee_job pej left join pm_employee pe on pej.employee_id=pe.id left join fnd_dept fd on fd.id=pej.dept_id where  pe.work_card=#{workCard}
+                                                                                                                                                  and pe.leave_flag=0
+                                                                                                                                                  and pej.enabled_flag = 1 and pej.job_main_flag = 1
+    </select>
+    <select id="getTeamLeaderList" resultType="java.util.Map">
+        SELECT
+            alm.id,
+            alm.dept_id,
+            fd.dept_name,
+            alm.enabled_flag,
+            alm.team_leader_employee_id,
+            alm.department_head_employee_id,
+            alm.manger_employee_id,
+            alm.leader_employee_id,
+            alm.team_authorize_work_card,
+            alm.department_authorize_work_card,
+            alm.manger_authorize_work_card,
+            alm.leader_authorize_work_card
+        FROM
+            ac_leave_management alm
+                INNER JOIN fnd_dept fd ON alm.dept_id= fd.id
+        WHERE alm.dept_id = #{deptId} and fd.enabled_flag = 1
+    </select>
+<!--    <select id="getTeamLeaderList" resultType="java.util.Map">-->
+<!--        select team_authorize_work_card, pe.work_card as username,pe.name as nickname-->
+<!--        FROM fnd_dept fd-->
+<!--                 left join ac_leave_management alm  on alm.dept_id=fd.id-->
+<!--                 LEFT JOIN pm_employee_job pej ON alm.team_leader_job_id=pej.job_id-->
+<!--                 LEFT JOIN pm_employee pe ON pe.id=pej.employee_id where alm.dept_id=#{deptId} and pej.enabled_flag = 1 and pe.leave_flag=0-->
+<!--        and alm.enabled_flag = 1-->
+<!--    </select>-->
+    <select id="getNewDeptIdbyWorkCard" resultType="java.lang.Integer">
+        select pej.dept_id from pm_employee_job pej left join pm_employee pe on pej.employee_id=pe.id left join fnd_dept fd on fd.id=pej.dept_id
+                           where  pe.work_card=#{workCard} and pe.leave_flag=0 and pej.enabled_flag = 1 and pej.job_main_flag = 1
+    </select>
+    <select id="getDepartmentLists" resultType="java.util.Map">
+        select DISTINCT department_authorize_work_card, pe.work_card as username,pe.name as nickname
+        FROM fnd_dept fd
+                 INNER join ac_leave_management alm  on alm.dept_id=fd.id
+                 INNER JOIN pm_employee_job pej ON alm.department_head_job_id=pej.job_id
+                 INNER JOIN pm_employee pe ON pe.id=pej.employee_id where alm.dept_id=#{deptId} and pej.enabled_flag = 1 and pe.leave_flag=0 and pej.enabled_flag = 1 and pej.job_main_flag = 1
+    </select>
+    <select id="getHrMangerList" resultType="java.util.Map">
+        select manger_authorize_work_card, pe.work_card as username,pe.name as nickname
+        FROM fnd_dept fd
+                 left join ac_leave_management alm  on alm.dept_id=fd.id
+                 LEFT JOIN pm_employee_job pej ON alm.manger_job_id=pej.job_id
+                 LEFT JOIN pm_employee pe ON pe.id=pej.employee_id where alm.dept_id=#{deptId} and pej.enabled_flag = 1 and pe.leave_flag=0 and pej.enabled_flag = 1 and pej.job_main_flag = 1
+    </select>
+    <select id="getHrLeaderList" resultType="java.util.Map">
+        select leader_authorize_work_card, pe.work_card as username,pe.name as nickname
+        FROM fnd_dept fd
+                 left join ac_leave_management alm  on alm.dept_id=fd.id
+                 LEFT JOIN pm_employee_job pej ON alm.leader_job_id=pej.job_id
+                 LEFT JOIN pm_employee pe ON pe.id=pej.employee_id where alm.dept_id=#{deptId} and pej.enabled_flag = 1 and pe.leave_flag=0 and pej.enabled_flag = 1 and pej.job_main_flag = 1
+
+    </select>
+    <select id="autoMatchNewLeaderUser" resultType="java.util.HashMap">
+        select leader_authorize_work_card, pe.work_card as username,pe.name as nickname
+        FROM fnd_dept fd
+                 left join ac_leave_management alm  on alm.dept_id=fd.id
+                 LEFT JOIN pm_employee_job pej ON alm.leader_job_id=pej.job_id
+                 LEFT JOIN pm_employee pe ON pe.id=pej.employee_id where alm.dept_id=#{deptId} and pej.enabled_flag = 1 and pe.leave_flag=0 and pej.enabled_flag = 1 and pej.job_main_flag = 1
+
+    </select>
+    <select id="getBrokerDepartmentList" resultType="java.util.Map">
+        SELECT
+            DISTINCT
+            fd.id as dept_id,
+            pej.dept_name,
+            pe.work_card AS username,
+            pe.name AS nickname
+        FROM
+            fnd_dept fd
+                INNER JOIN pm_employee_job pej ON fd.id= pej.dept_id
+                INNER JOIN pm_employee pe ON pe.id= pej.employee_id
+        where job_name like '代理主管'
+          and fd.id = #{deptId}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+    </select>
+
+    <select id="getDeptMainMap" resultType="java.util.Map">
+        SELECT
+            DISTINCT
+            fd.id as dept_id,
+            pej.dept_name,
+            pe.work_card AS username,
+            pe.name AS nickname
+        FROM
+            fnd_dept fd
+                INNER JOIN pm_employee_job pej ON fd.id= pej.dept_id
+                INNER JOIN pm_employee pe ON pe.id= pej.employee_id
+        where job_name like '主管'
+          and fd.id = #{deptId}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+    </select>
+    <select id="getAllHrChangeNewLeaveSubInfo" resultType="java.util.HashMap">
+        select * from ac_leave_application_line where oa_order = #{oaOrder} and enabled_flag = 1 and hr_nick_name != ''
+        order by create_time desc
+    </select>
+
+    <select id="getHrEditLeaveSubInfo" resultType="java.util.HashMap">
+        select * from ac_leave_application_line where oa_order = #{oaOrder} and enabled_flag = 1 and hr_nick_name != ''
+        order by create_time desc
+    </select>
+    <select id="checkMail" resultType="java.util.HashMap">
+        select TOP 1 pe.email_inside, pe.name from fnd_job fd INNER join pm_employee_job pej on fd.id=pej.job_id left join pm_employee pe on pej.employee_id=pe.id
+        where pe.work_card = #{mailUser} AND pe.leave_flag = 0
+    </select>
+    <select id="getUserNameByOaOrder" resultType="java.lang.String">
+        SELECT TOP 1 nick_name as name FROM ac_leave_application where oa_order = #{oaOrder}
+    </select>
+    <select id="getUserNameByWorkCard" resultType="java.lang.String">
+        SELECT name FROM
+            pm_employee as pe
+        WHERE work_card = #{workCard} and pe.leave_flag = 0 and pe.enabled_flag = 1
+    </select>
+
+    <select id="getStartTimeList" resultType="java.util.HashMap">
+        SELECT
+            DISTINCT
+            pe.name,
+            pe.work_card,
+            aea.regimea_date,
+            aea.first_time_from,
+            aea.first_time_to,
+            aea.extend1_time_flag,
+            aea.second_time_from,
+            aea.second_time_to,
+            aea.extend2_time_flag,
+            aea.third_time_from,
+            aea.third_time_to,
+            aea.extend3_time_flag,
+            aea.rest_day_flag,
+            aea.enabled_flag
+        FROM
+            pm_employee pe
+                JOIN ac_calendar_header ach
+                     ON ach.default_flag = 1
+                JOIN ac_calendar_line acl
+                     ON ach.id = acl.calendar_header_id JOIN ac_employee_attendance aea
+                                                             ON aea.employee_id = pe.id
+        WHERE pe.work_card = #{workCard} AND regimea_date = #{startTime} AND aea.enabled_flag = 1
+        order by regimea_date desc
+    </select>
+
+    <select id="getEndTimeList" resultType="java.util.HashMap">
+        SELECT
+            DISTINCT
+            pe.name,
+            pe.work_card,
+            aea.regimea_date,
+            aea.first_time_from,
+            aea.first_time_to,
+            aea.extend1_time_flag,
+            aea.second_time_from,
+            aea.second_time_to,
+            aea.extend2_time_flag,
+            aea.third_time_from,
+            aea.third_time_to,
+            aea.extend3_time_flag,
+            aea.rest_day_flag,
+            aea.enabled_flag
+        FROM
+            pm_employee pe
+                JOIN ac_calendar_header ach
+                     ON ach.default_flag = 1
+                JOIN ac_calendar_line acl
+                     ON ach.id = acl.calendar_header_id JOIN ac_employee_attendance aea
+                                                             ON aea.employee_id = pe.id
+        WHERE pe.work_card = #{workCard} AND regimea_date = #{endTime} AND aea.enabled_flag = 1
+        order by regimea_date desc
+    </select>
+
+    <select id="checkLeaveRule" resultType="java.util.HashMap">
+        SELECT
+            DISTINCT
+            pe.name,
+            pe.work_card,
+            aea.regimea_date,
+            aea.first_time_from,
+            aea.first_time_to,
+            aea.extend1_time_flag,
+            aea.second_time_from,
+            aea.second_time_to,
+            aea.extend2_time_flag,
+            aea.third_time_from,
+            aea.third_time_to,
+            aea.extend3_time_flag,
+            aea.rest_day_flag,
+            aea.enabled_flag
+        FROM
+            pm_employee pe
+                JOIN ac_calendar_header ach
+                     ON ach.default_flag = 1
+                JOIN ac_calendar_line acl
+                     ON ach.id = acl.calendar_header_id JOIN ac_employee_attendance aea
+                                                             ON aea.employee_id = pe.id
+        WHERE pe.work_card = #{workCard} AND regimea_date = #{formattedDate} AND aea.enabled_flag = 1
+        order by regimea_date desc
+    </select>
+
+    <select id="shiftChecks" resultType="java.lang.Integer">
+        select
+            workshop_attendance_flag
+        FROM pm_employee
+        where work_card = #{workCard}
+    </select>
+
+    <select id="getRestDay" resultType="java.lang.Integer">
+        SELECT
+            COUNT(DISTINCT regimea_date)
+        FROM
+            pm_employee pe
+                JOIN ac_calendar_header ach
+                     ON ach.default_flag = 1
+                JOIN ac_calendar_line acl
+                     ON ach.id = acl.calendar_header_id JOIN ac_employee_attendance aea ON aea.employee_id = pe.id
+        WHERE pe.work_card = #{workCard} AND regimea_date > #{startDate} and regimea_date &lt; #{endDate} AND aea.enabled_flag = 1 AND aea.rest_day_flag = 1
+    </select>
+    <select id="getAuthorizationListAll" resultType="java.util.HashMap">
+        SELECT
+            alm.id,
+            alm.dept_id,
+            fd.dept_name,
+            alm.enabled_flag,
+            alm.team_leader_employee_id,
+            alm.department_head_employee_id,
+            alm.manger_employee_id,
+            alm.leader_employee_id,
+            alm.team_authorize_work_card,
+            alm.department_authorize_work_card,
+            alm.manger_authorize_work_card,
+            alm.leader_authorize_work_card
+        FROM   ac_leave_management alm
+                   INNER join fnd_dept fd  on alm.dept_id=fd.id
+    </select>
+    <select id="getNewDeptIdByDept" resultType="java.lang.Integer">
+        select TOP 1 fd.id from fnd_dept as fd where fd.dept_name = #{department}
+    </select>
+    <select id="getDeptIdBySectionName" resultType="java.lang.Integer">
+        select TOP 1 fd.id from fnd_dept as fd where fd.dept_name = #{deptName}
+    </select>
+    <select id="getDeptIdByDepartment" resultType="java.lang.Integer">
+        select TOP 1 fd.id from fnd_dept as fd where fd.dept_name = #{department}
+    </select>
+    <select id="getWorkCardById" resultType="java.lang.String">
+        select TOP 1 pe.work_card from pm_employee pe where pe.id = #{teamLeaderEmployeeId} and pe.enabled_flag = 1 and pe.leave_flag = 0
+    </select>
+    <select id="getEmployeeIdByWordCard" resultType="java.lang.Integer">
+        select TOP 1 pe.id from pm_employee pe where pe.work_card = #{work_card} and pe.enabled_flag = 1 and pe.leave_flag = 0
+    </select>
+    <select id="getDeptIdByWorkCard" resultType="java.lang.Integer">
+        SELECT
+            TOP 1
+            CASE
+	WHEN
+		fd.dept_level LIKE '%班%' THEN
+			fd1.id
+			WHEN fd.dept_level LIKE '%科室%' THEN
+			fd.id
+			WHEN fd.dept_level LIKE '%部%' THEN
+			fd1.id ELSE NULL -- 或者你可以设置默认值
+        END AS id
+		FROM
+			pm_employee pe
+			INNER JOIN pm_employee_job pej ON pej.employee_id = pe.id
+			INNER JOIN fnd_dept fd ON fd.id = pej.dept_id
+			LEFT JOIN fnd_dept fd1 ON fd1.id = fd.parent_id
+			LEFT JOIN fnd_dept fd2 ON fd2.id = fd1.parent_id
+		WHERE
+		pe.work_card = #{workCard} and pej.job_main_flag = 1  AND pe.leave_flag = 0 AND pe.enabled_flag = 1 AND pej.enabled_flag = 1
+    </select>
+    <select id="getList" resultType="com.sunten.hrms.ac.domain.AcVacate">
+        select
+            ala.id,
+            ala.nick_name as NickName,
+            ala.user_name as UserName,
+            ala.oa_order as RequisitionCode,
+            ala.approval_result as State,
+            CONVERT(DATETIME, alal.start_time, 120) AS StartTime,
+            CONVERT(DATETIME, alal.end_time, 120) AS EndTime,
+            ala.reason as Reason,
+            alal.leave_type as LeaveType,
+            ala.create_time as CreateTime
+        FROM ac_leave_application as ala
+            INNER JOIN ac_leave_application_line as alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+        where 1 = 1  and ala.oa_order = #{ oaOrder }
+    </select>
+    <select id="getAcVacateByRequisitionCode" resultType="com.sunten.hrms.ac.domain.AcVacate">
+        select
+            ala.id,
+            ala.nick_name as NickName,
+            ala.user_name as UserName,
+            ala.oa_order as RequisitionCode,
+            ala.approval_result as State,
+            CONVERT(DATETIME, alal.start_time, 120) AS StartTime,
+            CONVERT(DATETIME, alal.end_time, 120) AS EndTime,
+            ala.reason as Reason,
+            alal.leave_type as LeaveType,
+            ala.create_time as CreateTime
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+        where 1 = 1
+        and DATEDIFF( MONTH, ala.create_time, GETDATE( ) ) &lt;= 3
+        and ala.oa_order = #{OaOrder}
+        ORDER BY ala.create_time DESC
+        OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY
+    </select>
+    <select id="getList2" resultType="com.sunten.hrms.ac.domain.AcVacate">
+        select
+            ala.id,
+            ala.nick_name as NickName,
+            ala.user_name as UserName,
+            ala.oa_order as RequisitionCode,
+            ala.approval_result as State,
+            CONVERT(DATETIME, alal.start_time, 120) AS StartTime,
+            CONVERT(DATETIME, alal.end_time, 120) AS EndTime,
+            ala.reason as Reason,
+            alal.leave_type as LeaveType,
+            ala.create_time as CreateTime
+        FROM ac_leave_application as ala
+                 INNER JOIN ac_leave_application_line as alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+        where 1 = 1
+    </select>
+    <select id="listAllLeaveStatistics" resultType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+        <include refid="Select_All_Criteria_Sql2"/>
+    </select>
+    <select id="listAllByCriteria2" resultType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+        <include refid="Select_All_Criteria_Sql2"/>
+    </select>
+    <select id="getSubLeaveInfoList" resultType="com.sunten.hrms.ac.domain.HrUpdateLeaveInfoSub">
+        select
+            oa_order as oa_order,
+            leave_type as leave_type,
+            start_time as start_time,
+            end_time as end_time,
+            number as total_number,
+            work_number as work_number,
+            hr_nick_name as hr_nick_name,
+            hr_time as modify_time,
+            create_by as create_by,
+            version as version
+        from ac_leave_application_line as alal
+        where alal.oa_order = #{oaOrder} and alal.enabled_flag = 1 and alal.version = #{version}
+    </select>
+
+    <select id="getSubLeaveInfoList2" resultType="java.util.HashMap">
+        select
+            oa_order as oa_order,
+            leave_type as leave_type,
+            CONVERT(varchar(19), start_time, 120) AS start_time,
+            CONVERT(varchar(19), end_time, 120) AS end_time,
+            number as total_number,
+            work_number as work_number,
+            hr_nick_name as hr_nick_name,
+            CONVERT(varchar(19), hr_time, 120) AS hr_time,
+            create_by as create_by,
+            version as version
+        from ac_leave_application_line as alal
+        where alal.oa_order = #{oaOrder} and alal.enabled_flag = 1 and alal.version = #{version}
+          AND alal.id NOT IN
+            <foreach item="item" collection="tempSubIds" open="(" separator="," close=")">
+                #{item, jdbcType=BIGINT}
+            </foreach>
+    </select>
+    <select id="getJobNameByEmployeeId" resultType="java.lang.String">
+        select job_name FROM pm_employee_job where employee_id = #{employeeId} and job_main_flag = 1 AND enabled_flag = 1
+    </select>
+    <select id="getDeptIdByEmployeeId" resultType="java.lang.Long">
+        select dept_id FROM pm_employee_job where employee_id = #{employeeId} and job_main_flag = 1 AND enabled_flag = 1
+    </select>
+    <select id="getCurrentMap" resultType="java.util.HashMap">
+        SELECT * FROM ac_leave_management WHERE dept_id = #{deptId} AND enabled_flag = 1
+    </select>
+    <sql id="Base_Column_Query_Sql2">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_leave_application ala inner join ac_leave_application_line alal on ala.oa_order = alal.oa_order and ala.version = alal.version
+        ]]>
+    </sql>
+    <sql id="Select_All_Criteria_Sql2">
+        <include refid="Base_Column_Query_Sql2"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.approvalResult != null">
+                <![CDATA[ and ala.approval_result = #{criteria.approvalResult,jdbcType=VARCHAR} ]]>
+            </if>
+            <if test="criteria.beginDate != null &amp;&amp; criteria.endDate != null">
+                <![CDATA[ and alal.start_time BETWEEN #{criteria.beginDate, jdbcType = DATE} and #{criteria.endDate, jdbcType = DATE} ]]>
+            </if>
+            <if test="criteria.checkMonth != null">
+                <![CDATA[
+            AND (
+    (YEAR(alal.start_time) <> YEAR(alal.end_time))
+    OR (YEAR(alal.start_time) = YEAR(alal.end_time) AND MONTH(alal.start_time) <> MONTH(alal.end_time))
+)
+    AND (
+    (MONTH(alal.start_time) = MONTH(#{criteria.checkMonth}) AND YEAR(alal.start_time) = YEAR(#{criteria.checkMonth})
+    OR ((MONTH(alal.end_time) = MONTH(#{criteria.checkMonth}) AND YEAR(alal.end_time) = YEAR(#{criteria.checkMonth}))
+    OR (MONTH(alal.start_time) < MONTH(#{criteria.checkMonth}) AND MONTH(alal.end_time) > MONTH(#{criteria.checkMonth}) AND YEAR(alal.start_time) = YEAR(#{criteria.checkMonth}))
+    OR (MONTH(alal.start_time) = MONTH(#{criteria.checkMonth}) AND MONTH(alal.end_time) > MONTH(#{criteria.checkMonth}) AND YEAR(alal.start_time) <= YEAR(#{criteria.checkMonth}) AND YEAR(alal.end_time) >= YEAR(#{criteria.checkMonth}))
+    OR (MONTH(alal.start_time) < MONTH(#{criteria.checkMonth}) AND MONTH(alal.end_time) = MONTH(#{criteria.checkMonth}) AND YEAR(alal.start_time) <= YEAR(#{criteria.checkMonth}) AND YEAR(alal.end_time) >= YEAR(#{criteria.checkMonth})))))
+              ]]>
+            </if>
+            <choose>
+                <when test='criteria.reqStatus eq "全部申请"'>
+                    and 1 = 1
+                </when>
+                <when test='criteria.reqStatus eq "已结束申请单"'>
+                    and (ala.approval_result = 'Pass' or ala.approval_result = 'notPass' or ala.approval_result = 'Cancel')
+                </when>
+                <when test='criteria.reqStatus eq "审批中申请单"'>
+                    and ala.approval_result is null
+                </when>
+                <when test='criteria.reqStatus eq "未修改"'>
+                    and (ala.version = 0 or ala.modify_reason is null)
+                </when>
+                <when test='criteria.reqStatus eq "已修改"'>
+                    and ala.version > 0
+                </when>
+                <when test='criteria.reqStatus eq "需上传附件"'>
+                    AND ( alal.leave_type != '事假' AND alal.leave_type != '年假' AND alal.leave_type  != '调休' )
+                </when>
+            </choose>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+    <resultMap type="com.sunten.hrms.ac.domain.PmLeaveApplication" id="resultReqForeMan">
+        <id property="userDepartment" column="deptName"/>
+        <id property="userSection" column="section"/>
+        <id property="position" column="positionName"/>
+        <id property="nickName" column="employeeName"/>
+        <id property="userName" column="workCard"/>
+    </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap2" type="com.sunten.hrms.ac.domain.AcLeaveApplication">
+        <id column="id" property="id"/>
+        <result column="oa_order" property="oaOrder"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_department" property="userDepartment"/>
+        <result column="user_section" property="userSection"/>
+        <result column="groups" property="groups"/>
+        <result column="position" property="position"/>
+        <result column="reason" property="reason"/>
+        <result column="total_number" property="totalNumber"/>
+        <result column="hr_total" property="hrTotal"/>
+        <result column="modify_reason" property="modifyReason"/>
+        <result column="version" property="version"/>
+        <result column="to_be_uploaded_flag" property="toBeUploadedFlag"/>
+        <result column="approval_node" property="approvalNode"/>
+        <result column="approval_employee" property="approvalEmployee"/>
+        <result column="approval_result" property="approvalResult"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="attribute4" property="attribute4"/>
+        <result column="attribute5" property="attribute5"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <resultMap id="AcLeaveApplicationResultMap" type="com.sunten.hrms.ac.domain.AcLeaveApplication" autoMapping="true">
+        <id column="id" property="id"/>
+    </resultMap>
+</mapper>

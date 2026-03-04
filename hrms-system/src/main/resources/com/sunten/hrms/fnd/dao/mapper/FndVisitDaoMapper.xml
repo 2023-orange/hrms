@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndVisitDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndVisit">
+        <id column="id" property="id" />
+        <result column="date" property="date" />
+        <result column="ip_counts" property="ipCounts" />
+        <result column="pv_counts" property="pvCounts" />
+        <result column="week_day" property="weekDay" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="FndVisitResultMap" type="com.sunten.hrms.fnd.domain.FndVisit" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fv.id, fv.date, fv.ip_counts, fv.pv_counts, fv.week_day, fv.create_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.date as ${tAlias}_date, 
+            ${tAlias}.ip_counts as ${tAlias}_ip_counts, ${tAlias}.pv_counts as ${tAlias}_pv_counts, 
+            ${tAlias}.week_day as ${tAlias}_week_day, ${tAlias}.create_time as ${tAlias}_create_time 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_visit fv
+        ]]>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndVisit" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_visit (date, ip_counts, pv_counts,
+                                   week_day, create_time)
+            values (#{date,jdbcType=VARCHAR}, #{ipCounts,jdbcType=BIGINT}, #{pvCounts,jdbcType=BIGINT},
+                    #{weekDay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_visit
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndVisit">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndVisit">
+        <![CDATA[
+            update fnd_visit
+               set date      = #{date,jdbcType=VARCHAR},
+                   ip_counts = #{ipCounts,jdbcType=BIGINT},
+                   pv_counts = #{pvCounts,jdbcType=BIGINT},
+                   week_day  = #{weekDay,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndVisitResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fv.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getByDate" resultMap="FndVisitResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fv.date = #{date,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <select id="listVisitBetween" resultMap="FndVisitResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fv.create_time between #{date1,jdbcType=TIMESTAMP}
+                                      and #{date2,jdbcType=TIMESTAMP}
+        ]]>
+    </select>
+
+
+</mapper>

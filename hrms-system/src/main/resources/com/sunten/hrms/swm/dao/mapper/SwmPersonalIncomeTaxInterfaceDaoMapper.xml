@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmPersonalIncomeTaxInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmPersonalIncomeTaxInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="tax_period_start" property="taxPeriodStart" />
+        <result column="tax_period_end" property="taxPeriodEnd" />
+        <result column="current_basic_pension_insurance" property="currentBasicPensionInsurance" />
+        <result column="current_basic_medical" property="currentBasicMedical" />
+        <result column="current_unemployment" property="currentUnemployment" />
+        <result column="current_housing_accumulation_fund" property="currentHousingAccumulationFund" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="month_income" property="monthIncome" />
+        <result column="amount_income" property="amountIncome" />
+        <result column="amount_deduct_expenses" property="amountDeductExpenses" />
+        <result column="amount_taxable_income" property="amountTaxableIncome" />
+        <result column="tax_rate" property="taxRate" />
+        <result column="quick_calculation_deduction" property="quickCalculationDeduction" />
+        <result column="amount_tax_due" property="amountTaxDue" />
+        <result column="amount_tax_paid" property="amountTaxPaid" />
+        <result column="amount_tax_refund" property="amountTaxRefund" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="deduct_sum_child_education" property="deductSumChildEducation" />
+        <result column="deduct_sum_education_continue" property="deductSumEducationContinue" />
+        <result column="deduct_sum_house_loan" property="deductSumHouseLoan" />
+        <result column="deduct_sum_housing_rental" property="deductSumHousingRental" />
+        <result column="deduct_sum_support_elderly" property="deductSumSupportElderly" />
+        <result column="deduct_sum_three_child" property="deductSumThreeChild"/>
+        <result column="income_period" property="incomePeriod"/>
+        <result column="tax_period" property="taxPeriod"/>
+    </resultMap>
+
+    <resultMap id="SwmPersonalIncomeTaxInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmPersonalIncomeTaxInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            spiti.id, spiti.group_id, spiti.employee_id, spiti.tax_period_start, spiti.tax_period_end,
+            spiti.current_basic_pension_insurance, spiti.current_basic_medical, spiti.current_unemployment,
+            spiti.current_housing_accumulation_fund, spiti.work_card, spiti.employee_name, spiti.month_income,
+            spiti.amount_income, spiti.amount_deduct_expenses, spiti.amount_taxable_income, spiti.tax_rate,
+            spiti.quick_calculation_deduction, spiti.amount_tax_due, spiti.amount_tax_paid,
+            spiti.amount_tax_refund, spiti.operation_code, spiti.error_msg, spiti.data_status,
+            spiti.create_time, spiti.create_by, spiti.update_time, spiti.update_by,
+            spiti.deduct_sum_child_education,
+            spiti.deduct_sum_education_continue,
+            spiti.deduct_sum_house_loan,
+            spiti.deduct_sum_housing_rental,
+            spiti.deduct_sum_support_elderly,
+            spiti.deduct_sum_three_child,
+            spiti.income_period,
+            spiti.tax_period
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.tax_period_start as ${tAlias}_tax_period_start,
+            ${tAlias}.tax_period_end as ${tAlias}_tax_period_end,
+            ${tAlias}.current_basic_pension_insurance as ${tAlias}_current_basic_pension_insurance,
+            ${tAlias}.current_basic_medical as ${tAlias}_current_basic_medical,
+            ${tAlias}.current_unemployment as ${tAlias}_current_unemployment,
+            ${tAlias}.current_housing_accumulation_fund as ${tAlias}_current_housing_accumulation_fund,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.month_income as ${tAlias}_month_income,
+            ${tAlias}.amount_income as ${tAlias}_amount_income,
+            ${tAlias}.amount_deduct_expenses as ${tAlias}_amount_deduct_expenses,
+            ${tAlias}.amount_taxable_income as ${tAlias}_amount_taxable_income,
+            ${tAlias}.tax_rate as ${tAlias}_tax_rate,
+            ${tAlias}.quick_calculation_deduction as ${tAlias}_quick_calculation_deduction,
+            ${tAlias}.amount_tax_due as ${tAlias}_amount_tax_due,
+            ${tAlias}.amount_tax_paid as ${tAlias}_amount_tax_paid,
+            ${tAlias}.amount_tax_refund as ${tAlias}_amount_tax_refund,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.deduct_sum_child_education as ${tAlias}_deduct_sum_child_education,
+            ${tAlias}.deduct_sum_education_continue as ${tAlias}_deduct_sum_education_continue,
+            ${tAlias}.deduct_sum_house_loan as ${tAlias}_deduct_sum_house_loan,
+            ${tAlias}.deduct_sum_housing_rental as ${tAlias}_deduct_sum_housing_rental,
+            ${tAlias}.deduct_sum_support_elderly as ${tAlias}_deduct_sum_support_elderly,
+            ${tAlias}.deduct_sum_three_child as ${tAlias}_deduct_sum_three_child,
+               ${tAlias}.income_period as ${tAlias}_income_period,
+                   ${tAlias}.tax_period as ${tAlias}_tax_period
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_personal_income_tax_interface spiti
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and spiti.group_id =  #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and spiti.data_status =  #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTaxInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_personal_income_tax_interface (group_id, employee_id,
+                                                           tax_period_start, tax_period_end,
+                                                           current_basic_pension_insurance, current_basic_medical,
+                                                           current_unemployment, current_housing_accumulation_fund,
+                                                           work_card, employee_name,
+                                                           month_income, amount_income,
+                                                           amount_deduct_expenses, amount_taxable_income,
+                                                           tax_rate, quick_calculation_deduction,
+                                                           amount_tax_due, amount_tax_paid,
+                                                           amount_tax_refund, operation_code,
+                                                           error_msg, data_status, create_time,
+                                                           create_by, update_time, update_by,
+                                                            deduct_sum_child_education,
+            deduct_sum_education_continue,
+            deduct_sum_house_loan,
+            deduct_sum_housing_rental,
+            deduct_sum_support_elderly,
+            deduct_sum_three_child,
+            income_period,
+            tax_period
+                                                           )
+            values (#{groupId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT},
+                    #{taxPeriodStart,jdbcType=DATE}, #{taxPeriodEnd,jdbcType=DATE},
+                    #{currentBasicPensionInsurance,jdbcType=DECIMAL}, #{currentBasicMedical,jdbcType=DECIMAL},
+                    #{currentUnemployment,jdbcType=DECIMAL}, #{currentHousingAccumulationFund,jdbcType=DECIMAL},
+                    #{workCard,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+                    #{monthIncome,jdbcType=DECIMAL}, #{amountIncome,jdbcType=DECIMAL},
+                    #{amountDeductExpenses,jdbcType=DECIMAL}, #{amountTaxableIncome,jdbcType=DECIMAL},
+                    #{taxRate,jdbcType=DECIMAL}, #{quickCalculationDeduction,jdbcType=DECIMAL},
+                    #{amountTaxDue,jdbcType=DECIMAL}, #{amountTaxPaid,jdbcType=DECIMAL},
+                    #{amountTaxRefund,jdbcType=DECIMAL}, #{operationCode,jdbcType=CHAR},
+                    #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                   #{deductSumChildEducation,jdbcType=DECIMAL}, #{deductSumEducationContinue,jdbcType=DECIMAL}, #{deductSumHouseLoan,jdbcType=DECIMAL},
+                    #{deductSumHousingRental,jdbcType=DECIMAL}, #{deductSumSupportElderly,jdbcType=DECIMAL},
+                    #{deductSumThreeChild, jdbcType=DECIMAL},#{incomePeriod, jdbcType = VARCHAR}, #{taxPeriod, jdbcType = VARCHAR}
+
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_personal_income_tax_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTaxInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTaxInterface">
+        <![CDATA[
+            update swm_personal_income_tax_interface
+               set group_id                          = #{groupId,jdbcType=BIGINT},
+                   employee_id                       = #{employeeId,jdbcType=BIGINT},
+                   tax_period_start                  = #{taxPeriodStart,jdbcType=DATE},
+                   tax_period_end                    = #{taxPeriodEnd,jdbcType=DATE},
+                   current_basic_pension_insurance   = #{currentBasicPensionInsurance,jdbcType=DECIMAL},
+                   current_basic_medical             = #{currentBasicMedical,jdbcType=DECIMAL},
+                   current_unemployment              = #{currentUnemployment,jdbcType=DECIMAL},
+                   current_housing_accumulation_fund = #{currentHousingAccumulationFund,jdbcType=DECIMAL},
+                   work_card                         = #{workCard,jdbcType=VARCHAR},
+                   employee_name                     = #{employeeName,jdbcType=VARCHAR},
+                   month_income                      = #{monthIncome,jdbcType=DECIMAL},
+                   amount_income                     = #{amountIncome,jdbcType=DECIMAL},
+                   amount_deduct_expenses            = #{amountDeductExpenses,jdbcType=DECIMAL},
+                   amount_taxable_income             = #{amountTaxableIncome,jdbcType=DECIMAL},
+                   tax_rate                          = #{taxRate,jdbcType=DECIMAL},
+                   quick_calculation_deduction       = #{quickCalculationDeduction,jdbcType=DECIMAL},
+                   amount_tax_due                    = #{amountTaxDue,jdbcType=DECIMAL},
+                   amount_tax_paid                   = #{amountTaxPaid,jdbcType=DECIMAL},
+                   amount_tax_refund                 = #{amountTaxRefund,jdbcType=DECIMAL},
+                   operation_code                    = #{operationCode,jdbcType=CHAR},
+                   error_msg                         = #{errorMsg,jdbcType=VARCHAR},
+                   data_status                       = #{dataStatus,jdbcType=CHAR},
+                   update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                         = #{updateBy,jdbcType=BIGINT},
+                   deduct_sum_child_education   = #{deductSumChildEducation,jdbcType=DECIMAL},
+            deduct_sum_education_continue =  #{deductSumEducationContinue,jdbcType=DECIMAL},
+
+            deduct_sum_house_loan = #{deductSumHouseLoan,jdbcType=DECIMAL},
+            deduct_sum_housing_rental =  #{deductSumHousingRental,jdbcType=DECIMAL},
+            deduct_sum_support_elderly =  #{deductSumSupportElderly,jdbcType=DECIMAL},
+            deduct_sum_three_child  = #{deductSumThreeChild,jdbcType=DECIMAL},
+            income_period = #{incomePeriod, jdbcType = VARCHAR},
+                tax_period = #{taxPeriod, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmPersonalIncomeTaxInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where spiti.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmPersonalIncomeTaxInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmPersonalIncomeTaxInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="insertByInterfaceWithNotAmount" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTaxInterface">
+        <![CDATA[
+            insert into swm_personal_income_tax_interface (group_id, employee_id,month_income,amount_income,
+             work_card, employee_name,amount_taxable_income,tax_rate,quick_calculation_deduction,amount_tax_due,
+             amount_tax_refund, operation_code,
+                error_msg, data_status, create_time,
+                create_by, update_time, update_by,income_period,tax_period, amount_flag)
+
+        select  #{groupId, jdbcType = BIGINT},
+        ISNULL((SELECT	se.employee_id FROM	swm_employee se WHERE RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            AND se.work_flag = 1
+            ),-1),
+         #{monthIncome,jdbcType=DECIMAL},#{amountIncome,jdbcType=DECIMAL},#{workCard,jdbcType=VARCHAR},  #{employeeName,jdbcType=VARCHAR},
+         #{amountTaxableIncome,jdbcType=DECIMAL},#{taxRate,jdbcType=DECIMAL}, #{quickCalculationDeduction,jdbcType=DECIMAL},
+         #{amountTaxDue,jdbcType=DECIMAL}, #{amountTaxRefund,jdbcType=DECIMAL}, 'C',
+         CASE
+            WHEN (
+        SELECT
+        ISNULL(
+        (
+        SELECT
+        se.employee_id
+        FROM
+        swm_employee se
+        WHERE
+        RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            AND se.work_flag = 1
+            ),- 1
+            )
+            ) = - 1 THEN
+                '工号匹配失败' ELSE ''
+            END,
+            CASE
+                WHEN (
+                SELECT
+                    ISNULL(
+                        (
+                        SELECT
+                            se.employee_id
+                        FROM
+                            swm_employee se
+                        WHERE
+                            RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+                            AND se.work_flag = 1
+                        ),- 1
+                    )
+                    ) = - 1 THEN
+                    'F' ELSE 'T'
+                END,getdate(), #{userId, jdbcType = BIGINT}, getdate(), #{userId, jdbcType = BIGINT},
+                #{incomePeriod, jdbcType = VARCHAR},
+		        #{taxPeriod, jdbcType = VARCHAR}, 0
+
+        ]]>
+    </insert>
+
+    <insert id="insertByInterface" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTaxInterface">
+         <![CDATA[
+             insert into swm_personal_income_tax_interface (group_id, employee_id,
+                                                           tax_period_start, tax_period_end,
+                                                           current_basic_pension_insurance, current_basic_medical,
+                                                           current_unemployment, current_housing_accumulation_fund,
+                                                           work_card, employee_name,
+                                                           month_income, amount_income,
+                                                           amount_deduct_expenses, amount_taxable_income,
+                                                           tax_rate, quick_calculation_deduction,
+                                                           amount_tax_due, amount_tax_paid,
+                                                           amount_tax_refund, operation_code,
+                                                           error_msg, data_status, create_time,
+                                                           create_by, update_time, update_by,
+                                                           deduct_sum_child_education,deduct_sum_education_continue,
+                                                           deduct_sum_house_loan,deduct_sum_housing_rental,
+                                                           deduct_sum_support_elderly, deduct_sum_three_child,  income_period,
+                                                           tax_period, amount_flag
+                                                           )
+               select #{groupId, jdbcType = BIGINT},
+ ISNULL(
+(SELECT	se.employee_id FROM	swm_employee se WHERE RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	AND se.work_flag = 1
+	),-1), #{taxPeriodStart,jdbcType=DATE}, #{taxPeriodEnd,jdbcType=DATE},
+	#{currentBasicPensionInsurance,jdbcType=DECIMAL},#{currentBasicMedical,jdbcType=DECIMAL},
+	#{currentUnemployment,jdbcType=DECIMAL}, #{currentHousingAccumulationFund,jdbcType=DECIMAL},
+	 #{workCard,jdbcType=VARCHAR},  #{employeeName,jdbcType=VARCHAR},
+	 #{monthIncome,jdbcType=DECIMAL},#{amountIncome,jdbcType=DECIMAL},#{amountDeductExpenses,jdbcType=DECIMAL},
+	#{amountTaxableIncome,jdbcType=DECIMAL},#{taxRate,jdbcType=DECIMAL},#{quickCalculationDeduction,jdbcType=DECIMAL},
+	#{amountTaxDue,jdbcType=DECIMAL}, #{amountTaxPaid,jdbcType=DECIMAL}, #{amountTaxRefund,jdbcType=DECIMAL}, 'C',
+	CASE
+	WHEN (
+SELECT
+ISNULL(
+(
+SELECT
+se.employee_id
+FROM
+swm_employee se
+WHERE
+RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	AND se.work_flag = 1
+	),- 1
+	)
+	) = - 1 THEN
+		'工号匹配失败' ELSE ''
+	END,
+	CASE
+		WHEN (
+		SELECT
+			ISNULL(
+				(
+				SELECT
+					se.employee_id
+				FROM
+					swm_employee se
+				WHERE
+					RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+					AND se.work_flag = 1
+				),- 1
+			)
+			) = - 1 THEN
+			'F' ELSE 'T'
+		END, getdate(), #{userId, jdbcType = BIGINT}, getdate(), #{userId, jdbcType = BIGINT},
+		#{deductSumChildEducation,jdbcType=DECIMAL}, #{deductSumEducationContinue,jdbcType=DECIMAL},
+		#{deductSumHouseLoan,jdbcType=DECIMAL}, #{deductSumHousingRental,jdbcType=DECIMAL},
+		#{deductSumSupportElderly,jdbcType=DECIMAL}, #{deductSumThreeChild,jdbcType=DECIMAL}, #{incomePeriod, jdbcType = VARCHAR},
+		 #{taxPeriod, jdbcType = VARCHAR}, 1
+        ]]>
+    </insert>
+
+</mapper>

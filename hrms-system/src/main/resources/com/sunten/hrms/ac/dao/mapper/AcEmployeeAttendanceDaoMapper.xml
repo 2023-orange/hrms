@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcEmployeeAttendanceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcEmployeeAttendance">
+        <id column="id" property="id"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="regimea_date" property="regimeaDate"/>
+        <result column="first_time_from" property="firstTimeFrom"/>
+        <result column="first_time_to" property="firstTimeTo"/>
+        <result column="extend1_time_flag" property="extend1TimeFlag"/>
+        <result column="second_time_from" property="secondTimeFrom"/>
+        <result column="second_time_to" property="secondTimeTo"/>
+        <result column="extend2_time_flag" property="extend2TimeFlag"/>
+        <result column="third_time_from" property="thirdTimeFrom"/>
+        <result column="third_time_to" property="thirdTimeTo"/>
+        <result column="extend3_time_flag" property="extend3TimeFlag"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="rest_day_flag" property="restDayFlag"/>
+    </resultMap>
+
+    <resultMap id="AcEmployeeAttendanceResultMap" type="com.sunten.hrms.ac.domain.AcEmployeeAttendance"
+               autoMapping="true">
+        <id column="id" property="id"/>
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"/>
+    </resultMap>
+
+    <resultMap id="AcEmployeeAttendanceAllAsIdResultMap" type="com.sunten.hrms.ac.domain.AcEmployeeAttendance"
+               autoMapping="true">
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"/>
+    </resultMap>
+
+    <resultMap id="NoAttendanceEmailHeaderResultMap" type="com.sunten.hrms.ac.vo.NoAttendanceEmialHeader" autoMapping="true">
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"/>
+    </resultMap>
+
+    <resultMap id="NoAttendanceDetailResultMap" type="com.sunten.hrms.ac.vo.NoAttendanceDetailVo" autoMapping="true"/>
+
+    <resultMap id="LineAcEmployeeAttendanceResultMap" type="com.sunten.hrms.ac.domain.AcCalendarLine"
+               autoMapping="true">
+        <id column="id" property="id"/>
+        <collection property="acEmployeeAttendances" ofType="com.sunten.hrms.ac.domain.AcEmployeeAttendance">
+            <id column="aea_id" property="id"/>
+            <result column="aea_employee_id" property="employeeId"/>
+            <result column="aea_regimea_date" property="regimeaDate"/>
+            <result column="aea_first_time_from" property="firstTimeFrom"/>
+            <result column="aea_first_time_to" property="firstTimeTo"/>
+            <result column="aea_extend1_time_flag" property="extend1TimeFlag"/>
+            <result column="aea_second_time_from" property="secondTimeFrom"/>
+            <result column="aea_second_time_to" property="secondTimeTo"/>
+            <result column="aea_extend2_time_flag" property="extend2TimeFlag"/>
+            <result column="aea_third_time_from" property="thirdTimeFrom"/>
+            <result column="aea_third_time_to" property="thirdTimeTo"/>
+            <result column="aea_extend3_time_flag" property="extend3TimeFlag"/>
+            <result column="aea_attribute1" property="attribute1"/>
+            <result column="aea_attribute2" property="attribute2"/>
+            <result column="aea_attribute3" property="attribute3"/>
+            <result column="aea_enabled_flag" property="enabledFlag"/>
+            <result column="aea_create_by" property="createBy"/>
+            <result column="aea_create_time" property="createTime"/>
+            <result column="aea_update_by" property="updateBy"/>
+            <result column="aea_update_time" property="updateTime"/>
+            <result column="aea_rest_day_flag" property="restDayFlag"/>
+            <association property="employee"
+                         javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                         resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                         columnPrefix="pe_"/>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List_Exclude_Regimea_Date">
+        <![CDATA[
+            aea.id, aea.employee_id, aea.first_time_from, aea.first_time_to,
+            aea.extend1_time_flag, aea.second_time_from, aea.second_time_to, aea.extend2_time_flag,
+            aea.third_time_from, aea.third_time_to, aea.extend3_time_flag,
+            aea.attribute1, aea.attribute2, aea.attribute3, aea.enabled_flag, aea.create_by, aea.create_time,
+            aea.update_by, aea.update_time, aea.rest_day_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aea.regimea_date,
+        ]]>
+        <include refid="Base_Column_List_Exclude_Regimea_Date"/>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.regimea_date as ${tAlias}_regimea_date,
+            ${tAlias}.first_time_from as ${tAlias}_first_time_from,
+            ${tAlias}.first_time_to as ${tAlias}_first_time_to,
+            ${tAlias}.extend1_time_flag as ${tAlias}_extend1_time_flag,
+            ${tAlias}.second_time_from as ${tAlias}_second_time_from,
+            ${tAlias}.second_time_to as ${tAlias}_second_time_to,
+            ${tAlias}.extend2_time_flag as ${tAlias}_extend2_time_flag,
+            ${tAlias}.third_time_from as ${tAlias}_third_time_from,
+            ${tAlias}.third_time_to as ${tAlias}_third_time_to,
+            ${tAlias}.extend3_time_flag as ${tAlias}_extend3_time_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.rest_day_flag as ${tAlias}_rest_day_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,
+        ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from ac_employee_attendance aea, pm_employee pe
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and aea.employee_id = pe.id and pe.enabled_flag = 1 and pe.leave_flag = 0 and pe.workshop_attendance_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <!-- 按部门查 -->
+            <if test="criteria.employeeJObs != null">
+                <choose>
+                    <when test="criteria.employeeJObs.size > 0">
+                        <![CDATA[
+                            and aea.employee_id in
+                        ]]>
+                        <foreach collection="criteria.employeeJObs" index="index" item="item" separator="," open="("
+                                 close=")">
+                            <![CDATA[
+                            #{item.employee.id, jdbcType=BIGINT}
+                        ]]>
+                        </foreach>
+                    </when>
+                </choose>
+            </if>
+            <!-- 按员工查 -->
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                and aea.employee_id = #{criteria.employeeId, jdbcType=BIGINT}
+            ]]>
+            </if>
+            <!-- enabled -->
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                and aea.enabled_flag = #{criteria.enabled, jdbcType=BIT}
+            ]]>
+            </if>
+            <!-- month -->
+            <if test="criteria.month != null">
+                <![CDATA[
+                and datediff(month, aea.regimea_date, getdate()) = 0
+            ]]>
+            </if>
+            <!-- dateFrom && dateTo -->
+            <if test="criteria.dateFrom != null and criteria.dateTo != null">
+                <![CDATA[
+                and (aea.regimea_date <= #{criteria.dateTo, jdbcType=DATE} AND aea.regimea_date >= #{criteria.dateFrom, jdbcType=DATE})
+            ]]>
+            </if>
+            <if test="criteria.today != null">
+                <![CDATA[
+                and aea.regimea_date >= getdate()
+             ]]>
+            </if>
+            <if test="criteria.dates != null">
+                <choose>
+                    <when test="criteria.dates.size > 0">
+                        <![CDATA[
+                            and
+                        ]]>
+                        <foreach collection="criteria.dates" index="index" item="item" separator="or" open="("
+                                 close=")">
+                            <![CDATA[
+                            aea.regimea_date = #{item, jdbcType=DATE}
+                        ]]>
+                        </foreach>
+                    </when>
+                </choose>
+            </if>
+            <if test="criteria.empIds != null">
+                <choose>
+                    <when test="criteria.empIds.size > 0">
+                        <![CDATA[
+                            and aea.employee_id in
+                        ]]>
+                        <foreach collection="criteria.empIds" index="index" item="item" separator="," open="("
+                                 close=")">
+                            <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                        </foreach>
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcEmployeeAttendance" useGeneratedKeys="true"
+            keyProperty="id">
+        <![CDATA[
+
+
+
+
+                                            insert into ac_employee_attendance (employee_id, regimea_date, first_time_from,
+                                                                                first_time_to, extend1_time_flag,
+                                                                                second_time_from, second_time_to,
+                                                                                extend2_time_flag, third_time_from,
+                                                                                third_time_to, extend3_time_flag,
+                                                                                rest_day_flag, attribute1,
+                                                                                attribute2, attribute3, enabled_flag,
+                                                                                create_by, create_time, update_by,
+                                                                                update_time)
+                                            values (#{employeeId,jdbcType=BIGINT}, #{regimeaDate,jdbcType=DATE}, #{firstTimeFrom,jdbcType=TIME},
+                                                    #{firstTimeTo,jdbcType=TIME}, #{extend1TimeFlag,jdbcType=BIT},
+                                                    #{secondTimeFrom,jdbcType=TIME}, #{secondTimeTo,jdbcType=TIME},
+                                                    #{extend2TimeFlag,jdbcType=BIT}, #{thirdTimeFrom,jdbcType=TIME},
+                                                    #{thirdTimeTo,jdbcType=TIME}, #{extend3TimeFlag,jdbcType=BIT},
+                                                    #{restDayFlag,jdbcType=BIT}, #{attribute1,jdbcType=VARCHAR},
+                                                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                                                    #{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                                                    #{updateTime,jdbcType=TIMESTAMP})
+
+
+
+
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+
+
+
+
+                                            delete
+                                              from ac_employee_attendance
+                                             where id = #{id,jdbcType=BIGINT}
+
+
+
+
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcEmployeeAttendance">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateByEnabled" parameterType="com.sunten.hrms.ac.domain.AcEmployeeAttendance">
+        <![CDATA[
+
+
+
+
+                                            update ac_employee_attendance set enabled_flag = 0,
+                                                update_by        = #{updateBy,jdbcType=BIGINT},
+                                                update_time      = #{updateTime,jdbcType=TIMESTAMP}
+                                            where id = #{id,jdbcType=BIGINT}
+
+
+
+
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcEmployeeAttendance">
+        <![CDATA[
+
+
+
+
+                                            update ac_employee_attendance
+                                               set employee_id       = #{employeeId,jdbcType=BIGINT},
+                                                   regimea_date      = #{regimeaDate,jdbcType=DATE},
+                                                   first_time_from   = #{firstTimeFrom,jdbcType=TIME},
+                                                   first_time_to     = #{firstTimeTo,jdbcType=TIME},
+                                                   extend1_time_flag = #{extend1TimeFlag,jdbcType=BIT},
+                                                   second_time_from  = #{secondTimeFrom,jdbcType=TIME},
+                                                   second_time_to    = #{secondTimeTo,jdbcType=TIME},
+                                                   extend2_time_flag = #{extend2TimeFlag,jdbcType=BIT},
+                                                   third_time_from   = #{thirdTimeFrom,jdbcType=TIME},
+                                                   third_time_to     = #{thirdTimeTo,jdbcType=TIME},
+                                                   extend3_time_flag = #{extend3TimeFlag,jdbcType=BIT},
+                                                   rest_day_flag     = #{restDayFlag,jdbcType=BIT},
+                                                   attribute1        = #{attribute1,jdbcType=VARCHAR},
+                                                   attribute2        = #{attribute2,jdbcType=VARCHAR},
+                                                   attribute3        = #{attribute3,jdbcType=VARCHAR},
+                                                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                                                   update_by         = #{updateBy,jdbcType=BIGINT},
+                                                   update_time       = #{updateTime,jdbcType=TIMESTAMP}
+                                             where id = #{id,jdbcType=BIGINT}
+
+
+
+
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcEmployeeAttendanceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aea.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcEmployeeAttendanceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            ORDER BY
+            employee_id,regimea_date
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcEmployeeAttendanceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listLineAndAllByCriteria" resultMap="LineAcEmployeeAttendanceResultMap">
+        <![CDATA[
+           select al.*,aea.* from (select
+        ]]>
+        <include refid="com.sunten.hrms.ac.dao.AcCalendarLineDao.Base_Column_List"/>
+        <![CDATA[
+            from ac_calendar_header ach,ac_calendar_line acl
+            where ach.default_flag = 1 and ach.id = acl.calendar_header_id
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.month != null">
+                <![CDATA[
+                and datediff(month, acl.now_date, #{criteria.month, jdbcType=DATE}) = 0
+            ]]>
+            </if>
+            <!-- dateFrom && dateTo -->
+            <if test="criteria.dateFrom != null and criteria.dateTo != null">
+                <![CDATA[
+                and (acl.now_date <= #{criteria.dateTo, jdbcType=DATE} AND acl.now_date >= #{criteria.dateFrom, jdbcType=DATE})
+            ]]>
+            </if>
+        </if>
+        <![CDATA[
+        ) al
+        left join (select
+        ]]>
+        <bind name="tAlias" value="'aea'"></bind>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[
+        ,
+        ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from ac_employee_attendance aea, pm_employee pe
+              where 1 = 1 and aea.employee_id = pe.id and pe.enabled_flag = 1 and pe.leave_flag = 0 and pe.workshop_attendance_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <!-- 部门ids -->
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0 ">
+                <![CDATA[
+                            and exists (SELECT 1
+                                          FROM pm_employee_job pej_t
+                                         WHERE pej_t.employee_id = pe.id
+                                           AND pej_t.enabled_flag = 1
+                                           AND pej_t.dept_id IN
+                        ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[
+                            )
+                        ]]>
+            </if>
+            <!-- enabled -->
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                and aea.enabled_flag = #{criteria.enabled, jdbcType=BIT}
+            ]]>
+            </if>
+        </if>
+        <![CDATA[
+            ) aea
+            on al.now_date = aea.aea_regimea_date
+            order by al.now_date
+        ]]>
+
+    </select>
+
+
+    <update id="disableAttendanceInDatesAndEmpIds">
+        <![CDATA[
+            update aea
+               set aea.enabled_flag = 0,
+                   aea.update_by    = #{updateBy,jdbcType=BIGINT},
+                   aea.update_time  = #{updateTime,jdbcType=TIMESTAMP}
+              from ac_employee_attendance aea
+             where aea.enabled_flag = 1
+            ]]>
+        <choose>
+            <when test="dates.size > 0">
+                <![CDATA[
+                            and aea.regimea_date in
+                        ]]>
+                <foreach collection="dates" index="index" item="item" separator="," open="(" close=")">
+                    <![CDATA[
+                            #{item, jdbcType=DATE}
+                        ]]>
+                </foreach>
+            </when>
+            <otherwise>
+                <![CDATA[
+                            and 1 = 2
+                        ]]>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="employeeIds.size > 0">
+                <![CDATA[
+                            and aea.employee_id in
+                        ]]>
+                <foreach collection="employeeIds" index="index" item="item" separator="," open="(" close=")">
+                    <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                </foreach>
+            </when>
+            <otherwise>
+                <![CDATA[
+                            and 1 = 2
+                        ]]>
+            </otherwise>
+        </choose>
+    </update>
+
+
+    <select id="listEmployeeAttendanceByCriteria" resultMap="AcEmployeeAttendanceAllAsIdResultMap">
+        <![CDATA[
+select temp.*,
+fd_dept.dept_name as pe_dept_name,fd_department.dept_name AS pe_department,
+	fd_team.dept_name AS pe_team from (
+            SELECT pe.id pe_id,
+                   pe.work_card pe_work_card,
+                   pe.name pe_name,
+                   ISNULL (aea.regimea_date, acl.now_date) AS regimea_date,
+                   ISNULL (aea.id, -1) id,
+                   aea.employee_id,
+                    aea.first_time_from,
+                    aea.first_time_to,
+                    aea.extend1_time_flag,
+                    aea.second_time_from,
+                    aea.second_time_to,
+                    aea.extend2_time_flag,
+                    aea.third_time_from,
+                    aea.third_time_to,
+                    aea.extend3_time_flag,
+                    aea.attribute1,
+                    aea.attribute2,
+                    aea.attribute3,
+                    aea.enabled_flag,
+                    aea.create_by,
+                    aea.create_time,
+                    aea.update_by,
+                    aea.update_time,
+                    aea.rest_day_flag
+              FROM pm_employee pe
+              JOIN ac_calendar_header ach
+                ON ach.default_flag = 1
+              JOIN ac_calendar_line acl
+                ON ach.id = acl.calendar_header_id
+              LEFT OUTER JOIN ac_employee_attendance aea
+                ON aea.employee_id = pe.id
+               AND aea.regimea_date = acl.now_date
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                   AND aea.enabled_flag = #{criteria.enabled, jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+        <![CDATA[
+             WHERE pe.enabled_flag = 1
+               AND pe.leave_flag = 0
+               AND pe.workshop_attendance_flag = 1
+               AND pe.work_attendance_flag = 1
+
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+             AND pe.pe_id = #{criteria.employeeId, jdbcType=BIGINT}
+            ]]>
+        </if>
+            <if test="criteria.empIds != null and criteria.empIds.size > 0">
+                <![CDATA[
+               AND  pe.id IN
+                ]]>
+                <foreach collection="criteria.empIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+            </if>
+            <if test="criteria.workCard != null">
+                <![CDATA[
+             AND pe.work_card like #{criteria.workCard, jdbcType=VARCHAR}
+        ]]>
+            </if>
+            <if test="criteria.name != null">
+                <![CDATA[
+             AND pe.name like #{criteria.name, jdbcType=VARCHAR}
+        ]]>
+            </if>
+            <!-- 部门ids -->
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+               AND EXISTS
+             (SELECT 1
+                      FROM pm_employee_job pej_t
+                     WHERE pej_t.employee_id = pe.id
+                       AND pej_t.enabled_flag = 1
+                       AND pej_t.dept_id IN
+                ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[
+                            )
+                ]]>
+            </if>
+        </if>
+        <![CDATA[
+               AND (acl.now_date >= #{criteria.dateFrom, jdbcType=DATE} AND acl.now_date <= #{criteria.dateTo, jdbcType=DATE})
+) temp,pm_employee_job pej
+
+outer apply
+               f_get_dept_parent_by_level(pej.dept_id,'部','部门','-') fd_dept
+OUTER apply f_get_dept_parent_by_level ( pej.dept_id, '科室', '-', '-' ) fd_department OUTER apply f_get_dept_parent_by_level ( pej.dept_id, '班组', '-', '-' ) fd_team
+	where  pej.employee_id = temp.pe_id and pej.enabled_flag = 1
+                                              and pej.job_main_flag = 1
+                                              order by temp.pe_id,regimea_date
+        ]]>
+    </select>
+
+    <select id="getNoAttendanceEmailHeader" resultMap="NoAttendanceEmailHeaderResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+select fj.job_name,fu.email, pejs_t.dept_id, pe.id as pe_id,pe.name AS pe_name
+
+from pm_employee pe join pm_employee_job_snapshot pejs_t
+on pe.id = pejs_t.employee_id and  pejs_t.date =  CONVERT(varchar(100),getdate(), 23)
+join fnd_job fj on pejs_t.job_id = fj.id and fj.enabled_flag = 1  and (fj.job_name like '%主管' or fj.job_name like '%班长')
+left join  fnd_user fu on pe.id = fu.employee_id and fu.enabled_flag = 1
+where 1 = 1
+   ]]>
+<if test="employeeId != null">
+        <![CDATA[
+    and pe.id = #{employeeId, jdbcType = BIGINT}
+      ]]>
+</if>
+
+        <![CDATA[
+
+and EXISTS (
+select 1 from (
+select distinct pejs.dept_id from
+ pm_employee pe_t join pm_employee_job_snapshot pejs  on pe_t.id = pejs.employee_id and pejs.work_attendance_flag = 1
+and pejs.workshop_attendance_flag = 1 and pejs.date =  CONVERT(varchar(100),getdate(), 23)
+and
+pe_t.enabled_flag =1
+where
+not EXISTS (
+select 1 from ac_employee_attendance aea  where aea.regimea_date =  CONVERT(varchar(100), dateAdd(dd, 1, getDate()), 23)
+and pe_t.id = aea.employee_id
+)
+) temp where temp.dept_id = pejs_t.dept_id
+)
+        ]]>
+    </select>
+
+    <select id="getNoAttendanceDetail" resultMap="NoAttendanceDetailResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+            select pe.id, pe.name, pe.work_card,
+              isnull((select fdt.dept_name from fnd_dept fd join fnd_dept fdt on
+              fd.ext_dept_id = fdt.id
+              and fd.id = pejs.dept_id
+              where  fd.enabled_flag = 1 and fd.deleted_flag = 0 and fdt.enabled_flag = 1 and fdt.deleted_flag = 0), '') as dept_name,
+              isnull((select fdt.dept_name from fnd_dept fd join fnd_dept fdt on
+              fd.ext_department_id = fdt.id
+              and fd.id = pejs.dept_id
+              where  fd.enabled_flag = 1 and fd.deleted_flag = 0 and fdt.enabled_flag = 1 and fdt.deleted_flag = 0), '') as department,
+            isnull((select fdt.dept_name from fnd_dept fd join fnd_dept fdt on
+              fd.ext_team_id = fdt.id
+              and fd.id = pejs.dept_id
+              where  fd.enabled_flag = 1 and fd.deleted_flag = 0 and fdt.enabled_flag = 1 and fdt.deleted_flag = 0), '') as team
+              from
+             pm_employee pe join pm_employee_job pejs  on pe.id = pejs.employee_id
+             where
+           pe.workshop_attendance_flag = 1
+						 and pe.work_attendance_flag = 1
+            and pe.enabled_flag =1
+            and pejs.enabled_flag = 1
+            and pe.leave_flag = 0
+            and pejs.dept_id in
+          ]]>
+            <foreach collection="deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+            </foreach>
+        <![CDATA[
+            and
+            not EXISTS (
+            select 1 from ac_employee_attendance aea  where aea.regimea_date =  CONVERT(varchar(100), dateAdd(dd, 1, getDate()), 23)
+            and pe.id = aea.employee_id
+            )
+        ]]>
+    </select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hrms</artifactId>
+        <groupId>com.sunten</groupId>
+        <version>1.0.0</version>
+    </parent>
+
+    <properties>
+        <dom4j.version>2.1.1</dom4j.version>
+    </properties>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hrms-common</artifactId>
+    <name>公共模块</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>${dom4j.version}</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

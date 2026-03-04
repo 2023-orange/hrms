@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeEntryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeEntry">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="entry_time" property="entryTime" />
+        <result column="entry_mode" property="entryMode" />
+        <result column="entry_archives_flag" property="entryArchivesFlag" />
+        <result column="archives_unknown" property="archivesUnknown" />
+        <result column="crime_flag" property="crimeFlag" />
+        <result column="probation" property="probation" />
+        <result column="formal_time" property="formalTime" />
+        <result column="probation_end_time" property="probationEndTime" />
+        <result column="introduction_wages" property="introductionWages" />
+        <result column="introduction_situation" property="introductionSituation" />
+        <result column="archives_address" property="archivesAddress" />
+        <result column="worked_years" property="workedYears" />
+        <result column="remarks" property="remarks" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="assess_flag" property="assessFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeEntryResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeEntry" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pee.employee_id as pe_id, pee.entry_time, pee.entry_mode, pee.entry_archives_flag, pee.archives_unknown,
+            pee.crime_flag, pee.probation, pee.formal_time, pee.introduction_wages, pee.introduction_situation,
+            pee.archives_address, pee.worked_years, pee.remarks, pee.attribute1, pee.attribute2,
+            pee.attribute3, pee.enabled_flag, pee.id, pee.probation_end_time,pee.assess_flag,
+            pee.create_time, pee.create_by, pee.update_time, pee.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.entry_time as ${tAlias}_entry_time,
+            ${tAlias}.entry_mode as ${tAlias}_entry_mode,
+            ${tAlias}.entry_archives_flag as ${tAlias}_entry_archives_flag,
+            ${tAlias}.archives_unknown as ${tAlias}_archives_unknown,
+            ${tAlias}.crime_flag as ${tAlias}_crime_flag, ${tAlias}.probation as ${tAlias}_probation,
+            ${tAlias}.formal_time as ${tAlias}_formal_time,
+            ${tAlias}.introduction_wages as ${tAlias}_introduction_wages,
+            ${tAlias}.introduction_situation as ${tAlias}_introduction_situation,
+            ${tAlias}.archives_address as ${tAlias}_archives_address,
+            ${tAlias}.worked_years as ${tAlias}_worked_years, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id,${tAlias}.probation_end_time as ${tAlias}_probation_end_time,
+            ${tAlias}.assess_flag as ${tAlias}_assess_flag,
+            ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,
+                   fdev.ext_dept_name AS pe_dept_name,
+                   fdev.ext_department_name AS pe_department,
+                   fdev.ext_team_name AS pe_team,
+        ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe_pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee_entry pee
+              join pm_employee pe
+                on pee.employee_id = pe.id
+              left outer join pm_employee_job pe_pej
+              on pe.id = pe_pej.employee_id
+              and pe_pej.job_main_flag = 1
+              and pe_pej.enabled_flag = 1
+              join fnd_job fj
+              on fj.id = pe_pej.job_id
+              and fj.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pe_pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+        ]]>
+    </sql>
+
+    <sql id="Criteria_Sql_Where">
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pee.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+              and exists (SELECT 1
+                          FROM pm_employee_job pej_t
+                         WHERE pej_t.employee_id = pee.employee_id
+                           AND pej_t.enabled_flag = 1
+                           AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pee.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+               and pe.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.leaveFlag != null">
+                <![CDATA[
+               and pe.leave_flag = #{criteria.leaveFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.beginDate != null and criteria.endDate != null">
+                <![CDATA[
+               and pee.formal_time >= #{criteria.beginDate,jdbcType=DATE}
+               and pee.formal_time <= #{criteria.endDate,jdbcType=DATE}
+                ]]>
+            </if>
+            <if test="criteria.selectTime != null">
+                <if test="criteria.selectTimeType == 'today'">
+                    <![CDATA[ and pee.formal_time > = #{criteria.selectTime,jdbcType=DATE}]]>
+                </if>
+                <if test="criteria.selectTimeType == 'dayAfter'">
+                    <![CDATA[ and pee.formal_time > = getdate()
+                    and pee.formal_time < = #{criteria.selectTime,jdbcType=DATE} ]]>
+                </if>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <include refid="Criteria_Sql_Where"/>
+    </sql>
+
+    <select id="countEntry" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(*) from pm_employee_entry pee
+              join pm_employee pe
+                on pee.employee_id = pe.id   where 1 = 1
+        ]]>
+        <include refid="Criteria_Sql_Where"/>
+    </select>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEntry" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_entry (employee_id, entry_time, entry_mode,
+                                           entry_archives_flag, archives_unknown,
+                                           crime_flag, probation, formal_time,
+                                           introduction_wages, introduction_situation,
+                                           archives_address, worked_years,
+                                           remarks, attribute1, attribute2,
+                                           attribute3, enabled_flag,probation_end_time,assess_flag,
+                                           create_time, create_by,
+                                           update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{entryTime,jdbcType=DATE}, #{entryMode,jdbcType=VARCHAR},
+                    #{entryArchivesFlag,jdbcType=BIT}, #{archivesUnknown,jdbcType=VARCHAR},
+                    #{crimeFlag,jdbcType=BIT}, #{probation,jdbcType=INTEGER}, #{formalTime,jdbcType=DATE},
+                    #{introductionWages,jdbcType=VARCHAR}, #{introductionSituation,jdbcType=VARCHAR},
+                    #{archivesAddress,jdbcType=VARCHAR}, #{workedYears,jdbcType=INTEGER},
+                    #{remarks,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},#{probationEndTime,jdbcType=DATE},
+                    #{assessFlag,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_entry
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEntry">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEntry">
+        <![CDATA[
+            update pm_employee_entry
+               set employee_id            = #{employee.id,jdbcType=BIGINT},
+                   entry_time             = #{entryTime,jdbcType=DATE},
+                   entry_mode             = #{entryMode,jdbcType=VARCHAR},
+                   entry_archives_flag    = #{entryArchivesFlag,jdbcType=BIT},
+                   archives_unknown       = #{archivesUnknown,jdbcType=VARCHAR},
+                   crime_flag             = #{crimeFlag,jdbcType=BIT},
+                   probation              = #{probation,jdbcType=INTEGER},
+                   formal_time            = #{formalTime,jdbcType=DATE},
+                   introduction_wages     = #{introductionWages,jdbcType=VARCHAR},
+                   introduction_situation = #{introductionSituation,jdbcType=VARCHAR},
+                   archives_address       = #{archivesAddress,jdbcType=VARCHAR},
+                   worked_years           = #{workedYears,jdbcType=INTEGER},
+                   remarks                = #{remarks,jdbcType=VARCHAR},
+                   attribute1             = #{attribute1,jdbcType=VARCHAR},
+                   attribute2             = #{attribute2,jdbcType=VARCHAR},
+                   attribute3             = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag           = #{enabledFlag,jdbcType=BIT},
+                   assess_flag           = #{assessFlag,jdbcType=VARCHAR},
+                   probation_end_time     = #{probationEndTime,jdbcType=DATE},
+                   update_time            = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by              = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeEntryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pee.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeEntryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeEntryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByEmployeeId" resultMap="PmEmployeeEntryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pee.employee_id = #{employeeId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEntry">
+        <![CDATA[
+        update pm_employee_entry
+        set enabled_flag           = #{enabledFlag,jdbcType=BIT},
+            probation_end_time     = #{probationEndTime,jdbcType=DATE},
+            update_time            = #{updateTime,jdbcType=TIMESTAMP},
+            update_by              = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listAllByProbationCriteriaPage" resultMap="PmEmployeeEntryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+          and pe.leave_flag = 0 and pe.enabled_flag = 1
+        ]]>
+    </select>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeeEntryResultMap">
+        <![CDATA[
+            select
+            peen.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peen.archives_address) > 0 then peen.archives_address else null end as archives_address,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peen.archives_unknown) > 0 then peen.archives_unknown else null end as archives_unknown,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peen.entry_mode) > 0 then peen.entry_mode else null end as entry_mode,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peen.introduction_situation) > 0 then peen.introduction_situation else null end as introduction_situation,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peen.introduction_wages) > 0 then peen.introduction_wages else null end as introduction_wages,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peen.remarks) > 0 then peen.remarks else null end as remarks
+            from pm_employee_entry peen join pm_employee pe on pe.id = peen.employee_id where peen.enabled_flag = 1
+            and pe.enabled_flag = 1 and concat(
+           peen.archives_address,peen.archives_unknown,peen.entry_mode,peen.introduction_situation,peen.introduction_wages,peen.remarks
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+    <update id="updateAssessFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEntry">
+        <![CDATA[
+        update pm_employee_entry
+        set assess_flag           = #{assessFlag,jdbcType=VARCHAR},
+            update_time            = #{updateTime,jdbcType=TIMESTAMP},
+            update_by              = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+</mapper>

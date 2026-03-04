@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmConsolationMoneyDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmConsolationMoney">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="consolation_money_type" property="consolationMoneyType" />
+        <result column="application_date" property="applicationDate" />
+        <result column="application_money" property="applicationMoney" />
+        <result column="relatives_died" property="relativesDied" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="status" property="status" />
+        <result column="approval_status" property="approvalStatus" />
+        <result column="current_node" property="currentNode" />
+        <result column="current_person" property="currentPerson" />
+        <result column="export_flag" property="exportFlag" />
+        <result column="released_money" property="releasedMoney" />
+        <result column="released_flag" property="releasedFlag" />
+        <result column="released_time" property="releasedTime" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="date" property="date"/>
+        <result column="pay_start_date" property="payStartDate"/>
+        <result column="pay_end_date" property="payEndDate"/>
+        <result column="child_name" property="childName"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="remarks" property="remarks"/>
+        <result column="spouse_name" property="spouseName"/>
+        <result column="relatives_died_relation" property="relativesDiedRelation"/>
+    </resultMap>
+
+    <resultMap id="SwmConsolationMoneyResultMap" type="com.sunten.hrms.swm.domain.SwmConsolationMoney" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            scm.employee_id, scm.consolation_money_type, scm.application_date, scm.application_money,
+            scm.relatives_died, scm.oa_order, scm.approval_date, scm.status, scm.approval_status,
+            scm.current_node, scm.current_person, scm.export_flag, scm.released_money, scm.released_flag,
+            scm.released_time, scm.id, scm.create_time, scm.create_by, scm.update_time, scm.update_by,scm.enabled_flag,
+            scm.date, scm.pay_start_date, scm.pay_end_date, scm.child_name,
+            scm.attribute1, scm.attribute2, scm.attribute3, scm.remarks, scm.relatives_died_relation,
+            scm.spouse_name
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.consolation_money_type as ${tAlias}_consolation_money_type,
+            ${tAlias}.application_date as ${tAlias}_application_date,
+            ${tAlias}.application_money as ${tAlias}_application_money,
+            ${tAlias}.relatives_died as ${tAlias}_relatives_died, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.approval_date as ${tAlias}_approval_date, ${tAlias}.status as ${tAlias}_status,
+            ${tAlias}.approval_status as ${tAlias}_approval_status,
+            ${tAlias}.current_node as ${tAlias}_current_node,
+            ${tAlias}.current_person as ${tAlias}_current_person,
+            ${tAlias}.export_flag as ${tAlias}_export_flag,
+            ${tAlias}.released_money as ${tAlias}_released_money,
+            ${tAlias}.released_flag as ${tAlias}_released_flag,
+            ${tAlias}.released_time as ${tAlias}_released_time, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+             ${tAlias}.date as ${tAlias}_date,
+             ${tAlias}.pay_start_date as ${tAlias}_pay_start_date,
+             ${tAlias}.pay_end_date as ${tAlias}_pay_end_date,
+                ${tAlias}.attribute1 as ${tAlias}_attribute1,
+                ${tAlias}.attribute2 as ${tAlias}_attribute2,
+                ${tAlias}.attribute3 as ${tAlias}_attribute3,
+                ${tAlias}.remarks as ${tAlias}_remarks,
+                ${tAlias}.relatives_died_relation as ${tAlias}_relatives_died_relation,
+                ${tAlias}.spouse_name as ${tAlias}_spouse_name
+
+        ]]>
+    </sql>
+
+<!--    ,-->
+<!--    case when exists (-->
+<!--    select 1 from fnd_dept fd join pm_employee_job pej_t on fd.admin_job_id = pej_t.job_id and fd.enabled_flag = 1 and fd.deleted_flag = 0-->
+<!--    and pej_t.enabled_flag = 1 and pej_t.job_main_flag = 1 join fnd_user fu on fu.employee_id = pej_t.employee_id and fu.enabled_flag = 1-->
+<!--    and fu.id = #{criteria.userId, jdbcType = BIGINT}-->
+<!--    ) then 1 else 0 end as approval_flag-->
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            , pe.work_card as work_card, pe.name as name, fdev.ext_dept_name as dept_name,
+            fdev.ext_department_name as department_name, fdev.ext_team_name as team_name, pe.leave_flag as leave_flag
+              from swm_consolation_money scm join pm_employee pe on pe.id = scm.employee_id and pe.enabled_flag = 1
+              join pm_employee_job pej on pej.employee_id = pe.id and pej.enabled_flag = 1 and pej.job_main_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id    and fdev.deleted_flag = 0
+          where 1 = 1
+
+        ]]>
+    </sql>
+
+    <sql id="Query_Sql">
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and scm.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.allFlag != null and criteria.allFlag == true">
+                <![CDATA[
+                    and scm.export_flag = 0
+                ]]>
+            </if>
+            <if test="criteria.ids != null and criteria.ids.size > 0">
+                <![CDATA[
+                    and exists (select 1 from swm_consolation_money scm_t where scm_t.id = scm.id and scm_t.id in
+                ]]>
+                <foreach collection="criteria.ids" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[
+                )
+                ]]>
+            </if>
+            <choose>
+                <when test="criteria.adminDeptIds != null and criteria.adminDeptIds.size > 0">
+                    <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_admin
+                                     WHERE pej_admin.employee_id = scm.employee_id
+                                       AND pej_admin.enabled_flag = 1
+                                       AND pej_admin.dept_id IN ]]>
+                    <foreach collection="criteria.adminDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                    </foreach>
+                    <![CDATA[ )]]>
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="criteria.employeeId != null and criteria.deptIds != null and criteria.deptIds.size > 0">
+                            <![CDATA[
+                                and (scm.employee_id = #{criteria.employeeId, jdbcType = BIGINT} or  exists (SELECT 1
+                                              FROM pm_employee_job pej_t
+                                             WHERE pej_t.employee_id = scm.employee_id
+                                               AND pej_t.enabled_flag = 1
+                                               AND pej_t.dept_id IN
+                                       ]]>
+                            <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                                <![CDATA[
+                                    #{item, jdbcType=BIGINT}
+                                ]]>
+                            </foreach>
+                                <![CDATA[ )
+                                )
+                                ]]>
+                        </when>
+                        <otherwise>
+                            <choose>
+                                <when test="criteria.adminFlag != null and criteria.adminFlag == true">
+                                    <![CDATA[
+                                        and 1 = 1
+                                    ]]>
+                                </when>
+                                <otherwise>
+                                    <![CDATA[
+                                        and scm.employee_id = #{criteria.employeeId, jdbcType = BIGINT}
+                                    ]]>
+                                </otherwise>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+            <if test="criteria.value != null and criteria.value != '' and criteria.colName != '' and criteria.symbol != ''">
+                <choose>
+                    <when test="criteria.colName == 'consolation_money_type'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'application_date'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DATE}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'application_money'">
+                        <![CDATA[
+                                   and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DECIMAL}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'relatives_died'">
+                        <![CDATA[
+                                   and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'oa_order'">
+                        <![CDATA[
+                                   and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'approval_date'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DATE}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'status'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'approval_status'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'current_node'">
+                        <![CDATA[
+                                     and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'current_person'">
+                        <![CDATA[
+                                     and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'export_flag'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=BIT}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'released_money'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DECIMAL}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'released_flag'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=BIT}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'released_time'">
+                        <![CDATA[
+                                     and scm.${criteria.colName} between #{criteria.releasedTimeStart,jdbcType=DATE}
+                                     and #{criteria.releasedTimeEnd,jdbcType=DATE}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'name'">
+                        <![CDATA[
+                                    and pe.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'work_card'">
+                        <![CDATA[
+                                    and pe.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                                ]]>
+                    </when>
+                    <when test="criteria.colName == 'date'">
+                        <![CDATA[
+                                    and scm.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DATE}
+                                ]]>
+                    </when>
+                </choose>
+            </if>
+            <if test="criteria.advancedQuerys != null and criteria.advancedQuerys.size > 0">
+                <foreach collection="criteria.advancedQuerys" item="item" index="index">
+                    <if test="item.value != null and item.colValue != '' and item.symbol != ''">
+                        <choose>
+                            <when test="item.value == 'consolation_money_type'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'application_date'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = DATE}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'application_money'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = DECIMAL}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'relatives_died'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'oa_order'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'approval_date'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = DATE}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'status'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'approval_status'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'current_node'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'current_person'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'export_flag'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = BIT}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'released_money'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = DECIMAL}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'released_flag'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = BIT}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'released_time'">
+                                <![CDATA[
+                                    and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = DATE}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'name'">
+                                <![CDATA[
+                                    and pe.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'work_card'">
+                                <![CDATA[
+                                    and pe.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                                ]]>
+                            </when>
+                            <when test="item.value == 'date'">
+                                <![CDATA[
+                                  and scm.${item.value} ${item.symbol} #{item.colValue, jdbcType = DATE}
+                                ]]>
+                            </when>
+                        </choose>
+                    </if>
+                </foreach>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <include refid="Query_Sql"/>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoney" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_consolation_money (employee_id, consolation_money_type,
+                                               application_date, application_money,
+                                               relatives_died, oa_order,
+                                               approval_date, status,
+                                               approval_status, current_node,
+                                               current_person, export_flag,
+                                               released_money, released_flag,
+                                               released_time, create_time,
+                                               create_by, update_time, update_by, enabled_flag, date, pay_start_date, pay_end_date, child_name,
+                                               attribute1, attribute2, attribute3, remarks,
+                                               relatives_died_relation,spouse_name
+                                               )
+            values (#{employeeId,jdbcType=BIGINT}, #{consolationMoneyType,jdbcType=VARCHAR},
+                    #{applicationDate,jdbcType=DATE}, #{applicationMoney,jdbcType=DECIMAL},
+                    #{relativesDied,jdbcType=VARCHAR}, #{oaOrder,jdbcType=VARCHAR},
+                    #{approvalDate,jdbcType=DATE}, '等待审批',
+                    #{approvalStatus,jdbcType=VARCHAR}, #{currentNode,jdbcType=VARCHAR},
+                    #{currentPerson,jdbcType=VARCHAR}, 0,
+                    #{releasedMoney,jdbcType=DECIMAL}, 0,
+                    #{releasedTime,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, 1, #{date, jdbcType = DATE},
+                    #{payStartDate, jdbcType = DATE}, #{payEndDate, jdbcType = DATE}, #{childName, jdbcType = VARCHAR},
+                    #{attribute1, jdbcType = VARCHAR},  #{attribute2, jdbcType = VARCHAR}, #{attribute3, jdbcType = VARCHAR},
+                    #{remarks, jdbcType = VARCHAR}, #{relativesDiedRelation, jdbcType=VARCHAR},
+                    #{spouseName, jdbcType = VARCHAR}
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_consolation_money
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoney">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteByEnabled" parameterType="java.lang.Long">
+        <![CDATA[
+            update  swm_consolation_money set enabled_flag = 0 where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoney">
+        <![CDATA[
+            update swm_consolation_money
+                set     update_time            = #{updateTime,jdbcType=TIMESTAMP}
+                   ,update_by              = #{updateBy,jdbcType=BIGINT}
+         ]]>
+            <if test="employeeId != null">
+        <![CDATA[    ,employee_id            = #{employeeId,jdbcType=BIGINT} ]]>
+            </if>
+        <if test="consolationMoneyType != null">
+           <![CDATA[  ,consolation_money_type = #{consolationMoneyType,jdbcType=VARCHAR}  ]]>
+        </if>
+        <if test="applicationDate != null">
+           <![CDATA[  ,application_date       = #{applicationDate,jdbcType=DATE} ]]>
+        </if>
+        <if test="applicationMoney != null">
+           <![CDATA[  ,application_money      = #{applicationMoney,jdbcType=DECIMAL} ]]>
+        </if>
+        <if test="relativesDied != null">
+          <![CDATA[   ,relatives_died         = #{relativesDied,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="oaOrder != null">
+            <![CDATA[ ,oa_order               = #{oaOrder,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="approvalDate != null">
+           <![CDATA[  , approval_date          = #{approvalDate,jdbcType=DATE} ]]>
+        </if>
+        <if test="status != null">
+           <![CDATA[  ,status                 = #{status,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="approvalStatus != null">
+           <![CDATA[  ,approval_status        = #{approvalStatus,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="currentNode != null">
+           <![CDATA[  ,current_node           = #{currentNode,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="currentPerson != null">
+           <![CDATA[  ,current_person         = #{currentPerson,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="exportFlag != null">
+           <![CDATA[  ,export_flag            = #{exportFlag,jdbcType=BIT} ]]>
+        </if>
+        <if test="releasedMoney != null">
+           <![CDATA[  ,released_money         = #{releasedMoney,jdbcType=DECIMAL} ]]>
+        </if>
+        <if test="releasedFlag != null">
+           <![CDATA[  ,released_flag          = #{releasedFlag,jdbcType=BIT} ]]>
+        </if>
+        <if test="releasedTime != null">
+           <![CDATA[  ,released_time          = #{releasedTime,jdbcType=DATE} ]]>
+        </if>
+        <if test="date != null">
+           <![CDATA[  ,date                   = #{date, jdbcType = DATE} ]]>
+        </if>
+        <if test="payStartDate != null">
+            <![CDATA[  ,pay_start_date                   = #{payStartDate, jdbcType = DATE} ]]>
+        </if>
+        <if test="payEndDate != null">
+            <![CDATA[  ,pay_end_date                   = #{payEndDate, jdbcType = DATE} ]]>
+        </if>
+        <if test="childName != null">
+            <![CDATA[  ,child_name                   = #{childName, jdbcType = VARCHAR} ]]>
+        </if>
+        <if test="attribute1 != null">
+            <![CDATA[  ,attribute1                   = #{attribute1, jdbcType = VARCHAR} ]]>
+        </if>
+        <if test="attribute2 != null">
+            <![CDATA[  ,attribute2                   = #{attribute2, jdbcType = VARCHAR} ]]>
+        </if>
+        <if test="attribute3 != null">
+            <![CDATA[  ,attribute3                   = #{attribute3, jdbcType = VARCHAR} ]]>
+        </if>
+        <if test="remarks != null">
+            <![CDATA[  ,remarks                   = #{remarks, jdbcType = VARCHAR} ]]>
+        </if>
+        <if test="relativesDiedRelation != null">
+            <![CDATA[  ,relatives_died_relation                   = #{relativesDiedRelation, jdbcType = VARCHAR} ]]>
+        </if>
+        <if test="spouseName != null">
+            <![CDATA[  ,spouse_name                   = #{spouseName, jdbcType = VARCHAR} ]]>
+        </if>
+
+     <![CDATA[
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateExportFlagByCriteria" parameterType="java.lang.Long">
+         <![CDATA[
+              update swm_consolation_money set
+              update_time = getdate(),
+              update_by = #{updateBy, jdbcType = BIGINT},
+              released_time = #{criteria.releasedTime, jdbcType=DATE},
+              export_flag = 1,
+              status = '发放审批中'
+              from swm_consolation_money scm where scm.enabled_flag = 1
+              and scm.status = '等待导出'
+        ]]>
+        <include refid="Query_Sql"/>
+    </update>
+
+    <select id="getByKey" resultMap="SwmConsolationMoneyResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             and scm.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmConsolationMoneyResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmConsolationMoneyResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="oldestInterfaceToMain" parameterType="java.lang.Long">
+        <![CDATA[
+            insert into swm_consolation_money (
+                                       employee_id, consolation_money_type,
+                                       application_date, application_money,
+                                       relatives_died, status,
+                                        export_flag,
+                                       released_money, released_flag,
+                                       released_time, create_time,
+                                       create_by, update_time, update_by, enabled_flag, date,
+                                       pay_start_date, pay_end_date, child_name,
+                                       attribute1,remarks
+            )
+            select
+            scmi.employee_id, scmi.consolation_money_type, scmi.application_date,scmi.application_money,
+            scmi.relatives_died, '发放完毕',  1, scmi.released_money, 1,
+            scmi.released_time, getdate(), scmi.create_by, getdate(), scmi.update_by,1, scmi.date,
+            case when scmi.date != null and scmi.consolation_money_type = '子女幼托费' then DATEADD(yyyy,2 , scmi.date) else null end,
+            case when scmi.date != null and scmi.consolation_money_type = '子女幼托费' then DATEADD(yyyy,13 , scmi.date) else null end,
+            scmi.child_name, '历史数据', scmi.remarks
+            from swm_consolation_money_interface scmi where scmi.group_id = #{groupId, jdbcType = BIGINT}
+            and scmi.data_status = 'T'
+        ]]>
+    </insert>
+
+    <insert id="releasedInterfaceToMain" parameterType="java.lang.Long">
+        <![CDATA[
+            update  scm
+            set scm.status = '发放完毕',
+            scm.export_flag = 1,
+            scm.released_money = scmi.released_money,
+            scm.released_flag = 1,
+            scm.released_time = scmi.released_time,
+            scm.update_time = scmi.update_time,
+            scm.update_by = scmi.update_by
+            from swm_consolation_money_interface scmi join swm_consolation_money scm on
+            scmi.employee_id = scm.employee_id
+            and scmi.consolation_money_type = scm.consolation_money_type
+            and scmi.application_date = scm.application_date
+            and scmi.application_money = scm.application_money
+            and scmi.group_id = #{groupId, jdbcType = BIGINT}
+            and scmi.data_status = 'T'
+        ]]>
+    </insert>
+
+    <update id="releasedMoney" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoney">
+        <![CDATA[
+            update swm_consolation_money
+            set released_flag = 1,
+            released_money = #{releasedMoney, jdbcType = DECIMAL},
+            status = '发放完毕',
+            update_time = getDate(),
+            update_by = #{updateBy, jdbcType = BIGINT}
+            where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="notReleasedMoney" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoney">
+        <![CDATA[
+            update swm_consolation_money
+            set released_flag = 0,
+            status = '发放审批不通过',
+            released_time = null,
+            update_time = getDate(),
+            update_by = #{updateBy, jdbcType = BIGINT}
+            where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="reBackExport">
+        <![CDATA[
+            update swm_consolation_money set export_flag = 0,
+            status = '等待导出',
+            released_time = null,
+            update_by = #{updateBy, jdbcType = BIGINT},
+            update_time = getDate()
+            where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="batchReBackExport">
+        <![CDATA[
+        update swm_consolation_money set export_flag = 0,
+                                         status = '等待导出',
+                                         released_time = null,
+                                         update_by = #{updateBy, jdbcType = BIGINT},
+                                         update_time = getDate()
+        where id in ]]>
+          <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+              <![CDATA[
+                #{item, jdbcType=BIGINT}
+            ]]>
+          </foreach>
+
+    </update>
+
+    <select id="checkHaveBornAfterChildPass" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+        <![CDATA[
+            select case when exists (select 1 from swm_consolation_money scm_t where scm_t.enabled_flag = 1 and scm_t.employee_id = scm.employee_id
+            and scm_t.consolation_money_type = '子女诞辰') then 0 else 1 end as create_flag
+            from swm_consolation_money scm where scm.id = #{id, jdbcType = BIGINT} and scm.enabled_flag = 1
+        ]]>
+    </select>
+
+    <select id="getSwmConsolationMoneyByOaOrder" parameterType="java.lang.String" resultType="com.sunten.hrms.swm.domain.SwmConsolationMoney">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            , pe.work_card as work_card, pe.name as name, fdev.ext_dept_name as dept_name,
+            fdev.ext_department_name as department_name, fdev.ext_team_name as team_name, pe.leave_flag as leave_flag
+              from swm_consolation_money scm join pm_employee pe on pe.id = scm.employee_id and pe.enabled_flag = 1
+              join pm_employee_job pej on pej.employee_id = pe.id and pej.enabled_flag = 1 and pej.job_main_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.deleted_flag = 0
+           where  scm.oa_order = #{oaOrder, jdbcType = VARCHAR}
+        ]]>
+    </select>
+
+    <update id="updateDateByChild" parameterType="java.lang.Long">
+        <![CDATA[
+                update
+        scm
+        set
+        scm.date = isnull(sfci.date, scm.date),
+        scm.child_name = isnull(sfci.child_name, scm.child_name),
+        scm.pay_start_date = case when sfci.date != null then dateadd(yyyy, 2, sfci.date) else scm.pay_start_date end,
+        scm.pay_end_date = case when sfci.date != null then DATEADD(yyyy, 13, sfci.date) else scm.pay_end_date end
+        from
+        swm_consolation_money scm join pm_employee pe on
+        scm.employee_id = pe.id and pe.enabled_flag = 1 and scm.enabled_flag = 1
+        left join swm_first_child_interface sfci on
+        pe.work_card = sfci.work_card and pe.name = sfci.name
+        where sfci.data_status = 'T'
+        and sfci.date is not null
+        and sfci.group_id = 1
+        and (scm.consolation_money_type = '子女幼托费'
+        || scm.consolation_money_type = '子女诞辰'
+        )
+        ]]>
+    </update>
+
+
+<!--     在职  5264   004462 ljw  有诞辰-->
+
+<!--     离职 	4288   000038 苏锦标  有诞辰-->
+
+<!--     在职	4121	000123	梁建生	有诞辰-->
+
+<!--     在职   	4106 000085   郭显松  无诞辰 还在发放期-->
+
+<!--     离职		5413	 000941		蒙江立	无诞辰		X-->
+
+<!--     在职	4108	000092	陈笑敏 无诞辰 不在发放期  	X-->
+
+    <!--   自动根据子女幼托生成幼托 -->
+    <insert id="autoCreateChildByChild">
+        <![CDATA[
+INSERT INTO swm_consolation_money (
+employee_id,
+consolation_money_type,
+application_date,
+application_money,
+relatives_died,
+STATUS,
+export_flag,
+released_money,
+released_flag,
+released_time,
+create_time,
+create_by,
+update_time,
+update_by,
+enabled_flag,
+DATE,
+pay_start_date,
+pay_end_date,
+child_name,
+attribute1,
+remarks,
+approval_status
+) SELECT
+target.employee_id,
+target.consolation_money_type,
+getdate( ),
+target.application_money,
+NULL,
+'等待导出',
+0,
+NULL,
+0,
+NULL,
+getdate( ),
+- 1,
+getdate( ),
+- 1,
+1,
+target.date,
+target.pay_start_date,
+target.pay_end_date,
+target.child_name,
+'系统自动生成的子女幼托',
+NULL,
+'pass'
+FROM
+	(
+SELECT
+	temp.*
+FROM
+	(
+    SELECT
+	scm.*,
+	ROW_NUMBER ( ) OVER ( PARTITION BY scm.employee_id, scm.consolation_money_type ORDER BY isnull(scm.released_time, getdate()) DESC ) rn
+FROM
+	swm_consolation_money scm
+WHERE
+	scm.consolation_money_type = '子女幼托费'
+	AND scm.enabled_flag = 1
+	and scm.status = '发放完毕'
+	and scm.approval_status = 'pass'
+	and EXISTS(select 1 from pm_employee pe where pe.id = scm.employee_id and pe.enabled_flag = 1 and pe.leave_flag = 0)
+	) temp
+WHERE
+	convert(varchar(10), getdate(),120) >= case when month(temp.create_time) < 7 then convert(varchar(10), convert(varchar(4),year(getdate())) + '-07-01', 120)
+	else convert(varchar(10), convert(varchar(4), year(getdate()) + 1) + '-01-01', 120) end
+	) AS target  join pm_employee pe on pe.id = target.employee_id  and pe.enabled_flag = 1 and pe.leave_flag = 0
+WHERE
+	target.pay_end_date >= convert(varchar(10),dateADD( mm, - 6, getdate( ) ),120)
+	AND target.pay_end_date IS NOT NULL
+	and target.pay_start_date <= convert(varchar(10), getdate(), 120)
+        ]]>
+    </insert>
+
+<!--   自动根据子女诞辰生成第一条子女幼托 -->
+    <insert id="autoCreateFirstChildByBorn">
+        <![CDATA[
+            insert into swm_consolation_money(
+     employee_id, consolation_money_type,
+                                       application_date, application_money,
+                                       relatives_died, status,
+                                        export_flag,
+                                       released_money, released_flag,
+                                       released_time, create_time,
+                                       create_by, update_time, update_by, enabled_flag, date,
+                                       pay_start_date, pay_end_date, child_name,
+                                       attribute1,remarks
+)
+select temp.employee_id, '子女幼托费', getdate(), 150, null , '等待导出', 0, null,  0, null , getdate(),
+-1, getdate(), -1 , 1 , temp.date, temp.pay_start_date, temp.pay_end_date, temp.child_name, '只有子女诞辰的情况下，系统自动生成的子女幼托', null
+from
+(
+select scm_t.* from swm_consolation_money scm_t where scm_t.enabled_flag = 1 and scm_t.consolation_money_type = '子女诞辰'
+and scm_t.pay_start_date is not null
+and scm_t.status = '发放完毕'
+and scm_t.approval_status = 'pass'
+	and EXISTS(select 1 from pm_employee pe where pe.id = scm_t.employee_id and pe.enabled_flag = 1 and pe.leave_flag = 0)
+
+and convert(varchar(10), getdate(), 120) >= scm_t.pay_start_date
+and convert(varchar(10), getdate(), 120) <= scm_t.pay_end_date
+and not EXISTS  (
+select 1 from swm_consolation_money scm where scm.enabled_flag = 1 and scm.consolation_money_type = '子女幼托费' and scm.employee_id = scm_t.employee_id
+)
+)
+temp join pm_employee pe on pe.id = temp.employee_id and pe.enabled_flag = 1 and pe.leave_flag = 0
+
+
+        ]]>
+    </insert>
+
+    <select id="checkBornBeforeInsert" resultType="com.sunten.hrms.swm.domain.SwmConsolationCheck">
+        <![CDATA[
+   select case when exists (
+            select 1 from swm_consolation_money scm where scm.enabled_flag = 1 and scm.consolation_money_type = '子女诞辰'
+            and scm.employee_id = #{employeeId, jdbcType = BIGINT}
+            and scm.approval_status != 'notPass'
+          ]]>
+          <if test="childName != null and childName != ''">
+              <![CDATA[ and scm.child_name = #{childName,jdbcType = VARCHAR} ]]>
+          </if>
+          <![CDATA[
+            ) then 1 else 0 end as have_born_flag,
+
+
+		case when  EXISTS   (
+                select 1 from pm_employee_socialrelations pes join pm_employee pe on pe.name = pes.name and
+                pe.enabled_flag = 1 and pe.leave_flag = 0 and  pes.enabled_flag = 1 and pes.in_factory_flag = 1 and pes.relationship = '夫妻'
+                and pes.employee_id = #{employeeId, jdbcType = BIGINT} and exists (
+                select 1 from swm_consolation_money scm_t where scm_t.enabled_flag = 1 and scm_t.employee_id = pe.id
+                and scm_t.consolation_money_type = '子女诞辰'
+                and scm_t.approval_status != 'notPass'
+                   ]]>
+        <if test="childName != null and childName != ''">
+            <![CDATA[ and scm_t.child_name = #{childName,jdbcType = VARCHAR} ]]>
+        </if>
+        <![CDATA[
+                )
+            )
+				then 1 else 0 end as have_half_born_flag,
+
+        case when exists (
+             select 1 from swm_consolation_money scm where scm.enabled_flag = 1 and scm.consolation_money_type = '结婚'
+            and scm.employee_id = #{employeeId, jdbcType = BIGINT}
+            and scm.approval_status != 'notPass'
+        ) then 1 else 0 end as have_married_flag,
+
+        case when exists (
+              select 1 from pm_employee_socialrelations pes join pm_employee pe on pe.name = pes.name and
+                pe.enabled_flag = 1 and pe.leave_flag = 0 and  pes.enabled_flag = 1 and pes.in_factory_flag = 1 and pes.relationship = '夫妻'
+                and pes.employee_id = #{employeeId, jdbcType = BIGINT} and exists (
+                select 1 from swm_consolation_money scm_t where scm_t.enabled_flag = 1 and scm_t.employee_id = pe.id
+                and scm_t.consolation_money_type = '结婚'
+                and scm_t.approval_status != 'notPass'
+                )
+        ) then 1 else 0 end as have_half_married_flag,
+
+
+        case when exists  (
+                     select 1 from swm_consolation_money scm where scm.enabled_flag = 1 and scm.consolation_money_type = '子女幼托费'
+            and scm.employee_id = #{employeeId, jdbcType = BIGINT}
+        ]]>
+        <if test="childName != null and childName != ''">
+            <![CDATA[ and scm.child_name = #{childName,jdbcType = VARCHAR} ]]>
+        </if>
+        <![CDATA[
+            and scm.approval_status != 'notPass'
+        ) then 1 else 0 end as have_child_flag,
+
+            case when exists  (
+                      select 1 from pm_employee_socialrelations pes join pm_employee pe on pe.name = pes.name and
+                pe.enabled_flag = 1 and pe.leave_flag = 0 and  pes.enabled_flag = 1 and pes.in_factory_flag = 1 and pes.relationship = '夫妻'
+                and pes.employee_id = #{employeeId, jdbcType = BIGINT} and exists (
+                select 1 from swm_consolation_money scm_t where scm_t.enabled_flag = 1 and scm_t.employee_id = pe.id
+                and scm_t.consolation_money_type = '子女幼托费'
+                ]]>
+        <if test="childName != null and childName != ''">
+            <![CDATA[ and scm_t.child_name = #{childName,jdbcType = VARCHAR} ]]>
+        </if>
+        <![CDATA[
+                and scm_t.approval_status != 'notPass'
+                )
+        ) then 1 else 0 end as have_half_child_flag,
+
+            case when #{deadDate, jdbcType = DATE} != null then
+             case when exists (
+                   select 1 from swm_consolation_money scm where scm.enabled_flag = 1 and scm.consolation_money_type = '丧事' and
+                   scm.date = #{deadDate, jdbcType = DATE}
+                   and scm.approval_status != 'notPass'
+            ) then 1 else 0 end
+             else 0 end as have_dead_flag
+        ]]>
+    </select>
+
+    <select id="listForExportApproval" resultMap="SwmConsolationMoneyResultMap" parameterType="java.util.List">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+            and scm.enabled_flag = 1
+            and pe.leave_flag = 0
+            ]]>
+             <if test="ids != null and ids.size > 0">
+                    <![CDATA[
+                        and exists (select 1 from swm_consolation_money scm_t where scm_t.id = scm.id and scm_t.id in
+                    ]]>
+            <foreach collection="ids" item="item" index="index" open=" (" separator="," close=")">
+                <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+            </foreach>
+            <![CDATA[
+                    )
+                    ]]>
+            </if>
+    </select>
+
+    <select id="getListForSendEmail" parameterType="java.util.Set" resultMap="SwmConsolationMoneyResultMap">
+        <![CDATA[
+            select pej.dept_id, scm.*,pe.name, pe.work_card, (select top 1 fu.email from fnd_user fu where fu.employee_id = pe.id and fu.enabled_flag = 1
+        ) as email
+            from swm_consolation_money scm join pm_employee_job pej on
+            scm.employee_id = pej.employee_id and pej.enabled_flag = 1 and pej.job_main_flag = 1  and scm.id in    ]]>
+        <foreach collection="ids" item="item" index="index" open=" (" separator="," close=")">
+            <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+        </foreach>
+        <![CDATA[
+                    join pm_employee pe on pe.id = scm.employee_id and pe.enabled_flag = 1
+                        ]]>
+    </select>
+
+
+</mapper>

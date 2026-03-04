@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanEmployeeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanEmployee">
+        <id column="id" property="id" />
+        <result column="plan_implement_id" property="planImplementId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="type" property="type" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdPlanEmployeeResultMap" type="com.sunten.hrms.td.domain.TdPlanEmployee" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpe.plan_implement_id, tpe.employee_id, tpe.enabled_flag, tpe.type, tpe.id, tpe.create_time,
+            tpe.create_by, tpe.update_time, tpe.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.plan_implement_id as ${tAlias}_plan_implement_id,
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.type as ${tAlias}_type, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        ,(select pe.workshop_attendance_flag from pm_employee pe where pe.id = tpe.employee_id and pe.enabled_flag = 1 ) as workshop_attendance_flag
+        ,(select pe.name from pm_employee pe where pe.id = tpe.employee_id and pe.enabled_flag = 1 ) as employee_name
+        , isnull((select pe.email_inside from pm_employee pe where pe.id = tpe.employee_id and pe.enabled_flag = 1  ),
+        (select top 1 fu.email from fnd_user fu where fu.employee_id = tpe.employee_id and fu.enabled_flag = 1 and fu.email <> '@in-sunten.com')
+        ) as email,
+        (select pej.dept_id from pm_employee_job pej where pej.employee_id = tpe.employee_id and pej.job_main_flag = 1 and pej.enabled_flag = 1
+        and tpe.enabled_flag = 1) as dept_id
+
+              from td_plan_employee tpe join td_plan_implement tpi on tpe.plan_implement_id = tpi.id
+              and tpe.enabled_flag = 1 and tpi.enabled_flag = 1
+
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.planImplementId != null">
+                <![CDATA[
+                    and tpe.plan_implement_id = #{criteria.planImplementId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.type != null">
+                <![CDATA[
+                    and tpe.type = #{criteria.type,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.planId != null">
+                <![CDATA[
+                    and tpi.plan_id = #{criteria.planId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and tpi.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanEmployee" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_employee (plan_implement_id, employee_id,
+                                          enabled_flag, type, create_time,
+                                          create_by, update_time, update_by)
+            values (#{planImplementId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT},
+                    #{enabledFlag,jdbcType=BIT}, #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_employee
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanEmployee">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanEmployee">
+        <![CDATA[
+            update td_plan_employee
+               set plan_implement_id = #{planImplementId,jdbcType=BIGINT},
+                   employee_id       = #{employeeId,jdbcType=BIGINT},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   type              = #{type,jdbcType=VARCHAR},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="deleteByEnabled" parameterType="com.sunten.hrms.td.domain.TdPlanEmployee">
+         <![CDATA[
+            update td_plan_employee set enabled_flag = 0
+            where plan_implement_id = #{planImplementId, jdbcType=BIGINT}
+            and enabled_flag = 1
+            and type = #{type, jdbcType = VARCHAR}
+            and employee_id = #{employeeId, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tpe.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+<!--    <select id="superQuery" parameterType="java.lang.String" resultMap="TdPlanImplementResultMap">-->
+<!--        <![CDATA[-->
+<!--            select-->
+
+
+<!--            from  td_plan_employee tpe join td_plan_implement tpi on tpe.plan_implement_id = tpi.id and tpe.enabled_flag = 1-->
+<!--            and tpi.enabled_flag = 1 and tpe.type = 'employee' join td_plan tp on tp.id = tpi.plan_id and tp.enabled_flag = 1-->
+<!--            and tp.training_name like '%' +  + '%'-->
+<!--        ]]>-->
+<!--    </select>-->
+
+
+</mapper>

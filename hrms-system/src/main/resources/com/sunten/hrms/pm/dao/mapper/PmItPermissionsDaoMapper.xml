@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmItPermissionsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmItPermissions">
+        <id column="id" property="id" />
+        <result column="permission_belong" property="permissionBelong" />
+        <result column="permission" property="permission" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="belong_type" property="belongType"/>
+    </resultMap>
+
+    <resultMap id="PmItPermissionsResultMap" type="com.sunten.hrms.pm.domain.PmItPermissions" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pip.permission_belong, pip.permission, pip.enabled_flag, pip.id, pip.create_time, pip.create_by,
+            pip.update_time, pip.update_by, pip.belong_type
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.permission_belong as ${tAlias}_permission_belong,
+            ${tAlias}.permission as ${tAlias}_permission, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.belong_type as ${tAlias}_belong_type
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_it_permissions pip
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and pip.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.permissionBelong != null">
+                <![CDATA[
+                    and pip.permission_belong = #{criteria.permissionBelong,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmItPermissions" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_it_permissions (permission_belong, permission,
+                                           enabled_flag, create_time, create_by,
+                                           update_time, update_by, belong_type)
+            values (#{permissionBelong,jdbcType=BIGINT}, #{permission,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{belongType, jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_it_permissions
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmItPermissions">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmItPermissions">
+        <![CDATA[
+        update pm_it_permissions
+        set  update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+     ]]>
+     <if test="permissionBelong != null">
+         <![CDATA[
+        ,permission_belong = #{permissionBelong,jdbcType=BIGINT}
+     ]]>
+     </if>
+        <if test="permission != null">
+            <![CDATA[
+        ,permission        = #{permission,jdbcType=VARCHAR}
+     ]]>
+        </if>
+        <if test="enabledFlag != null">
+            <![CDATA[
+        ,enabled_flag      = #{enabledFlag,jdbcType=BIT}
+     ]]>
+        </if>
+        <if test="belongType != null">
+            <![CDATA[
+        ,belong_type = #{belongType, jdbcType=VARCHAR}
+     ]]>
+        </if>
+        <![CDATA[
+        where id = #{id,jdbcType=BIGINT}
+         ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmItPermissionsResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pip.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmItPermissionsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmItPermissionsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

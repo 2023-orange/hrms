@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmEmployeeInfoInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmEmployeeInfoInterface">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="group_id" property="groupId" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="bank_account" property="bankAccount" />
+        <result column="bank_name" property="bankName" />
+        <result column="department" property="department" />
+        <result column="administrative_office" property="administrativeOffice" />
+        <result column="team" property="team" />
+        <result column="station" property="station" />
+        <result column="cost_center_num" property="costCenterNum" />
+        <result column="cost_center" property="costCenter" />
+        <result column="service_department" property="serviceDepartment" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="SwmEmployeeInfoInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmEmployeeInfoInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <parameterMap id="mspMap" type="java.util.Map">
+        <parameter property="groupId" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="resultStr" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            seii.id, seii.employee_id, seii.work_card, seii.name, seii.group_id, seii.operation_code, 
+            seii.error_msg, seii.data_status, seii.bank_account, seii.bank_name, seii.department, 
+            seii.administrative_office, seii.team, seii.station, seii.cost_center_num, seii.cost_center, 
+            seii.service_department, seii.create_time, seii.create_by, seii.update_time, seii.update_by 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.employee_id as ${tAlias}_employee_id, 
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.name as ${tAlias}_name, 
+            ${tAlias}.group_id as ${tAlias}_group_id, ${tAlias}.operation_code as ${tAlias}_operation_code, 
+            ${tAlias}.error_msg as ${tAlias}_error_msg, ${tAlias}.data_status as ${tAlias}_data_status, 
+            ${tAlias}.bank_account as ${tAlias}_bank_account, ${tAlias}.bank_name as ${tAlias}_bank_name, 
+            ${tAlias}.department as ${tAlias}_department, 
+            ${tAlias}.administrative_office as ${tAlias}_administrative_office, 
+            ${tAlias}.team as ${tAlias}_team, ${tAlias}.station as ${tAlias}_station, 
+            ${tAlias}.cost_center_num as ${tAlias}_cost_center_num, 
+            ${tAlias}.cost_center as ${tAlias}_cost_center, 
+            ${tAlias}.service_department as ${tAlias}_service_department, 
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by, 
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_employee_info_interface seii
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and seii.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and seii.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInfoInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_employee_info_interface (employee_id, work_card, name,
+                                                     group_id, operation_code, error_msg,
+                                                     data_status, bank_account, bank_name,
+                                                     department, administrative_office,
+                                                     team, station, cost_center_num,
+                                                     cost_center, service_department,
+                                                     create_time, create_by,
+                                                     update_time, update_by)
+            values (#{employeeId,jdbcType=BIGINT}, #{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                    #{groupId,jdbcType=BIGINT}, #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR},
+                    #{dataStatus,jdbcType=CHAR}, #{bankAccount,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR},
+                    #{department,jdbcType=VARCHAR}, #{administrativeOffice,jdbcType=VARCHAR},
+                    #{team,jdbcType=VARCHAR}, #{station,jdbcType=VARCHAR}, #{costCenterNum,jdbcType=VARCHAR},
+                    #{costCenter,jdbcType=VARCHAR}, #{serviceDepartment,jdbcType=NCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_employee_info_interface
+             where id = #{id,jdbcType=NUMERIC}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInfoInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInfoInterface">
+        <![CDATA[
+            update swm_employee_info_interface
+               set employee_id           = #{employeeId,jdbcType=BIGINT},
+                   work_card             = #{workCard,jdbcType=VARCHAR},
+                   name                  = #{name,jdbcType=VARCHAR},
+                   group_id              = #{groupId,jdbcType=BIGINT},
+                   operation_code        = #{operationCode,jdbcType=CHAR},
+                   error_msg             = #{errorMsg,jdbcType=VARCHAR},
+                   data_status           = #{dataStatus,jdbcType=CHAR},
+                   bank_account          = #{bankAccount,jdbcType=VARCHAR},
+                   bank_name             = #{bankName,jdbcType=VARCHAR},
+                   department            = #{department,jdbcType=VARCHAR},
+                   administrative_office = #{administrativeOffice,jdbcType=VARCHAR},
+                   team                  = #{team,jdbcType=VARCHAR},
+                   station               = #{station,jdbcType=VARCHAR},
+                   cost_center_num       = #{costCenterNum,jdbcType=VARCHAR},
+                   cost_center           = #{costCenter,jdbcType=VARCHAR},
+                   service_department    = #{serviceDepartment,jdbcType=NCHAR},
+                   update_time           = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by             = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=NUMERIC}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmEmployeeInfoInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where seii.id = #{id,jdbcType=NUMERIC}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmEmployeeInfoInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmEmployeeInfoInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="checkSwmEmployeeInfoInterface" parameterMap="mspMap" statementType="CALLABLE">
+        <![CDATA[
+            {call check_swm_employee_info_interface(?,?)}
+        ]]>
+    </select>
+
+
+    <select id="insertSwmEmployeeInfoInterfaceToMain" parameterMap="mspMap" statementType="CALLABLE">
+        <![CDATA[
+            {call insert_swm_employee_info_interface_to_main(?,?)}
+        ]]>
+    </select>
+
+
+    <select id="getSwmEmployeeInfoSummaryByImportList" resultMap="SwmEmployeeInfoInterfaceResultMap">
+        <![CDATA[
+            select sum(sei.lump_sum_wage) as lump_sum_wage,
+            sum(sei.post_skill_salary) as post_skill_salary,
+            sum(sei.target_performance_pay) as target_performance_pay,
+            sum(sei.base_pay) as base_pay,
+            sum(sei.post_subsidy) as post_subsidy,
+            sum(sei.seniority_allowance) as seniority_allowance,
+            sum(sei.transportation_allowance) as transportation_allowance,
+            sum(sei.one_child_subsidy) as one_child_subsidy,
+            sum(sei.personal_deductibles) as personal_deductibles,
+            sum(sei.company_deductibles) as company_deductibles,
+            sum(sei.personal_deduct_accumulation_fund) as personal_deduct_accumulation_fund,
+            sum(sei.company_deduct_accumulation_fund) as company_deduct_accumulation_fund,
+            sum(sei.safety_accumulation_award) as safety_accumulation_award,
+            sum(sei.high_temperature_subsidy) as high_temperature_subsidy
+            from swm_employee_interface sei where sei.data_status = 'T'
+        ]]>
+        <if test="workCards != null and workCards.size > 0">
+            <![CDATA[
+                        and
+            sei.work_card in (]]>
+            <foreach collection="workCards" item="item" index="index" separator=",">
+                <![CDATA[
+                    right(replicate('0',6) + convert(varchar(6),#{item}),6)
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+        <if test="groupIds != null and groupIds.size > 0">
+            <![CDATA[
+                        and
+            sei.group_id in (]]>
+            <foreach collection="groupIds" item="groupId" index="index" separator=",">
+                <![CDATA[
+                    #{groupId}
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+    </select>
+
+</mapper>

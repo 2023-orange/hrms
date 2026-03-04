@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndRolesMenusDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndRolesMenus">
+        <id column="menu_id" property="menuId" />
+        <id column="role_id" property="roleId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="FndRolesMenusResultMap" type="com.sunten.hrms.fnd.domain.FndRolesMenus" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            frm.menu_id, frm.role_id, frm.create_time, frm.create_by, frm.update_time, frm.update_by 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.menu_id as ${tAlias}_menu_id, ${tAlias}.role_id as ${tAlias}_role_id, 
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by, 
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_roles_menus frm
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+            where 1 = 1
+        ]]>
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--              and xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndRolesMenus">
+        <![CDATA[
+            insert into fnd_roles_menus (menu_id, role_id, create_time,
+                                         create_by, update_time, update_by)
+            values (#{menuId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_roles_menus
+             where menu_id = #{menuId,jdbcType=BIGINT}
+               and role_id = #{roleId,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndRolesMenus">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndRolesMenus">
+        <![CDATA[
+            update fnd_roles_menus
+               set update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+             where menu_id = #{menuId,jdbcType=BIGINT}
+               and role_id = #{roleId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndRolesMenusResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where frm.menu_id = #{menuId,jdbcType=BIGINT}
+               and frm.role_id = #{roleId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndRolesMenusResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by menu_id, role_id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndRolesMenusResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <delete id="untiedMenu" parameterType="java.lang.Long">
+        <![CDATA[
+		    delete
+              from fnd_roles_menus
+             where menu_id = #{id,jdbcType=BIGINT}
+		]]>
+    </delete>
+
+</mapper>

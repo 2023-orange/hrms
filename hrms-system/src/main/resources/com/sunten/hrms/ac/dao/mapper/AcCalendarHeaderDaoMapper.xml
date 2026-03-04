@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcCalendarHeaderDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcCalendarHeader">
+        <id column="id" property="id" />
+        <result column="calendar_name" property="calendarName" />
+        <result column="default_flag" property="defaultFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcCalendarHeaderResultMap" type="com.sunten.hrms.ac.domain.AcCalendarHeader" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <resultMap id="AcCalendarHeaderAndLineResultMap" type="com.sunten.hrms.ac.domain.AcCalendarHeader" autoMapping="true">
+        <id column="id" property="id" />
+        <result column="calendar_name" property="calendarName" />
+        <result column="default_flag" property="defaultFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <collection property="acCalendarLines" ofType="com.sunten.hrms.ac.domain.AcCalendarLine">
+            <id column="acl_id" property="id" />
+            <result column="acl_calendar_header_id" property="calendarHeaderId" />
+            <result column="acl_now_date" property="nowDate" />
+            <result column="acl_week" property="week" />
+            <result column="acl_day_off_flag" property="dayOffFlag" />
+            <result column="acl_attribute1" property="attribute1" />
+            <result column="acl_attribute2" property="attribute2" />
+            <result column="acl_attribute3" property="attribute3" />
+            <result column="acl_enabled_flag" property="enabledFlag" />
+            <result column="acl_create_by" property="createBy" />
+            <result column="acl_create_time" property="createTime" />
+            <result column="acl_update_by" property="updateBy" />
+            <result column="acl_update_time" property="updateTime" />
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ach.id, ach.calendar_name, ach.default_flag, ach.attribute1, ach.attribute2, ach.attribute3,
+            ach.enabled_flag, ach.create_by, ach.create_time, ach.update_by, ach.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.calendar_name as ${tAlias}_calendar_name,
+            ${tAlias}.default_flag as ${tAlias}_default_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_calendar_header ach
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                    and ach.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.id != null">
+                <![CDATA[
+                    and ach.id = #{criteria.id,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.defaultFlag != null">
+                <![CDATA[
+                    and ach.default_flag = #{criteria.defaultFlag,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcCalendarHeader" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_calendar_header (calendar_name, default_flag,
+                                            attribute1, attribute2,
+                                            attribute3, enabled_flag, create_by,
+                                            create_time, update_by,
+                                            update_time)
+            values (#{calendarName,jdbcType=VARCHAR}, #{defaultFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_calendar_header
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcCalendarHeader">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEnabled" parameterType="com.sunten.hrms.ac.domain.AcCalendarHeader">
+        <![CDATA[
+            update ac_calendar_header set enabled_flag = 0,
+                update_by        = #{updateBy,jdbcType=BIGINT},
+                update_time      = #{updateTime,jdbcType=TIMESTAMP}
+            where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcCalendarHeader">
+        <![CDATA[
+            update ac_calendar_header
+               set calendar_name = #{calendarName,jdbcType=VARCHAR},
+                   default_flag  = #{defaultFlag,jdbcType=BIT},
+                   attribute1    = #{attribute1,jdbcType=VARCHAR},
+                   attribute2    = #{attribute2,jdbcType=VARCHAR},
+                   attribute3    = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag  = #{enabledFlag,jdbcType=BIT},
+                   update_by     = #{updateBy,jdbcType=BIGINT},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcCalendarHeaderResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ach.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcCalendarHeaderResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcCalendarHeaderResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listHeaderAndLineByCriteria" resultMap="AcCalendarHeaderAndLineResultMap">
+        <![CDATA[ select temp.*, ]]>
+        <bind name="tAlias" value="'acl'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcCalendarLineDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from ( select ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ from ac_calendar_header ach where 1 = 1 ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                    and ach.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.id != null">
+                <![CDATA[
+                    and ach.id = #{criteria.id,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.defaultFlag != null">
+                <![CDATA[
+                    and ach.default_flag = #{criteria.defaultFlag,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+        <![CDATA[ ) as temp left join
+        ac_calendar_line acl on  temp.id = acl.calendar_header_id order by temp.id]]>
+    </select>
+
+    <select id="getDefaultHeader" resultType="com.sunten.hrms.ac.domain.AcCalendarHeader">
+           <![CDATA[ select ach.* from ac_calendar_header ach where ach.default_flag = 1 and ach.enabled_flag = 1 ]]>
+    </select>
+
+</mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcExceptionDisposeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcExceptionDispose">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="exception_type" property="exceptionType" />
+        <result column="exception_date" property="exceptionDate" />
+        <result column="exception_describes" property="exceptionDescribes" />
+        <result column="dispose_employee_id" property="disposeEmployeeId" />
+        <result column="dispose_date" property="disposeDate" />
+        <result column="dispose_result" property="disposeResult" />
+        <result column="dispose_flag" property="disposeFlag" />
+        <result column="req_code" property="reqCode" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcExceptionDisposeResultMap" type="com.sunten.hrms.ac.domain.AcExceptionDispose" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aed.id, aed.employee_id, aed.exception_type, aed.exception_date, aed.exception_describes,
+            aed.dispose_employee_id, aed.dispose_date, aed.dispose_result, aed.dispose_flag, aed.req_code,
+            aed.attribute1, aed.attribute2, aed.attribute3, aed.enabled_flag, aed.create_by, aed.create_time,
+            aed.update_by, aed.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.exception_type as ${tAlias}_exception_type,
+            ${tAlias}.exception_date as ${tAlias}_exception_date,
+            ${tAlias}.exception_describes as ${tAlias}_exception_describes,
+            ${tAlias}.dispose_employee_id as ${tAlias}_dispose_employee_id,
+            ${tAlias}.dispose_date as ${tAlias}_dispose_date,
+            ${tAlias}.dispose_result as ${tAlias}_dispose_result,
+            ${tAlias}.dispose_flag as ${tAlias}_dispose_flag, ${tAlias}.req_code as ${tAlias}_req_code,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_exception_dispose aed,
+                   pm_employee pe
+              where aed.employee_id = pe.id
+                and pe.enabled_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <if test="criteria != null">
+            <if test="criteria.employeeName != null">
+                <![CDATA[
+                    and pe.name like #{criteria.employeeName,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and aed.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.beginDate != null">
+                <![CDATA[
+                    and aed.exception_date >= #{criteria.beginDate,jdbcType=DATE}
+                ]]>
+            </if>
+            <if test="criteria.endDate != null">
+                <![CDATA[
+                    and aed.exception_date <= #{criteria.endDate,jdbcType=DATE}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null">
+                <![CDATA[
+                    and aed.employee_id in ( select pej.employee_id from pm_employee_job pej
+                                             where pej.enabled_flag = 1
+                                              and pej.job_main_flag = 1
+                                              and pej.dept_id in (]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+                <![CDATA[))]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcExceptionDispose" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_exception_dispose (employee_id, exception_type,
+                                              exception_date, exception_describes,
+                                              dispose_employee_id, dispose_date,
+                                              dispose_result, dispose_flag, req_code,
+                                              attribute1, attribute2,
+                                              attribute3, enabled_flag, create_by,
+                                              create_time, update_by,
+                                              update_time)
+            values (#{employeeId,jdbcType=BIGINT}, #{exceptionType,jdbcType=VARCHAR},
+                    #{exceptionDate,jdbcType=DATE}, #{exceptionDescribes,jdbcType=VARCHAR},
+                    #{disposeEmployeeId,jdbcType=BIGINT}, #{disposeDate,jdbcType=TIMESTAMP},
+                    #{disposeResult,jdbcType=VARCHAR}, #{disposeFlag,jdbcType=BIT}, #{reqCode,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_exception_dispose
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcExceptionDispose">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcExceptionDispose">
+        <![CDATA[
+            update ac_exception_dispose
+               set employee_id         = #{employeeId,jdbcType=BIGINT},
+                   exception_type      = #{exceptionType,jdbcType=VARCHAR},
+                   exception_date      = #{exceptionDate,jdbcType=DATE},
+                   exception_describes = #{exceptionDescribes,jdbcType=VARCHAR},
+                   dispose_employee_id = #{disposeEmployeeId,jdbcType=BIGINT},
+                   dispose_date        = #{disposeDate,jdbcType=TIMESTAMP},
+                   dispose_result      = #{disposeResult,jdbcType=VARCHAR},
+                   dispose_flag        = #{disposeFlag,jdbcType=BIT},
+                   req_code            = #{reqCode,jdbcType=VARCHAR},
+                   attribute1          = #{attribute1,jdbcType=VARCHAR},
+                   attribute2          = #{attribute2,jdbcType=VARCHAR},
+                   attribute3          = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag        = #{enabledFlag,jdbcType=BIT},
+                   update_by           = #{updateBy,jdbcType=BIGINT},
+                   update_time         = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateSomeColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcExceptionDispose">
+        <![CDATA[
+        update ac_exception_dispose
+        set ]]>
+        <if test="disposeFlag">
+            <![CDATA[
+             dispose_employee_id = #{updateBy,jdbcType=BIGINT},
+              dispose_date        = #{updateTime,jdbcType=TIMESTAMP},
+            ]]>
+        </if>
+        <![CDATA[
+            dispose_result      = #{disposeResult,jdbcType=VARCHAR},
+            dispose_flag        = #{disposeFlag,jdbcType=BIT},
+            req_code            = #{reqCode,jdbcType=VARCHAR},
+            update_by           = #{updateBy,jdbcType=BIGINT},
+            update_time         = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcExceptionDisposeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aed.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcExceptionDisposeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcExceptionDisposeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

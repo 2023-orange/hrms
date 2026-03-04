@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeEmergencyDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeEmergency">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="emergency_contact" property="emergencyContact" />
+        <result column="emergency_tele" property="emergencyTele" />
+        <result column="remarks" property="remarks" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeEmergencyResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeEmergency" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pee.employee_id as pe_id, pee.emergency_contact, pee.emergency_tele, pee.remarks, pee.attribute1,
+            pee.attribute2, pee.attribute3, pee.enabled_flag, pee.id, pee.create_time, pee.create_by,
+            pee.update_time, pee.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id,
+            ${tAlias}.emergency_contact as ${tAlias}_emergency_contact,
+            ${tAlias}.emergency_tele as ${tAlias}_emergency_tele, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_emergency pee
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and pee.employee_id like #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                    and pee.enabled_flag like #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEmergency" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_emergency (employee_id, emergency_contact,
+                                               emergency_tele, remarks,
+                                               attribute1, attribute2,
+                                               attribute3, enabled_flag,
+                                               create_time, create_by,
+                                               update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{emergencyContact,jdbcType=VARCHAR},
+                    #{emergencyTele,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_emergency
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEmergency">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEmergency">
+        <![CDATA[
+            update pm_employee_emergency
+               set employee_id       = #{employee.id,jdbcType=BIGINT},
+                   emergency_contact = #{emergencyContact,jdbcType=VARCHAR},
+                   emergency_tele    = #{emergencyTele,jdbcType=VARCHAR},
+                   remarks           = #{remarks,jdbcType=VARCHAR},
+                   attribute1        = #{attribute1,jdbcType=VARCHAR},
+                   attribute2        = #{attribute2,jdbcType=VARCHAR},
+                   attribute3        = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateEnableFlagByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEmergency">
+        <![CDATA[
+        update pm_employee_emergency
+        set enabled_flag      = #{enabledFlag,jdbcType=BIT},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeEmergencyResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pee.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeEmergencyResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeEmergencyResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeeEmergencyResultMap">
+        <![CDATA[
+            select
+            peem.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peem.emergency_contact) > 0 then peem.emergency_contact else null end as emergency_contact,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peem.emergency_tele) > 0 then peem.emergency_tele else null end as emergency_tele,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, peem.remarks) > 0 then peem.remarks else null end as remarks
+            from pm_employee_emergency peem join pm_employee pe on pe.id = peem.employee_id where peem.enabled_flag = 1
+            and pe.enabled_flag = 1 and concat(
+           peem.emergency_contact,peem.emergency_tele,peem.remarks
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+
+    <insert id="insertByRecruitment" parameterType="com.sunten.hrms.pm.domain.PmEmployeeEmergency" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_emergency (employee_id, emergency_contact,
+                                               emergency_tele, enabled_flag,
+                                               create_time, create_by,
+                                               update_time, update_by)
+            values (#{employeeId,jdbcType=BIGINT}, #{emergencyContact,jdbcType=VARCHAR},
+                    #{emergencyTele,jdbcType=VARCHAR},1,
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdTrainingEvaluationScoreDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdTrainingEvaluationScore">
+        <id column="id" property="id" />
+        <result column="course_content" property="courseContent" />
+        <result column="activity_discussion_exercise" property="activityDiscussionExercise" />
+        <result column="understanding_course" property="understandingCourse" />
+        <result column="guide_think" property="guideThink" />
+        <result column="combined_with_content" property="combinedWithContent" />
+        <result column="control_of_scene" property="controlOfScene" />
+        <result column="reasonable_training_schedule" property="reasonableTrainingSchedule" />
+        <result column="job_needs" property="jobNeeds" />
+        <result column="absorption_understanding" property="absorptionUnderstanding" />
+        <result column="goals_achieved" property="goalsAchieved" />
+        <result column="plan_implement_id" property="planImplementId" />
+        <result column="average_score" property="averageScore" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="TdTrainingEvaluationScoreResultMap" type="com.sunten.hrms.td.domain.TdTrainingEvaluationScore" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ttes.course_content, ttes.activity_discussion_exercise, ttes.understanding_course,
+            ttes.guide_think, ttes.combined_with_content, ttes.control_of_scene,
+            ttes.reasonable_training_schedule, ttes.job_needs, ttes.absorption_understanding,
+            ttes.goals_achieved, ttes.plan_implement_id, ttes.average_score, ttes.enabled_flag, ttes.id,
+            ttes.create_by, ttes.update_by, ttes.create_time, ttes.update_time,ttes.trainingOpinion
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.course_content as ${tAlias}_course_content,
+            ${tAlias}.activity_discussion_exercise as ${tAlias}_activity_discussion_exercise,
+            ${tAlias}.understanding_course as ${tAlias}_understanding_course,
+            ${tAlias}.guide_think as ${tAlias}_guide_think,
+            ${tAlias}.combined_with_content as ${tAlias}_combined_with_content,
+            ${tAlias}.control_of_scene as ${tAlias}_control_of_scene,
+            ${tAlias}.reasonable_training_schedule as ${tAlias}_reasonable_training_schedule,
+            ${tAlias}.job_needs as ${tAlias}_job_needs,
+            ${tAlias}.absorption_understanding as ${tAlias}_absorption_understanding,
+            ${tAlias}.goals_achieved as ${tAlias}_goals_achieved,
+            ${tAlias}.plan_implement_id as ${tAlias}_plan_implement_id,
+            ${tAlias}.average_score as ${tAlias}_average_score,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_training_evaluation_score ttes
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.planImplementId != null">
+                <![CDATA[
+                    and ttes.plan_implement_id = #{criteria.planImplementId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and ttes.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdTrainingEvaluationScore" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_training_evaluation_score (course_content, activity_discussion_exercise,
+                                                      understanding_course, guide_think,
+                                                      combined_with_content, control_of_scene,
+                                                      reasonable_training_schedule, job_needs,
+                                                      absorption_understanding, goals_achieved,
+                                                      plan_implement_id, average_score,
+                                                      enabled_flag, create_by, update_by,
+                                                      create_time, update_time,trainingOpinion)
+            values (#{courseContent,jdbcType=DOUBLE}, #{activityDiscussionExercise,jdbcType=DOUBLE},
+                    #{understandingCourse,jdbcType=DOUBLE}, #{guideThink,jdbcType=DOUBLE},
+                    #{combinedWithContent,jdbcType=DOUBLE}, #{controlOfScene,jdbcType=DOUBLE},
+                    #{reasonableTrainingSchedule,jdbcType=DOUBLE}, #{jobNeeds,jdbcType=DOUBLE},
+                    #{absorptionUnderstanding,jdbcType=DOUBLE}, #{goalsAchieved,jdbcType=DOUBLE},
+                    #{planImplementId,jdbcType=BIGINT},
+                    (#{courseContent,jdbcType=DOUBLE} + #{activityDiscussionExercise,jdbcType=DOUBLE} +
+                    #{understandingCourse,jdbcType=DOUBLE} + #{guideThink,jdbcType=DOUBLE} +
+                    #{combinedWithContent,jdbcType=DOUBLE} + #{controlOfScene,jdbcType=DOUBLE} +
+                    #{reasonableTrainingSchedule,jdbcType=DOUBLE} + #{jobNeeds,jdbcType=DOUBLE} +
+                    #{absorptionUnderstanding,jdbcType=DOUBLE} + #{goalsAchieved,jdbcType=DOUBLE}) / 10,
+                    #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{trainingOpinion,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_training_evaluation_score
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdTrainingEvaluationScore">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdTrainingEvaluationScore">
+        <![CDATA[
+            update td_training_evaluation_score
+               set course_content               = #{courseContent,jdbcType=DOUBLE},
+                   activity_discussion_exercise = #{activityDiscussionExercise,jdbcType=DOUBLE},
+                   understanding_course         = #{understandingCourse,jdbcType=DOUBLE},
+                   guide_think                  = #{guideThink,jdbcType=DOUBLE},
+                   combined_with_content        = #{combinedWithContent,jdbcType=DOUBLE},
+                   control_of_scene             = #{controlOfScene,jdbcType=DOUBLE},
+                   reasonable_training_schedule = #{reasonableTrainingSchedule,jdbcType=DOUBLE},
+                   job_needs                    = #{jobNeeds,jdbcType=DOUBLE},
+                   absorption_understanding     = #{absorptionUnderstanding,jdbcType=DOUBLE},
+                   goals_achieved               = #{goalsAchieved,jdbcType=DOUBLE},
+                   plan_implement_id            = #{planImplementId,jdbcType=BIGINT},
+                   average_score                =
+                   (#{courseContent,jdbcType=DOUBLE} + #{activityDiscussionExercise,jdbcType=DOUBLE} +
+                    #{understandingCourse,jdbcType=DOUBLE} + #{guideThink,jdbcType=DOUBLE} +
+                    #{combinedWithContent,jdbcType=DOUBLE} + #{controlOfScene,jdbcType=DOUBLE} +
+                    #{reasonableTrainingSchedule,jdbcType=DOUBLE} + #{jobNeeds,jdbcType=DOUBLE} +
+                    #{absorptionUnderstanding,jdbcType=DOUBLE} + #{goalsAchieved,jdbcType=DOUBLE}) / 10,
+                   enabled_flag                 = #{enabledFlag,jdbcType=BIT},
+                   update_by                    = #{updateBy,jdbcType=BIGINT},
+                   update_time                  = #{updateTime,jdbcType=TIMESTAMP},  trainingOpinion  = #{trainingOpinion,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdTrainingEvaluationScoreResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ttes.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdTrainingEvaluationScoreResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdTrainingEvaluationScoreResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

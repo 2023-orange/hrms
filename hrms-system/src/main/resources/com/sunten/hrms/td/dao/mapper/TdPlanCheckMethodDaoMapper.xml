@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanCheckMethodDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanCheckMethod">
+        <id column="id" property="id" />
+        <result column="plan_implement_id" property="planImplementId" />
+        <result column="check_method" property="checkMethod" />
+        <result column="evaluation_results" property="evaluationResults" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdPlanCheckMethodResultMap" type="com.sunten.hrms.td.domain.TdPlanCheckMethod" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpcm.plan_implement_id, tpcm.check_method, tpcm.evaluation_results, tpcm.enabled_flag, tpcm.id,
+            tpcm.create_by, tpcm.update_time, tpcm.create_time, tpcm.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.plan_implement_id as ${tAlias}_plan_implement_id,
+            ${tAlias}.check_method as ${tAlias}_check_method,
+            ${tAlias}.evaluation_results as ${tAlias}_evaluation_results,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_plan_check_method tpcm
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and tpcm.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.planImplementId != null">
+                <![CDATA[
+                    and tpcm.plan_implement_id = #{criteria.planImplementId,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanCheckMethod" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_check_method (plan_implement_id, check_method,
+                                              evaluation_results, enabled_flag,
+                                              create_by, update_time,
+                                              create_time, update_by)
+            values (#{planImplementId,jdbcType=BIGINT}, #{checkMethod,jdbcType=VARCHAR},
+                    #{evaluationResults,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_check_method
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanCheckMethod">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanCheckMethod">
+        <![CDATA[
+            update td_plan_check_method
+               set plan_implement_id  = #{planImplementId,jdbcType=BIGINT},
+                   check_method       = #{checkMethod,jdbcType=VARCHAR},
+                   evaluation_results = #{evaluationResults,jdbcType=VARCHAR},
+                   enabled_flag       = #{enabledFlag,jdbcType=BIT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanCheckMethodResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tpcm.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanCheckMethodResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanCheckMethodResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="deleteByMethodAndEnabledFlag">
+        <![CDATA[
+            update td_plan_check_method
+            set enabled_flag = 0,
+                update_by = #{updateBy, jdbcType = BIGINT},
+                 update_time = getdate()
+            where check_method = #{checkMethod, jdbcType = VARCHAR}
+            and enabled_flag = 1
+            and plan_implement_id = #{planImplementId, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateEvaluationResultsByMethodAndPlanImplementId" parameterType="com.sunten.hrms.td.domain.TdPlanCheckMethod">
+        <![CDATA[
+            update td_plan_check_method
+            set
+            evaluation_results = #{evaluationResults, jdbcType = VARCHAR}
+            where enabled_flag = 1
+            and check_method =#{checkMethod, jdbcType = VARCHAR}
+             and plan_implement_id = #{planImplementId, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+</mapper>

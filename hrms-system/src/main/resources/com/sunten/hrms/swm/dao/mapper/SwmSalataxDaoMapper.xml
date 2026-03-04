@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmSalataxDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmSalatax">
+        <result column="ID" property="id" />
+        <result column="FDYFGZ" property="fdyfgz" />
+        <result column="GDYFGZ" property="gdyfgz" />
+        <result column="BT_YH" property="btYh" />
+        <result column="kc_BX" property="kcBx" />
+        <result column="JJJE" property="jjje" />
+        <result column="SJSDQJ" property="sjsdqj" />
+        <result column="SJSDQJ1" property="sjsdqj1" />
+        <result column="GPH" property="gph" />
+        <result column="XM" property="xm" />
+        <result column="SDQJ" property="sdqj" />
+        <result column="RMB" property="rmb" />
+        <result column="JFYE" property="jfye" />
+        <result column="YNSSDE" property="ynssde" />
+        <result column="SL" property="sl" />
+        <result column="SSKCS" property="sskcs" />
+        <result column="DKSDS" property="dksds" />
+        <result column="DKSDS0701" property="dksds0701" />
+    </resultMap>
+
+    <resultMap id="SwmSalataxResultMap" type="com.sunten.hrms.swm.domain.SwmSalatax" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ss.ID, ss.FDYFGZ, ss.GDYFGZ, ss.BT_YH, ss.kc_BX, ss.JJJE, ss.SJSDQJ, ss.SJSDQJ1, ss.GPH, ss.XM, 
+            ss.SDQJ, ss.RMB, ss.JFYE, ss.YNSSDE, ss.SL, ss.SSKCS, ss.DKSDS, ss.DKSDS0701 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.ID as ${tAlias}_ID, ${tAlias}.FDYFGZ as ${tAlias}_FDYFGZ, 
+            ${tAlias}.GDYFGZ as ${tAlias}_GDYFGZ, ${tAlias}.BT_YH as ${tAlias}_BT_YH, 
+            ${tAlias}.kc_BX as ${tAlias}_kc_BX, ${tAlias}.JJJE as ${tAlias}_JJJE, 
+            ${tAlias}.SJSDQJ as ${tAlias}_SJSDQJ, ${tAlias}.SJSDQJ1 as ${tAlias}_SJSDQJ1, 
+            ${tAlias}.GPH as ${tAlias}_GPH, ${tAlias}.XM as ${tAlias}_XM, ${tAlias}.SDQJ as ${tAlias}_SDQJ, 
+            ${tAlias}.RMB as ${tAlias}_RMB, ${tAlias}.JFYE as ${tAlias}_JFYE, 
+            ${tAlias}.YNSSDE as ${tAlias}_YNSSDE, ${tAlias}.SL as ${tAlias}_SL, 
+            ${tAlias}.SSKCS as ${tAlias}_SSKCS, ${tAlias}.DKSDS as ${tAlias}_DKSDS, 
+            ${tAlias}.DKSDS0701 as ${tAlias}_DKSDS0701 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_salatax ss
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and ss.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmSalatax">
+        <![CDATA[
+            insert into swm_salatax (ID, FDYFGZ, GDYFGZ,
+                                     BT_YH, kc_BX, JJJE,
+                                     SJSDQJ, SJSDQJ1, GPH,
+                                     XM, SDQJ, RMB,
+                                     JFYE, YNSSDE, SL,
+                                     SSKCS, DKSDS, DKSDS0701)
+            values (#{id,jdbcType=INTEGER}, #{fdyfgz,jdbcType=DECIMAL}, #{gdyfgz,jdbcType=DECIMAL},
+                    #{btYh,jdbcType=DECIMAL}, #{kcBx,jdbcType=DECIMAL}, #{jjje,jdbcType=DECIMAL},
+                    #{sjsdqj,jdbcType=VARCHAR}, #{sjsdqj1,jdbcType=VARCHAR}, #{gph,jdbcType=VARCHAR},
+                    #{xm,jdbcType=VARCHAR}, #{sdqj,jdbcType=VARCHAR}, #{rmb,jdbcType=DECIMAL},
+                    #{jfye,jdbcType=DECIMAL}, #{ynssde,jdbcType=DECIMAL}, #{sl,jdbcType=REAL},
+                    #{sskcs,jdbcType=DECIMAL}, #{dksds,jdbcType=DECIMAL}, #{dksds0701,jdbcType=DECIMAL})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_salatax
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmSalatax">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmSalatax">
+        <![CDATA[
+            update swm_salatax
+               set ID        = #{id,jdbcType=INTEGER},
+                   FDYFGZ    = #{fdyfgz,jdbcType=DECIMAL},
+                   GDYFGZ    = #{gdyfgz,jdbcType=DECIMAL},
+                   BT_YH     = #{btYh,jdbcType=DECIMAL},
+                   kc_BX     = #{kcBx,jdbcType=DECIMAL},
+                   JJJE      = #{jjje,jdbcType=DECIMAL},
+                   SJSDQJ    = #{sjsdqj,jdbcType=VARCHAR},
+                   SJSDQJ1   = #{sjsdqj1,jdbcType=VARCHAR},
+                   GPH       = #{gph,jdbcType=VARCHAR},
+                   XM        = #{xm,jdbcType=VARCHAR},
+                   SDQJ      = #{sdqj,jdbcType=VARCHAR},
+                   RMB       = #{rmb,jdbcType=DECIMAL},
+                   JFYE      = #{jfye,jdbcType=DECIMAL},
+                   YNSSDE    = #{ynssde,jdbcType=DECIMAL},
+                   SL        = #{sl,jdbcType=REAL},
+                   SSKCS     = #{sskcs,jdbcType=DECIMAL},
+                   DKSDS     = #{dksds,jdbcType=DECIMAL},
+                   DKSDS0701 = #{dksds0701,jdbcType=DECIMAL}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmSalataxResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmSalataxResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmSalataxResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <select id="getOldSalatax" resultMap="SwmSalataxResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+             from swm_salatax ss
+             where
+             RIGHT ( cast( '000000' + rtrim( ss.GPH ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+             and left(ss.SDQJ, 4) = #{year, jdbcType=VARCHAR}
+             ORDER BY ss.SDQJ
+        ]]>
+    </select>
+
+</mapper>

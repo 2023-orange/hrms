@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcFakeRecordSettingDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcFakeRecordSetting">
+        <result column="user_name" property="userName" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="work_card" property="workCard" />
+    </resultMap>
+
+    <resultMap id="AcFakeRecordSettingResultMap" type="com.sunten.hrms.ac.domain.AcFakeRecordSetting" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            afrs.user_name, afrs.enabled_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.user_name as ${tAlias}_user_name, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,pe.work_card
+              from ac_fake_record_setting afrs
+                  join fnd_user fu on afrs.user_name = fu.username
+                  left join pm_employee pe on fu.employee_id = pe.id and pe.enabled_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and afrs.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcFakeRecordSetting">
+        <![CDATA[
+            insert into ac_fake_record_setting (user_name, enabled_flag)
+            values (#{userName,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_fake_record_setting
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+        <![CDATA[
+            where user_name    = #{userName,jdbcType=VARCHAR}
+        ]]>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcFakeRecordSetting">
+        <include refid="Delete_Sql"/>
+        <![CDATA[
+            where user_name    = #{userName,jdbcType=VARCHAR}
+        ]]>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcFakeRecordSetting">
+        <![CDATA[
+            update ac_fake_record_setting
+               set user_name    = #{userName,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT}
+        ]]>
+    </update>
+
+    <update id="updateEnabled" parameterType="com.sunten.hrms.ac.domain.AcFakeRecordSetting">
+        <![CDATA[
+        update ac_fake_record_setting
+        set enabled_flag = #{enabledFlag,jdbcType=BIT}
+        where user_name = #{userName,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcFakeRecordSettingResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+          where afrs.user_name    = #{userName,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcFakeRecordSettingResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcFakeRecordSettingResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by afrs.user_name
+        ]]>
+    </select>
+
+</mapper>

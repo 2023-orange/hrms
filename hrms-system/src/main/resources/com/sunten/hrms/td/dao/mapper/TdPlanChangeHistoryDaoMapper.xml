@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanChangeHistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanChangeHistory">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="change_type" property="changeType" />
+        <result column="change_plan_date" property="changePlanDate" />
+        <result column="change_describe" property="changeDescribe" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="pass_flag" property="passFlag"/>
+    </resultMap>
+
+    <resultMap id="TdPlanChangeHistoryResultMap" type="com.sunten.hrms.td.domain.TdPlanChangeHistory" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpch.parent_id, tpch.change_type, tpch.change_plan_date, tpch.change_describe, tpch.oa_order,
+            tpch.id, tpch.create_time, tpch.create_by, tpch.update_time, tpch.update_by, tpch.pass_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.parent_id as ${tAlias}_parent_id, ${tAlias}.change_type as ${tAlias}_change_type,
+            ${tAlias}.change_plan_date as ${tAlias}_change_plan_date,
+            ${tAlias}.change_describe as ${tAlias}_change_describe, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.pass_flag as ${tAlias}_pass_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_plan_change_history tpch
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.parentId != null">
+                <![CDATA[
+                    and tpch.parent_id like #{criteria.parentId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.changeType != null">
+                <![CDATA[
+                    and tpch.change_type like #{criteria.changeType,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.oaOrder != null">
+                <![CDATA[
+                    and tpch.oa_order like #{criteria.oaOrder,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanChangeHistory" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_change_history (parent_id, change_type,
+                                                change_plan_date, change_describe,
+                                                oa_order, create_time, create_by,
+                                                update_time, update_by, pass_flag)
+            values (#{parentId,jdbcType=BIGINT}, #{changeType,jdbcType=VARCHAR},
+                    #{changePlanDate,jdbcType=VARCHAR}, #{changeDescribe,jdbcType=VARCHAR},
+                    #{oaOrder,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{passFlag, jdbcType = BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_change_history
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanChangeHistory">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanChangeHistory">
+        <![CDATA[
+            update td_plan_change_history
+               set parent_id        = #{parentId,jdbcType=BIGINT},
+                   change_type      = #{changeType,jdbcType=VARCHAR},
+                   change_plan_date = #{changePlanDate,jdbcType=VARCHAR},
+                   change_describe  = #{changeDescribe,jdbcType=VARCHAR},
+                   oa_order         = #{oaOrder,jdbcType=VARCHAR},
+                   update_time      = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by        = #{updateBy,jdbcType=BIGINT},
+                   pass_flag        = #{passFlag, jdbcType= BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanChangeHistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tpch.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanChangeHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanChangeHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updatePassOrNotPass" parameterType="com.sunten.hrms.td.domain.TdPlanChangeHistory">
+        update td_plan_change_history
+            set pass_flag        = #{passFlag, jdbcType= BIT},
+                update_time = getdate(),
+                update_by = #{updateBy, jdbcType = BIGINT}
+                where parent_id = #{parentId, jdbcType = BIGINT}
+                and id = (
+                    select max(temp.id) from td_plan_change_history temp where temp.parent_id = #{parentId, jdbcType = BIGINT}
+                )
+    </update>
+
+</mapper>

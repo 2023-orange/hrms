@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeAwardDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeAward">
+        <id column="id" property="id"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="type" property="type"/>
+        <result column="award_name" property="awardName"/>
+        <result column="award_star_time" property="awardStarTime"/>
+        <result column="award_end_time" property="awardEndTime"/>
+        <result column="award_company" property="awardCompany"/>
+        <result column="award_content" property="awardContent"/>
+        <result column="award_result" property="awardResult"/>
+        <result column="award_money" property="awardMoney"/>
+        <result column="reference_backup_flag" property="referenceBackupFlag"/>
+        <result column="remarks" property="remarks"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <resultMap id="PmEmployeeAwardResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeAward" autoMapping="true">
+        <id column="id" property="id"/>
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pea.employee_id pe_id, pea.type, pea.award_name, pea.award_star_time, pea.award_end_time,
+            pea.award_company, pea.award_content, pea.award_result, pea.award_money, pea.reference_backup_flag,
+            pea.remarks, pea.attribute1, pea.attribute2, pea.attribute3, pea.enabled_flag, pea.id,
+            pea.create_time, pea.create_by, pea.update_time, pea.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.type as ${tAlias}_type,
+            ${tAlias}.award_name as ${tAlias}_award_name,
+            ${tAlias}.award_star_time as ${tAlias}_award_star_time,
+            ${tAlias}.award_end_time as ${tAlias}_award_end_time,
+            ${tAlias}.award_company as ${tAlias}_award_company,
+            ${tAlias}.award_content as ${tAlias}_award_content,
+            ${tAlias}.award_result as ${tAlias}_award_result, ${tAlias}.award_money as ${tAlias}_award_money,
+            ${tAlias}.reference_backup_flag as ${tAlias}_reference_backup_flag,
+            ${tAlias}.remarks as ${tAlias}_remarks, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee_award pea
+              join pm_employee pe on pea.employee_id = pe.id and pe.enabled_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pea.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+              and exists (SELECT 1
+                          FROM pm_employee_job pej_t
+                         WHERE pej_t.employee_id = pea.employee_id
+                           AND pej_t.enabled_flag = 1
+                           AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pea.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.referenceBackup != null">
+                <![CDATA[
+               and pea.reference_backup_flag = #{criteria.referenceBackup,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.awardType != null">
+                <![CDATA[
+               and pea.type = #{criteria.awardType,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeAward" useGeneratedKeys="true"
+            keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_award (employee_id, type, award_name,
+                                           award_star_time, award_end_time,
+                                           award_company, award_content,
+                                           award_result, award_money,
+                                           reference_backup_flag, remarks,
+                                           attribute1, attribute2,
+                                           attribute3, enabled_flag,
+                                           create_time, create_by,
+                                           update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR}, #{awardName,jdbcType=VARCHAR},
+                    #{awardStarTime,jdbcType=TIMESTAMP}, #{awardEndTime,jdbcType=TIMESTAMP},
+                    #{awardCompany,jdbcType=VARCHAR}, #{awardContent,jdbcType=VARCHAR},
+                    #{awardResult,jdbcType=VARCHAR}, #{awardMoney,jdbcType=DECIMAL},
+                    #{referenceBackupFlag,jdbcType=BIT}, #{remarks,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_award
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeAward">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeAward">
+        <![CDATA[
+            update pm_employee_award
+               set employee_id           = #{employee.id,jdbcType=BIGINT},
+                   type                  = #{type,jdbcType=VARCHAR},
+                   award_name            = #{awardName,jdbcType=VARCHAR},
+                   award_star_time       = #{awardStarTime,jdbcType=TIMESTAMP},
+                   award_end_time        = #{awardEndTime,jdbcType=TIMESTAMP},
+                   award_company         = #{awardCompany,jdbcType=VARCHAR},
+                   award_content         = #{awardContent,jdbcType=VARCHAR},
+                   award_result          = #{awardResult,jdbcType=VARCHAR},
+                   award_money           = #{awardMoney,jdbcType=DECIMAL},
+                   reference_backup_flag = #{referenceBackupFlag,jdbcType=BIT},
+                   remarks               = #{remarks,jdbcType=VARCHAR},
+                   attribute1            = #{attribute1,jdbcType=VARCHAR},
+                   attribute2            = #{attribute2,jdbcType=VARCHAR},
+                   attribute3            = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag          = #{enabledFlag,jdbcType=BIT},
+                   update_time           = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by             = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeAwardResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pea.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeAwardResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeAwardResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeAward">
+        <![CDATA[
+        update pm_employee_award
+        set enabled_flag          = #{enabledFlag,jdbcType=BIT},
+            update_time           = #{updateTime,jdbcType=TIMESTAMP},
+            update_by             = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeeAwardResultMap">
+        <![CDATA[
+            select
+            pea.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pea.award_company) > 0 then pea.award_company else null end as award_company,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pea.award_content) > 0 then pea.award_content else null end as award_content,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pea.award_name) > 0 then pea.award_name else null end as award_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pea.award_result) > 0 then pea.award_result else null end as award_result,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pea.remarks) > 0 then pea.remarks else null end as remarks,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pea.type) > 0 then pea.type else null end as type
+            from pm_employee_award pea join pm_employee pe on pe.id = pea.employee_id where pea.enabled_flag = 1
+            and pe.enabled_flag = 1 and concat(
+            pea.award_company,pea.award_content,pea.award_name,pea.award_result,pea.remarks,pea.type
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+    <insert id="interfaceToMain">
+        <![CDATA[
+        insert into pm_employee_award (employee_id, type, award_name,
+                                       award_star_time, award_end_time,
+                                       award_company, award_content,
+                                       award_result, award_money,
+                                       reference_backup_flag, remarks,enabled_flag,
+                                       create_time, create_by,
+                                       update_time, update_by)
+         select peai.employee_id, peai.type, peai.award_name,
+                     peai.award_star_time, peai.award_end_time, peai.award_company, peai.award_content,
+                     peai.award_result, peai.award_money, peai.reference_backup_flag, peai.remarks,1,
+                     peai.create_time, #{userId,jdbcType=BIGINT}, peai.update_time, #{userId,jdbcType=BIGINT}
+            from pm_employee_award_interface peai
+          where peai.group_id = #{groupId, jdbcType = BIGINT}
+              and peai.employee_id  != -1
+              and peai.data_status = 'T'
+        ]]>
+    </insert>
+</mapper>

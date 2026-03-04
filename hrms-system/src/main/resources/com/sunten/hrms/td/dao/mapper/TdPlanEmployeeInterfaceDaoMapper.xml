@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanEmployeeInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanEmployeeInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="name" property="name" />
+        <result column="work_card" property="workCard" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdPlanEmployeeInterfaceResultMap" type="com.sunten.hrms.td.domain.TdPlanEmployeeInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpei.group_id, tpei.operation_code, tpei.error_msg, tpei.data_status, tpei.name, tpei.work_card,
+            tpei.id, tpei.create_time, tpei.create_by, tpei.update_time, tpei.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.group_id as ${tAlias}_group_id, ${tAlias}.operation_code as ${tAlias}_operation_code,
+            ${tAlias}.error_msg as ${tAlias}_error_msg, ${tAlias}.data_status as ${tAlias}_data_status,
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        , isnull((select pe.id from pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) = right(cast('000000'+rtrim(tpei.work_card) as varchar),6)
+        and pe.name = tpei.name and pe.leave_flag = 0 and pe.enabled_flag = 1
+        ), '') as employee_id
+              from td_plan_employee_interface tpei
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and tpei.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and tpei.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanEmployeeInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_employee_interface (group_id, operation_code, error_msg,
+                                                    data_status, name, work_card,
+                                                    create_time, create_by,
+                                                    update_time, update_by)
+            values (#{groupId,jdbcType=BIGINT}, #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR},
+                    #{dataStatus,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_employee_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanEmployeeInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanEmployeeInterface">
+        <![CDATA[
+            update td_plan_employee_interface
+               set group_id       = #{groupId,jdbcType=BIGINT},
+                   operation_code = #{operationCode,jdbcType=CHAR},
+                   error_msg      = #{errorMsg,jdbcType=VARCHAR},
+                   data_status    = #{dataStatus,jdbcType=CHAR},
+                   name           = #{name,jdbcType=VARCHAR},
+                   work_card      = #{workCard,jdbcType=VARCHAR},
+                   update_time    = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by      = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanEmployeeInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tpei.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanEmployeeInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanEmployeeInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="insertByInterface" parameterType="com.sunten.hrms.td.domain.TdPlanEmployeeInterface">
+       <![CDATA[
+           insert into td_plan_employee_interface (group_id, operation_code, error_msg,
+                                                    data_status, name, work_card,
+                                                    create_time, create_by,
+                                                    update_time, update_by)
+            select #{groupId, jdbcType = BIGINT}, 'C',
+            case when isnull((select pe.work_card from pm_employee pe where pe.name = #{name, jdbcType = VARCHAR} and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard, jdbcType = VARCHAR}) as varchar),6) and pe.enabled_flag = 1 and pe.leave_flag = 0), '') = '' then '在职人员中，没找到对应人员' else '' end,
+            case when isnull((select pe.work_card from pm_employee pe where pe.name = #{name, jdbcType = VARCHAR} and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard, jdbcType = VARCHAR}) as varchar),6) and pe.enabled_flag = 1 and pe.leave_flag = 0), '') = '' then 'F' else 'T' end,
+            #{name, jdbcType = VARCHAR}, right(cast('000000'+rtrim(#{workCard, jdbcType = VARCHAR}) as varchar),6),
+            getdate(), #{createBy,jdbcType=BIGINT} , getdate(), #{createBy,jdbcType=BIGINT}
+
+        ]]>
+    </insert>
+
+</mapper>

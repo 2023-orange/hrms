@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdJobAuthenticationDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdJobAuthentication">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="process" property="process" />
+        <result column="job" property="job" />
+        <result column="authentication_level" property="authenticationLevel" />
+        <result column="level" property="level" />
+        <result column="surety" property="surety" />
+        <result column="first_general_grade" property="firstGeneralGrade" />
+        <result column="second_general_grade" property="secondGeneralGrade" />
+        <result column="three_general_grade" property="threeGeneralGrade" />
+        <result column="first_theory_grade" property="firstTheoryGrade" />
+        <result column="second_theory_grade" property="secondTheoryGrade" />
+        <result column="three_theory_grade" property="threeTheoryGrade" />
+        <result column="first_operation_grade" property="firstOperationGrade" />
+        <result column="second_operation_grade" property="secondOperationGrade" />
+        <result column="three_operation_grade" property="threeOperationGrade" />
+        <result column="credential_grant_date" property="credentialGrantDate" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="enabled_time" property="enabledTime" />
+        <result column="dept_name" property="deptName" />
+        <result column="department" property="department" />
+        <result column="team" property="team" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute1" property="attribute1" />
+        <result column="file_id" property="fileId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdJobAuthenticationResultMap" type="com.sunten.hrms.td.domain.TdJobAuthentication" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="storage"
+                     javaType="com.sunten.hrms.tool.domain.ToolLocalStorage"
+                     resultMap="com.sunten.hrms.tool.dao.ToolLocalStorageDao.ToolLocalStorageResultMap"
+                     columnPrefix="tls_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tja.employee_id, tja.process, tja.job, tja.authentication_level, tja.level, tja.surety,
+            tja.first_general_grade, tja.second_general_grade, tja.three_general_grade, tja.first_theory_grade,
+            tja.second_theory_grade, tja.three_theory_grade, tja.first_operation_grade,
+            tja.second_operation_grade, tja.three_operation_grade, tja.credential_grant_date, tja.enabled_flag,
+            tja.enabled_time, tja.dept_name, tja.department, tja.team, tja.work_card, tja.name, tja.attribute2,
+            tja.attribute3, tja.attribute1, tja.id, tja.file_id,
+            tja.create_time, tja.create_by, tja.update_time,tja.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.process as ${tAlias}_process,
+            ${tAlias}.job as ${tAlias}_job, ${tAlias}.authentication_level as ${tAlias}_authentication_level,
+            ${tAlias}.level as ${tAlias}_level, ${tAlias}.surety as ${tAlias}_surety,
+            ${tAlias}.first_general_grade as ${tAlias}_first_general_grade,
+            ${tAlias}.second_general_grade as ${tAlias}_second_general_grade,
+            ${tAlias}.three_general_grade as ${tAlias}_three_general_grade,
+            ${tAlias}.first_theory_grade as ${tAlias}_first_theory_grade,
+            ${tAlias}.second_theory_grade as ${tAlias}_second_theory_grade,
+            ${tAlias}.three_theory_grade as ${tAlias}_three_theory_grade,
+            ${tAlias}.first_operation_grade as ${tAlias}_first_operation_grade,
+            ${tAlias}.second_operation_grade as ${tAlias}_second_operation_grade,
+            ${tAlias}.three_operation_grade as ${tAlias}_three_operation_grade,
+            ${tAlias}.credential_grant_date as ${tAlias}_credential_grant_date,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.enabled_time as ${tAlias}_enabled_time,
+            ${tAlias}.dept_name as ${tAlias}_dept_name, ${tAlias}.department as ${tAlias}_department,
+            ${tAlias}.team as ${tAlias}_team, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.file_id as ${tAlias}_file_id,
+            ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'tls'"/>
+        <include refid="com.sunten.hrms.tool.dao.ToolLocalStorageDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from td_job_authentication tja
+              left join tool_local_storage tls on tja.file_id = tls.id
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+             and tja.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[ and  tja.employee_id = #{criteria.employeeId,jdbcType=BIGINT}]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = tja.employee_id
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.value != null">
+                <choose>
+                    <when test="criteria.column == 'first_general_grade' or criteria.column == 'second_general_grade' or criteria.column == 'three_general_grade'">
+                        <![CDATA[
+                          and tja.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=DECIMAL}
+                        ]]>
+                    </when>
+                    <!--往下两个字段识别是可以并入上一个判断的，只是字段太多看不到所以分成了三个判断语句-->
+                    <when test="criteria.column == 'first_theory_grade' or criteria.column == 'second_theory_grade' or criteria.column == 'three_theory_grade'">
+                        <![CDATA[
+                          and tja.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=DECIMAL}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'first_operation_grade' or criteria.column == 'second_operation_grade' or criteria.column == 'three_operation_grade'">
+                        <![CDATA[
+                          and tja.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=DECIMAL}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'credential_grant_date' or criteria.column == 'enabled_time'">
+                        <![CDATA[
+                          and tja.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=DATE}
+                        ]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                          and tja.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdJobAuthentication" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_job_authentication (employee_id, process, job,
+                                               authentication_level, level,
+                                               surety, first_general_grade,
+                                               second_general_grade, three_general_grade,
+                                               first_theory_grade, second_theory_grade,
+                                               three_theory_grade, first_operation_grade,
+                                               second_operation_grade, three_operation_grade,
+                                               credential_grant_date, enabled_flag,
+                                               enabled_time, dept_name, department,
+                                               team, work_card, name,
+                                               attribute2, attribute3,
+                                               attribute1, file_id,create_time,
+                                               create_by, update_time, update_by)
+            values (#{employeeId,jdbcType=BIGINT}, #{process,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR},
+                    #{authenticationLevel,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR},
+                    #{surety,jdbcType=VARCHAR}, #{firstGeneralGrade,jdbcType=DECIMAL},
+                    #{secondGeneralGrade,jdbcType=DECIMAL}, #{threeGeneralGrade,jdbcType=DECIMAL},
+                    #{firstTheoryGrade,jdbcType=DECIMAL}, #{secondTheoryGrade,jdbcType=DECIMAL},
+                    #{threeTheoryGrade,jdbcType=DECIMAL}, #{firstOperationGrade,jdbcType=DECIMAL},
+                    #{secondOperationGrade,jdbcType=DECIMAL}, #{threeOperationGrade,jdbcType=DECIMAL},
+                    #{credentialGrantDate,jdbcType=DATE}, #{enabledFlag,jdbcType=BIT},
+                    #{enabledTime,jdbcType=DATE}, #{deptName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR},
+                    #{team,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR},#{fileId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_job_authentication
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdJobAuthentication">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdJobAuthentication">
+        <![CDATA[
+            update td_job_authentication
+               set employee_id            = #{employeeId,jdbcType=BIGINT},
+                   process                = #{process,jdbcType=VARCHAR},
+                   job                    = #{job,jdbcType=VARCHAR},
+                   authentication_level   = #{authenticationLevel,jdbcType=VARCHAR},
+                   level                  = #{level,jdbcType=VARCHAR},
+                   surety                 = #{surety,jdbcType=VARCHAR},
+                   first_general_grade    = #{firstGeneralGrade,jdbcType=DECIMAL},
+                   second_general_grade   = #{secondGeneralGrade,jdbcType=DECIMAL},
+                   three_general_grade    = #{threeGeneralGrade,jdbcType=DECIMAL},
+                   first_theory_grade     = #{firstTheoryGrade,jdbcType=DECIMAL},
+                   second_theory_grade    = #{secondTheoryGrade,jdbcType=DECIMAL},
+                   three_theory_grade     = #{threeTheoryGrade,jdbcType=DECIMAL},
+                   first_operation_grade  = #{firstOperationGrade,jdbcType=DECIMAL},
+                   second_operation_grade = #{secondOperationGrade,jdbcType=DECIMAL},
+                   three_operation_grade  = #{threeOperationGrade,jdbcType=DECIMAL},
+                   credential_grant_date  = #{credentialGrantDate,jdbcType=DATE},
+                   enabled_flag           = #{enabledFlag,jdbcType=BIT},
+                   enabled_time           = #{enabledTime,jdbcType=DATE},
+                   dept_name              = #{deptName,jdbcType=VARCHAR},
+                   department             = #{department,jdbcType=VARCHAR},
+                   team                   = #{team,jdbcType=VARCHAR},
+                   work_card              = #{workCard,jdbcType=VARCHAR},
+                   name                   = #{name,jdbcType=VARCHAR},
+                   attribute2             = #{attribute2,jdbcType=VARCHAR},
+                   attribute3             = #{attribute3,jdbcType=VARCHAR},
+                   attribute1             = #{attribute1,jdbcType=VARCHAR},
+                   file_id             = #{fileId,jdbcType=BIGINT},
+                   update_time            = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by              = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdJobAuthenticationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tja.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdJobAuthenticationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by  tja.dept_name, tja.department, tja.team
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdJobAuthenticationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+         order by  tja.dept_name, tja.department, tja.team
+         ]]>
+    </select>
+
+
+    <select id="getDueToRemindAuthentication" resultMap="TdJobAuthenticationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+            where tja.enabled_time <= dateadd(MONTH,3,sysdate())
+            order by tja.dept_name,tja.department,tja.team,tja.employee_id
+        ]]>
+    </select>
+
+    <insert id="interfaceToMain">
+        <![CDATA[
+        insert into td_job_authentication (employee_id, process, job,
+                                           authentication_level, level,
+                                           surety, first_general_grade,
+                                           second_general_grade, three_general_grade,
+                                           first_theory_grade, second_theory_grade,
+                                           three_theory_grade, first_operation_grade,
+                                           second_operation_grade, three_operation_grade,
+                                           credential_grant_date,
+                                           enabled_time, dept_name, department,
+                                           team, work_card, name,
+                                           attribute1,enabled_flag,create_time,
+                                           create_by, update_time, update_by)
+        select tjai.employee_id, tjai.process, tjai.job,
+               tjai.authentication_level, tjai.level,
+               tjai.surety, tjai.first_general_grade,
+               tjai.second_general_grade, tjai.three_general_grade,
+               tjai.first_theory_grade, tjai.second_theory_grade,
+               tjai.three_theory_grade, tjai.first_operation_grade,
+               tjai.second_operation_grade, tjai.three_operation_grade,
+               tjai.credential_grant_date,tjai.enabled_time, tjai.dept_name, tjai.department,
+               tjai.team, tjai.work_card, tjai.name,'excel导入',1,
+               tjai.create_time, #{userId,jdbcType=BIGINT}, tjai.update_time, #{userId,jdbcType=BIGINT}
+        from td_job_authentication_interface tjai
+        where tjai.group_id = #{groupId, jdbcType = BIGINT}
+          and tjai.employee_id  != -1
+          and tjai.data_status = 'T'
+        ]]>
+    </insert>
+
+    <select id="getAuthentication" resultMap="BaseResultMap">
+        SELECT  tja.work_card ,tja.name ,tja.job,tja.credential_grant_date,tja.enabled_time
+        FROM td_job_grading tjg  join  td_job_authentication tja  on tjg.process = tja.process      and  tjg.certification_job  = tja.job
+        where  1=1
+        <if test="criteria != null">
+                <if test="criteria.workCard != null">
+                      and   tja.work_card  =    #{criteria.workCard,jdbcType=VARCHAR}
+                </if>
+                <if test="criteria.name != null">
+                      and   tja.name  =    #{criteria.name,jdbcType=VARCHAR}
+                </if>
+                <if test="criteria.certificationJob != null">
+                    and    tja.job =    #{criteria.certificationJob,jdbcType=VARCHAR}
+                </if>
+                    and    tja.enabled_flag  = 1
+                <if test="criteria.validityFlag == 1">
+                    <![CDATA[
+                    and    getdate() < DATEADD(MM,0,tja.enabled_time)
+                    ]]>
+                </if>
+        </if>
+        order by tja.credential_grant_date
+    </select>
+
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.td.domain.TdJobAuthentication">
+        <![CDATA[
+        update td_job_authentication
+        set
+            enabled_flag    = #{enabledFlag,jdbcType=BIT},
+            update_by       = #{updateBy,jdbcType=BIGINT},
+            update_time     = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

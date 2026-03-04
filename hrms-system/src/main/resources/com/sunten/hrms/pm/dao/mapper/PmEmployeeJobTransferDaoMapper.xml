@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeJobTransferDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeJobTransfer">
+        <id column="id" property="id"/>
+        <result column="group_id" property="groupId"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="old_job_id" property="oldJobId"/>
+        <result column="old_job_name" property="oldJobName"/>
+        <result column="old_dept_id" property="oldDeptId"/>
+        <result column="old_dept_name" property="oldDeptName"/>
+        <result column="new_job_id" property="newJobId"/>
+        <result column="new_job_name" property="newJobName"/>
+        <result column="new_dept_id" property="newDeptId"/>
+        <result column="new_dept_name" property="newDeptName"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="transfer_reason" property="transferReason"/>
+        <result column="transfer_state" property="transferState"/>
+        <result column="remarks" property="remarks"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="attribute4" property="attribute4"/>
+        <result column="attribute5" property="attribute5"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="transfer_type" property="transferType"/>
+        <result column="transfer_error" property="transferError"/>
+        <result column="old_ext_dept_name" property="oldExtDeptName"/>
+        <result column="old_ext_department_name" property="oldExtDepartmentName"/>
+        <result column="old_ext_team_name" property="oldExtTeamName"/>
+        <result column="new_ext_dept_name" property="newExtDeptName"/>
+        <result column="new_ext_department_name" property="newExtDepartmentName"/>
+        <result column="new_ext_team_name" property="newExtTeamName"/>
+        <result column="transfer_form" property="transferForm"/>
+        <result column="update_by_user" property="updateByUser"/>
+    </resultMap>
+
+    <resultMap id="PmEmployeeJobTransferResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeJobTransfer"
+               autoMapping="true">
+        <id column="id" property="id"/>
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"/>
+        <association property="oldDept"
+                     javaType="com.sunten.hrms.fnd.domain.FndDept"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                     columnPrefix="fdo_"/>
+        <association property="oldJob"
+                     javaType="com.sunten.hrms.fnd.domain.FndJob"
+                     resultMap="com.sunten.hrms.fnd.dao.FndJobDao.FndJobResultMap"
+                     columnPrefix="fjo_"/>
+        <association property="newDept"
+                     javaType="com.sunten.hrms.fnd.domain.FndDept"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                     columnPrefix="fdn_"/>
+        <association property="newJob"
+                     javaType="com.sunten.hrms.fnd.domain.FndJob"
+                     resultMap="com.sunten.hrms.fnd.dao.FndJobDao.FndJobResultMap"
+                     columnPrefix="fjn_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+
+                    pejt.group_id, pejt.employee_id as pe_id, pejt.old_job_id as fjo_id,
+                    pejt.old_job_name as fjo_job_name, pejt.old_dept_id as fdo_id,
+                    pejt.old_dept_name as fdo_dept_name, pejt.new_job_id as fjn_id,
+                    pejt.new_job_name as fjn_job_name, pejt.new_dept_id as fdn_id, pejt.new_dept_name fdn_dept_name,
+                    pejt.start_time, pejt.end_time, pejt.transfer_reason, pejt.transfer_state, pejt.remarks,
+                    pejt.attribute1, pejt.attribute2, pejt.attribute3, pejt.attribute4, pejt.attribute5,
+                    pejt.enabled_flag, pejt.id, pejt.create_time, pejt.create_by, pejt.update_time, pejt.update_by,
+                    pejt.transfer_type, pejt.transfer_error, pejt.old_ext_dept_name as fdo_ext_dept_name,
+                    pejt.old_ext_department_name as fdo_ext_department_name, pejt.old_ext_team_name as fdo_ext_team_name,
+                    pejt.new_ext_dept_name as fdn_ext_dept_name, pejt.new_ext_department_name as fdn_ext_department_name,
+                    pejt.new_ext_team_name as fdn_ext_team_name, pejt.transfer_form,
+                    (select description from fnd_user fu_update where fu_update.id = pejt.update_by) update_by_user
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+
+                    ${tAlias}.group_id as ${tAlias}_group_id, ${tAlias}.employee_id as ${tAlias}_pe_id,
+                    ${tAlias}.old_job_id as ${tAlias}_fjo_id, ${tAlias}.old_job_name as ${tAlias}_fjo_job_name,
+                    ${tAlias}.old_dept_id as ${tAlias}_fdo_id, ${tAlias}.old_dept_name as ${tAlias}_fdo_dept_name,
+                    ${tAlias}.new_job_id as ${tAlias}_fjn_id, ${tAlias}.new_job_name as ${tAlias}_fjn_job_name,
+                    ${tAlias}.new_dept_id as ${tAlias}_fdn_id, ${tAlias}.new_dept_name as ${tAlias}_fdn_dept_name,
+                    ${tAlias}.start_time as ${tAlias}_start_time, ${tAlias}.end_time as ${tAlias}_end_time,
+                    ${tAlias}.transfer_reason as ${tAlias}_transfer_reason,
+                    ${tAlias}.transfer_state as ${tAlias}_transfer_state, ${tAlias}.remarks as ${tAlias}_remarks,
+                    ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+                    ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+                    ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+                    ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+                    ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+                    ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.transfer_type as ${tAlias}_transfer_type,
+                    ${tAlias}.transfer_error as ${tAlias}_transfer_error,
+                    ${tAlias}.old_ext_dept_name as ${tAlias}_fdo_ext_dept_name,
+                    ${tAlias}.old_ext_department_name as ${tAlias}_fdo_ext_department_name,
+                    ${tAlias}.old_ext_team_name as ${tAlias}_fdo_ext_team__name,
+                    ${tAlias}.old_ext_dept_name as ${tAlias}_fdn_ext_dept_name,
+                    ${tAlias}.old_ext_department_name as ${tAlias}_fdn_ext_department_name,
+                    ${tAlias}.old_ext_team_name as ${tAlias}_fdn_ext_team__name,
+                    ${tAlias}.appointment_and_removal_type as ${tAlias}_transfer_form
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee_job_transfer pejt
+              join pm_employee pe
+                on pejt.employee_id = pe.id
+        ]]>
+    </sql>
+
+
+    <sql id="Criteria_Sql_Where">
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pejt.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and (pejt.old_dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ or pejt.new_dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ ) ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pejt.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                and pe.enabled_flag = #{criteria.enabledFlag, jdbcType=BIT}
+            </if>
+            <if test="criteria.leaveFlag != null">
+                <![CDATA[
+               and pe.leave_flag = #{criteria.leaveFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.transferStartTime != null and criteria.transferEndTime != null">
+                <![CDATA[
+
+                and ((pejt.start_time >= #{criteria.transferStartTime,jdbcType=DATE}
+                and pejt.start_time <= #{criteria.transferEndTime,jdbcType=DATE})
+                 or (pejt.end_time >= #{criteria.transferStartTime,jdbcType=DATE}
+                and pejt.end_time <= #{criteria.transferEndTime,jdbcType=DATE}))
+                ]]>
+            </if>
+            <if test="criteria.taskTransferStartTime != null">
+                <![CDATA[
+                and pejt.start_time <= #{criteria.taskTransferStartTime,jdbcType=DATE}
+                and ISNULL (pejt.end_time, #{criteria.taskTransferStartTime,jdbcType=DATE}) >= #{criteria.taskTransferStartTime,jdbcType=DATE}
+                and pejt.transfer_state = 'PLAN'
+                ]]>
+            </if>
+            <if test="criteria.taskTransferEndTime != null">
+                <![CDATA[
+                and ISNULL (pejt.end_time, #{criteria.taskTransferEndTime,jdbcType=DATE}) < #{criteria.taskTransferEndTime,jdbcType=DATE}
+                and pejt.transfer_state = 'TRANSFERRING'
+                ]]>
+            </if>
+            <if test="criteria.states != null">
+                <foreach collection="criteria.states" item="item" index="index" open=" and pejt.transfer_state IN ("
+                         separator=","
+                         close=")">
+                    <![CDATA[
+                        #{item, jdbcType=VARCHAR}
+                    ]]>
+                </foreach>
+            </if>
+            <if test="criteria.expInit != null and criteria.expInit == true">
+                <![CDATA[
+                    and pejt.transfer_type !='初始化'
+                ]]>
+            </if>
+            <if test="criteria.transferType != null">
+                <if test="criteria.transferType">
+                    <![CDATA[
+                    and pejt.transfer_type !='初始化'
+                ]]>
+                </if>
+                <if test="!criteria.transferType">
+                    <![CDATA[
+                    and pejt.transfer_type ='初始化'
+                ]]>
+                </if>
+            </if>
+            <if test="criteria.transferForm != null and criteria.transferForm != ''">
+                <![CDATA[
+                    and pejt.transfer_form = #{criteria.transferForm, jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <include refid="Criteria_Sql_Where"/>
+    </sql>
+
+
+    <select id="countJobTransfer" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(*)
+             from pm_employee_job_transfer pejt
+              join pm_employee pe
+                on pejt.employee_id = pe.id
+                 where 1 = 1
+        ]]>
+        <include refid="Criteria_Sql_Where"/>
+    </select>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobTransfer" useGeneratedKeys="true"
+            keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_job_transfer (group_id, employee_id, old_job_id,
+                                                  old_job_name, old_dept_id,
+                                                  old_dept_name, new_job_id,
+                                                  new_job_name, new_dept_id,
+                                                  new_dept_name, start_time,
+                                                  end_time, transfer_reason,
+                                                  transfer_state, remarks,
+                                                  attribute1, attribute2,
+                                                  attribute3, attribute4,
+                                                  attribute5, enabled_flag,
+                                                  create_time, create_by,
+                                                  update_time, update_by,
+                                                  transfer_type, transfer_error,
+                                                  old_ext_dept_name, old_ext_department_name,
+                                                  old_ext_team_name, new_ext_dept_name,
+                                                  new_ext_department_name, new_ext_team_name,
+                                                  transfer_form)
+            values (#{groupId,jdbcType=BIGINT}, #{employee.id,jdbcType=BIGINT}, #{oldJob.id,jdbcType=BIGINT},
+                    #{oldJob.jobName,jdbcType=VARCHAR}, #{oldDept.id,jdbcType=BIGINT},
+                    #{oldDept.deptName,jdbcType=VARCHAR}, #{newJob.id,jdbcType=BIGINT},
+                    #{newJob.jobName,jdbcType=VARCHAR}, #{newDept.id,jdbcType=BIGINT},
+                    #{newDept.deptName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+                    #{endTime,jdbcType=TIMESTAMP}, #{transferReason,jdbcType=VARCHAR},
+                    #{transferState,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{transferType,jdbcType=VARCHAR}, #{transferError,jdbcType=VARCHAR},
+                    #{oldDept.extDeptName,jdbcType=VARCHAR}, #{oldDept.extDepartmentName,jdbcType=VARCHAR},
+                    #{oldDept.extTeamName,jdbcType=VARCHAR}, #{newDept.extDeptName,jdbcType=VARCHAR},
+                    #{newDept.extDepartmentName,jdbcType=VARCHAR}, #{newDept.extTeamName,jdbcType=VARCHAR},
+                    #{transferForm,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_job_transfer
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobTransfer">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobTransfer">
+        <![CDATA[
+            update pm_employee_job_transfer
+               set group_id                = #{groupId,jdbcType=BIGINT},
+                   employee_id             = #{employee.id,jdbcType=BIGINT},
+                   old_job_id              = #{oldJob.id,jdbcType=BIGINT},
+                   old_job_name            = #{oldJob.jobName,jdbcType=VARCHAR},
+                   old_dept_id             = #{oldDept.id,jdbcType=BIGINT},
+                   old_dept_name           = #{oldDept.deptName,jdbcType=VARCHAR},
+                   new_job_id              = #{newJob.id,jdbcType=BIGINT},
+                   new_job_name            = #{newJob.jobName,jdbcType=VARCHAR},
+                   new_dept_id             = #{newDept.id,jdbcType=BIGINT},
+                   new_dept_name           = #{newDept.deptName,jdbcType=VARCHAR},
+                   start_time              = #{startTime,jdbcType=TIMESTAMP},
+                   end_time                = #{endTime,jdbcType=TIMESTAMP},
+                   transfer_reason         = #{transferReason,jdbcType=VARCHAR},
+                   transfer_state          = #{transferState,jdbcType=VARCHAR},
+                   remarks                 = #{remarks,jdbcType=VARCHAR},
+                   attribute1              = #{attribute1,jdbcType=VARCHAR},
+                   attribute2              = #{attribute2,jdbcType=VARCHAR},
+                   attribute3              = #{attribute3,jdbcType=VARCHAR},
+                   attribute4              = #{attribute4,jdbcType=VARCHAR},
+                   attribute5              = #{attribute5,jdbcType=VARCHAR},
+                   enabled_flag            = #{enabledFlag,jdbcType=BIT},
+                   update_time             = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by               = #{updateBy,jdbcType=BIGINT},
+                   transfer_type           = #{transferType,jdbcType=VARCHAR},
+                   transfer_error          = #{transferError,jdbcType=VARCHAR},
+                   old_ext_dept_name       = #{oldDept.extDeptName,jdbcType=VARCHAR},
+                   old_ext_department_name = #{oldDept.extDepartmentName,jdbcType=VARCHAR},
+                   old_ext_team_name       = #{oldDept.extTeamName,jdbcType=VARCHAR},
+                   new_ext_dept_name       = #{newDept.extDeptName,jdbcType=VARCHAR},
+                   new_ext_department_name = #{newDept.extDepartmentName,jdbcType=VARCHAR},
+                   new_ext_team_name       = #{newDept.extTeamName,jdbcType=VARCHAR},
+                   transfer_form           = #{transferForm,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeJobTransferResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pejt.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeJobTransferResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by pejt.group_id,pejt.start_time desc,pejt.id desc
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeJobTransferResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobTransfer">
+        <![CDATA[
+            update pm_employee_job_transfer
+            set enabled_flag    = #{enabledFlag,jdbcType=BIT},
+                update_time     = #{updateTime,jdbcType=TIMESTAMP},
+                update_by       = #{updateBy,jdbcType=BIGINT}
+            where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listFutureTransfer" resultMap="PmEmployeeJobTransferResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pejt.enabled_flag = #{enabledFlag,jdbcType=BIT}
+               and pejt.employee_id = #{employeeId,jdbcType=BIGINT}
+               and (pejt.start_time > #{currentDate,jdbcType=DATE}
+                 or pejt.end_time < #{currentDate,jdbcType=DATE})
+        ]]>
+    </select>
+
+    <select id="listPlanOrTransferringTransferByEmployeeId" resultMap="PmEmployeeJobTransferResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pejt.enabled_flag = 1
+               and pejt.employee_id = #{employeeId,jdbcType=BIGINT}
+        ]]>
+        <if test="groupId != null">
+            <![CDATA[
+               and pejt.group_id = #{groupId ,jdbcType=BIGINT}
+            ]]>
+        </if>
+        <![CDATA[
+               and pejt.transfer_state IN ('PLAN', 'TRANSFERRING', 'APPROVING')
+        ]]>
+    </select>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeeJobTransferResultMap">
+        <![CDATA[
+            select
+            pejt.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.old_job_name) > 0 then pejt.old_job_name else null end as fjo_job_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.new_job_name) > 0 then pejt.new_job_name else null end as fjn_job_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.transfer_reason) > 0 then pejt.transfer_reason else null end as transfer_reason,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.remarks) > 0 then pejt.remarks else null end as remarks,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.transfer_type) > 0 then pejt.transfer_type else null end as transfer_type,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.old_ext_dept_name) > 0 then pejt.old_ext_dept_name else null end as fdo_ext_dept_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.old_ext_department_name) > 0 then pejt.old_ext_department_name else null end as fdo_ext_department_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.old_ext_team_name) > 0 then pejt.old_ext_team_name else null end as fdo_ext_team_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.new_ext_dept_name) > 0 then pejt.new_ext_dept_name else null end as fdn_ext_dept_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.new_ext_department_name) > 0 then pejt.new_ext_department_name else null end as fdn_ext_department_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.new_ext_team_name) > 0 then pejt.new_ext_team_name else null end as fdn_ext_team_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pejt.transfer_form) > 0 then pejt.transfer_form else null end as transfer_form
+            from pm_employee_job_transfer pejt
+              join pm_employee pe
+                on pejt.employee_id = pe.id
+                where pejt.enabled_flag = 1 and pe.enabled_flag = 1
+                and pejt.transfer_type <> '初始入职岗位'
+                and concat(
+          pejt.old_job_name, pejt.new_job_name, pejt.transfer_reason, pejt.remarks,
+          pejt.transfer_type, pejt.old_ext_dept_name, pejt.old_ext_department_name,
+          pejt.old_ext_team_name, pejt.new_ext_dept_name, pejt.new_ext_department_name,
+          pejt.new_ext_team_name, pejt.transfer_form
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+
+        ]]>
+    </select>
+</mapper>

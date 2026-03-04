@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOaLeaveDao">
+
+    <select id="getUsedAnnualLeaveDays" resultType="java.lang.Double">
+        select IFNULL(sum(vrhl.Number), 0)
+        FROM v_req_hrleave_all_end AS vrhl
+        WHERE vrhl.LeaveType='年假' AND vrhl.UserName=#{workCard}
+        AND YEAR(vrhl.EndTime) = YEAR(CURDATE()) -- 查询今年的数据
+        AND vrhl.StartTime >= CONCAT(YEAR(CURDATE()), '-01-01') -- 起始日期在当前年份的1月1日之后
+        AND vrhl.EndTime &lt;= CONCAT(YEAR(CURDATE()), '-12-31'); -- 结束日期在当前年份的12月31日之前
+    </select>
+    <select id="getUsedLeaveOfAbsenceDays" resultType="java.lang.Double">
+        SELECT IFNULL(SUM(IFNULL(number, 0)), 0) AS ts
+        FROM v_req_hrleave_not_cancel
+        WHERE leavetype = '事假'
+          AND username = #{workCard}
+          AND DATE_FORMAT(starttime, '%Y') = DATE_FORMAT(NOW(), '%Y')
+    </select>
+    <select id="getMonthOverTime" resultType="java.lang.Double">
+        <![CDATA[
+        SELECT IFNULL(a.xxrjb, 0) njts  FROM
+            (SELECT SUM(d.reviewhours) as xxrjb
+             FROM
+                 (SELECT b.jbnickname,b.jbusername,b.endtime,b.reviewhours,c.xxrbs from v_req_hrovertime_all_end b LEFT JOIN
+                                                                                        (SELECT c.rq,c.xxrbs FROM mobile_platform_normal.sys_kq_date c WHERE DATE_FORMAT(c.rq,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m')  ) c on  DATE_FORMAT(b.ReviewStartTime,'%Y-%m-%d')  =c.rq
+                  WHERE b.jbUserName=#{workCard} AND DATE_FORMAT(b.ReviewStartTime,'%Y%m')=DATE_FORMAT(CURDATE(),'%Y%m') AND b.reviewhours<>'' and c.xxrbs=1) d
+             group by d.jbusername ) a RIGHT JOIN (SELECT 0) t2 ON 1=1
+
+        ]]>
+    </select>
+    <select id="getUsedMonthOverTime" resultType="java.lang.Double">
+	<![CDATA[
+        select ifnull(sum(a.ydtxgs),0) ydtxgs
+        from (SELECT
+                  DISTINCT RequisitionCode,ifnull( TotalNumber, 0 ) ydtxgs
+              FROM
+                  v_req_hrleave_not_cancel
+              WHERE
+                  UserName = #{workCard}
+                AND LeaveType = '调休'
+                AND DATE_FORMAT( StartTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ), '%Y%m' )
+              GROUP BY 	RequisitionCode) a
+        ]]>
+    </select>
+    <select id="getUserViews" resultType="java.util.HashMap">
+        SELECT * FROM sys_user_mes where WorkCardNumber = #{workCard}
+    </select>
+    <select id="getDirectorMap" resultType="java.util.Map">
+        select id,
+               Keyword ,
+               ValueField ,
+               TextField ,
+               FatherId ,
+               SequenceNumber
+        from req_parameter t where deleteflag=0 and Keyword=#{keyword}
+        order by SequenceNumber
+    </select>
+    <select id="createOaReqCode" resultType="java.lang.Object">
+        SELECT
+            SUBSTRING(requisitioncode, 7, 3)
+        FROM Req_Property where deleteflag=0 and
+            date_format(createtime,'%y-%m-%d') = date_format(now(),'%y-%m-%d')
+        order by
+            requisitioncode desc limit 1
+    </select>
+    <select id="getFileList" resultType="java.util.HashMap">
+        SELECT * FROM req_attachment WHERE RequisitionCode= #{oaOrder} and CreateBy = #{workCard}
+    </select>
+    <select id="getFlowInfo" resultType="java.util.HashMap">
+        select ID_ AS TaskId,
+               PROC_INST_ID_ AS ProcessInstanceId
+        FROM v_req_list_pending
+        WHERE RequisitionCode = #{oaOrder}
+    </select>
+</mapper>

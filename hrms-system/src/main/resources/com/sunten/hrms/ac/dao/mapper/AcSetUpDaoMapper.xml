@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcSetUpDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcSetUp">
+        <id column="id" property="id" />
+        <result column="interval" property="interval" />
+        <result column="run_time" property="runTime" />
+        <result column="stage_flag" property="stageFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="calculation" property="calculation" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+    </resultMap>
+
+    <resultMap id="AcSetUpResultMap" type="com.sunten.hrms.ac.domain.AcSetUp" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            asu.id, asu.interval, asu.run_time, asu.stage_flag, asu.create_time, asu.create_by,
+            asu.update_time, asu.update_by, asu.calculation
+            , asu.attribute1
+            , asu.attribute2
+            , asu.attribute3
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.interval as ${tAlias}_interval,
+            ${tAlias}.run_time as ${tAlias}_run_time, ${tAlias}.stage_flag as ${tAlias}_stage_flag,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+            , ${tAlias}.calculation as ${tAlias}_calculation
+            , ${tAlias}.attribute1 as ${tAlias}_attribute1
+            , ${tAlias}.attribute2 as ${tAlias}_attribute2
+            , ${tAlias}.attribute3 as ${tAlias}_attribute3
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_set_up asu
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and asu.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcSetUp" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_set_up (interval, run_time, stage_flag,
+                                   create_time, create_by,
+                                   update_time, update_by,
+                                   asu.calculation
+            , asu.attribute1
+            , asu.attribute2
+            , asu.attribute3
+                                   )
+            values (#{interval,jdbcType=INTEGER}, #{runTime,jdbcType=TIME}, #{stageFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}
+                    , #{calculation,jdbcType=NUMERIC}
+                    , #{attribute1,jdbcType=VARCHAR}
+                    , #{attribute2,jdbcType=VARCHAR}
+                    , #{attribute3,jdbcType=VARCHAR}
+
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_set_up
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcSetUp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcSetUp">
+        <![CDATA[
+            update ac_set_up
+               set interval    = #{interval,jdbcType=INTEGER},
+                   run_time    = #{runTime,jdbcType=TIME},
+                   stage_flag  = #{stageFlag,jdbcType=BIT},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT},
+                   calculation   = #{calculation,jdbcType=NUMERIC},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcSetUpResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where asu.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcSetUpResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcSetUpResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByNew" resultType="com.sunten.hrms.ac.domain.AcSetUp">
+        select top 1 * from ac_set_up order by id desc
+    </select>
+
+</mapper>

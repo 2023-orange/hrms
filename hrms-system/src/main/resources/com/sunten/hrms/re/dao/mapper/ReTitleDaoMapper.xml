@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReTitleDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReTitle">
+        <id column="id" property="id" />
+        <result column="re_id" property="reId" />
+        <result column="title_level" property="titleLevel" />
+        <result column="title_name" property="titleName" />
+        <result column="evaluation_time" property="evaluationTime" />
+        <result column="new_title_flag" property="newTitleFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="ReTitleResultMap" type="com.sunten.hrms.re.domain.ReTitle" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="recruitment"
+                     javaType="com.sunten.hrms.re.domain.ReRecruitment"
+                     resultMap="com.sunten.hrms.re.dao.ReRecruitmentDao.ReRecruitmentResultMap"
+                     columnPrefix="rr_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            rt.re_id as rr_id, rt.title_level, rt.title_name, rt.evaluation_time, rt.new_title_flag, rt.attribute1,
+            rt.attribute2, rt.attribute3, rt.enabled_flag, rt.id, rt.update_by, rt.create_time, rt.create_by,
+            rt.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.re_id as ${tAlias}_rr_id, ${tAlias}.title_level as ${tAlias}_title_level,
+            ${tAlias}.title_name as ${tAlias}_title_name,
+            ${tAlias}.evaluation_time as ${tAlias}_evaluation_time,
+            ${tAlias}.new_title_flag as ${tAlias}_new_title_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from re_title rt
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.reId != null">
+                <![CDATA[
+               and rt.re_id = #{criteria.reId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and rt.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReTitle" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_title (re_id, title_level, title_name,
+                                  evaluation_time, new_title_flag,
+                                  attribute1, attribute2,
+                                  attribute3, enabled_flag, update_by,
+                                  create_time, create_by,
+                                  update_time)
+            values (#{recruitment.id,jdbcType=BIGINT}, #{titleLevel,jdbcType=VARCHAR}, #{titleName,jdbcType=VARCHAR},
+                    #{evaluationTime,jdbcType=DATE}, #{newTitleFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{updateBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_title
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReTitle">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReTitle">
+        <![CDATA[
+            update re_title
+               set re_id           = #{recruitment.id,jdbcType=BIGINT},
+                   title_level     = #{titleLevel,jdbcType=VARCHAR},
+                   title_name      = #{titleName,jdbcType=VARCHAR},
+                   evaluation_time = #{evaluationTime,jdbcType=DATE},
+                   new_title_flag  = #{newTitleFlag,jdbcType=BIT},
+                   attribute1      = #{attribute1,jdbcType=VARCHAR},
+                   attribute2      = #{attribute2,jdbcType=VARCHAR},
+                   attribute3      = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag    = #{enabledFlag,jdbcType=BIT},
+                   update_by       = #{updateBy,jdbcType=BIGINT},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReTitleResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rt.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReTitleResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReTitleResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.re.domain.ReTitle">
+        <![CDATA[
+        update re_title
+        set
+            enabled_flag    = #{enabledFlag,jdbcType=BIT},
+            update_by       = #{updateBy,jdbcType=BIGINT},
+            update_time     = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <insert id="insertByTempInterface" parameterType="java.lang.Long">
+        <![CDATA[
+            insert into re_title (re_id, title_level, title_name,
+                                  evaluation_time, new_title_flag,
+                                  enabled_flag, update_by,
+                                  create_time, create_by,
+                                  update_time)
+                        select rr.id, rrti.title_level, rrti.title_name,
+                        rrti.title_evaluation_time, 1, 1, rrti.update_by,
+                        rrti.create_time, rrti.create_by, rrti.update_time
+                    from re_recruitment_temp_interface rrti join
+                     re_recruitment rr on rrti.id = convert(bigint, rr.attribute4)
+                     and convert(bigint, rr.attribute5) = rrti.group_id
+                     and rrti.group_id = #{groupId, jdbcType = BIGINT}
+                     and rrti.data_status = 'T'
+                     and isnull(rrti.title_name, '') <> ''
+        ]]>
+    </insert>
+</mapper>

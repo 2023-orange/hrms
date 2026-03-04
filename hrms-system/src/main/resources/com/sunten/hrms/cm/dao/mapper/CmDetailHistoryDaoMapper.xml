@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.cm.dao.CmDetailHistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.cm.domain.CmDetailHistory">
+        <id column="id" property="id" />
+        <result column="detail_id" property="detailId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="type" property="type" />
+        <result column="year" property="year" />
+        <result column="dept" property="dept" />
+        <result column="department" property="department" />
+        <result column="team" property="team" />
+        <result column="job" property="job" />
+        <result column="cost_center_num" property="costCenterNum" />
+        <result column="status" property="status" />
+        <result column="export_flag" property="exportFlag" />
+        <result column="suit1" property="suit1" />
+        <result column="suit2" property="suit2" />
+        <result column="suit3" property="suit3" />
+        <result column="suit4" property="suit4" />
+        <result column="family_clothing1" property="familyClothing1" />
+        <result column="family_clothing2" property="familyClothing2" />
+        <result column="family_clothing3" property="familyClothing3" />
+        <result column="family_clothing4" property="familyClothing4" />
+        <result column="summer_working_clothes1" property="summerWorkingClothes1" />
+        <result column="summer_working_clothes2" property="summerWorkingClothes2" />
+        <result column="summer_working_clothes3" property="summerWorkingClothes3" />
+        <result column="winter_working_clothes1" property="winterWorkingClothes1" />
+        <result column="winter_working_clothes2" property="winterWorkingClothes2" />
+        <result column="post_sale_clothing1" property="postSaleClothing1" />
+        <result column="post_sale_clothing2" property="postSaleClothing2" />
+        <result column="post_sale_clothing3" property="postSaleClothing3" />
+        <result column="post_sale_clothing4" property="postSaleClothing4" />
+        <result column="post_sale_clothing5" property="postSaleClothing5" />
+        <result column="dining_clothes1" property="diningClothes1" />
+        <result column="dining_clothes2" property="diningClothes2" />
+        <result column="security_clothes1" property="securityClothes1" />
+        <result column="security_clothes2" property="securityClothes2" />
+        <result column="security_clothes3" property="securityClothes3" />
+        <result column="security_clothes4" property="securityClothes4" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="CmDetailHistoryResultMap" type="com.sunten.hrms.cm.domain.CmDetailHistory" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            cdh.id, cdh.detail_id, cdh.employee_id, cdh.enabled_flag, cdh.attribute1, cdh.attribute2, 
+            cdh.attribute3, cdh.attribute4, cdh.type, cdh.year, cdh.dept, cdh.department, cdh.team, cdh.job, 
+            cdh.cost_center_num, cdh.status, cdh.export_flag, isnull(cdh.suit1, 0) as suit1, isnull(cdh.suit2, 0) as suit2, isnull(cdh.suit3, 0) as suit3,
+            isnull(cdh.suit4, 0) as suit4,isnull(cdh.family_clothing1,0) as family_clothing1, isnull(cdh.family_clothing2,0) as family_clothing2,
+            isnull(cdh.family_clothing3, 0) as family_clothing3, isnull(cdh.family_clothing4, 0) as family_clothing4,
+            isnull(cdh.summer_working_clothes1, 0) as summer_working_clothes1, isnull(cdh.summer_working_clothes2, 0) as summer_working_clothes2,
+            isnull(cdh.summer_working_clothes3, 0) as summer_working_clothes3, isnull(cdh.winter_working_clothes1, 0) as winter_working_clothes1,
+            isnull(cdh.winter_working_clothes2, 0) as winter_working_clothes2, isnull(cdh.post_sale_clothing1, 0) as post_sale_clothing1,
+            isnull(cdh.post_sale_clothing2, 0) as post_sale_clothing2, isnull( cdh.post_sale_clothing3, 0) as post_sale_clothing3,
+            isnull(cdh.post_sale_clothing4, 0) as post_sale_clothing4, isnull(cdh.post_sale_clothing5, 0) as post_sale_clothing5,
+            isnull(cdh.dining_clothes1, 0) as dining_clothes1, isnull(cdh.dining_clothes2, 0) as dining_clothes2,
+            isnull(cdh.security_clothes1, 0) as security_clothes1, isnull(cdh.security_clothes2, 0) as security_clothes2,
+            isnull(cdh.security_clothes3, 0) as security_clothes3, isnull(cdh.security_clothes4, 0) as security_clothes4,
+            cdh.create_time, cdh.create_by, cdh.update_time,
+            cdh.update_by 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.detail_id as ${tAlias}_detail_id, 
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, 
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2, 
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4, 
+            ${tAlias}.type as ${tAlias}_type, ${tAlias}.year as ${tAlias}_year, 
+            ${tAlias}.dept as ${tAlias}_dept, ${tAlias}.department as ${tAlias}_department, 
+            ${tAlias}.team as ${tAlias}_team, ${tAlias}.job as ${tAlias}_job, 
+            ${tAlias}.cost_center_num as ${tAlias}_cost_center_num, ${tAlias}.status as ${tAlias}_status,
+            ${tAlias}.export_flag as ${tAlias}_export_flag, ${tAlias}.suit1 as ${tAlias}_suit1, 
+            ${tAlias}.suit2 as ${tAlias}_suit2, ${tAlias}.suit3 as ${tAlias}_suit3, 
+            ${tAlias}.suit4 as ${tAlias}_suit4, ${tAlias}.family_clothing1 as ${tAlias}_family_clothing1, 
+            ${tAlias}.family_clothing2 as ${tAlias}_family_clothing2, 
+            ${tAlias}.family_clothing3 as ${tAlias}_family_clothing3, 
+            ${tAlias}.family_clothing4 as ${tAlias}_family_clothing4, 
+            ${tAlias}.summer_working_clothes1 as ${tAlias}_summer_working_clothes1, 
+            ${tAlias}.summer_working_clothes2 as ${tAlias}_summer_working_clothes2, 
+            ${tAlias}.summer_working_clothes3 as ${tAlias}_summer_working_clothes3, 
+            ${tAlias}.winter_working_clothes1 as ${tAlias}_winter_working_clothes1, 
+            ${tAlias}.winter_working_clothes2 as ${tAlias}_winter_working_clothes2, 
+            ${tAlias}.post_sale_clothing1 as ${tAlias}_post_sale_clothing1, 
+            ${tAlias}.post_sale_clothing2 as ${tAlias}_post_sale_clothing2, 
+            ${tAlias}.post_sale_clothing3 as ${tAlias}_post_sale_clothing3, 
+            ${tAlias}.post_sale_clothing4 as ${tAlias}_post_sale_clothing4, 
+            ${tAlias}.post_sale_clothing5 as ${tAlias}_post_sale_clothing5, 
+            ${tAlias}.dining_clothes1 as ${tAlias}_dining_clothes1, 
+            ${tAlias}.dining_clothes2 as ${tAlias}_dining_clothes2, 
+            ${tAlias}.security_clothes1 as ${tAlias}_security_clothes1, 
+            ${tAlias}.security_clothes2 as ${tAlias}_security_clothes2, 
+            ${tAlias}.security_clothes3 as ${tAlias}_security_clothes3, 
+            ${tAlias}.security_clothes4 as ${tAlias}_security_clothes4, 
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by, 
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              ,
+        (select isnull(pe.name, '')  from fnd_user fu join pm_employee pe on
+        fu.employee_id = pe.id
+        and fu.id = cdh.update_by
+        where fu.enabled_flag  =1
+        and pe.enabled_flag = 1) as update_by_str
+              from cm_detail_history cdh
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+           <if test="criteria.detailId != null">
+            <![CDATA[
+                and cdh.detail_id like #{criteria.detailId,jdbcType=BIGINT}
+            ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.cm.domain.CmDetailHistory" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into cm_detail_history (detail_id, employee_id, enabled_flag,
+                                           attribute1, attribute2,
+                                           attribute3, attribute4, type,
+                                           year, dept, department,
+                                           team, job, cost_center_num,
+                                           status, export_flag, suit1,
+                                           suit2, suit3, suit4,
+                                           family_clothing1, family_clothing2,
+                                           family_clothing3, family_clothing4,
+                                           summer_working_clothes1, summer_working_clothes2,
+                                           summer_working_clothes3, winter_working_clothes1,
+                                           winter_working_clothes2, post_sale_clothing1,
+                                           post_sale_clothing2, post_sale_clothing3,
+                                           post_sale_clothing4, post_sale_clothing5,
+                                           dining_clothes1, dining_clothes2,
+                                           security_clothes1, security_clothes2,
+                                           security_clothes3, security_clothes4,
+                                           create_time, create_by,
+                                           update_time, update_by)
+            values (#{detailId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT}, #{enabledFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+                    #{year,jdbcType=INTEGER}, #{dept,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR},
+                    #{team,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{costCenterNum,jdbcType=VARCHAR},
+                    #{status,jdbcType=VARCHAR}, #{exportFlag,jdbcType=BIT}, #{suit1,jdbcType=INTEGER},
+                    #{suit2,jdbcType=INTEGER}, #{suit3,jdbcType=INTEGER}, #{suit4,jdbcType=INTEGER},
+                    #{familyClothing1,jdbcType=INTEGER}, #{familyClothing2,jdbcType=INTEGER},
+                    #{familyClothing3,jdbcType=INTEGER}, #{familyClothing4,jdbcType=INTEGER},
+                    #{summerWorkingClothes1,jdbcType=INTEGER}, #{summerWorkingClothes2,jdbcType=INTEGER},
+                    #{summerWorkingClothes3,jdbcType=INTEGER}, #{winterWorkingClothes1,jdbcType=INTEGER},
+                    #{winterWorkingClothes2,jdbcType=INTEGER}, #{postSaleClothing1,jdbcType=INTEGER},
+                    #{postSaleClothing2,jdbcType=INTEGER}, #{postSaleClothing3,jdbcType=INTEGER},
+                    #{postSaleClothing4,jdbcType=INTEGER}, #{postSaleClothing5,jdbcType=INTEGER},
+                    #{diningClothes1,jdbcType=INTEGER}, #{diningClothes2,jdbcType=INTEGER},
+                    #{securityClothes1,jdbcType=INTEGER}, #{securityClothes2,jdbcType=INTEGER},
+                    #{securityClothes3,jdbcType=INTEGER}, #{securityClothes4,jdbcType=INTEGER},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from cm_detail_history
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.cm.domain.CmDetailHistory">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.cm.domain.CmDetailHistory">
+        <![CDATA[
+            update cm_detail_history
+               set detail_id               = #{detailId,jdbcType=BIGINT},
+                   employee_id             = #{employeeId,jdbcType=BIGINT},
+                   enabled_flag            = #{enabledFlag,jdbcType=BIT},
+                   attribute1              = #{attribute1,jdbcType=VARCHAR},
+                   attribute2              = #{attribute2,jdbcType=VARCHAR},
+                   attribute3              = #{attribute3,jdbcType=VARCHAR},
+                   attribute4              = #{attribute4,jdbcType=VARCHAR},
+                   type                    = #{type,jdbcType=VARCHAR},
+                   year                    = #{year,jdbcType=INTEGER},
+                   dept                    = #{dept,jdbcType=VARCHAR},
+                   department              = #{department,jdbcType=VARCHAR},
+                   team                    = #{team,jdbcType=VARCHAR},
+                   job                     = #{job,jdbcType=VARCHAR},
+                   cost_center_num         = #{costCenterNum,jdbcType=VARCHAR},
+                   status                  = #{status,jdbcType=VARCHAR},
+                   export_flag             = #{exportFlag,jdbcType=BIT},
+                   suit1                   = #{suit1,jdbcType=INTEGER},
+                   suit2                   = #{suit2,jdbcType=INTEGER},
+                   suit3                   = #{suit3,jdbcType=INTEGER},
+                   suit4                   = #{suit4,jdbcType=INTEGER},
+                   family_clothing1        = #{familyClothing1,jdbcType=INTEGER},
+                   family_clothing2        = #{familyClothing2,jdbcType=INTEGER},
+                   family_clothing3        = #{familyClothing3,jdbcType=INTEGER},
+                   family_clothing4        = #{familyClothing4,jdbcType=INTEGER},
+                   summer_working_clothes1 = #{summerWorkingClothes1,jdbcType=INTEGER},
+                   summer_working_clothes2 = #{summerWorkingClothes2,jdbcType=INTEGER},
+                   summer_working_clothes3 = #{summerWorkingClothes3,jdbcType=INTEGER},
+                   winter_working_clothes1 = #{winterWorkingClothes1,jdbcType=INTEGER},
+                   winter_working_clothes2 = #{winterWorkingClothes2,jdbcType=INTEGER},
+                   post_sale_clothing1     = #{postSaleClothing1,jdbcType=INTEGER},
+                   post_sale_clothing2     = #{postSaleClothing2,jdbcType=INTEGER},
+                   post_sale_clothing3     = #{postSaleClothing3,jdbcType=INTEGER},
+                   post_sale_clothing4     = #{postSaleClothing4,jdbcType=INTEGER},
+                   post_sale_clothing5     = #{postSaleClothing5,jdbcType=INTEGER},
+                   dining_clothes1         = #{diningClothes1,jdbcType=INTEGER},
+                   dining_clothes2         = #{diningClothes2,jdbcType=INTEGER},
+                   security_clothes1       = #{securityClothes1,jdbcType=INTEGER},
+                   security_clothes2       = #{securityClothes2,jdbcType=INTEGER},
+                   security_clothes3       = #{securityClothes3,jdbcType=INTEGER},
+                   security_clothes4       = #{securityClothes4,jdbcType=INTEGER},
+                   update_time             = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by               = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="CmDetailHistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where cdh.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="CmDetailHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="CmDetailHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByDetailId" resultMap="CmDetailHistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where cdh.detail_id = #{detailId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <insert id="insertIntoHistory" parameterType="java.lang.Long">
+        <![CDATA[
+             insert into cm_detail_history (detail_id, employee_id, enabled_flag,
+                                           attribute1, attribute2,
+                                           attribute3, attribute4, type,
+                                           year, dept, department,
+                                           team, job, cost_center_num,
+                                           status, export_flag, suit1,
+                                           suit2, suit3, suit4,
+                                           family_clothing1, family_clothing2,
+                                           family_clothing3, family_clothing4,
+                                           summer_working_clothes1, summer_working_clothes2,
+                                           summer_working_clothes3, winter_working_clothes1,
+                                           winter_working_clothes2, post_sale_clothing1,
+                                           post_sale_clothing2, post_sale_clothing3,
+                                           post_sale_clothing4, post_sale_clothing5,
+                                           dining_clothes1, dining_clothes2,
+                                           security_clothes1, security_clothes2,
+                                           security_clothes3, security_clothes4,
+                                           create_time, create_by,
+                                           update_time, update_by)
+										   select id, employee_id, enabled_flag,
+                                           attribute1, attribute2,
+                                           attribute3, attribute4, type,
+                                           year, dept, department,
+                                           team, job, cost_center_num,
+                                           status, export_flag, suit1,
+                                           suit2, suit3, suit4,
+                                           family_clothing1, family_clothing2,
+                                           family_clothing3, family_clothing4,
+                                           summer_working_clothes1, summer_working_clothes2,
+                                           summer_working_clothes3, winter_working_clothes1,
+                                           winter_working_clothes2, post_sale_clothing1,
+                                           post_sale_clothing2, post_sale_clothing3,
+                                           post_sale_clothing4, post_sale_clothing5,
+                                           dining_clothes1, dining_clothes2,
+                                           security_clothes1, security_clothes2,
+                                           security_clothes3, security_clothes4,
+                                           create_time, create_by,
+                                           update_time, update_by from cm_detail where id=#{id,jdbcType=BIGINT}
+        ]]>
+    </insert>
+
+</mapper>

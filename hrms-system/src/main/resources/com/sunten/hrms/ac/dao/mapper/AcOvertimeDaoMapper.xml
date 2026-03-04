@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOvertimeDao">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcOvertime">
+        <id column="id" property="id" />
+        <result column="jb_user_name" property="workCode" />
+        <result column="jb_nick_name" property="nickName" />
+        <result column="user_department" property="deptName" />
+        <result column="user_section" property="officeName" />
+        <result column="now_date" property="nowDate" />
+        <result column="rest_num" property="restNum" />
+        <result column="work_num" property="workNum" />
+        <result column="quantity" property="quantity" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+        id, jbUserName, StartTime, EndTime, quantity
+        ]]>
+    </sql>
+
+    <select id="getOvertimeList" resultMap="BaseResultMap">
+        <![CDATA[ select temp.jb_user_name,temp.jb_nick_name,temp.user_department,temp.user_section,temp.now_date,
+                    SUM(temp.rest_num) rest_num,SUM(temp.work_num) work_num,SUM(temp.quantity) quantity
+          from (
+        select b.id,
+               b.jbUserName as jb_user_name,
+	           b.jbNickName as jb_nick_name,
+	           b.UserDepartment as user_department,
+	           b.UserSection as user_section,
+	           date_format ( b.StartTime, '%Y-%m' )  as now_date,
+	           SUM(case c.xxrbs when 1 then cast(b.reviewhours as DECIMAL(8,2)) else 0 end) rest_num,
+	           SUM(case c.xxrbs when 0 then cast(b.reviewhours as DECIMAL(8,2)) else 0 end) work_num,
+	           0 as quantity
+	      from v_req_hrovertime_all_end b
+		  LEFT JOIN (SELECT c.rq,c.xxrbs
+							FROM mobile_platform_normal.sys_kq_date c
+						 WHERE c.RQ > '2018-8-31' ]]>
+        <if test="criteria != null">
+            <if test="criteria.startDate != null and criteria.endDate != null">
+                <![CDATA[
+                   and c.RQ between
+                    #{criteria.startDate,jdbcType=DATE} and #{criteria.endDate,jdbcType=DATE}
+                ]]>
+            </if>
+        </if>
+        <![CDATA[
+          ) c
+	      ON DATE_FORMAT(b.StartTime, '%Y-%m-%d') = c.rq
+	    where b.reviewhours <> ''
+         ]]>
+        <if test="criteria != null">
+            <if test="criteria.startDate != null and criteria.endDate != null">
+                <![CDATA[
+                   and  b.StartTime between
+                    #{criteria.startDate,jdbcType=DATE} and #{criteria.endDate,jdbcType=DATE}
+                ]]>
+            </if>
+            <if test="criteria.workCode != null">
+                <![CDATA[
+                    and b.jbUserName = RIGHT(LPAD(#{criteria.workCode,jdbcType=VARCHAR}, 6 , '0'), 6 )
+                ]]>
+            </if>
+            <if test="criteria.name != null">
+                <![CDATA[
+                    and b.jbNickName like #{criteria.name,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.employees != null and criteria.employees.size > 0">
+                <![CDATA[
+                    and  RIGHT(LPAD(b.jbUserName, 6 , '0'), 6 ) in
+                ]]>
+                <foreach collection="criteria.employees" index="index" item="item" separator="," open="(" close=")">
+                  #{item.workCard}
+                </foreach>
+            </if>
+            <if test="criteria.queryEmployees != null">
+                <choose>
+                    <when test="criteria.queryEmployees.size > 0">
+                        and  RIGHT(LPAD(b.jbUserName, 6 , '0'), 6 ) in
+                        <foreach collection="criteria.queryEmployees" index="index" item="item" separator="," open="(" close=")">
+                            #{item.workCard}
+                        </foreach>
+                    </when>
+                    <otherwise>
+                        and b.jbUserName  = 'notExit'
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+        <![CDATA[
+       GROUP BY b.jbUserName, date_format ( b.StartTime, '%Y%m' )
+      union all
+       SELECT vrhae.id,
+	          vrhae.UserName jb_user_name,
+              vrhae.NickName jb_nick_name,
+	          vrhae.UserDepartment user_department,
+	          (select b.SectionOffice from sys_user_mes b WHERE vrhae.UserName = b.WorkCardNumber) user_section,
+	          DATE_FORMAT(vrhae.StartTime, '%Y-%m') now_date,
+	          0 AS rest_num,
+              0 AS work_num,
+              SUM( cast(vrhae.Number as DECIMAL(8,2))) quantity
+         FROM v_req_hrleave_all_end vrhae
+        WHERE LeaveType='调休'
+       ]]>
+        <if test="criteria != null">
+            <if test="criteria.startDate != null and criteria.endDate != null">
+                <![CDATA[
+                   and DATE_FORMAT(vrhae.StartTime, '%Y%m') = DATE_FORMAT(#{criteria.startDate,jdbcType=DATE}, '%Y%m')
+                ]]>
+            </if>
+            <if test="criteria.workCode != null">
+                <![CDATA[
+                    and vrhae.UserName = RIGHT(LPAD(#{criteria.workCode,jdbcType=VARCHAR}, 6 , '0'), 4 )
+                ]]>
+            </if>
+            <if test="criteria.name != null">
+                <![CDATA[
+                    and vrhae.NickName like #{criteria.name,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.employees != null and criteria.employees.size > 0">
+                <![CDATA[
+                    and  RIGHT(LPAD(vrhae.UserName, 6 , '0'), 6 ) in
+                ]]>
+                <foreach collection="criteria.employees" index="index" item="item" separator="," open="(" close=")">
+                    #{item.workCard}
+                </foreach>
+            </if>
+            <if test="criteria.queryEmployees != null">
+                <choose>
+                    <when test="criteria.queryEmployees.size > 0">
+                        and  RIGHT(LPAD(vrhae.UserName, 6 , '0'), 6 ) in
+                        <foreach collection="criteria.queryEmployees" index="index" item="item" separator="," open="(" close=")">
+                            #{item.workCard}
+                        </foreach>
+                    </when>
+                    <otherwise>
+                        and vrhae.UserName  = 'notExit'
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+        <![CDATA[
+          group by vrhae.UserName) as temp
+        group by temp.jb_user_name,temp.now_date
+        ]]>
+
+    </select>
+</mapper>

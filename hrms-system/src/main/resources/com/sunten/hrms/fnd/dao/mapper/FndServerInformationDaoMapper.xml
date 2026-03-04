@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndServerInformationDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndServerInformation">
+        <id column="id" property="id" />
+        <result column="server_name" property="serverName" />
+        <result column="description" property="description" />
+        <result column="frontend_uri" property="frontendUri" />
+        <result column="backend_uri" property="backendUri" />
+        <result column="database_uri" property="databaseUri" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="remarks" property="remarks" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="FndServerInformationResultMap" type="com.sunten.hrms.fnd.domain.FndServerInformation" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fsi.id, fsi.server_name, fsi.description, fsi.frontend_uri, fsi.backend_uri, fsi.database_uri,
+            fsi.enabled_flag, fsi.remarks, fsi.attribute1, fsi.attribute2, fsi.attribute3, fsi.attribute4,
+            fsi.attribute5, fsi.create_time, fsi.create_by, fsi.update_time, fsi.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.server_name as ${tAlias}_server_name,
+            ${tAlias}.description as ${tAlias}_description, ${tAlias}.frontend_uri as ${tAlias}_frontend_uri,
+            ${tAlias}.backend_uri as ${tAlias}_backend_uri, ${tAlias}.database_uri as ${tAlias}_database_uri,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_server_information fsi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.serverName != null">
+                <![CDATA[
+                    and fsi.server_name like #{criteria.serverName,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.description != null">
+                <![CDATA[
+                    and fsi.description like #{criteria.description,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.frontendUri != null">
+                <![CDATA[
+                    and fsi.frontend_uri like #{criteria.frontendUri,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.backendUri != null">
+                <![CDATA[
+                    and fsi.backend_uri like #{criteria.backendUri,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.databaseUri != null">
+                <![CDATA[
+                    and fsi.database_uri like #{criteria.databaseUri,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                    and fsi.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndServerInformation" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_server_information (server_name, description,
+                                                frontend_uri, backend_uri,
+                                                database_uri, enabled_flag, remarks,
+                                                attribute1, attribute2,
+                                                attribute3, attribute4,
+                                                attribute5, create_time,
+                                                create_by, update_time, update_by)
+            values (#{serverName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+                    #{frontendUri,jdbcType=VARCHAR}, #{backendUri,jdbcType=VARCHAR},
+                    #{databaseUri,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{remarks,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_server_information
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndServerInformation">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndServerInformation">
+        <![CDATA[
+            update fnd_server_information
+               set server_name  = #{serverName,jdbcType=VARCHAR},
+                   description  = #{description,jdbcType=VARCHAR},
+                   frontend_uri = #{frontendUri,jdbcType=VARCHAR},
+                   backend_uri  = #{backendUri,jdbcType=VARCHAR},
+                   database_uri = #{databaseUri,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   remarks      = #{remarks,jdbcType=VARCHAR},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   attribute4   = #{attribute4,jdbcType=VARCHAR},
+                   attribute5   = #{attribute5,jdbcType=VARCHAR},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndServerInformationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fsi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndServerInformationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndServerInformationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

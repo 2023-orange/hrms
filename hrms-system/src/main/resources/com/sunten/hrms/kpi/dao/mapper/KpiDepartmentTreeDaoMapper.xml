@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiDepartmentTreeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiDepartmentTree">
+        <id column="id" property="id" />
+        <result column="year" property="year" />
+        <result column="kpi_annual_id" property="kpiAnnualId" />
+        <result column="dept_id" property="deptId" />
+        <result column="dept_name" property="deptName" />
+        <result column="parent_id" property="parentId" />
+        <result column="dept_level" property="deptLevel" />
+        <result column="dept_sequence" property="deptSequence" />
+        <result column="sequence" property="sequence" />
+        <result column="ext_dept_id" property="extDeptId" />
+        <result column="ext_department_id" property="extDepartmentId" />
+        <result column="ext_team_id" property="extTeamId" />
+        <result column="admin_job_id" property="adminJobId" />
+        <result column="assessment_department_flag" property="assessmentDepartmentFlag" />
+        <result column="assessed_department_flag" property="assessedDepartmentFlag" />
+        <result column="info_work_card" property="infoWorkCard" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="KpiDepartmentTreeResultMap" type="com.sunten.hrms.kpi.domain.KpiDepartmentTree" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            kdt.id, kdt.year, kdt.kpi_annual_id, kdt.dept_id, kdt.dept_name, kdt.parent_id, kdt.dept_level,
+            kdt.dept_sequence, kdt.sequence, kdt.ext_dept_id, kdt.ext_department_id, kdt.ext_team_id,
+            kdt.admin_job_id, kdt.assessment_department_flag, kdt.assessed_department_flag, kdt.info_work_card,
+            kdt.attribute1, kdt.attribute2, kdt.attribute3, kdt.attribute4, kdt.attribute5, kdt.create_time,
+            kdt.create_by, kdt.update_time, kdt.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.year as ${tAlias}_year,
+            ${tAlias}.kpi_annual_id as ${tAlias}_kpi_annual_id, ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.dept_name as ${tAlias}_dept_name, ${tAlias}.parent_id as ${tAlias}_parent_id,
+            ${tAlias}.dept_level as ${tAlias}_dept_level, ${tAlias}.dept_sequence as ${tAlias}_dept_sequence,
+            ${tAlias}.sequence as ${tAlias}_sequence, ${tAlias}.ext_dept_id as ${tAlias}_ext_dept_id,
+            ${tAlias}.ext_department_id as ${tAlias}_ext_department_id,
+            ${tAlias}.ext_team_id as ${tAlias}_ext_team_id, ${tAlias}.admin_job_id as ${tAlias}_admin_job_id,
+            ${tAlias}.assessment_department_flag as ${tAlias}_assessment_department_flag,
+            ${tAlias}.assessed_department_flag as ${tAlias}_assessed_department_flag,
+            ${tAlias}.info_work_card as ${tAlias}_info_work_card, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_department_tree kdt
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.year != null">
+                <![CDATA[
+                    and kdt.year = #{criteria.year,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.assessmentDepartmentFlag != null">
+                <![CDATA[
+                    and kdt.assessment_department_flag like #{criteria.assessmentDepartmentFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.assessedDepartmentFlag != null">
+                <![CDATA[
+                    and kdt.assessed_department_flag like #{criteria.assessedDepartmentFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.year != null">
+                <![CDATA[
+                    and kdt.year like #{criteria.year,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTree" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into kpi_department_tree (year, kpi_annual_id, dept_id,
+                                             dept_name, parent_id, dept_level,
+                                             dept_sequence, sequence,
+                                             ext_dept_id, ext_department_id,
+                                             ext_team_id, admin_job_id,
+                                             assessment_department_flag, assessed_department_flag,
+                                             info_work_card, attribute1,
+                                             attribute2, attribute3,
+                                             attribute4, attribute5,
+                                             create_time, create_by,
+                                             update_time, update_by)
+            values (#{year,jdbcType=VARCHAR}, #{kpiAnnualId,jdbcType=BIGINT}, #{deptId,jdbcType=BIGINT},
+                    #{deptName,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, #{deptLevel,jdbcType=VARCHAR},
+                    #{deptSequence,jdbcType=INTEGER}, #{sequence,jdbcType=INTEGER},
+                    #{extDeptId,jdbcType=BIGINT}, #{extDepartmentId,jdbcType=BIGINT},
+                    #{extTeamId,jdbcType=BIGINT}, #{adminJobId,jdbcType=BIGINT},
+                    #{assessmentDepartmentFlag,jdbcType=BIT}, #{assessedDepartmentFlag,jdbcType=BIT},
+                    #{infoWorkCard,jdbcType=BIGINT}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_department_tree
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTree">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTree">
+        <![CDATA[
+            update kpi_department_tree
+               set year                       = #{year,jdbcType=VARCHAR},
+                   kpi_annual_id              = #{kpiAnnualId,jdbcType=BIGINT},
+                   dept_id                    = #{deptId,jdbcType=BIGINT},
+                   dept_name                  = #{deptName,jdbcType=VARCHAR},
+                   parent_id                  = #{parentId,jdbcType=BIGINT},
+                   dept_level                 = #{deptLevel,jdbcType=VARCHAR},
+                   dept_sequence              = #{deptSequence,jdbcType=INTEGER},
+                   sequence                   = #{sequence,jdbcType=INTEGER},
+                   ext_dept_id                = #{extDeptId,jdbcType=BIGINT},
+                   ext_department_id          = #{extDepartmentId,jdbcType=BIGINT},
+                   ext_team_id                = #{extTeamId,jdbcType=BIGINT},
+                   admin_job_id               = #{adminJobId,jdbcType=BIGINT},
+                   assessment_department_flag = #{assessmentDepartmentFlag,jdbcType=BIT},
+                   assessed_department_flag   = #{assessedDepartmentFlag,jdbcType=BIT},
+                   info_work_card             = #{infoWorkCard,jdbcType=BIGINT},
+                   attribute1                 = #{attribute1,jdbcType=VARCHAR},
+                   attribute2                 = #{attribute2,jdbcType=VARCHAR},
+                   attribute3                 = #{attribute3,jdbcType=VARCHAR},
+                   attribute4                 = #{attribute4,jdbcType=VARCHAR},
+                   attribute5                 = #{attribute5,jdbcType=VARCHAR},
+                   update_time                = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                  = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiDepartmentTreeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where kdt.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiDepartmentTreeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiDepartmentTreeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="insertTreeFromDept" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTree" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into kpi_department_tree(
+                        [year]
+                       ,[kpi_annual_id]
+                       ,[dept_id]
+                       ,[dept_name]
+                       ,[parent_id]
+                       ,[dept_level]
+                       ,[dept_sequence]
+                       ,[sequence]
+                       ,[ext_dept_id]
+                       ,[ext_department_id]
+                       ,[ext_team_id]
+                       ,[admin_job_id]
+                       ,[assessment_department_flag]
+                       ,[assessed_department_flag]
+                       ,[info_work_card]
+                       ,[attribute1]
+                       ,[attribute2]
+                       ,[attribute3]
+                       ,[attribute4]
+                       ,[attribute5]
+                       ,[create_time]
+                       ,[create_by]
+                       ,[update_time]
+                       ,[update_by]
+            )
+            select
+                        #{year,jdbcType=VARCHAR}
+                       ,#{kpiAnnualId,jdbcType=BIGINT}
+                       ,[id]
+                       ,[dept_name]
+                       ,REPLACE(parent_id,'70','1')
+                       ,[dept_level]
+                       ,[dept_sequence]
+                       ,[sequence]
+                       ,[ext_dept_id]
+                       ,[ext_department_id]
+                       ,[ext_team_id]
+                       ,[admin_job_id]
+                       ,0
+                       ,1
+                       ,#{infoWorkCard,jdbcType=BIGINT}
+                       ,#{attribute1,jdbcType=VARCHAR}
+                       ,#{attribute2,jdbcType=VARCHAR}
+                       ,#{attribute3,jdbcType=VARCHAR}
+                       ,#{attribute4,jdbcType=VARCHAR}
+                       ,#{attribute5,jdbcType=VARCHAR}
+                       ,#{createTime,jdbcType=TIMESTAMP}
+                       ,#{createBy,jdbcType=BIGINT}
+                       ,#{updateTime,jdbcType=TIMESTAMP}
+                       ,#{updateBy,jdbcType=BIGINT}
+             from fnd_dept fd
+             where fd.enabled_flag = 1 and fd.deleted_flag = 0
+        ]]>
+    </insert>
+
+    <select id="getNameByDeptId" resultType="java.lang.String">
+        <![CDATA[
+		    select kdt.dept_name
+              from kpi_department_tree kdt
+             where kdt.dept_id = #{id,jdbcType=BIGINT} AND YEAR = #{year,jdbcType=BIGINT}
+		]]>
+    </select>
+
+    <select id="getByDeptId" resultMap="KpiDepartmentTreeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where kdt.dept_id = #{id,jdbcType=BIGINT} AND YEAR = #{year,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <update id="updateByKpiTree" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTree">
+        <![CDATA[
+            update kpi_department_tree
+               set assessment_department_flag = #{assessmentDepartmentFlag,jdbcType=BIT},
+                   assessed_department_flag   = #{assessedDepartmentFlag,jdbcType=BIT},
+                   update_time                = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                  = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

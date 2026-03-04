@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiDepartmentTreeEmployeeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiDepartmentTreeEmployee">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="department_tree_id" property="departmentTreeId" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="name" property="name" />
+        <result column="work_card" property="workCard" />
+    </resultMap>
+
+    <resultMap id="KpiDepartmentTreeEmployeeResultMap" type="com.sunten.hrms.kpi.domain.KpiDepartmentTreeEmployee" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            kdte.id, kdte.employee_id, kdte.department_tree_id, kdte.attribute1, kdte.attribute2, kdte.attribute3,
+            kdte.attribute4, kdte.attribute5, kdte.create_time, kdte.create_by, kdte.update_time,
+            kdte.update_by, kdte.enabled_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.department_tree_id as ${tAlias}_department_tree_id, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_department_tree_employee kdte
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and enabled_flag = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and kdte.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTreeEmployee" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into kpi_department_tree_employee (employee_id, department_tree_id, attribute1,
+                                                      attribute2, attribute3,
+                                                      attribute4, attribute5,
+                                                      create_time, create_by,
+                                                      update_time, update_by, enabled_flag)
+            values (#{employeeId,jdbcType=BIGINT}, #{departmentTreeId,jdbcType=BIGINT}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},1)
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_department_tree_employee
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTreeEmployee">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiDepartmentTreeEmployee">
+        <![CDATA[
+            update kpi_department_tree_employee
+               set employee_id = #{employeeId,jdbcType=BIGINT},
+                   department_tree_id     = #{departmentTreeId,jdbcType=BIGINT},
+                   attribute1  = #{attribute1,jdbcType=VARCHAR},
+                   attribute2  = #{attribute2,jdbcType=VARCHAR},
+                   attribute3  = #{attribute3,jdbcType=VARCHAR},
+                   attribute4  = #{attribute4,jdbcType=VARCHAR},
+                   attribute5  = #{attribute5,jdbcType=VARCHAR},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT},
+                   enabled_flag = #{criteria.enabled,jdbcType=BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiDepartmentTreeEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where kdte.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiDepartmentTreeEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiDepartmentTreeEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listDepartmentTreeEmployee" resultMap="KpiDepartmentTreeEmployeeResultMap">
+        select pe.name,pe.work_card,kdte.department_tree_id,kdte.id,kdte.employee_id from kpi_department_tree kdt
+            left join kpi_department_tree_employee kdte on kdt.id = kdte.department_tree_id
+            left join pm_employee pe on pe.id = kdte.employee_id
+            where kdte.enabled_flag = 1 and kdt.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="deleteTreeEmployee">
+        <![CDATA[
+            update kpi_department_tree_employee
+               set update_time = getdate(),
+                   enabled_flag = 0
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getKpiEmployee" resultMap="KpiDepartmentTreeEmployeeResultMap">
+        select name,work_card,department_tree_id,id,employee_id,dept_name from v_get_kpi_employee
+            where employee_id = #{employeeId,jdbcType=BIGINT}
+            and year = #{year,jdbcType=VARCHAR}
+            and assessment_department_flag = 1
+    </select>
+
+</mapper>

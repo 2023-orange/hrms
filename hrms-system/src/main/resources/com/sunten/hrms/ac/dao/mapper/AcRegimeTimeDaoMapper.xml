@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcRegimeTimeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcRegimeTime">
+        <id column="id" property="id" />
+        <result column="time_from" property="timeFrom" />
+        <result column="time_to" property="timeTo" />
+        <result column="extend_time_flag" property="extendTimeFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcRegimeTimeResultMap" type="com.sunten.hrms.ac.domain.AcRegimeTime" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            art.id, art.time_from, art.time_to, art.extend_time_flag, art.attribute1, art.attribute2,
+            art.attribute3, art.enabled_flag, art.create_by, art.create_time, art.update_by, art.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.time_from as ${tAlias}_time_from,
+            ${tAlias}.time_to as ${tAlias}_time_to, ${tAlias}.extend_time_flag as ${tAlias}_extend_time_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_regime_time art
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabled != null">
+            <![CDATA[
+                and art.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+            ]]>
+            </if>
+        </if>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and art.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcRegimeTime" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_regime_time (time_from, time_to, extend_time_flag,
+                                        attribute1, attribute2,
+                                        attribute3, enabled_flag, create_by,
+                                        create_time, update_by,
+                                        update_time)
+            values (#{timeFrom,jdbcType=TIME}, #{timeTo,jdbcType=TIME}, #{extendTimeFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <update id="deleteByEnabled" parameterType="com.sunten.hrms.ac.domain.AcRegimeTime">
+        <![CDATA[
+            update ac_regime_time set enabled_flag = 0,
+                update_by        = #{updateBy,jdbcType=BIGINT},
+                update_time      = #{updateTime,jdbcType=TIMESTAMP}
+            where id = #{id,jdbcType=BIGINT}
+           ]]>
+    </update>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_regime_time
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcRegimeTime">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcRegimeTime">
+        <![CDATA[
+            update ac_regime_time
+               set time_from        = #{timeFrom,jdbcType=TIME},
+                   time_to          = #{timeTo,jdbcType=TIME},
+                   extend_time_flag = #{extendTimeFlag,jdbcType=BIT},
+                   attribute1       = #{attribute1,jdbcType=VARCHAR},
+                   attribute2       = #{attribute2,jdbcType=VARCHAR},
+                   attribute3       = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag     = #{enabledFlag,jdbcType=BIT},
+                   update_by        = #{updateBy,jdbcType=BIGINT},
+                   update_time      = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcRegimeTimeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where art.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcRegimeTimeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcRegimeTimeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

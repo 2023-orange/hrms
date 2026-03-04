@@ -1,0 +1,2027 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcAttendanceRecordHistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory">
+        <id column="id" property="id" />
+        <result column="abnromal_attendance_record_id" property="abnromalAttendanceRecordId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="date" property="date" />
+        <result column="last_paragraph_end_time" property="lastParagraphEndTime" />
+        <result column="first_time_from" property="firstTimeFrom" />
+        <result column="first_time_to" property="firstTimeTo" />
+        <result column="extend1_time_flag" property="extend1TimeFlag" />
+        <result column="second_time_from" property="secondTimeFrom" />
+        <result column="second_time_to" property="secondTimeTo" />
+        <result column="extend2_time_flag" property="extend2TimeFlag" />
+        <result column="third_time_from" property="thirdTimeFrom" />
+        <result column="third_time_to" property="thirdTimeTo" />
+        <result column="extend3_time_flag" property="extend3TimeFlag" />
+        <result column="next_period_start_time" property="nextPeriodStartTime" />
+        <result column="rest_flag" property="restFlag" />
+        <result column="no_scheduling" property="noScheduling" />
+        <result column="rest_day_clock" property="restDayClock" />
+        <result column="all_day_no_clock" property="allDayNoClock" />
+        <result column="office_time_clock" property="officeTimeClock" />
+        <result column="no_clock_in" property="noClockIn" />
+        <result column="abnormal_clock_in_time" property="abnormalClockInTime" />
+        <result column="no_clock_after_work" property="noClockAfterWork" />
+        <result column="alt_first_time_from" property="altFirstTimeFrom" />
+        <result column="alt_first_time_to" property="altFirstTimeTo" />
+        <result column="alt_extend1_time_flag" property="altExtend1TimeFlag" />
+        <result column="alt_second_time_from" property="altSecondTimeFrom" />
+        <result column="alt_second_time_to" property="altSecondTimeTo" />
+        <result column="alt_extend2_time_flag" property="altExtend2TimeFlag" />
+        <result column="alt_third_time_from" property="altThirdTimeFrom" />
+        <result column="alt_third_time_to" property="altThirdTimeTo" />
+        <result column="alt_extend3_time_flag" property="altExtend3TimeFlag" />
+        <result column="alt_rest_day_flag" property="altRestDayFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="dispose_flag" property="disposeFlag" />
+        <result column="result" property="result" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="AcAttendanceRecordHistoryResultMap" type="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory" autoMapping="true">
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="abClockRecord"
+                     javaType="com.sunten.hrms.ac.domain.AcAbnormalClockRecord"
+                     resultMap="com.sunten.hrms.ac.dao.AcAbnormalClockRecordDao.AcAbnormalClockRecordResultMap"
+                     columnPrefix="aacr_"
+
+        />
+    </resultMap>
+
+    <resultMap id="AcAttendanceMachineResultMap" type="com.sunten.hrms.ac.domain.AcAttendanceMachine">
+        <id column="id" property="id" />
+        <result column="machine_id" property="machineId" />
+        <result column="machine_name" property="machineName"/>
+        <result column="machine_ip_address" property="machineIpAddress" />
+        <result column="crjqk" property="crjqk" />
+    </resultMap>
+
+    <resultMap id="nowUseAcAttendanceRecordHistoryResultMap" type="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory" autoMapping="true">
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <resultMap id="RepulseEmailMesResultMap" type="com.sunten.hrms.ac.vo.RepulseEmailMes" autoMapping="true"/>
+
+    <resultMap id="ExceptionEmailResultMap" type="com.sunten.hrms.ac.vo.AcExceptionEmailVo" autoMapping="true"/>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aarh.abnromal_attendance_record_id, aarh.employee_id, aarh.date, aarh.last_paragraph_end_time,
+            aarh.first_time_from, aarh.first_time_to, aarh.extend1_time_flag, aarh.second_time_from,
+            aarh.second_time_to, aarh.extend2_time_flag, aarh.third_time_from, aarh.third_time_to,
+            aarh.extend3_time_flag, aarh.next_period_start_time, aarh.rest_flag, aarh.no_scheduling,
+            aarh.rest_day_clock, aarh.all_day_no_clock, aarh.office_time_clock, aarh.no_clock_in,
+            aarh.abnormal_clock_in_time, aarh.no_clock_after_work, aarh.alt_first_time_from,
+            aarh.alt_first_time_to, aarh.alt_extend1_time_flag, aarh.alt_second_time_from,
+            aarh.alt_second_time_to, aarh.alt_extend2_time_flag, aarh.alt_third_time_from,
+            aarh.alt_third_time_to, aarh.alt_extend3_time_flag, aarh.alt_rest_day_flag, aarh.attribute1,
+            aarh.attribute2, aarh.attribute3, aarh.attribute4, aarh.attribute5, aarh.id, aarh.dispose_flag, aarh.result, aarh.update_by,
+            aarh.create_by, aarh.update_time, aarh.create_time
+        ]]>
+    </sql>
+
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.abnromal_attendance_record_id as ${tAlias}_abnromal_attendance_record_id,
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.date as ${tAlias}_date,
+            ${tAlias}.last_paragraph_end_time as ${tAlias}_last_paragraph_end_time,
+            ${tAlias}.first_time_from as ${tAlias}_first_time_from,
+            ${tAlias}.first_time_to as ${tAlias}_first_time_to,
+            ${tAlias}.extend1_time_flag as ${tAlias}_extend1_time_flag,
+            ${tAlias}.second_time_from as ${tAlias}_second_time_from,
+            ${tAlias}.second_time_to as ${tAlias}_second_time_to,
+            ${tAlias}.extend2_time_flag as ${tAlias}_extend2_time_flag,
+            ${tAlias}.third_time_from as ${tAlias}_third_time_from,
+            ${tAlias}.third_time_to as ${tAlias}_third_time_to,
+            ${tAlias}.extend3_time_flag as ${tAlias}_extend3_time_flag,
+            ${tAlias}.next_period_start_time as ${tAlias}_next_period_start_time,
+            ${tAlias}.rest_flag as ${tAlias}_rest_flag, ${tAlias}.no_scheduling as ${tAlias}_no_scheduling,
+            ${tAlias}.rest_day_clock as ${tAlias}_rest_day_clock,
+            ${tAlias}.all_day_no_clock as ${tAlias}_all_day_no_clock,
+            ${tAlias}.office_time_clock as ${tAlias}_office_time_clock,
+            ${tAlias}.no_clock_in as ${tAlias}_no_clock_in,
+            ${tAlias}.abnormal_clock_in_time as ${tAlias}_abnormal_clock_in_time,
+            ${tAlias}.no_clock_after_work as ${tAlias}_no_clock_after_work,
+            ${tAlias}.alt_first_time_from as ${tAlias}_alt_first_time_from,
+            ${tAlias}.alt_first_time_to as ${tAlias}_alt_first_time_to,
+            ${tAlias}.alt_extend1_time_flag as ${tAlias}_alt_extend1_time_flag,
+            ${tAlias}.alt_second_time_from as ${tAlias}_alt_second_time_from,
+            ${tAlias}.alt_second_time_to as ${tAlias}_alt_second_time_to,
+            ${tAlias}.alt_extend2_time_flag as ${tAlias}_alt_extend2_time_flag,
+            ${tAlias}.alt_third_time_from as ${tAlias}_alt_third_time_from,
+            ${tAlias}.alt_third_time_to as ${tAlias}_alt_third_time_to,
+            ${tAlias}.alt_extend3_time_flag as ${tAlias}_alt_extend3_time_flag,
+            ${tAlias}.alt_rest_day_flag as ${tAlias}_alt_rest_day_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.dispose_flag as ${tAlias}_dispose_flag,
+            ${tAlias}.result as ${tAlias}_result,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.create_time as ${tAlias}_create_time
+
+        ]]>
+    </sql>
+
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+            aarh.abnromal_attendance_record_id,
+	aarh.employee_id,
+	aarh.date,
+	aarh.last_paragraph_end_time,
+	aarh.next_period_start_time,
+	aarh.rest_flag,
+	aarh.no_scheduling,
+	aarh.rest_day_clock,
+	aarh.all_day_no_clock,
+	aarh.office_time_clock,
+	aarh.no_clock_in,
+	aarh.abnormal_clock_in_time,
+	aarh.no_clock_after_work,
+	aarh.alt_first_time_from,
+	aarh.alt_first_time_to,
+	aarh.alt_extend1_time_flag,
+	aarh.alt_second_time_from,
+	aarh.alt_second_time_to,
+	aarh.alt_extend2_time_flag,
+	aarh.alt_third_time_from,
+	aarh.alt_third_time_to,
+	aarh.alt_extend3_time_flag,
+	aarh.alt_rest_day_flag,
+	aarh.attribute1,
+	aarh.attribute2,
+	aarh.attribute3,
+	aarh.attribute4,
+	aarh.attribute5,
+	aarh.id,
+	aarh.dispose_flag,
+	aarh.result,
+	pe.work_card as pe_work_card,
+	pe.NAME as pe_name,
+	fds.dept as pe_dept_name,
+	fds.department as pe_department,
+	fds.team as pe_team,
+	fj.job_name as jobName
+	FROM
+	ac_attendance_record_history aarh
+	JOIN pm_employee_job_snapshot pejs ON aarh.employee_id = pejs.employee_id AND aarh.date = pejs.date
+	JOIN pm_employee pe ON aarh.employee_id = pe.id and pe.id = pejs.employee_id AND pe.enabled_flag = 1
+	join fnd_dept_snapshot fds on  pejs.dept_id = fds.dept_id and pejs.date = fds.date
+	join fnd_job fj on fj.id = pejs.job_id
+            where 1 = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <if test="criteria != null">
+            <if test="criteria.hisID != null">
+                <![CDATA[ and aarh.id = #{criteria.hisID, jdbcType = BIGINT} ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[ and aarh.employee_id = #{criteria.employeeId, jdbcType = BIGINT} ]]>
+            </if>
+            <if test="criteria.employeeName != null">
+                <![CDATA[ and pe.name like #{criteria.employeeName,jdbcType=VARCHAR} ]]>
+            </if>
+            <if test="criteria.queryName != null">
+                <![CDATA[ and (pe.name like #{criteria.queryName,jdbcType=VARCHAR}
+             or pe.work_card like #{criteria.queryName,jdbcType=VARCHAR} )
+              ]]>
+            </if>
+            <if test="criteria.beginDate != null">
+                <![CDATA[ and aarh.date >= #{criteria.beginDate,jdbcType=DATE} ]]>
+            </if>
+            <if test="criteria.endDate != null">
+                <![CDATA[ and aarh.date <= #{criteria.endDate,jdbcType=DATE} ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and exists ( select 1 from pm_employee_job pej
+                                             where pej.enabled_flag = 1
+                                              and pej.job_main_flag = 1
+                                              and pej.employee_id = aarh.employee_id
+                                              AND pej.employee_id = pejs.employee_id
+	                                            and pej.dept_id = fds.dept_id
+                                              and pej.dept_id in (]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+                <![CDATA[))]]>
+            </if>
+            <if test="criteria.disposeFlag == 'notPass'">
+                <![CDATA[  AND aarh.dispose_flag != 'pass'  ]]>
+            </if>
+            <if test="criteria.disposeFlag == 'not'">
+                <![CDATA[ and aarh.dispose_flag is null ]]>
+            </if>
+            <if test="criteria.disposeFlag != null and criteria.disposeFlag != 'not' and criteria.disposeFlag != 'notPass'">
+                <![CDATA[ and aarh.dispose_flag = #{criteria.disposeFlag, jdbcType =VARCHAR } ]]>
+            </if>
+            <if test="criteria.abNormalFlag == true">
+                <![CDATA[
+             and (  aarh.no_scheduling = 1 or aarh.rest_day_clock = 1 or aarh.all_day_no_clock = 1 or aarh.office_time_clock = 1 or
+             aarh.no_clock_in = 1 or aarh.abnormal_clock_in_time = 1 or aarh.no_clock_after_work = 1 )
+              ]]>
+            </if>
+            <if test="criteria.abNormalFlag == false">
+                <![CDATA[
+             and ( aarh.no_scheduling & aarh.rest_day_clock & aarh.all_day_no_clock & aarh.office_time_clock & aarh.no_clock_in & aarh.abnormal_clock_in_time & aarh.no_clock_after_work
+             ) = 0
+             ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_attendance_record_history (abnromal_attendance_record_id, employee_id,
+                                                      date, last_paragraph_end_time,
+                                                      first_time_from, first_time_to,
+                                                      extend1_time_flag, second_time_from,
+                                                      second_time_to, extend2_time_flag,
+                                                      third_time_from, third_time_to,
+                                                      extend3_time_flag, next_period_start_time,
+                                                      rest_flag, no_scheduling, rest_day_clock,
+                                                      all_day_no_clock, office_time_clock, no_clock_in,
+                                                      abnormal_clock_in_time, no_clock_after_work,
+                                                      alt_first_time_from, alt_first_time_to,
+                                                      alt_extend1_time_flag, alt_second_time_from,
+                                                      alt_second_time_to, alt_extend2_time_flag,
+                                                      alt_third_time_from, alt_third_time_to,
+                                                      alt_extend3_time_flag, alt_rest_day_flag,
+                                                      attribute1, attribute2,
+                                                      attribute3, attribute4,
+                                                      attribute5, dispose_flag, result, update_by, create_by,
+                                                      update_time, create_time)
+            values (#{abnromalAttendanceRecordId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT},
+                    #{date,jdbcType=DATE}, #{lastParagraphEndTime,jdbcType=TIMESTAMP},
+                    #{firstTimeFrom,jdbcType=TIME}, #{firstTimeTo,jdbcType=TIME},
+                    #{extend1TimeFlag,jdbcType=BIT}, #{secondTimeFrom,jdbcType=TIME},
+                    #{secondTimeTo,jdbcType=TIME}, #{extend2TimeFlag,jdbcType=BIT},
+                    #{thirdTimeFrom,jdbcType=TIME}, #{thirdTimeTo,jdbcType=TIME},
+                    #{extend3TimeFlag,jdbcType=BIT}, #{nextPeriodStartTime,jdbcType=TIMESTAMP},
+                    #{restFlag,jdbcType=BIT}, #{noScheduling,jdbcType=BIT}, #{restDayClock,jdbcType=BIT},
+                    #{allDayNoClock,jdbcType=BIT}, #{officeTimeClock,jdbcType=BIT}, #{noClockIn,jdbcType=BIT},
+                    #{abnormalClockInTime,jdbcType=BIT}, #{noClockAfterWork,jdbcType=BIT},
+                    #{altFirstTimeFrom,jdbcType=TIME}, #{altFirstTimeTo,jdbcType=TIME},
+                    #{altExtend1TimeFlag,jdbcType=BIT}, #{altSecondTimeFrom,jdbcType=TIME},
+                    #{altSecondTimeTo,jdbcType=TIME}, #{altExtend2TimeFlag,jdbcType=BIT},
+                    #{altThirdTimeFrom,jdbcType=TIME}, #{altThirdTimeTo,jdbcType=TIME},
+                    #{altExtend3TimeFlag,jdbcType=BIT}, #{altRestDayFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR},
+                    #{disposeFlag,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR},
+                    #{updateBy,jdbcType=BIGINT}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_attendance_record_history
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory">
+        <![CDATA[
+            update ac_attendance_record_history
+               set abnromal_attendance_record_id = #{abnromalAttendanceRecordId,jdbcType=BIGINT},
+                   employee_id                   = #{employeeId,jdbcType=BIGINT},
+                   date                          = #{date,jdbcType=DATE},
+                   last_paragraph_end_time       = #{lastParagraphEndTime,jdbcType=TIMESTAMP},
+                   first_time_from               = #{firstTimeFrom,jdbcType=TIME},
+                   first_time_to                 = #{firstTimeTo,jdbcType=TIME},
+                   extend1_time_flag             = #{extend1TimeFlag,jdbcType=BIT},
+                   second_time_from              = #{secondTimeFrom,jdbcType=TIME},
+                   second_time_to                = #{secondTimeTo,jdbcType=TIME},
+                   extend2_time_flag             = #{extend2TimeFlag,jdbcType=BIT},
+                   third_time_from               = #{thirdTimeFrom,jdbcType=TIME},
+                   third_time_to                 = #{thirdTimeTo,jdbcType=TIME},
+                   extend3_time_flag             = #{extend3TimeFlag,jdbcType=BIT},
+                   next_period_start_time        = #{nextPeriodStartTime,jdbcType=TIMESTAMP},
+                   rest_flag                     = #{restFlag,jdbcType=BIT},
+                   no_scheduling                 = #{noScheduling,jdbcType=BIT},
+                   rest_day_clock                = #{restDayClock,jdbcType=BIT},
+                   all_day_no_clock              = #{allDayNoClock,jdbcType=BIT},
+                   office_time_clock             = #{officeTimeClock,jdbcType=BIT},
+                   no_clock_in                   = #{noClockIn,jdbcType=BIT},
+                   abnormal_clock_in_time        = #{abnormalClockInTime,jdbcType=BIT},
+                   no_clock_after_work           = #{noClockAfterWork,jdbcType=BIT},
+                   alt_first_time_from           = #{altFirstTimeFrom,jdbcType=TIME},
+                   alt_first_time_to             = #{altFirstTimeTo,jdbcType=TIME},
+                   alt_extend1_time_flag         = #{altExtend1TimeFlag,jdbcType=BIT},
+                   alt_second_time_from          = #{altSecondTimeFrom,jdbcType=TIME},
+                   alt_second_time_to            = #{altSecondTimeTo,jdbcType=TIME},
+                   alt_extend2_time_flag         = #{altExtend2TimeFlag,jdbcType=BIT},
+                   alt_third_time_from           = #{altThirdTimeFrom,jdbcType=TIME},
+                   alt_third_time_to             = #{altThirdTimeTo,jdbcType=TIME},
+                   alt_extend3_time_flag         = #{altExtend3TimeFlag,jdbcType=BIT},
+                   alt_rest_day_flag            = #{altRestDayFlag,jdbcType=BIT},
+                   attribute1                    = #{attribute1,jdbcType=VARCHAR},
+                   attribute2                    = #{attribute2,jdbcType=VARCHAR},
+                   attribute3                    = #{attribute3,jdbcType=VARCHAR},
+                   attribute4                    = #{attribute4,jdbcType=VARCHAR},
+                   attribute5                    = #{attribute5,jdbcType=VARCHAR},
+                   update_by                     = #{updateBy,jdbcType=BIGINT},
+                   update_time                   = #{updateTime,jdbcType=TIMESTAMP},
+                   dispose_flag                  = #{disposeFlag,jdbcType=VARCHAR},
+                    result                        = #{result,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcAttendanceRecordHistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aarh.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcAttendanceRecordHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcAttendanceRecordHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateDisposeFlagByKey" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory">
+        <![CDATA[
+        update ac_attendance_record_history
+        set dispose_flag                  = #{disposeFlag,jdbcType=VARCHAR},
+            result                        = #{result,jdbcType=VARCHAR},
+            update_by                     = #{updateBy,jdbcType=BIGINT},
+            update_time                   = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+
+    <sql id="listForBatchCommonQuery">
+        <if test="criteria.targetResult != null">
+            <![CDATA[
+                and temp.aacr_target_result like #{criteria.targetResult, jdbcType=VARCHAR}
+             ]]>
+        </if>
+        <if test="criteria.targetDescribes != null">
+            <![CDATA[
+                and temp.aacr_target_describes like #{criteria.targetDescribes, jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <if test="criteria.peopleType == 'normal'">
+            <![CDATA[
+              AND  EXISTS (
+    SELECT
+        1
+    FROM
+        pm_employee_job pej
+    WHERE
+        pej.id = temp.pej_id
+        AND pej.job_id != isnull(( SELECT  fd.admin_job_id FROM fnd_dept fd WHERE  fd.id = temp.dept_id ), -1 ))
+        ]]>
+        </if>
+        <if test="criteria.peopleType == 'charge'">
+            <![CDATA[
+                          AND  EXISTS (
+    SELECT
+        1
+    FROM
+        pm_employee_job pej
+    WHERE
+        pej.id = temp.pej_id
+        AND pej.job_id = isnull(( SELECT  fd.admin_job_id FROM fnd_dept fd WHERE  fd.id = temp.dept_id ), -1 ))
+         ]]>
+        </if>
+        <if test="criteria.deptIds != null and criteria.deptIds.size > 0 ">
+            <![CDATA[
+                            and exists (SELECT 1
+                                          FROM pm_employee_job pej
+                                         WHERE pej.employee_id = temp.pe_id
+                                           AND pej.enabled_flag = 1
+                                           and pej.job_main_flag = 1
+                                           AND pej.dept_id IN
+                        ]]>
+            <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+            </foreach>
+            <![CDATA[
+                            )
+                        ]]>
+        </if>
+        <if test="criteria.beginDateStr != null and criteria.endDateStr != null">
+            <![CDATA[ and temp.date between
+               '${criteria.beginDateStr}' AND '${criteria.endDateStr}'
+             ]]>
+        </if>
+        <if test="criteria.beginDate != null and criteria.endDate != null">
+            <![CDATA[ and temp.date between
+               #{criteria.beginDate, jdbcType = DATE} AND #{criteria.endDate, jdbcType = DATE}
+             ]]>
+        </if>
+        <if test="criteria.endAndBeforeStr != null">
+            <![CDATA[
+                and temp.date <= '${criteria.endAndBeforeStr}'
+         ]]>
+        </if>
+        <if test="criteria.employeeId != null">
+            <![CDATA[ and temp.employee_id = #{criteria.employeeId, jdbcType = BIGINT} ]]>
+        </if>
+        <if test="criteria.hisIds != null and criteria.hisIds.size > 0 ">
+            <![CDATA[
+             and temp.id in (
+             ]]>
+            <foreach collection="criteria.hisIds" item="item" index="index" separator=",">
+                #{item}
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+        <if test="criteria.employeeName != null">
+            <![CDATA[ and temp.pe_name like #{criteria.employeeName,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="criteria.queryName != null">
+            <![CDATA[ and (temp.pe_name like #{criteria.queryName,jdbcType=VARCHAR}
+             or temp.pe_work_card like #{criteria.queryName,jdbcType=VARCHAR} )
+              ]]>
+        </if>
+
+        <!--            <if test="criteria.disposeFlag == 'wait'">-->
+        <!--                <![CDATA[  AND aacr.dispose_flag = 1 and aacr.check_flag = 0 ]]>-->
+        <!--            </if>-->
+        <!--            <if test="criteria.disposeFlag == 'not'">-->
+        <!--                <![CDATA[ and  aacr.dispose_flag = 0 and aacr.check_flag = 0 ]]>-->
+        <!--            </if>-->
+        <!--            <if test="criteria.disposeFlag == 'notPass'">-->
+        <!--                <![CDATA[ and aacr.check_flag = 0 ]]>-->
+        <!--            </if>-->
+        <!--            <if test="criteria.disposeFlag == 'pass'">-->
+        <!--                <![CDATA[ and aacr.dispose_flag = 1 and aacr.check_flag = 1 ]]>-->
+        <!--            </if>-->
+        <!--             <if test="criteria.disposeFlag == 'disposeExcept'">-->
+        <!--                 <![CDATA[ and (aacr.dispose_flag = 0 or aacr.check_flag = 0 or aacr.state != 'pass')  ]]>-->
+        <!--             </if>-->
+        <if test="criteria.exceptionType != null">
+            <if test="criteria.exceptionType == 'no_scheduling'">
+                <![CDATA[  and temp.no_scheduling = 1 ]]>
+            </if>
+            <if test="criteria.exceptionType == 'rest_day_clock'">
+                <![CDATA[  and temp.rest_day_clock = 1 ]]>
+            </if>
+            <if test="criteria.exceptionType == 'all_day_no_clock'">
+                <![CDATA[  and temp.all_day_no_clock = 1 ]]>
+            </if>
+            <if test="criteria.exceptionType == 'office_time_clock'">
+                <![CDATA[  and temp.office_time_clock = 1 ]]>
+            </if>
+            <if test="criteria.exceptionType == 'no_clock_in_ofter'">
+                <![CDATA[  and (temp.no_clock_in = 1 or temp.no_clock_after_work = 1)]]>
+            </if>
+            <if test="criteria.exceptionType == 'abnormal_clock_in_time'">
+                <![CDATA[  and temp.abnormal_clock_in_time = 1 ]]>
+            </if>
+        </if>
+        <if test="criteria.disposeFlag != null">
+            <choose>
+                <when test="criteria.disposeFlag == 'person'">
+                    and temp.aacr_code_status = 'person' and isnull(temp.aacr_commit_flag,0) = 0
+                </when>
+                <when test="criteria.disposeFlag == 'documentor'">
+                    and temp.aacr_code_status = 'documentor' and isnull(temp.aacr_commit_flag,0) = 0
+                </when>
+                <when test="criteria.disposeFlag == 'leader'">
+                    and temp.aacr_code_status = 'leader' and isnull(temp.aacr_commit_flag,0) = 0
+                </when>
+                <when test="criteria.disposeFlag == 'leaderCatch'">
+                    and temp.aacr_code_status = 'leader' and temp.aacr_commit_flag = 1
+                </when>
+                <when test="criteria.disposeFlag == 'acAdmin'">
+                    and temp.aacr_code_status = 'acAdmin' and temp.aacr_commit_flag = 1
+                </when>
+                <when test="criteria.disposeFlag == 'leaderRepulse'">
+                    and ((temp.aacr_code_status = 'leaderRepulse' and isnull(temp.aacr_commit_flag,0) = 0)
+                    or (temp.aacr_code_status = 'leaderRepulseToPerson' and isnull(temp.aacr_commit_flag,0) = 0))
+                </when>
+                <when test="criteria.disposeFlag == 'acAdminRepulse'">
+                    and temp.aacr_code_status = 'acAdminRepulse' and isnull(temp.aacr_commit_flag,0) = 0
+                </when>
+                <when test="criteria.disposeFlag == 'close'">
+                    and temp.aacr_code_status = 'close' and temp.aacr_commit_flag = 1
+                </when>
+            </choose>
+        </if>
+        <choose>
+            <when test="criteria.requestFlag == true">
+                <![CDATA[
+                and temp.aacr_req_code is not null
+             ]]>
+            </when>
+            <when test="criteria.requestFlag == null">
+                and  1 = 1
+            </when>
+            <otherwise>
+                <![CDATA[
+                and temp.aacr_req_code is null
+            ]]>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="criteria.state == 'pass'">
+                <![CDATA[
+                and temp.aacr_state = 'pass'
+             ]]>
+            </when>
+            <when test="criteria.state == 'wait'">
+                <![CDATA[
+                and temp.aacr_state = 'wait'
+            ]]>
+            </when>
+            <when test="criteria.state == 'notpass'">
+                <![CDATA[
+                and temp.aacr_state = 'notpass'
+            ]]>
+            </when>
+            <when test="criteria.state == 'except'">
+                <![CDATA[
+                and temp.aacr_state != 'pass'
+            ]]>
+            </when>
+        </choose>
+    </sql>
+
+
+    <select id="countHistory" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from (
+
+        ]]>
+        <include refid="Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.teamUnion != null">
+                <include refid="Exception_Team_Union_sql"/>
+            </if>
+            <if test="criteria.docUnion != null">
+                <include refid="Exception_Doc_Union_sql"/>
+            </if>
+            <if test="criteria.chargeUnion != null">
+                <include refid="Exception_Charge_Union_sql"/>
+            </if>
+            <if test="criteria.personUnion != null">
+                <include refid="Exception_Person_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[  ) temp where 1 =1 ]]>
+        <include refid="listForBatchCommonQuery"/>
+    </select>
+
+    <select id = "listForBatch" resultMap="AcAttendanceRecordHistoryResultMap">
+        <![CDATA[
+            select temp.* from (
+        ]]>
+        <include refid="Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.teamUnion != null">
+                <include refid="Exception_Team_Union_sql"/>
+            </if>
+            <if test="criteria.docUnion != null">
+                <include refid="Exception_Doc_Union_sql"/>
+            </if>
+            <if test="criteria.chargeUnion != null">
+                <include refid="Exception_Charge_Union_sql"/>
+            </if>
+            <if test="criteria.personUnion != null">
+                <include refid="Exception_Person_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[  ) temp where 1 =1 ]]>
+        <include refid="listForBatchCommonQuery"/>
+        <![CDATA[
+        ORDER BY 	temp.pe_dept_name DESC,
+	temp.pe_department DESC,
+	temp.pe_team DESC,
+	temp.date DESC ]]>
+    </select>
+
+    <select id = "listForBatchByPage" resultMap="AcAttendanceRecordHistoryResultMap">
+        <![CDATA[
+            select temp.* from (
+        ]]>
+        <include refid="Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.teamUnion != null">
+                <include refid="Exception_Team_Union_sql"/>
+            </if>
+            <if test="criteria.docUnion != null">
+                <include refid="Exception_Doc_Union_sql"/>
+            </if>
+            <if test="criteria.chargeUnion != null">
+                <include refid="Exception_Charge_Union_sql"/>
+            </if>
+            <if test="criteria.personUnion != null">
+                <include refid="Exception_Person_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[  ) temp where 1 =1 ]]>
+        <include refid="listForBatchCommonQuery"/>
+    </select>
+
+    <select id = "countForDocCommit" resultType="java.lang.Integer">
+             <![CDATA[
+            select count(1) from (
+        ]]>
+        <include refid="Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.docUnion != null">
+                <include refid="Exception_Doc_Union_sql"/>
+            </if>
+        </if>
+         <![CDATA[  ) temp where 1 =1 ]]>
+        <include refid="listForBatchCommonQuery"/>
+    </select>
+
+    <update id="updateBatchCommit">
+        <![CDATA[
+            update  ac_abnormal_clock_record set commit_flag = 1,
+            check_result = case when temp.aacr_code_status <> 'leader' then temp.aacr_dispose_result else temp.aacr_check_result end,
+            check_describes = case when temp.aacr_code_status <> 'leader' then temp.aacr_dispose_describes else temp.aacr_check_describes end,
+            attribute1 = case when temp.aacr_code_status <> 'leader' then '资料员于复核中提交' else null end,
+            code_status = 'leader'
+            from  ( ]]>
+             <include refid="Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.docUnion != null">
+                <include refid="Exception_Doc_Union_sql"/>
+            </if>
+        </if>
+         <![CDATA[  ) temp join  ac_abnormal_clock_record acr on temp.aacr_id = acr.id ]]>
+        <include refid="listForBatchCommonQuery"/>
+
+    </update>
+
+
+<!--  做测试数据的方法  -->
+    <update id="updateBatchDataTest">
+        <![CDATA[
+           update ac_abnormal_clock_record set code_status = 'leader'
+            from  ( ]]>
+        <include refid="Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.docUnion != null">
+                <include refid="Exception_Doc_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[  ) temp join  ac_abnormal_clock_record acr on temp.aacr_id = acr.id ]]>
+        <include refid="listForBatchCommonQuery"/>
+    </update>
+
+<!-- 打回到个人、 即领导 -->
+    <select id="getPersonEmailInfoByAccrId" resultMap="RepulseEmailMesResultMap">
+        <![CDATA[
+         select DISTINCT fu.email as email , aarh.date as date ,CONVERT(varchar(10), aarh.date,120 ) as date_str from
+                fnd_user fu
+                join
+                pm_employee_job pej on
+                fu.employee_id = pej.employee_id
+                and fu.enabled_flag =1
+                and pej.enabled_flag = 1 and pej.job_main_flag = 1
+                join fnd_dept fd on
+                fd.id = pej.dept_id
+                and fd.enabled_flag =1
+                and fd.deleted_flag = 0
+                join
+                ac_attendance_record_history aarh on
+                pej.employee_id = aarh.employee_id
+
+                ]]>
+                <if test="criteria != null">
+                    <if test="criteria.aarhIds != null and criteria.aarhIds.size > 0">
+                        <![CDATA[
+                        and aarh.id in (
+                        ]]>
+                        <foreach collection="criteria.aarhIds" item="item" index="index" separator=",">
+                             #{item}
+                        </foreach>
+                <![CDATA[)]]>
+                    </if>
+                </if>
+
+    </select>
+
+<!--   打回到资料员得邮件信息获取 -->
+    <select id="getDocEmailInfoByAccrId" resultMap="RepulseEmailMesResultMap">
+         <![CDATA[
+            select distinct pe.name as to_name, fu.email as email, aarh.date as date, pet.name as from_name, CONVERT(varchar(10), aarh.date,120 ) as date_str  from
+            pm_employee pe join
+            ac_emp_depts aed
+            on pe.id = aed.employee_id and aed.enabled_flag =1 and  aed.data_type = 'documenter'
+            and pe.enabled_flag =1 and  pe.leave_flag = 0
+
+            join fnd_user fu on
+            aed.employee_id = fu.employee_id
+            and fu.enabled_flag = 1
+            join pm_employee_job pej on pej.dept_id = aed.dept_id
+            and pej.enabled_flag = 1 and pej.job_main_flag = 1
+            join
+            ac_attendance_record_history aarh on
+            pej.employee_id = aarh.employee_id
+
+
+              ]]>
+              <if test="criteria != null">
+                  <if test="criteria.aarhIds != null and criteria.aarhIds.size > 0">
+                      <![CDATA[
+             and aarh.id in (
+             ]]>
+                      <foreach collection="criteria.aarhIds" item="item" index="index" separator=",">
+                          #{item}
+                      </foreach>
+                      <![CDATA[)]]>
+                  </if>
+              </if>
+           <![CDATA[
+             and  CHARINDEX('sunten',fu.email) <> 0
+            join pm_employee pet on pet.enabled_flag =1 and pet.id = pej.employee_id
+        ]]>
+
+    </select>
+
+
+    <sql id="Exception_Base_Query">
+         <![CDATA[select
+CASE
+			WHEN EXISTS (
+			SELECT
+				1
+			FROM
+				pm_employee_job pej
+				JOIN fnd_dept fd ON  pej.job_id = fd.admin_job_id
+				AND pej.enabled_flag = 1
+				AND fd.enabled_flag = 1
+				AND fd.deleted_flag = 0
+				AND pej.employee_id = aarh.employee_id
+				) or EXISTS(select 1 from fnd_authorization fa join pm_employee_job pej on pej.employee_id = fa.authorization_to
+				where pej.enabled_flag = 1 and fa.enable_flag = 1 and getdate() between fa.begin_date and fa.end_date
+				and fa.authorization_type = 'ac'
+				]]>
+				 <if test="criteria != null">
+                    <if test="criteria.baseQueryEmpId != null">
+                     <![CDATA[
+                    and pej.employee_id =  #{criteria.baseQueryEmpId, jdbcType = BIGINT}
+                    ]]>
+                    </if>
+                 </if>
+        <![CDATA[
+				) THEN
+				1 ELSE 0
+			END
+			 AS aacr_record_is_charge_flag,
+
+			 CASE WHEN EXISTS (
+			    SELECT
+				1
+			FROM
+				pm_employee_job pej
+				JOIN fnd_dept fd ON  pej.job_id = fd.admin_job_id
+				AND pej.enabled_flag = 1
+				AND fd.enabled_flag = 1
+				AND fd.deleted_flag = 0
+				AND pej.employee_id = aarh.employee_id
+			 ) then 1 else 0 end
+			 as aacr_record_plus_charge_flag,
+
+
+        	(select dept_name from fnd_dept fdt where  fds.ext_dept_id = fdt.id) AS pe_dept_name,
+	(select dept_name from fnd_dept fdt where  fds.ext_department_id = fdt.id) AS pe_department,
+	(select dept_name from fnd_dept fdt where  fds.ext_team_id = fdt.id) AS pe_team,
+        aarh.abnromal_attendance_record_id,
+        aarh.employee_id,aarh.date,aarh.last_paragraph_end_time,aarh.next_period_start_time,aarh.rest_flag,aarh.no_scheduling,
+        aarh.rest_day_clock,aarh.all_day_no_clock,aarh.office_time_clock,aarh.no_clock_in,aarh.abnormal_clock_in_time,
+        aarh.no_clock_after_work,aarh.alt_first_time_from,aarh.alt_first_time_to,aarh.alt_extend1_time_flag,aarh.alt_second_time_from,
+        aarh.alt_second_time_to,aarh.alt_extend2_time_flag,aarh.alt_third_time_from,aarh.alt_third_time_to,aarh.alt_extend3_time_flag,
+        aarh.alt_rest_day_flag,aarh.attribute1,aarh.attribute2,aarh.attribute3,aarh.attribute4,aarh.attribute5,aarh.id,
+        aarh.dispose_flag,aarh.result,aacr.date AS aacr_date,aacr.ac_attendance_record_history_id AS aacr_ac_attendance_record_history_id,
+        aacr.clock_time AS aacr_clock_time,aacr.id AS aacr_id,aacr.dispose_by AS aacr_dispose_by,aacr.dispose_time AS aacr_dispose_time,
+        case when isnull(aacr.check_result, '') = '' then aacr.dispose_result else
+         aacr.check_result end as aacr_target_result,
+        case when isnull(aacr.check_describes, '') = '' then aacr.dispose_describes else
+        aacr.check_describes end  as aacr_target_describes,
+        aacr.dispose_result as aacr_dispose_result,
+        aacr.dispose_describes as aacr_dispose_describes,
+        aacr.check_result as aacr_check_result,
+        aacr.check_describes as aacr_check_describes,
+        aacr.req_code AS aacr_req_code,
+        aacr.state AS aacr_state,
+        aacr.admin_result AS aacr_admin_result,
+        aacr.oa_remark AS aacr_oa_remark,
+        aacr.code_status as aacr_code_status,
+        aacr.leader_result as aacr_leader_result,
+        aacr.commit_flag as aacr_commit_flag,
+        pe.work_card AS pe_work_card,
+        pe.NAME AS pe_name,pe.id AS pe_id,
+        fds.id as dept_id,
+        pejs.job_id as job_id,
+        pejs.id as pej_id
+        FROM
+	ac_attendance_record_history aarh
+	JOIN ac_abnormal_clock_record aacr ON aacr.ac_attendance_record_history_id = aarh.id
+	JOIN pm_employee_job pejs ON aarh.employee_id = pejs.employee_id and pejs.enabled_flag = 1 and pejs.job_main_flag = 1
+	JOIN pm_employee pe ON pejs.employee_id = pe.id
+	JOIN fnd_dept fds ON fds.id = pejs.dept_id  and fds.enabled_flag = 1 and fds.deleted_flag = 0
+          ]]>
+    </sql>
+    <sql id="Exception_Base_sql">
+        <include refid="Exception_Base_Query"/>
+     <![CDATA[
+            where 1 = 0
+          ]]>
+    </sql>
+
+    <sql id="Exception_Team_Union_sql">
+        <![CDATA[
+            union
+          ]]>
+        <include refid="Exception_Base_Query"/>
+        <![CDATA[
+            where (1 = 1
+
+          ]]>
+        <if test="criteria != null">
+
+            <if test="criteria.teamDeptIds != null and criteria.teamDeptIds.size > 0 ">
+                <![CDATA[
+                                and exists (SELECT 1
+                                              FROM pm_employee_job pej_t
+                                             WHERE pej_t.employee_id = pe.id
+                                               AND pej_t.enabled_flag = 1
+                                               and pej_t.job_main_flag = 1
+                                               AND pej_t.dept_id IN
+                            ]]>
+                <foreach collection="criteria.teamDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                </foreach>
+                <![CDATA[
+                                )
+                            ]]>
+            </if>
+            <if test="criteria.teamRemoveFlag != null">
+                <![CDATA[
+                    AND  EXISTS (
+    SELECT
+        1
+    FROM
+        pm_employee_job pejst
+    WHERE
+        pejst.id = pejs.id
+        AND pejst.job_id != isnull(( SELECT  fdst.admin_job_id FROM fnd_dept fdst WHERE  fdst.id = fds.id ), -1 ))
+                    ]]>
+            </if>
+            <if test="criteria.teamRemoveSelfFlag != null">
+                <![CDATA[
+                and aarh.employee_id != #{criteria.teamRemoveSelfId, jdbcType = BIGINT}
+             ]]>
+            </if>
+            <if test="criteria.teamCodeStatus != null">
+                <if test="criteria.teamCodeStatus != 'all'">
+                    <![CDATA[  AND aacr.code_status = #{criteria.teamCodeStatus, jdbcType = VARCHAR} ]]>
+                </if>
+                <if test="criteria.teamCodeStatus == 'all'">
+                    <![CDATA[
+                AND (
+                (isnull(aacr.commit_flag, 0) = 0 and (aacr.code_status = 'documentor' or aacr.code_status = 'leader' or aacr.code_status = 'person'))
+                or  (isnull(aacr.commit_flag, 0) = 0 and (aacr.code_status = 'leaderRepulse' or aacr.code_status = 'acAdminRepulse' or aacr.code_status = 'leaderRepulseToPerson')))
+                ]]>
+                </if>
+            </if>
+            <if test="criteria.teamCommitFlag != null">
+                <![CDATA[  AND isnull(aacr.commit_flag,0) = #{criteria.teamCommitFlag, jdbcType = BIT} ]]>
+            </if>
+            <if test="criteria.teamDeptIdsIsNull != null">
+                <![CDATA[
+                           and    1 = 0
+                            ]]>
+            </if>
+            <![CDATA[
+            )
+          ]]>
+            <if test="criteria.teamLowerLevel != null">
+                <![CDATA[
+              or (exists(
+              select 1 from fnd_dept fdx join pm_employee_job pejx on pejx.employee_id = #{criteria.higherLevelEmployeeId, jdbcType = BIGINT}
+              and pejx.enabled_flag = 1 and fdx.admin_job_id = pejx.job_id
+              join fnd_dept fdtx on fdtx.parent_id = fdx.id and fdtx.enabled_flag = 1
+            join pm_employee_job pejtx on pejtx.job_id = fdtx.admin_job_id and pejtx.enabled_flag = 1
+            where pejtx.employee_id = aarh.employee_id)
+                 and aacr.code_status = 'leader'
+                 and aacr.commit_flag = 1
+                 )
+                  ]]>
+
+            </if>
+
+            <if test="criteria.teamAuthLowerLevel != null ">
+--                 授权专用
+                <![CDATA[
+              or (exists(
+              select 1 from fnd_dept fdx join pm_employee_job pejx
+              on  pejx.enabled_flag = 1 and fdx.admin_job_id = pejx.job_id
+              join fnd_dept fdtx on fdtx.parent_id = fdx.id and fdtx.enabled_flag = 1
+               ]]>
+                <if test="criteria.teamAuthDeptIds != null and criteria.teamAuthDeptIds.size > 0">
+                    <![CDATA[
+                   and fdtx.id in
+                   ]]>
+                    <foreach collection="criteria.teamAuthDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                    </foreach>
+                </if>
+                <![CDATA[
+            join pm_employee_job pejtx on pejtx.job_id = fdtx.admin_job_id and pejtx.enabled_flag = 1
+            where pejtx.employee_id = aarh.employee_id)
+                 and aacr.code_status = 'leader'
+                 and aacr.commit_flag = 1
+                 )
+                  ]]>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="Exception_Doc_Union_sql">
+        <![CDATA[
+            union
+          ]]>
+        <include refid="Exception_Base_Query"/>
+        <![CDATA[
+            where 1 = 1
+          ]]>
+        <if test="criteria != null">
+
+            <if test="criteria.docDeptIds != null and criteria.docDeptIds.size > 0 ">
+                <![CDATA[
+                            and exists (SELECT 1
+                                          FROM pm_employee_job pej_t
+                                         WHERE pej_t.employee_id = pe.id
+                                           AND pej_t.enabled_flag = 1
+                                           and pej_t.job_main_flag = 1
+                                           AND pej_t.dept_id IN
+                        ]]>
+                <foreach collection="criteria.docDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[
+                            )
+                        ]]>
+            </if>
+            <if test="criteria.docRemoveFlag != null">
+                <![CDATA[
+                AND  EXISTS (
+SELECT
+	1
+FROM
+	pm_employee_job pejst
+WHERE
+	pejst.id = pejs.id
+	AND pejst.job_id != isnull(( SELECT  fdst.admin_job_id FROM fnd_dept fdst WHERE  fdst.id = fds.id ), -1 ))
+                ]]>
+            </if>
+            <if test="criteria.docCodeStatus != null">
+                <![CDATA[  AND aacr.code_status = #{criteria.docCodeStatus, jdbcType = VARCHAR} ]]>
+            </if>
+            <if test="criteria.docBatchCommitCodeStatusFlag != null">
+                <![CDATA[  AND (aacr.code_status = 'leader' or aacr.code_status = 'documentor')  ]]>
+            </if>
+            <if test="criteria.docQueryFlag != null">  <!-- 最主要的班组层查询, 只要未提交、且被打回过的都在填写页上显示出来 -->
+                <![CDATA[  AND (
+                (isnull(aacr.commit_flag, 0) = 0 and (aacr.code_status = 'documentor' or aacr.code_status = 'leader' or aacr.code_status = 'person'))
+                or  (isnull(aacr.commit_flag, 0) = 0 and (aacr.code_status = 'leaderRepulse' or aacr.code_status = 'acAdminRepulse' or aacr.code_status = 'leaderRepulseToPerson'))) ]]>
+            </if>
+            <if test="criteria.docCommitFlag != null">
+                <![CDATA[  AND isnull(aacr.commit_flag, 0) = #{criteria.docCommitFlag, jdbcType = BIT} ]]>
+            </if>
+            <if test="criteria.docMultiCodeStatus != null">
+                <if test = "criteria.docMultiCodeStatus == 'documentor'">
+                    <![CDATA[  AND (aacr.code_status = 'documentor'
+                  or aacr.code_status = 'leaderRepulse'
+                  or aacr.code_status = 'acAdminRepulse'
+                  or aacr.code_status = 'leaderRepulseToPerson'
+                  )
+                   ]]>
+                </if>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="Exception_Person_Union_sql">
+        <![CDATA[
+            union
+          ]]>
+        <include refid="Exception_Base_Query"/>
+        <if test="criteria != null">
+            <if test="criteria.personEmployeeId != null">
+                <![CDATA[
+                    and aarh.employee_id = #{criteria.personEmployeeId, jdbcType = BIGINT}
+                  ]]>
+            </if>
+            <choose>
+                <when test="criteria.chara == 'documentorAndTeam'">
+                    <![CDATA[
+                     AND (aacr.code_status = 'documentor'
+                  or aacr.code_status = 'leaderRepulse'
+                  or aacr.code_status = 'acAdminRepulse'
+                  or aacr.code_status = 'person'
+                  )
+                  ]]>
+                </when>
+                <when test="criteria.chara == 'team' or criteria.chara == 'person'">
+                    <![CDATA[
+                     AND (
+                (isnull(aacr.commit_flag, 0) = 0 and (aacr.code_status = 'documentor' or aacr.code_status = 'leader' or aacr.code_status = 'person'))
+                or  (isnull(aacr.commit_flag, 0) = 0 and (aacr.code_status = 'leaderRepulse' or aacr.code_status = 'acAdminRepulse' or aacr.code_status = 'leaderRepulseToPerson')))
+                  ]]>
+                </when>
+                <when test="criteria.chara == 'charge'">
+                    <![CDATA[
+                     and (aacr.code_status = 'person' or  aacr.code_status = 'leaderRepulse')
+                  ]]>
+                </when>
+                <when test="criteria.chara == 'documentor'">
+                    <![CDATA[
+                     AND (aacr.code_status = 'documentor'
+                  or aacr.code_status = 'leaderRepulse'
+                  or aacr.code_status = 'acAdminRepulse'
+                  or aacr.code_status = 'person'
+                  or aacr.code_status = 'leader'
+                  ) and isnull(aacr.commit_flag, 0) = 0
+                  ]]>
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <sql id="Exception_Charge_Union_sql">
+        <![CDATA[
+            union
+          ]]>
+        <include refid="Exception_Base_Query"/>
+        <if test="criteria != null">
+            <if test="criteria.chargeDeptIds != null and criteria.chargeDeptIds.size > 0 ">
+                <![CDATA[
+                            and exists (SELECT 1
+                                          FROM pm_employee_job pej_t
+                                         WHERE pej_t.employee_id = pe.id
+                                           AND pej_t.enabled_flag = 1
+                                           and pej_t.job_main_flag = 1
+                                           AND pej_t.dept_id IN
+                        ]]>
+                <foreach collection="criteria.chargeDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[
+                            )
+                        ]]>
+            </if>
+            <if test="criteria.chargeRemoveFlag != null">
+                <![CDATA[
+                    AND  EXISTS (
+    SELECT
+        1
+    FROM
+        pm_employee_job pejst
+    WHERE
+        pejst.id = pejs.id
+        AND pejst.job_id != isnull(( SELECT  fdst.admin_job_id FROM fnd_dept fdst WHERE  fdst.id = fds.id ), -1 ))
+                    ]]>
+            </if>
+        </if>
+    </sql>
+
+
+    <select id="listEmailTargetByLastMonthException" resultMap="ExceptionEmailResultMap">
+                <![CDATA[
+        select DISTINCT fu.email, convert(varchar(4), year(aarh.date)) + '年' + convert(varchar(2), month(aarh.date)) + '月' as year_and_month  from
+
+fnd_user fu join pm_employee pe on fu.employee_id = pe.id and
+fu.enabled_flag = 1 and pe.enabled_flag = 1 and pe.leave_flag = 0
+join
+ac_attendance_record_history aarh
+on aarh.employee_id = fu.employee_id
+where  (aarh.no_scheduling = 1
+	   OR aarh.all_day_no_clock = 1
+	   OR aarh.office_time_clock = 1
+	   OR aarh.no_clock_in = 1
+	   OR aarh.abnormal_clock_in_time = 1
+	   OR aarh.no_clock_after_work = 1)
+		 and isnull(fu.email, '@in-sunten.com') <> '@in-sunten.com'
+		 and fu.email <> ''
+		 and aarh.abnromal_attendance_record_id = (select top (1)
+		 case when
+		 aaar.execution_status = 'SUCCESS' then aaar.id else -aaar.id end  from ac_abnormal_attendance_record aaar order by aaar.id desc
+		 )
+
+        ]]>
+    </select>
+
+
+<!--  2021.07.12 第四版考勤异常所用的sql  -->
+    <!--				or EXISTS(select 1 from fnd_authorization fa join pm_employee_job pej on pej.employee_id = fa.authorization_to-->
+    <!--				where pej.enabled_flag = 1 and fa.enable_flag = 1 and getdate() between fa.begin_date and fa.end_date-->
+    <!--				and fa.authorization_type = 'ac'-->
+    <!--				]]>-->
+    <!--        <if test="criteria != null">-->
+    <!--            <if test="criteria.baseQueryEmpId != null">-->
+    <!--                <![CDATA[-->
+    <!--                    and pej.employee_id =  #{criteria.baseQueryEmpId, jdbcType = BIGINT}-->
+    <!--                    ]]>-->
+    <!--            </if>-->
+    <!--        </if>-->
+    <!--        <![CDATA[-->
+    <!--				) THEN-->
+    <!--				1 ELSE 0-->
+    <!--			END-->
+    <!--			 AS record_is_charge_flag,-->
+    <sql id="In_Used_Exception_Base_Query">
+        <![CDATA[
+            select CASE WHEN EXISTS (
+			    SELECT
+				    1
+			    FROM
+				    pm_employee_job pej JOIN fnd_dept fd
+				        ON
+				            pej.job_id = fd.admin_job_id
+                        AND pej.enabled_flag = 1
+                        AND fd.enabled_flag = 1
+                        AND fd.deleted_flag = 0
+                        AND pej.employee_id = aarh.employee_id
+			) then 1 else 0 end as record_is_charge_flag,
+			        CASE WHEN EXISTS (
+			    SELECT
+				    1
+			    FROM
+				    pm_employee_job pej JOIN fnd_dept fd
+				        ON
+                            pej.job_id = fd.admin_job_id
+                        AND pej.enabled_flag = 1
+                        AND fd.enabled_flag = 1
+                        AND fd.deleted_flag = 0
+                        AND pej.employee_id = aarh.employee_id
+			 ) then 1 else 0 end as record_plus_charge_flag,
+        	(select dept_name from fnd_dept fdt where  fds.ext_dept_id = fdt.id) AS pe_dept_name,
+	        (select dept_name from fnd_dept fdt where  fds.ext_department_id = fdt.id) AS pe_department,
+	        (select dept_name from fnd_dept fdt where  fds.ext_team_id = fdt.id) AS pe_team,
+            aarh.abnromal_attendance_record_id,
+            aarh.employee_id,
+            aarh.date,
+            aarh.last_paragraph_end_time,
+            aarh.next_period_start_time,
+            aarh.rest_flag,
+            aarh.no_scheduling,
+            aarh.rest_day_clock,
+            aarh.all_day_no_clock,
+            aarh.office_time_clock,
+            aarh.no_clock_in,
+            aarh.abnormal_clock_in_time,
+            aarh.no_clock_after_work,
+            aarh.alt_first_time_from,
+            aarh.alt_first_time_to,
+            aarh.alt_extend1_time_flag,
+            aarh.alt_second_time_from,
+            aarh.alt_second_time_to,
+            aarh.alt_extend2_time_flag,
+            aarh.alt_third_time_from,
+            aarh.alt_third_time_to,
+            aarh.alt_extend3_time_flag,
+            aarh.alt_rest_day_flag,
+            aarh.attribute1,
+            aarh.attribute2,
+            aarh.attribute3,
+            aarh.attribute4,
+            aarh.attribute5,
+            aarh.id,
+            aarh.dispose_flag,
+            aarh.result,
+            aarh.dispose_result as dispose_result, aarh.dispose_describes,
+            aarh.dispose_by as dispose_by, aarh.dispose_time  as dispose_time,
+            case when isnull(aarh.check_result, '') = '' then aarh.dispose_result else aarh.check_result end as target_result,
+            case when isnull(aarh.check_describes, '') = '' then aarh.dispose_describes else aarh.check_describes end as target_describes,
+            aarh.check_result as check_result,
+            aarh.check_describes as check_describes,
+            aarh.req_code AS req_code,
+            aarh.state AS state,
+            aarh.admin_result AS admin_result,
+            aarh.oa_remark AS oa_remark,
+            aarh.code_status as code_status,
+            aarh.leader_result as leader_result,
+            aarh.commit_flag as commit_flag,
+            aarh.day_clock_time as day_clock_time,
+            pe.work_card AS pe_work_card,
+            pe.NAME AS pe_name,pe.id AS pe_id,
+            fds.id as dept_id,
+            pejs.job_id as job_id,
+            pejs.id as pej_id,
+            pejs.dept_id as pej_dept_id
+            FROM ac_attendance_record_history aarh
+	        JOIN pm_employee_job pejs
+	        ON aarh.employee_id = pejs.employee_id and pejs.enabled_flag = 1 and pejs.job_main_flag = 1
+	        JOIN pm_employee pe ON pejs.employee_id = pe.id
+	        JOIN fnd_dept fds ON fds.id = pejs.dept_id  and fds.enabled_flag = 1 and fds.deleted_flag = 0
+          ]]>
+    </sql>
+    <sql id="In_Used_Exception_Base_sql">
+        <include refid="In_Used_Exception_Base_Query"/>
+        <![CDATA[
+            where 1 = 0
+          ]]>
+    </sql>
+
+    <sql id="In_Used_Exception_Team_Union_sql">
+            <![CDATA[
+                union
+            ]]>
+        <include refid="In_Used_Exception_Base_Query"/>
+            <![CDATA[
+                where (1 = 1
+            ]]>
+        <if test="criteria != null">
+            <if test="criteria.teamDeptIds != null and criteria.teamDeptIds.size > 0 ">
+                <![CDATA[
+                    and pejs.dept_id IN
+                ]]>
+                <foreach collection="criteria.teamDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+            </if>
+            <if test="criteria.teamRemoveFlag != null">
+                <![CDATA[
+                    AND  pejs.job_id !=  isnull(fds.admin_job_id,-1)
+                ]]>
+            </if>
+            <if test="criteria.teamRemoveSelfFlag != null">
+                <![CDATA[
+                    and aarh.employee_id != #{criteria.teamRemoveSelfId, jdbcType = BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.teamCodeStatus != null">
+                <if test="criteria.teamCodeStatus != 'all'">
+                    <![CDATA[  AND aarh.code_status = #{criteria.teamCodeStatus, jdbcType = VARCHAR} ]]>
+                </if>
+                <if test="criteria.teamCodeStatus == 'all'">
+                    <![CDATA[
+                        AND (
+                            (isnull(aarh.commit_flag, 0) = 0 and (aarh.code_status = 'documentor' or aarh.code_status = 'leader' or aarh.code_status = 'person'))
+                         or (isnull(aarh.commit_flag, 0) = 0 and (aarh.code_status = 'leaderRepulse' or aarh.code_status = 'acAdminRepulse' or aarh.code_status = 'leaderRepulseToPerson'))
+                         )
+                    ]]>
+                </if>
+            </if>
+            <if test="criteria.teamCommitFlag != null">
+                <![CDATA[
+                    AND isnull(aarh.commit_flag,0) = #{criteria.teamCommitFlag, jdbcType = BIT}
+                ]]>
+            </if>
+            <if test="criteria.teamDeptIdsIsNull != null">
+                <![CDATA[
+                    and 1 = 0
+                ]]>
+            </if>
+                <![CDATA[
+                    )
+                ]]>
+            <if test="criteria.teamLowerLevel != null">
+                <![CDATA[
+                    or ( 1 = 1
+                ]]>
+                <if test="criteria.teamDsDeptIds != null and criteria.teamDsDeptIds.size > 0 ">
+                    -- 查下级的管理人员
+                    <![CDATA[
+                       and  pejs.dept_id IN
+                    ]]>
+                    <foreach collection="criteria.teamDsDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                    </foreach>
+                </if>
+                <![CDATA[
+                    and exists(
+                        select 1 from fnd_dept fdx
+                        join pm_employee_job pejx
+                            on pejx.employee_id = #{criteria.higherLevelEmployeeId, jdbcType = BIGINT}
+                            and pejx.enabled_flag = 1
+                            and fdx.admin_job_id = pejx.job_id
+                        join fnd_dept fdtx
+                            on fdtx.parent_id = fdx.id
+                            and fdtx.enabled_flag = 1
+                        join pm_employee_job pejtx
+                            on pejtx.job_id = fdtx.admin_job_id
+                            and pejtx.enabled_flag = 1
+                        where pejtx.employee_id = aarh.employee_id)
+                            and aarh.code_status = 'leader'
+                            and aarh.commit_flag = 1
+                     )
+                ]]>
+            </if>
+            <if test="criteria.teamAuthLowerLevel != null ">
+            -- 授权专用， 查授权部门下的所有人员
+                <![CDATA[
+              or (
+                  ]]>
+
+                <if test="criteria.teamDeptIds != null and criteria.teamDeptIds.size > 0 ">
+                    <![CDATA[
+                              pejs.dept_id IN
+                            ]]>
+                    <foreach collection="criteria.teamAuthDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                    </foreach>
+                </if>
+                <![CDATA[
+                    and exists(
+                        select 1 from fnd_dept fdtx
+                            join pm_employee_job pejtx
+                            on pejtx.job_id = fdtx.admin_job_id
+                            and pejtx.enabled_flag = 1
+                            where pejtx.employee_id = aarh.employee_id
+                            and fdtx.enabled_flag = 1
+               ]]>
+                <if test="criteria.teamAuthDeptIds != null and criteria.teamAuthDeptIds.size > 0">
+                    <![CDATA[
+                        and fdtx.id in
+                    ]]>
+                    <foreach collection="criteria.teamAuthDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                    </foreach>
+                </if>
+                <![CDATA[
+                    )
+                     and aarh.code_status = 'leader'
+                     and aarh.commit_flag = 1
+                 )
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="In_Used_Exception_Doc_Union_sql">
+        <![CDATA[
+            union
+          ]]>
+        <include refid="In_Used_Exception_Base_Query"/>
+        <![CDATA[
+            where 1 = 1
+          ]]>
+        <if test="criteria != null">
+            <if test="criteria.docDeptIds != null and criteria.docDeptIds.size > 0 ">
+                <![CDATA[
+                    and exists (SELECT 1
+                                  FROM pm_employee_job pej_t
+                                 WHERE pej_t.employee_id = pe.id
+                                   AND pej_t.enabled_flag = 1
+                                   and pej_t.job_main_flag = 1
+                                   AND pej_t.dept_id IN
+                ]]>
+                <foreach collection="criteria.docDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[
+                    )
+                ]]>
+            </if>
+            <if test="criteria.docRemoveFlag != null">
+                <![CDATA[
+                AND EXISTS (
+                SELECT 1 FROM pm_employee_job pejst
+                WHERE
+	                pejst.id = pejs.id
+	            AND pejst.job_id != isnull((SELECT fdst.admin_job_id FROM fnd_dept fdst WHERE fdst.id = fds.id), -1 ))
+                ]]>
+            </if>
+            <if test="criteria.docCodeStatus != null">
+                <![CDATA[
+                    AND aarh.code_status = #{criteria.docCodeStatus, jdbcType = VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.docBatchCommitCodeStatusFlag != null">
+                <![CDATA[
+--                     AND (aarh.code_status = 'leader' or aarh.code_status = 'documentor')
+                         AND (aarh.code_status = 'leader' or aarh.code_status = 'documentor' or aarh.code_status = 'leaderRepulse')
+                ]]>
+            </if>
+            <if test="criteria.docQueryFlag != null">
+                <!-- 最主要的班组层查询, 只要未提交、且被打回过的都在填写页上显示出来 -->
+                <![CDATA[
+                    AND (
+                        (isnull(aarh.commit_flag, 0) = 0 and (aarh.code_status = 'documentor' or aarh.code_status = 'leader' or aarh.code_status = 'person'))
+                    or  (isnull(aarh.commit_flag, 0) = 0 and (aarh.code_status = 'leaderRepulse' or aarh.code_status = 'acAdminRepulse' or aarh.code_status = 'leaderRepulseToPerson'))
+                    )
+                ]]>
+            </if>
+            <if test="criteria.docCommitFlag != null">
+                <![CDATA[
+                    AND isnull(aarh.commit_flag, 0) = #{criteria.docCommitFlag, jdbcType = BIT}
+                ]]>
+            </if>
+            <if test="criteria.docMultiCodeStatus != null">
+                <if test = "criteria.docMultiCodeStatus == 'documentor'">
+                    <![CDATA[
+                        AND (aarh.code_status = 'documentor'
+                        or aarh.code_status = 'leaderRepulse'
+                        or aarh.code_status = 'acAdminRepulse'
+                        or aarh.code_status = 'leaderRepulseToPerson')
+                   ]]>
+                </if>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="In_Used_Exception_Person_Union_sql">
+        <![CDATA[
+            union
+        ]]>
+        <include refid="In_Used_Exception_Base_Query"/>
+        <if test="criteria != null">
+            <if test="criteria.personEmployeeId != null">
+                <![CDATA[
+                    and aarh.employee_id = #{criteria.personEmployeeId, jdbcType = BIGINT}
+                  ]]>
+            </if>
+            <choose>
+                <when test="criteria.chara == 'documentorAndTeam'">
+                    <![CDATA[
+                        AND (
+                            aarh.code_status = 'documentor'
+                            or aarh.code_status = 'leaderRepulse'
+                            or aarh.code_status = 'acAdminRepulse'
+                            or aarh.code_status = 'person'
+                        )
+                    ]]>
+                </when>
+                <when test="criteria.chara == 'team' or criteria.chara == 'person'">
+                    <![CDATA[
+                         AND (
+                            (isnull(aarh.commit_flag, 0) = 0 and (aarh.code_status = 'documentor' or aarh.code_status = 'leader' or aarh.code_status = 'person'))
+                            or (isnull(aarh.commit_flag, 0) = 0 and (aarh.code_status = 'leaderRepulse' or aarh.code_status = 'acAdminRepulse' or aarh.code_status = 'leaderRepulseToPerson'))
+                        )
+                    ]]>
+                </when>
+                <when test="criteria.chara == 'charge'">
+                    <![CDATA[
+                        and (aarh.code_status = 'person' or  aarh.code_status = 'leaderRepulse')
+                    ]]>
+                </when>
+                <when test="criteria.chara == 'documentor'">
+                    <![CDATA[
+                        AND (aarh.code_status = 'documentor'
+                        or aarh.code_status = 'leaderRepulse'
+                        or aarh.code_status = 'acAdminRepulse'
+                        or aarh.code_status = 'person'
+                        or aarh.code_status = 'leader'
+                        ) and isnull(aarh.commit_flag, 0) = 0
+                    ]]>
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <sql id="In_Used_Exception_Charge_Union_sql">
+        <![CDATA[
+            union
+        ]]>
+        <include refid="In_Used_Exception_Base_Query"/>
+        <if test="criteria != null">
+            <if test="criteria.chargeDeptIds != null and criteria.chargeDeptIds.size > 0 ">
+                <![CDATA[
+                    and exists (SELECT 1
+                                  FROM pm_employee_job pej_t
+                                 WHERE pej_t.employee_id = pe.id
+                                   AND pej_t.enabled_flag = 1
+                                   and pej_t.job_main_flag = 1
+                                   AND pej_t.dept_id IN
+                ]]>
+                <foreach collection="criteria.chargeDeptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                    <![CDATA[
+                        )
+                    ]]>
+            </if>
+            <if test="criteria.chargeRemoveFlag != null">
+                <![CDATA[
+                AND  EXISTS (
+                    SELECT 1 FROM pm_employee_job pejst
+                    WHERE
+                    pejst.id = pejs.id
+                AND pejst.job_id != isnull(( SELECT  fdst.admin_job_id FROM fnd_dept fdst WHERE  fdst.id = fds.id ), -1 ))
+                ]]>
+            </if>
+        </if>
+    </sql>
+    <!--当前在用的公用查询条件-->
+    <sql id="In_Used_Batch_Common_Query">
+        and
+         (
+            temp.no_scheduling = 1
+            OR temp.all_day_no_clock = 1
+            OR temp.office_time_clock = 1
+            OR temp.no_clock_in = 1
+            OR temp.abnormal_clock_in_time = 1
+            OR temp.no_clock_after_work = 1
+            )
+        <if test="criteria.targetResult != null">
+            <![CDATA[
+                and temp.target_result like #{criteria.targetResult, jdbcType=VARCHAR}
+             ]]>
+        </if>
+        <if test="criteria.targetDescribes != null">
+            <![CDATA[
+                and temp.target_describes like #{criteria.targetDescribes, jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="criteria.peopleType == 'normal'">
+            <![CDATA[
+                AND EXISTS (
+                SELECT 1 FROM pm_employee_job pej
+                WHERE
+                pej.id = temp.pej_id
+                AND pej.job_id != isnull(( SELECT  fd.admin_job_id FROM fnd_dept fd WHERE  fd.id = temp.dept_id ), -1 ))
+            ]]>
+        </if>
+        <if test="criteria.peopleType == 'charge'">
+            <![CDATA[
+                AND EXISTS (
+                SELECT 1 FROM pm_employee_job pej
+                WHERE
+                pej.id = temp.pej_id
+                AND pej.job_id = isnull(( SELECT  fd.admin_job_id FROM fnd_dept fd WHERE  fd.id = temp.dept_id ), -1 ))
+            ]]>
+        </if>
+        <if test="criteria.deptIds != null and criteria.deptIds.size > 0 ">
+            <![CDATA[
+                AND temp.dept_id IN
+            ]]>
+            <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                <![CDATA[
+                    #{item, jdbcType=BIGINT}
+                ]]>
+            </foreach>
+        </if>
+        <if test="criteria.beginDateStr != null and criteria.endDateStr != null">
+            <![CDATA[
+                and temp.date between '${criteria.beginDateStr}' AND '${criteria.endDateStr}'
+            ]]>
+        </if>
+        <if test="criteria.beginDate != null and criteria.endDate != null">
+            <![CDATA[
+                and temp.date between #{criteria.beginDate, jdbcType = DATE} AND #{criteria.endDate, jdbcType = DATE}
+            ]]>
+        </if>
+        <if test="criteria.endAndBeforeStr != null">
+            <![CDATA[
+                and temp.date <= '${criteria.endAndBeforeStr}'
+            ]]>
+        </if>
+        <if test="criteria.employeeId != null">
+            <![CDATA[
+                and temp.employee_id = #{criteria.employeeId, jdbcType = BIGINT}
+            ]]>
+        </if>
+        <if test="criteria.hisIds != null and criteria.hisIds.size > 0 ">
+            <![CDATA[
+                and temp.id in (
+            ]]>
+                <foreach collection="criteria.hisIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+            <![CDATA[
+                )
+            ]]>
+        </if>
+        <if test="criteria.employeeName != null">
+            <![CDATA[
+                and temp.pe_name like #{criteria.employeeName,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="criteria.queryName != null">
+            <![CDATA[
+                and (temp.pe_name like #{criteria.queryName,jdbcType=VARCHAR}
+                    or temp.pe_work_card like #{criteria.queryName,jdbcType=VARCHAR}
+                )
+            ]]>
+        </if>
+        <if test="criteria.exceptionType != null">
+            <if test="criteria.exceptionType == 'no_scheduling'">
+                <![CDATA[
+                    and temp.no_scheduling = 1
+                ]]>
+            </if>
+            <if test="criteria.exceptionType == 'rest_day_clock'">
+                <![CDATA[
+                    and temp.rest_day_clock = 1
+                ]]>
+            </if>
+            <if test="criteria.exceptionType == 'all_day_no_clock'">
+                <![CDATA[
+                    and temp.all_day_no_clock = 1
+                ]]>
+            </if>
+            <if test="criteria.exceptionType == 'office_time_clock'">
+                <![CDATA[
+                    and temp.office_time_clock = 1
+                ]]>
+            </if>
+            <if test="criteria.exceptionType == 'no_clock_in_ofter'">
+                <![CDATA[
+                    and (temp.no_clock_in = 1 or temp.no_clock_after_work = 1)
+                ]]>
+            </if>
+            <if test="criteria.exceptionType == 'abnormal_clock_in_time'">
+                <![CDATA[
+                    and temp.abnormal_clock_in_time = 1
+                ]]>
+            </if>
+        </if>
+        <if test="criteria.disposeFlag != null">
+            <choose>
+                <when test="criteria.disposeFlag == 'person'">
+                    <![CDATA[
+                        and temp.code_status = 'person' and isnull(temp.commit_flag,0) = 0
+                    ]]>
+                </when>
+                <when test="criteria.disposeFlag == 'documentor'">
+                    <![CDATA[
+                        and temp.code_status = 'documentor' and isnull(temp.commit_flag,0) = 0
+                    ]]>
+                </when>
+                <when test="criteria.disposeFlag == 'leader'">
+                    <![CDATA[
+                       and temp.code_status = 'leader' and isnull(temp.commit_flag,0) = 0
+                    ]]>
+                </when>
+                <when test="criteria.disposeFlag == 'leaderCatch'">
+                    <![CDATA[
+                        and temp.code_status = 'leader' and temp.commit_flag = 1
+                    ]]>
+                </when>
+                <when test="criteria.disposeFlag == 'acAdmin'">
+                    <![CDATA[
+                        and temp.code_status = 'acAdmin' and temp.commit_flag = 1
+                    ]]>
+                </when>
+                <when test="criteria.disposeFlag == 'leaderRepulse'">
+                    <![CDATA[
+                        and (
+                            (temp.code_status = 'leaderRepulse' and isnull(temp.commit_flag,0) = 0)
+                         or (temp.code_status = 'leaderRepulseToPerson' and isnull(temp.commit_flag,0) = 0)
+                        )
+                    ]]>
+                </when>
+                <when test="criteria.disposeFlag == 'acAdminRepulse'">
+                    <![CDATA[
+                        and temp.code_status = 'acAdminRepulse' and isnull(temp.commit_flag,0) = 0
+                    ]]>
+                </when>
+                <when test="criteria.disposeFlag == 'close'">
+                    <![CDATA[
+                        and temp.code_status = 'close' and temp.commit_flag = 1
+                    ]]>
+                </when>
+            </choose>
+        </if>
+        <choose>
+            <when test="criteria.requestFlag == true">
+                <![CDATA[
+                    and temp.req_code is not null
+                ]]>
+            </when>
+            <when test="criteria.requestFlag == null">
+                <![CDATA[
+                    and 1 = 1
+                ]]>
+            </when>
+            <otherwise>
+                <![CDATA[
+                    and temp.req_code is null
+                ]]>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="criteria.state == 'pass'">
+                <![CDATA[
+                    and temp.state = 'pass'
+                ]]>
+            </when>
+            <when test="criteria.state == 'wait'">
+                <![CDATA[
+                    and temp.state = 'wait'
+                ]]>
+            </when>
+            <when test="criteria.state == 'notpass'">
+                <![CDATA[
+                    and temp.state = 'notpass'
+                ]]>
+            </when>
+            <when test="criteria.state == 'except'">
+                <![CDATA[
+                    and temp.state != 'pass'
+                ]]>
+            </when>
+        </choose>
+    </sql>
+
+    <!--  当前待办列表数异常数量的方法  -->
+    <select id="inUsedCountHistory" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from (
+        ]]>
+        <include refid="In_Used_Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.teamUnion != null">
+                <include refid="In_Used_Exception_Team_Union_sql"/>
+            </if>
+            <if test="criteria.docUnion != null">
+                <include refid="In_Used_Exception_Doc_Union_sql"/>
+            </if>
+            <if test="criteria.chargeUnion != null">
+                <include refid="In_Used_Exception_Charge_Union_sql"/>
+            </if>
+            <if test="criteria.personUnion != null">
+                <include refid="In_Used_Exception_Person_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[
+            ) temp where 1 =1
+        ]]>
+        <include refid="In_Used_Batch_Common_Query"/>
+    </select>
+
+    <!-- 当前在用的异常处理、审批、查询不分页接口-->
+    <select id = "inUsedListForBatch" resultMap="nowUseAcAttendanceRecordHistoryResultMap">
+        <![CDATA[
+            select temp.* from (
+        ]]>
+        <include refid="In_Used_Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.teamUnion != null">
+                <include refid="In_Used_Exception_Team_Union_sql"/>
+            </if>
+            <if test="criteria.docUnion != null">
+                <include refid="In_Used_Exception_Doc_Union_sql"/>
+            </if>
+            <if test="criteria.chargeUnion != null">
+                <include refid="In_Used_Exception_Charge_Union_sql"/>
+            </if>
+            <if test="criteria.personUnion != null">
+                <include refid="In_Used_Exception_Person_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[
+            ) temp where 1 = 1
+        ]]>
+        <include refid="In_Used_Batch_Common_Query"/>
+        <![CDATA[
+            ORDER BY 	temp.pe_dept_name DESC,
+            temp.pe_department DESC,
+            temp.pe_team DESC,
+            temp.date DESC
+	    ]]>
+    </select>
+
+    <!--  当前在用的异常审批、处理、查询、分页接口  -->
+    <select id = "inUsedListForBatchByPage" resultMap="nowUseAcAttendanceRecordHistoryResultMap">
+        <![CDATA[
+            select temp.* from (
+        ]]>
+        <include refid="In_Used_Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.teamUnion != null">
+                <include refid="In_Used_Exception_Team_Union_sql"/>
+            </if>
+            <if test="criteria.docUnion != null">
+                <include refid="In_Used_Exception_Doc_Union_sql"/>
+            </if>
+            <if test="criteria.chargeUnion != null">
+                <include refid="In_Used_Exception_Charge_Union_sql"/>
+            </if>
+            <if test="criteria.personUnion != null">
+                <include refid="In_Used_Exception_Person_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[
+            ) temp where 1 = 1
+        ]]>
+        <include refid="In_Used_Batch_Common_Query"/>
+    </select>
+
+    <!--  当前在用的上月异常提交的前置查询接口  -->
+    <select id = "inUsedCountForDocCommit" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from (
+        ]]>
+        <include refid="In_Used_Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.docUnion != null">
+                <include refid="In_Used_Exception_Doc_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[
+            ) temp where 1 =1
+        ]]>
+        <include refid="In_Used_Batch_Common_Query"/>
+    </select>
+
+    <!--  当前再用的批量提交上月异常的接口  -->
+    <update id="inUsedUpdateBatchCommit">
+        <![CDATA[
+            update  aarht
+                set commit_flag = 1,
+                    check_result = case when temp.code_status <> 'leader' then temp.dispose_result else temp.check_result end,
+                    check_describes = case when temp.code_status <> 'leader' then temp.dispose_describes else temp.check_describes end,
+                    attribute1 = case when temp.code_status <> 'leader' then '资料员于复核中提交' else null end,
+                    code_status = 'leader'
+            from  ( ]]>
+        <include refid="In_Used_Exception_Base_sql"/>
+        <if test="criteria != null">
+            <if test="criteria.docUnion != null">
+                <include refid="In_Used_Exception_Doc_Union_sql"/>
+            </if>
+        </if>
+        <![CDATA[
+            ) temp join ac_attendance_record_history aarht on  temp.id = aarht.id
+        ]]>
+        <include refid="In_Used_Batch_Common_Query"/>
+    </update>
+
+    <!--  暂时没用  -->
+    <update id="inUsedUpdateByBatchDisposed" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory">
+        <![CDATA[
+                        update ac_attendance_record_history
+               set
+                   update_by                     = #{updateBy,jdbcType=BIGINT},
+                   update_time                   = #{updateTime,jdbcType=TIMESTAMP},
+                   dispose_flag                  = #{disposeFlag,jdbcType=VARCHAR},
+                   dispose_by                    = #{disposeBy, jdbcType = BIGINT},
+                   dispose_time                  = #{disposeTime, jdbcType = TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <!--  考勤异常处理接口  -->
+    <update id="inUsedUpdateDisposeByColumn" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory">
+        <![CDATA[
+            update ac_attendance_record_history
+                set update_by = #{updateBy,jdbcType=BIGINT}
+                    ,update_time = #{updateTime,jdbcType=TIMESTAMP}
+        ]]>
+        <if test="disposeBy != null">
+            <![CDATA[   ,dispose_by              = #{disposeBy,jdbcType=BIGINT}   ]]>
+        </if>
+        <if test="disposeTime != null">
+            <![CDATA[   ,dispose_time            = #{disposeTime,jdbcType=TIMESTAMP} ]]>
+        </if>
+        <if test="disposeFlag != null">
+            <![CDATA[   ,dispose_flag            = #{disposeFlag,jdbcType=BIGINT} ]]>
+        </if>
+        <if test="disposeResult != null">
+            <![CDATA[   ,dispose_result          = #{disposeResult,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="disposeDescribes != null">
+            <![CDATA[  ,dispose_describes       = #{disposeDescribes,jdbcType=VARCHAR} ]]>
+        </if>
+        <if test="checkResult != null">
+            <![CDATA[   ,check_result            = #{checkResult,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="checkDescribes != null">
+            <![CDATA[   ,check_describes         = #{checkDescribes,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="adminResult != null">
+            <![CDATA[   ,admin_result            = #{adminResult,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="adminDescribes != null">
+            <![CDATA[   ,admin_describes         = #{adminDescribes,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="reqCode != null">
+            <if test="reqCode == ''">
+                <![CDATA[   ,req_code               = null]]>
+            </if>
+            <if test="reqCode != ''">
+                <![CDATA[   ,req_code                = #{reqCode,jdbcType=VARCHAR}]]>
+            </if>
+        </if>
+        <if test="state != null">
+            <![CDATA[      ,state                   = #{state,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="oaRemark != null">
+            <![CDATA[   ,oa_remark               = #{oaRemark,jdbcType=VARCHAR}]]>
+        </if>
+        <if test="codeStatus != null">
+            <![CDATA[        ,code_status = #{codeStatus, jdbcType=VARCHAR}]]>
+        </if>
+        <if test="leaderResult != null">
+            <![CDATA[      ,leader_result = #{leaderResult, jdbcType = VARCHAR}]]>
+        </if>
+        <if test="commitFlag != null">
+            <![CDATA[       ,commit_flag = #{commitFlag, jdbcType = BIT}]]>
+        </if>
+        <if test="selfDisposeTime != null">
+            <![CDATA[    ,self_dispose_time             = #{selfDisposeTime,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="leaderDisposeBy != null">
+            <![CDATA[    ,leader_dispose_by               = #{leaderDisposeBy,jdbcType=BIGINT}]]>
+        </if>
+        <if test="leaderDisposeTime != null">
+            <![CDATA[    ,leader_dispose_time             = #{leaderDisposeTime,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="acAdminDisposeTime != null">
+            <![CDATA[    ,ac_admin_dispose_time             = #{acAdminDisposeTime,jdbcType=TIMESTAMP}]]>
+        </if>
+        <![CDATA[
+            where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <!--  2021.07.12 第四版异常代码结束  -->
+
+    <!-- 获取OA审批状态为审批中的异常记录-->
+    <select id="listByWaitState" resultMap="AcAttendanceRecordHistoryResultMap">
+        <![CDATA[ select * from  ac_attendance_record_history aarh
+             where aarh.state = 'wait'
+        ]]>
+    </select>
+
+    <update id="updateStateByReqCode" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordHistory">
+        <![CDATA[
+        update ac_attendance_record_history
+        set  attribute3                     = #{attribute3,jdbcType=VARCHAR},
+              attribute4                     = #{attribute4,jdbcType=VARCHAR},
+             state                   = #{state,jdbcType=TIMESTAMP},
+             update_time                   = getdate()
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <!-- 获取人脸机IP地址-->
+    <select id="getMachineListAll" resultMap="AcAttendanceMachineResultMap">
+        <![CDATA[ select * from  ac_attendance_machine ]]>
+    </select>
+    <!-- 写入考勤记录-->
+    <insert id="insertAttendanceData" parameterType="hashmap">
+        <![CDATA[
+            insert into KQ_CRJSJ_TEMP (kh, time8, date8, mjkzqbh, crjqk)
+            values ('${name}','${time8}','${date8}','${machineName}','${crjqk}')
+        ]]>
+    </insert>
+</mapper>

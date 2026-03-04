@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcClockRecordRestDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcClockRecordRest">
+        <id column="work_card" property="workCard"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="date" property="date"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="ext_dept_name" property="extDeptName"/>
+        <result column="ext_department_name" property="extDepartmentName"/>
+        <result column="ext_team_name" property="extTeamName"/>
+        <result column="clockDiff" property="consecutiveDays"/>
+        <result column="overtime" property="overtime"/>
+        <result column="clock_times" property="clockTimes"/>
+        <result column="latestClockDate" property="latestClockDate"/>
+        <result column="attendance_machine" property="attendanceMachine"/>
+    </resultMap>
+
+    <resultMap id="AcClockRecordRestMap" type="com.sunten.hrms.ac.domain.AcClockRecordRest" autoMapping="true">
+        <id column="work_card" property="workCard"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+           <![CDATA[
+        pe
+        .
+        work_card
+        ,c.date, pe.name, pe.gender, fdev.ext_dept_name,fdev.ext_department_name, fdev.ext_team_name, d.clockDiff, d.overTime,
+       (
+         SELECT CONCAT(CONVERT(VARCHAR(5), c2.clock_time), ' ', '' ) AS "data()"
+         FROM ac_clock_record c2
+         WHERE c2.employee_id = c.employee_id
+             AND c2.date = c.date
+         ORDER BY clock_time
+         FOR XML PATH(''), TYPE
+       ).value('.', 'NVARCHAR(MAX)') AS clock_times
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select DISTINCT
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+                 FROM (
+    SELECT c.id, c.employee_id,c.date,c.create_time,ROW_NUMBER() OVER(ORDER BY date DESC, employee_id DESC) AS RowNum
+    FROM ac_clock_record c
+) AS c
+                JOIN pm_employee as pe ON pe.id = c.employee_id
+                JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                JOIN fnd_dept_ext_v fdev on pej.dept_id=fdev.id
+                CROSS APPLY (SELECT * FROM dbo.get_pre_next_date2(c.date, c.employee_id)) AS d
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <!--        and c.RowNum BETWEEN 0 AND 100-->
+        <!--        <if test="criteria != null">-->
+        <!--            <if test="criteria.user_name != null">-->
+        <!--                <![CDATA[ and ala.user_name = #{criteria.user_name,jdbcType=VARCHAR} ]]>-->
+        <!--            </if>-->
+
+        <!--            <choose>-->
+        <!--                <when test='criteria.reqStatus eq "全部申请单"'>-->
+        <!--                    and 1 = 1-->
+        <!--                </when>-->
+        <!--                <when test='criteria.reqStatus eq "已结束申请单"'>-->
+        <!--                    and (ala.approval_result = 'pass' or ala.approval_result = 'Cancel' or ala.approval_result =-->
+        <!--                    'notPass')-->
+        <!--                </when>-->
+        <!--                <when test='criteria.reqStatus eq "审批中申请单"'>-->
+        <!--                    and ala.approval_result IS NULL-->
+        <!--                </when>-->
+        <!--            </choose>-->
+        <!--            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>-->
+        <!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcLeaveApplication">
+       <![CDATA[
+        insert into ac_leave_application (oa_order, nick_name, user_name,
+                                          user_department, user_section,
+                                          groups, position, reason,
+                                          total_number, hr_total, modify_reason,
+                                          version, to_be_uploaded_flag,
+                                          approval_node, approval_employee,
+                                          approval_result, enabled_flag,
+                                          attribute1, attribute2,
+                                          attribute3, attribute4,
+                                          attribute5, create_by,
+                                          create_time)
+        values (#{oaOrder,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+                #{userDepartment,jdbcType=VARCHAR}, #{userSection,jdbcType=VARCHAR},
+                #{groups,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR},
+                #{totalNumber,jdbcType=DOUBLE}, #{hrTotal,jdbcType=DOUBLE}, #{modify_reason,jdbcType=VARCHAR},
+                #{version,jdbcType=INTEGER}, #{to_be_uploaded_flag,jdbcType=INTEGER},
+                #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                #{approvalResult,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=BIGINT},
+                #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                #{attribute5,jdbcType=VARCHAR}, #{createBy,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+    <insert id="addMainTableInfo" parameterType="java.util.HashMap">
+        INSERT INTO ac_leave_application (oa_order, nick_name, user_name, user_department, user_section, groups,
+                                          position, reason, total_number, version, create_by, create_time)
+        VALUES (#{oa_order}, #{nick_name}, #{user_name}, #{user_department}, #{user_section}, #{groups}, #{position},
+                #{reason}, #{total_number}, 0, #{create_by}, GETDATE())
+    </insert>
+
+    <insert id="addSubLeaveInfo" parameterType="java.util.List">
+        INSERT INTO ac_leave_application_line (oa_order, leave_type, start_time, end_time, number, version, work_number,
+        create_by, create_time)
+        VALUES
+        <foreach collection="subDataList" item="item" index="index" separator=",">
+            (#{item.oa_order}, #{item.leave_type}, CONVERT(datetime, #{item.start_time}), CONVERT(datetime,
+            #{item.end_time}), CONVERT(float, #{item.total_number}), 0, CONVERT(float, #{item.work_number}),
+            #{item.create_by}, GETDATE())
+        </foreach>
+    </insert>
+
+
+    <select id="listAllByCriteria" resultMap="AcClockRecordRestMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcClockRecordRestMap">
+        <!--        <include refid="Select_All_Criteria_Sql"/>-->
+        <![CDATA[
+    SELECT DISTINCT
+    pe.work_card,
+    c.date,
+    pe.name,
+    pe.gender,
+    fdev.ext_dept_name,
+    fdev.ext_department_name,
+    fdev.ext_team_name,
+    d.clockDiff,
+    d.overTime,
+    (
+        SELECT CONCAT(CONVERT(VARCHAR(5), c2.clock_time), ' ', '' ) AS "data()"
+        FROM ac_clock_record c2
+        WHERE c2.employee_id = c.employee_id
+        AND c2.date = c.date
+        ORDER BY clock_time
+        FOR XML PATH(''), TYPE
+    ).value('.', 'NVARCHAR(MAX)') AS clock_times
+    FROM
+    (
+        SELECT c.id, c.employee_id,c.date,c.create_time,ROW_NUMBER() OVER(ORDER BY date DESC, employee_id DESC) AS RowNum
+        FROM ac_clock_record c
+    ) AS c
+    JOIN pm_employee as pe ON pe.id = c.employee_id
+    JOIN pm_employee_job pej ON pej.employee_id = pe.id
+    JOIN fnd_dept_ext_v fdev on pej.dept_id=fdev.id
+    CROSS APPLY (SELECT * FROM dbo.get_pre_next_date2(c.date, c.employee_id)) AS d
+    WHERE
+    c.RowNum BETWEEN 0 AND 100
+    ORDER BY c.date desc
+        ]]>
+    </select>
+    <select id="listAll" resultMap="AcClockRecordRestMap">
+        SELECT
+        c.employee_id,
+        pe.work_card,
+        c.date,
+        pe.name,
+        pe.gender,
+        fdev.ext_dept_name,
+        fdev.ext_department_name,
+        fdev.ext_team_name,
+--         d.clockDiff,
+--         d.overTime,
+        CONVERT ( VARCHAR ( 8 ), c.clock_time )  clock_times,
+        c.card_machine_no as attendance_machine
+--         d.nextDATE
+        FROM
+        (
+        SELECT
+        acr.id,
+        acr.employee_id,
+        acr.date,
+        acr.create_time,
+        acr.clock_time,
+        acr.card_machine_no,
+        ROW_NUMBER ( ) OVER ( ORDER BY DATE DESC, acr.employee_id DESC ) AS RowNum,
+        pe.work_card,
+        pe.name,
+        pe.gender,
+        fdev.ext_dept_name,
+        fdev.ext_department_name,
+        fdev.ext_team_name FROM ac_clock_record acr
+        JOIN pm_employee as pe ON pe.id = acr.employee_id
+        JOIN pm_employee_job as pej ON pej.employee_id = pe.id
+        JOIN fnd_dept_ext_v fdev on pej.dept_id=fdev.id
+        where 1 = 1 --AND --pe.work_card = '003104' AND
+        <if test="criteria != null">
+            <if test="criteria.deptId != null">
+                <![CDATA[ and pej.dept_id =  #{criteria.deptId,jdbcType=BIGINT} ]]>
+            </if>
+            <if test="criteria.beginDate != null &amp;&amp; criteria.endDate != null">
+                <![CDATA[ and acr.date BETWEEN #{criteria.beginDate, jdbcType = DATE} and #{criteria.endDate, jdbcType = DATE} ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+        ) AS c
+        JOIN pm_employee as pe ON pe.id = c.employee_id
+        JOIN pm_employee_job pej ON pej.employee_id = pe.id
+        JOIN fnd_dept_ext_v fdev on pej.dept_id=fdev.id
+--         CROSS APPLY (SELECT * FROM dbo.get_pre_next_date(c.date, c.employee_id)) AS d
+        WHERE 1 = 1 AND c.RowNum BETWEEN (#{page} - 1) * 100 + 1 AND (#{page} * #{pageSize} * 2)
+        ORDER BY c.date desc;
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM (SELECT DISTINCT pe.work_card, c.date
+              FROM ac_clock_record c
+                       JOIN pm_employee as pe ON pe.id = c.employee_id
+                       JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                       JOIN fnd_dept_ext_v fdev on pej.dept_id = fdev.id) as c
+    </select>
+    <select id="listAll2" resultMap="AcClockRecordRestMap">
+        SELECT pe.work_card,
+               c.date,
+               pe.name,
+               pe.gender,
+               fdev.ext_dept_name,
+               fdev.ext_department_name,
+               fdev.ext_team_name,
+               d.clockDiff,
+               d.overTime,
+               (SELECT CONCAT(CONVERT(VARCHAR (5), c2.clock_time), '') AS "data()"
+                FROM ac_clock_record c2
+                WHERE c2.employee_id = c.employee_id
+                  AND c2.date = c.date
+                ORDER BY clock_time
+                FOR XML PATH(''), TYPE
+            ).value('.', 'NVARCHAR(MAX)') AS clock_times
+        FROM ac_clock_record c
+            JOIN pm_employee as pe
+        ON pe.id = c.employee_id
+            JOIN pm_employee_job pej ON pej.employee_id = pe.id
+            JOIN fnd_dept_ext_v fdev on pej.dept_id=fdev.id
+            CROSS APPLY (SELECT * FROM dbo.get_pre_next_date(c.date, c.employee_id)) AS d
+        WHERE 1 = 1
+        ORDER BY c.date desc
+        OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY;
+    </select>
+    <select id="getInfo" resultType="java.util.Map">
+        SELECT * FROM dbo.GetConsecutiveClockDaysAndLatestDate3(#{employeeId}, #{date})
+    </select>
+    <select id="listAllDownload" resultType="com.sunten.hrms.ac.domain.AcClockRecordRest">
+        SELECT
+        top 1200
+        c.employee_id,
+        pe.work_card,
+        c.date,
+        pe.name,
+        pe.gender,
+        fdev.ext_dept_name,
+        fdev.ext_department_name,
+        fdev.ext_team_name,
+        --         d.clockDiff,
+        --         d.overTime,
+        CONVERT ( VARCHAR ( 8 ), c.clock_time )  clock_times,
+        c.card_machine_no as attendance_machine
+        --         d.nextDATE
+        FROM
+        (
+        SELECT
+        acr.id,
+        acr.employee_id,
+        acr.date,
+        acr.create_time,
+        acr.clock_time,
+        acr.card_machine_no,
+        ROW_NUMBER ( ) OVER ( ORDER BY DATE DESC, acr.employee_id DESC ) AS RowNum,
+        pe.work_card,
+        pe.name,
+        pe.gender,
+        fdev.ext_dept_name,
+        fdev.ext_department_name,
+        fdev.ext_team_name FROM ac_clock_record acr
+        JOIN pm_employee as pe ON pe.id = acr.employee_id
+        JOIN pm_employee_job as pej ON pej.employee_id = pe.id
+        JOIN fnd_dept_ext_v fdev on pej.dept_id=fdev.id
+        where 1 = 1 --AND --pe.work_card = '003104' AND
+        <if test="criteria != null">
+            <if test="criteria.deptId != null">
+                <![CDATA[ and pej.dept_id =  #{criteria.deptId,jdbcType=BIGINT} ]]>
+            </if>
+            <if test="criteria.beginDate != null &amp;&amp; criteria.endDate != null">
+                <![CDATA[ and acr.date BETWEEN #{criteria.beginDate, jdbcType = DATE} and #{criteria.endDate, jdbcType = DATE} ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+        ) AS c
+        JOIN pm_employee as pe ON pe.id = c.employee_id
+        JOIN pm_employee_job pej ON pej.employee_id = pe.id
+        JOIN fnd_dept_ext_v fdev on pej.dept_id=fdev.id
+        --         CROSS APPLY (SELECT * FROM dbo.get_pre_next_date(c.date, c.employee_id)) AS d
+        WHERE 1 = 1 AND c.RowNum BETWEEN 0 + 1 AND 1500
+        ORDER BY c.date desc;
+    </select>
+
+</mapper>

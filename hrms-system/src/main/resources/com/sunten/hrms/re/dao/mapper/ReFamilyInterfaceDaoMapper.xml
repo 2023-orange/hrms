@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReFamilyInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReFamilyInterface">
+        <id column="id" property="id" />
+        <result column="re_id" property="reId" />
+        <result column="name" property="name" />
+        <result column="relationship" property="relationship" />
+        <result column="company" property="company" />
+        <result column="post" property="post" />
+        <result column="tele" property="tele" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="ReFamilyInterfaceResultMap" type="com.sunten.hrms.re.domain.ReFamilyInterface" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="recruitmentInterface"
+                     javaType="com.sunten.hrms.re.domain.ReRecruitmentInterface"
+                     resultMap="com.sunten.hrms.re.dao.ReRecruitmentInterfaceDao.ReRecruitmentInterfaceResultMap"
+                     columnPrefix="rri_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            rfi.re_id as rri_id, rfi.name, rfi.relationship, rfi.company, rfi.post, rfi.tele, rfi.gender, rfi.birthday,
+            rfi.mobile_phone, rfi.attribute1, rfi.attribute2, rfi.attribute3, rfi.enabled_flag, rfi.id,
+            rfi.update_by, rfi.create_time, rfi.create_by, rfi.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.re_id as ${tAlias}_rri_id, ${tAlias}.name as ${tAlias}_name,
+            ${tAlias}.relationship as ${tAlias}_relationship, ${tAlias}.company as ${tAlias}_company,
+            ${tAlias}.post as ${tAlias}_post, ${tAlias}.tele as ${tAlias}_tele,
+            ${tAlias}.gender as ${tAlias}_gender, ${tAlias}.birthday as ${tAlias}_birthday,
+            ${tAlias}.mobile_phone as ${tAlias}_mobile_phone, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from re_family_interface rfi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.recruitmentId != null">
+                <![CDATA[
+               and rfi.re_id = #{criteria.recruitmentId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and rfi.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReFamilyInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_family_interface (re_id, name, relationship,
+                                             company, post, tele,
+                                             gender, birthday, mobile_phone,
+                                             attribute1, attribute2,
+                                             attribute3, enabled_flag, update_by,
+                                             create_time, create_by,
+                                             update_time)
+            values (#{recruitmentInterface.id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{relationship,jdbcType=VARCHAR},
+                    #{company,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, #{tele,jdbcType=VARCHAR},
+                    #{gender,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{mobilePhone,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{updateBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_family_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReFamilyInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReFamilyInterface">
+        <![CDATA[
+            update re_family_interface
+               set re_id        = #{recruitmentInterface.id,jdbcType=BIGINT},
+                   name         = #{name,jdbcType=VARCHAR},
+                   relationship = #{relationship,jdbcType=VARCHAR},
+                   company      = #{company,jdbcType=VARCHAR},
+                   post         = #{post,jdbcType=VARCHAR},
+                   tele         = #{tele,jdbcType=VARCHAR},
+                   gender       = #{gender,jdbcType=VARCHAR},
+                   birthday     = #{birthday,jdbcType=DATE},
+                   mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_by    = #{updateBy,jdbcType=BIGINT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReFamilyInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rfi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReFamilyInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReFamilyInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

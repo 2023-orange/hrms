@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReRecruitmentDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReRecruitment">
+        <id column="id" property="id" />
+        <result column="job_name" property="jobName" />
+        <result column="dept_name" property="deptName" />
+        <result column="expected_salary" property="expectedSalary" />
+        <result column="gender" property="gender" />
+        <result column="name" property="name" />
+        <result column="id_number" property="idNumber" />
+        <result column="birthday" property="birthday" />
+        <result column="height" property="height" />
+        <result column="weight" property="weight" />
+        <result column="nation" property="nation" />
+        <result column="marital_status" property="maritalStatus" />
+        <result column="political" property="political" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="email" property="email" />
+        <result column="address" property="address" />
+        <result column="zipcode" property="zipcode" />
+        <result column="native_place" property="nativePlace" />
+        <result column="original_contract_flag" property="originalContractFlag" />
+        <result column="occupational_diseases_flag" property="occupationalDiseasesFlag" />
+        <result column="confidentiality_restrictions_flag" property="confidentialityRestrictionsFlag" />
+        <result column="health_flag" property="healthFlag" />
+        <result column="relationship_flag" property="relationshipFlag" />
+        <result column="relationship_name" property="relationshipName" />
+        <result column="relationship" property="relationship" />
+        <result column="relationship_dept_name" property="relationshipDeptName" />
+        <result column="entry_time" property="entryTime" />
+        <result column="recruitment_flag" property="recruitmentFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="employee_id" property="employeeId" />
+        <result column="emergency_contact_name" property="emergencyContactName" />
+        <result column="emergency_contact_phone" property="emergencyContactPhone" />
+    </resultMap>
+
+    <resultMap id="ReRecruitmentResultMap" type="com.sunten.hrms.re.domain.ReRecruitment" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="batterEducation"
+                     javaType="com.sunten.hrms.re.domain.ReEducation"
+                     resultMap="com.sunten.hrms.re.dao.ReEducationDao.ReEducationResultMap"
+                     columnPrefix="re_"/>
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+        rr.job_name, rr.dept_name, rr.expected_salary, rr.gender, rr.name, rr.id_number, rr.birthday,
+        rr.height, rr.weight, rr.nation, rr.marital_status, rr.political, rr.mobile_phone, rr.email,
+        rr.address, rr.zipcode, rr.native_place, rr.original_contract_flag, rr.occupational_diseases_flag,
+        rr.confidentiality_restrictions_flag, rr.health_flag, rr.relationship_flag, rr.relationship_name,
+        rr.relationship, rr.relationship_dept_name, rr.entry_time, rr.recruitment_flag, rr.attribute1,
+        rr.attribute2, rr.attribute3, rr.attribute4, rr.attribute5, rr.enabled_flag, rr.id, rr.create_by,
+        rr.update_time, rr.update_by, rr.create_time, rr.employee_id as pe_id, rr.emergency_contact_name,rr.emergency_contact_phone
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+        ${tAlias}.job_name as ${tAlias}_job_name, ${tAlias}.dept_name as ${tAlias}_dept_name,
+        ${tAlias}.expected_salary as ${tAlias}_expected_salary, ${tAlias}.gender as ${tAlias}_gender,
+        ${tAlias}.name as ${tAlias}_name, ${tAlias}.id_number as ${tAlias}_id_number,
+        ${tAlias}.birthday as ${tAlias}_birthday, ${tAlias}.height as ${tAlias}_height,
+        ${tAlias}.weight as ${tAlias}_weight, ${tAlias}.nation as ${tAlias}_nation,
+        ${tAlias}.marital_status as ${tAlias}_marital_status, ${tAlias}.political as ${tAlias}_political,
+        ${tAlias}.mobile_phone as ${tAlias}_mobile_phone, ${tAlias}.email as ${tAlias}_email,
+        ${tAlias}.address as ${tAlias}_address, ${tAlias}.zipcode as ${tAlias}_zipcode,
+        ${tAlias}.native_place as ${tAlias}_native_place,
+        ${tAlias}.original_contract_flag as ${tAlias}_original_contract_flag,
+        ${tAlias}.occupational_diseases_flag as ${tAlias}_occupational_diseases_flag,
+        ${tAlias}.confidentiality_restrictions_flag as ${tAlias}_confidentiality_restrictions_flag,
+        ${tAlias}.health_flag as ${tAlias}_health_flag,
+        ${tAlias}.relationship_flag as ${tAlias}_relationship_flag,
+        ${tAlias}.relationship_name as ${tAlias}_relationship_name,
+        ${tAlias}.relationship as ${tAlias}_relationship,
+        ${tAlias}.relationship_dept_name as ${tAlias}_relationship_dept_name,
+        ${tAlias}.entry_time as ${tAlias}_entry_time,
+        ${tAlias}.recruitment_flag as ${tAlias}_recruitment_flag,
+        ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+        ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+        ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+        ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_by as ${tAlias}_create_by,
+        ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+        ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.employee_id as ${tAlias}_pe_id,
+        ${tAlias}.emergency_contact_name as ${tAlias}_emergency_contact_name, ${tAlias}.emergency_contact_phone as ${tAlias}_emergency_contact_phone
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[, ISNULL(re.id, -1) re_id,]]>
+        <bind name="tAlias" value="'re'"/>
+        <include refid="com.sunten.hrms.re.dao.ReEducationDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              ,(select pe.work_card from pm_employee pe where pe.id = rr.employee_id) as pe_work_card
+              from re_recruitment rr
+               outer apply (
+               select top(1) re_ap.* from re_education re_ap
+               where re_ap.re_id = rr.id
+                       AND re_ap.enabled_flag = 1
+                       AND re_ap.new_education_flag = 1
+               ) re
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+            where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.expectInUsedPersonFlag != null and criteria.expectInUsedPersonFlag == true">
+                <![CDATA[
+                    and not exists (select 1 from re_trial_approval rta where rta.enabled_flag = 1 and isnull(rta.repeal_flag, 0) = 0 and rta.re_employee_id
+                        = rr.id
+                    )
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and rr.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.name != null">
+                <![CDATA[
+               and rr.name like #{criteria.name,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.originalContractFlag != null">
+                <![CDATA[ and rr.original_contract_flag = #{criteria.originalContractFlag,jdbcType=BIT} ]]>
+            </if>
+            <if test="criteria.occupationalDiseasesFlag != null">
+                <![CDATA[ and rr.occupational_diseases_flag = #{criteria.occupationalDiseasesFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.confidentialityRestrictionsFlag != null">
+                <![CDATA[ and rr.confidentiality_restrictions_flag = #{criteria.confidentialityRestrictionsFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.healthFlag != null">
+                <![CDATA[ and rr.health_flag = #{criteria.healthFlag,jdbcType=BIT} ]]>
+            </if>
+            <if test="criteria.relationshipFlag != null">
+                <![CDATA[ and rr.relationship_flag = #{criteria.relationshipFlag,jdbcType=BIT} ]]>
+            </if>
+            <if test="criteria.recruitmentFlag != null">
+                <![CDATA[ and rr.recruitment_flag = #{criteria.recruitmentFlag,jdbcType=BIT} ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReRecruitment" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+        insert into re_recruitment (job_name, dept_name,
+                                    expected_salary, gender, name,
+                                    id_number, birthday, height,
+                                    weight, nation, marital_status,
+                                    political, mobile_phone, email,
+                                    address, zipcode, native_place,
+                                    original_contract_flag, occupational_diseases_flag,
+                                    confidentiality_restrictions_flag, health_flag,
+                                    relationship_flag, relationship_name,
+                                    relationship, relationship_dept_name,
+                                    entry_time, recruitment_flag, attribute1,
+                                    attribute2, attribute3,
+                                    attribute4, attribute5, enabled_flag,
+                                    create_by, update_time, update_by,
+                                    create_time, employee_id,emergency_contact_name,emergency_contact_phone)
+        values (#{jobName,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR},
+                #{expectedSalary,jdbcType=DECIMAL}, #{gender,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                #{idNumber,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{height,jdbcType=DECIMAL},
+                #{weight,jdbcType=DECIMAL}, #{nation,jdbcType=VARCHAR}, #{maritalStatus,jdbcType=VARCHAR},
+                #{political,jdbcType=VARCHAR}, #{mobilePhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR}, #{nativePlace,jdbcType=VARCHAR},
+                #{originalContractFlag,jdbcType=BIT}, #{occupationalDiseasesFlag,jdbcType=BIT},
+                #{confidentialityRestrictionsFlag,jdbcType=BIT}, #{healthFlag,jdbcType=BIT},
+                #{relationshipFlag,jdbcType=BIT}, #{relationshipName,jdbcType=VARCHAR},
+                #{relationship,jdbcType=VARCHAR}, #{relationshipDeptName,jdbcType=VARCHAR},
+                #{entryTime,jdbcType=DATE}, #{recruitmentFlag,jdbcType=BIT}, #{attribute1,jdbcType=VARCHAR},
+                #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP}, #{employee.id,jdbcType=BIGINT},
+                #{emergencyContactName,jdbcType=VARCHAR}, #{emergencyContactPhone,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_recruitment
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReRecruitment">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReRecruitment">
+        <![CDATA[
+        update re_recruitment
+        set job_name                          = #{jobName,jdbcType=VARCHAR},
+            dept_name                         = #{deptName,jdbcType=VARCHAR},
+            expected_salary                   = #{expectedSalary,jdbcType=DECIMAL},
+            gender                            = #{gender,jdbcType=VARCHAR},
+            name                              = #{name,jdbcType=VARCHAR},
+            id_number                         = #{idNumber,jdbcType=VARCHAR},
+            birthday                          = #{birthday,jdbcType=DATE},
+            height                            = #{height,jdbcType=DECIMAL},
+            weight                            = #{weight,jdbcType=DECIMAL},
+            nation                            = #{nation,jdbcType=VARCHAR},
+            marital_status                    = #{maritalStatus,jdbcType=VARCHAR},
+            political                         = #{political,jdbcType=VARCHAR},
+            mobile_phone                      = #{mobilePhone,jdbcType=VARCHAR},
+            email                             = #{email,jdbcType=VARCHAR},
+            address                           = #{address,jdbcType=VARCHAR},
+            zipcode                           = #{zipcode,jdbcType=VARCHAR},
+            native_place                      = #{nativePlace,jdbcType=VARCHAR},
+            original_contract_flag            = #{originalContractFlag,jdbcType=BIT},
+            occupational_diseases_flag        = #{occupationalDiseasesFlag,jdbcType=BIT},
+            confidentiality_restrictions_flag = #{confidentialityRestrictionsFlag,jdbcType=BIT},
+            health_flag                       = #{healthFlag,jdbcType=BIT},
+            relationship_flag                 = #{relationshipFlag,jdbcType=BIT},
+            relationship_name                 = #{relationshipName,jdbcType=VARCHAR},
+            relationship                      = #{relationship,jdbcType=VARCHAR},
+            relationship_dept_name            = #{relationshipDeptName,jdbcType=VARCHAR},
+            entry_time                        = #{entryTime,jdbcType=DATE},
+            recruitment_flag                  = #{recruitmentFlag,jdbcType=BIT},
+            attribute1                        = #{attribute1,jdbcType=VARCHAR},
+            attribute2                        = #{attribute2,jdbcType=VARCHAR},
+            attribute3                        = #{attribute3,jdbcType=VARCHAR},
+            attribute4                        = #{attribute4,jdbcType=VARCHAR},
+            attribute5                        = #{attribute5,jdbcType=VARCHAR},
+            enabled_flag                      = #{enabledFlag,jdbcType=BIT},
+            update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                         = #{updateBy,jdbcType=BIGINT},
+            employee_id                       = #{employee.id,jdbcType=BIGINT},
+            emergency_contact_name            = #{emergencyContactName,jdbcType=BIGINT},
+            emergency_contact_phone           = #{emergencyContactPhone,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReRecruitmentResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rr.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReRecruitmentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReRecruitmentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.re.domain.ReRecruitment">
+        <![CDATA[
+        update re_recruitment
+        set enabled_flag                      = #{enabledFlag,jdbcType=BIT},
+            update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <insert id="insertByTempInterface" parameterType="java.lang.Long">
+        <![CDATA[
+            insert into re_recruitment(job_name, dept_name,
+                                    gender, name,
+                                    id_number, birthday, height,
+                                    weight, nation, marital_status,
+                                    political, mobile_phone, email,
+                                    address, native_place,
+                                    original_contract_flag, occupational_diseases_flag,
+                                    confidentiality_restrictions_flag, health_flag,
+                                    relationship_flag, relationship_name,
+                                    relationship, relationship_dept_name,
+                                    entry_time, recruitment_flag,
+                                    attribute4, attribute5, enabled_flag,
+                                    create_by, update_time, update_by,
+                                    create_time, employee_id, expected_salary,emergency_contact_name,emergency_contact_phone)
+                                    select
+                                    rrti.job_name, rrti.dept_name, rrti.gender, rrti.name,
+                                    rrti.id_number, rrti.birthday, rrti.height, rrti.weight,
+                                    rrti.nation, rrti.marital_status, rrti.political, rrti.mobile_phone, rrti.email, rrti.address,
+                                    rrti.native_place, rrti.original_contract_flag, rrti.occupational_diseases_flag, rrti.confidentiality_restrictions_flag,
+                                    rrti.health_flag, rrti.relationship_flag, rrti.relationship_name, rrti.relationship, rrti.relationship_dept_name,
+                                    rrti.entry_time, 0, rrti.id, rrti.group_id, 1, rrti.create_by,
+                                    rrti.update_time, rrti.update_by, rrti.create_time, -1, rrti.expected_salary,
+                                    rrti.emergency_contact_name,rrti.emergency_contact_phone
+                                    from re_recruitment_temp_interface rrti where rrti.group_id = #{groupId, jdbcType = BIGINT}
+                                    and rrti.data_status = 'T'
+        ]]>
+    </insert>
+
+</mapper>

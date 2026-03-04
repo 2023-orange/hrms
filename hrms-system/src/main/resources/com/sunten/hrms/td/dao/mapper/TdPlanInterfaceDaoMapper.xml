@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanInterface">
+        <id column="id" property="id" />
+        <result column="training_name" property="trainingName" />
+        <result column="training_method" property="trainingMethod" />
+        <result column="training_content" property="trainingContent" />
+        <result column="training_purpose" property="trainingPurpose" />
+        <result column="training_level" property="trainingLevel" />
+        <result column="profession_classify" property="professionClassify" />
+        <result column="dependence_dept" property="dependenceDept" />
+        <result column="host_dept" property="hostDept" />
+        <result column="teacher" property="teacher" />
+        <result column="employee_describes" property="employeeDescribes" />
+        <result column="plan_date" property="planDate" />
+        <result column="employee_quantity" property="employeeQuantity" />
+        <result column="plan_money" property="planMoney" />
+        <result column="online_flag" property="onlineFlag" />
+        <result column="remark" property="remark" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="group_id" property="groupId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdPlanInterfaceResultMap" type="com.sunten.hrms.td.domain.TdPlanInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpi.training_name, tpi.training_method, tpi.training_content, tpi.training_purpose,
+            tpi.training_level, tpi.profession_classify, tpi.dependence_dept, tpi.host_dept, tpi.teacher,
+            tpi.employee_describes, tpi.plan_date, tpi.employee_quantity, tpi.plan_money, tpi.online_flag,
+            tpi.remark, tpi.enabled_flag, tpi.operation_code, tpi.error_msg, tpi.data_status, tpi.group_id,
+            tpi.id, tpi.create_time, tpi.create_by, tpi.update_time, tpi.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.training_name as ${tAlias}_training_name,
+            ${tAlias}.training_method as ${tAlias}_training_method,
+            ${tAlias}.training_content as ${tAlias}_training_content,
+            ${tAlias}.training_purpose as ${tAlias}_training_purpose,
+            ${tAlias}.training_level as ${tAlias}_training_level,
+            ${tAlias}.profession_classify as ${tAlias}_profession_classify,
+            ${tAlias}.dependence_dept as ${tAlias}_dependence_dept, ${tAlias}.host_dept as ${tAlias}_host_dept,
+            ${tAlias}.teacher as ${tAlias}_teacher,
+            ${tAlias}.employee_describes as ${tAlias}_employee_describes,
+            ${tAlias}.plan_date as ${tAlias}_plan_date,
+            ${tAlias}.employee_quantity as ${tAlias}_employee_quantity,
+            ${tAlias}.plan_money as ${tAlias}_plan_money, ${tAlias}.online_flag as ${tAlias}_online_flag,
+            ${tAlias}.remark as ${tAlias}_remark, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_plan_interface tpi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and tpi.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_interface (training_name, training_method,
+                                           training_content, training_purpose,
+                                           training_level, profession_classify,
+                                           dependence_dept, host_dept,
+                                           teacher, employee_describes,
+                                           plan_date, employee_quantity,
+                                           plan_money, online_flag, remark,
+                                           enabled_flag, operation_code, error_msg,
+                                           data_status, group_id, create_time,
+                                           create_by, update_time, update_by)
+            values (#{trainingName,jdbcType=VARCHAR}, #{trainingMethod,jdbcType=VARCHAR},
+                    #{trainingContent,jdbcType=VARCHAR}, #{trainingPurpose,jdbcType=VARCHAR},
+                    #{trainingLevel,jdbcType=VARCHAR}, #{professionClassify,jdbcType=VARCHAR},
+                    #{dependenceDept,jdbcType=VARCHAR}, #{hostDept,jdbcType=VARCHAR},
+                    #{teacher,jdbcType=VARCHAR}, #{employeeDescribes,jdbcType=VARCHAR},
+                    #{planDate,jdbcType=VARCHAR}, #{employeeQuantity,jdbcType=INTEGER},
+                    #{planMoney,jdbcType=DECIMAL}, #{onlineFlag,jdbcType=BIT}, #{remark,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT}, #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR},
+                    #{dataStatus,jdbcType=CHAR}, #{groupId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <insert id="insertByInterface" parameterType="com.sunten.hrms.td.domain.TdPlanInterface">
+        <![CDATA[
+             insert into td_plan_interface (training_name, training_method,
+                                           training_content, training_purpose,
+                                           training_level, profession_classify,
+                                           dependence_dept, host_dept,
+                                           teacher, employee_describes,
+                                           plan_date, employee_quantity,
+                                           plan_money, online_flag, remark,
+                                           enabled_flag, operation_code, error_msg,
+                                           data_status, group_id, create_time,
+                                           create_by, update_time, update_by)
+
+           select #{trainingName, jdbcType = VARCHAR}, #{trainingMethod, jdbcType = VARCHAR}, #{trainingContent, jdbcType = VARCHAR},
+           #{trainingPurpose, jdbcType = VARCHAR}, #{trainingLevel, jdbcType = VARCHAR}, #{professionClassify, jdbcType = VARCHAR},
+           #{dependenceDept, jdbcType = VARCHAR}, #{hostDept,jdbcType=VARCHAR},
+                    #{teacher,jdbcType=VARCHAR}, #{employeeDescribes,jdbcType=VARCHAR},
+                    #{planDate,jdbcType=VARCHAR}, #{employeeQuantity,jdbcType=INTEGER},
+                    #{planMoney,jdbcType=DECIMAL},
+                    case when #{planMoney,jdbcType=DECIMAL} = 0 then 0 else 1 end
+                    , #{remark,jdbcType=VARCHAR},
+                    1, 'C' , case when #{planMoney,jdbcType=DECIMAL} is null then '预计金额为空' else
+                    case when #{planMoney,jdbcType=DECIMAL} < 0 then '预计金额小于0' else
+                    case when #{employeeQuantity,jdbcType=INTEGER} is null then '预计人数为空' else
+                    case when #{employeeQuantity,jdbcType=INTEGER} < 0 then '预计人事小于0'  else ''
+                    end
+                    end
+                    end
+                    end,
+                    case when #{planMoney,jdbcType=DECIMAL} is null then 'F' else
+                    case when #{planMoney,jdbcType=DECIMAL} < 0 then 'F' else
+                    case when #{employeeQuantity,jdbcType=INTEGER} is null then 'F' else
+                    case when #{employeeQuantity,jdbcType=INTEGER} < 0 then 'F'  else 'T'
+                    end
+                    end
+                    end
+                    end,
+                    #{groupId, jdbcType = BIGINT},
+                    getdate(), #{userId, jdbcType = BIGINT}, getdate(), #{userId, jdbcType = BIGINT}
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanInterface">
+        <![CDATA[
+            update td_plan_interface
+               set training_name       = #{trainingName,jdbcType=VARCHAR},
+                   training_method     = #{trainingMethod,jdbcType=VARCHAR},
+                   training_content    = #{trainingContent,jdbcType=VARCHAR},
+                   training_purpose    = #{trainingPurpose,jdbcType=VARCHAR},
+                   training_level      = #{trainingLevel,jdbcType=VARCHAR},
+                   profession_classify = #{professionClassify,jdbcType=VARCHAR},
+                   dependence_dept     = #{dependenceDept,jdbcType=VARCHAR},
+                   host_dept           = #{hostDept,jdbcType=VARCHAR},
+                   teacher             = #{teacher,jdbcType=VARCHAR},
+                   employee_describes  = #{employeeDescribes,jdbcType=VARCHAR},
+                   plan_date           = #{planDate,jdbcType=VARCHAR},
+                   employee_quantity   = #{employeeQuantity,jdbcType=INTEGER},
+                   plan_money          = #{planMoney,jdbcType=DECIMAL},
+                   online_flag         = #{onlineFlag,jdbcType=BIT},
+                   remark              = #{remark,jdbcType=VARCHAR},
+                   enabled_flag        = #{enabledFlag,jdbcType=BIT},
+                   operation_code      = #{operationCode,jdbcType=CHAR},
+                   error_msg           = #{errorMsg,jdbcType=VARCHAR},
+                   data_status         = #{dataStatus,jdbcType=CHAR},
+                   group_id            = #{groupId,jdbcType=BIGINT},
+                   update_time         = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by           = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tpi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

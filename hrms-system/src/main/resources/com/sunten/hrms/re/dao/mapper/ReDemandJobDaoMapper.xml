@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReDemandJobDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReDemandJob">
+        <id column="id" property="id" />
+        <result column="demand_id" property="demandId" />
+        <result column="demand_code" property="demandCode" />
+        <result column="remaining_personnel" property="remainingPersonnel" />
+        <result column="job_name" property="jobName" />
+        <result column="job_id" property="jobId"/>
+        <result column="quantity" property="quantity" />
+        <result column="base_condition" property="baseCondition" />
+        <result column="special_flag" property="specialFlag" />
+        <result column="special_midecal" property="specialMidecal" />
+        <result column="need_flag" property="needFlag" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="real_flag" property="realFlag"/>
+        <result column="show_box" property="showBox"/>
+        <result column="job_name_by_id" property="jobNameById"/>
+        <result column="risk_factors" property="riskFactors"/>
+        <result column="team_mes" property="teamMes"/>
+        <result column="job_first_count" property="jobFirstCount"/>
+        <result column="job_second_count" property="jobSecondCount"/>
+        <result column="job_third_count" property="jobThirdCount"/>
+        <result column="job_current_count" property="jobCurrentCount"/>
+        <result column="in_used_quantity" property="inUsedQuantity"/>
+        <result column="pass_quantity" property="passQuantity"/>
+        <result column="add_before_approval_flag" property="addBeforeApprovalFlag"/>
+    </resultMap>
+
+    <resultMap id="ReDemandJobResultMap" type="com.sunten.hrms.re.domain.ReDemandJob" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <resultMap id="QueryUsedByTrialApprovalResultMap" type="com.sunten.hrms.re.vo.UsedByTrialApprovalDemandVo">
+        <result column="demand_code" property="demandCode"/>
+        <result column="id" property="id"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="office_name" property="officeName"/>
+        <result column="team" property="team"/>
+        <result column="dept_first_count" property="deptFirstCount"/>
+        <result column="dept_second_count" property="deptSecondCount"/>
+        <result column="dept_third_count" property="deptThirdCount"/>
+        <result column="dept_current_count" property="deptCurrentCount"/>
+        <collection property="usedByTrialApprovalDemandJobVos" ofType="com.sunten.hrms.re.vo.UsedByTrialApprovalDemandJobVo">
+            <result column="rdj_demand_job_id" property="id"/>
+            <result column="rdj_job_id" property="jobId"/>
+            <result column="rdj_job_name" property="jobName"/>
+            <result column="rdj_quantity" property="quantity"/>
+            <result column="rdj_in_used_quantity" property="inUsedQuantity"/>
+            <result column="rdj_pass_quantity" property="passQuantity"/>
+            <result column="rdj_job_first_count" property="jobFirstCount"/>
+            <result column="rdj_job_second_count" property="jobSecondCount"/>
+            <result column="rdj_job_third_count" property="jobThirdCount"/>
+            <result column="rdj_job_current_count" property="jobCurrentCount"/>
+            <result column="rdj_agree_num" property="agreeNum"/>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            rdj.demand_id, rdj.job_name,rdj.job_id, rdj.quantity, rdj.base_condition, rdj.special_flag,
+            rdj.special_midecal, rdj.need_flag, rdj.enabled_flag, rdj.id, rdj.create_time, rdj.create_by,
+            rdj.update_time, rdj.update_by, 1 as real_flag, 0 as show_box,
+            (select job_name from fnd_job where id = rdj.job_id) as job_name_by_id,
+            rdj.risk_factors, rdj.team_mes, rdj.job_first_count, rdj.job_second_count, rdj.job_third_count,
+            rdj.job_current_count,
+            rdj.pass_quantity, rdj.in_used_quantity, rdj.add_before_approval_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.demand_id as ${tAlias}_demand_id, ${tAlias}.job_name as ${tAlias}_job_name,
+            (select job_name from fnd_job where id =  ${tAlias}.job_id) as ${tAlias}_job_name_by_id,
+            ${tAlias}.job_id as ${tAlias}_job_id,
+            ${tAlias}.quantity as ${tAlias}_quantity, ${tAlias}.base_condition as ${tAlias}_base_condition,
+            ${tAlias}.special_flag as ${tAlias}_special_flag,
+            ${tAlias}.special_midecal as ${tAlias}_special_midecal, ${tAlias}.need_flag as ${tAlias}_need_flag,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            1 as ${tAlias}_real_flag,  0 as ${tAlias}_show_box,
+            ${tAlias}.risk_factors as ${tAlias}_risk_factors,
+            ${tAlias}.team_mes as ${tAlias}_team_mes,
+            ${tAlias}.job_first_count as ${tAlias}_job_first_count,
+            ${tAlias}.job_second_count as ${tAlias}_job_second_count,
+            ${tAlias}.job_third_count as ${tAlias}_job_third_count,
+            ${tAlias}.job_current_count as ${tAlias}_job_current_count,
+            ${tAlias}.agree_num as ${tAlias}_agree_num,
+            ${tAlias}.in_used_quantity as ${tAlias}_in_used_quantity,
+            ${tAlias}.pass_quantity as ${tAlias}_pass_quantity,
+             ${tAlias}.add_before_approval_flag as  ${tAlias}_add_before_approval_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from re_demand_job rdj
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and rdj.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.demandId != null">
+                <![CDATA[
+                    and rdj.demand_id = #{criteria.demandId,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReDemandJob" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_demand_job (demand_id, job_name, job_id, quantity,
+                                       base_condition, special_flag,
+                                       special_midecal, need_flag, enabled_flag,
+                                       create_time, create_by,
+                                       update_time, update_by,
+                                       risk_factors, team_mes,
+                                       job_first_count, job_second_count, job_third_count, job_current_count,
+                                       in_used_quantity, pass_quantity, add_before_approval_flag,agree_num)
+            values (#{demandId,jdbcType=BIGINT}, #{jobName,jdbcType=VARCHAR}, #{jobId, jdbcType= BIGINT}, #{quantity,jdbcType=VARCHAR},
+                    #{baseCondition,jdbcType=VARCHAR}, #{specialFlag,jdbcType=BIT},
+                    #{specialMidecal,jdbcType=VARCHAR}, #{needFlag,jdbcType=BIT}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{riskFactors, jdbcType = VARCHAR},
+                    #{teamMes, jdbcType = VARCHAR}, #{jobFirstCount, jdbcType = INTEGER}, #{jobSecondCount, jdbcType = INTEGER},
+                    #{jobThirdCount, jdbcType = INTEGER},
+                     #{jobCurrentCount, jdbcType = INTEGER},
+                     #{inUsedQuantity, jdbcType = INTEGER}, #{passQuantity, jdbcType = INTEGER},
+                    #{addBeforeApprovalFlag, jdbcType = BIT},#{quantity,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_demand_job
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReDemandJob">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReDemandJob">
+        <![CDATA[
+            update re_demand_job
+               set demand_id       = #{demandId,jdbcType=BIGINT},
+                   job_name        = #{jobName,jdbcType=VARCHAR},
+                   job_id          = #{jobId, jdbcType= BIGINT},
+                   quantity        = #{quantity,jdbcType=VARCHAR},
+                   base_condition  = #{baseCondition,jdbcType=VARCHAR},
+                   special_flag    = #{specialFlag,jdbcType=BIT},
+                   special_midecal = #{specialMidecal,jdbcType=VARCHAR},
+                   need_flag       = #{needFlag,jdbcType=BIT},
+                   enabled_flag    = #{enabledFlag,jdbcType=BIT},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by       = #{updateBy,jdbcType=BIGINT},
+                   risk_factors    = #{riskFactors, jdbcType = VARCHAR},
+                   team_mes        = #{teamMes, jdbcType = VARCHAR},
+                   job_first_count = #{jobFirstCount, jdbcType = INTEGER},
+                   job_second_count = #{jobSecondCount, jdbcType = INTEGER},
+                   job_third_count  = #{jobThirdCount, jdbcType = INTEGER},
+                   job_current_count = #{jobCurrentCount, jdbcType = INTEGER},
+                   agree_num        = #{agreeNum, jdbcType = INTEGER},
+                   in_used_quantity = #{inUsedQuantity, jdbcType = INTEGER},
+                   pass_quantity    = #{passQuantity, jdbcType = INTEGER},
+                   add_before_approval_flag = #{addBeforeApprovalFlag, jdbcType = BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateColumnByValue" parameterType="com.sunten.hrms.re.domain.ReDemandJob">
+        <![CDATA[
+            update re_demand_job set
+            update_time = getdate()
+        ]]>
+        <if test="jobName != null">
+            <![CDATA[
+                ,job_name = #{jobName,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="jobId != null">
+            <![CDATA[
+                ,job_id = #{jobId,jdbcType=BIGINT}
+            ]]>
+        </if>
+        <if test="quantity != null">
+            <![CDATA[
+                ,quantity = #{quantity,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="baseCondition != null">
+            <![CDATA[
+                ,base_condition = #{baseCondition,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="specialFlag != null">
+            <![CDATA[
+                ,special_flag = #{specialFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="specialMidecal != null">
+            <![CDATA[
+                ,special_midecal = #{specialMidecal,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="needFlag != null">
+            <![CDATA[
+                ,need_flag = #{needFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="enabledFlag != null">
+            <![CDATA[
+                ,enabled_flag = #{enabledFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="riskFactors != null">
+            <![CDATA[
+                ,risk_factors = #{riskFactors,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="teamMes != null">
+            <![CDATA[
+                ,team_mes = #{teamMes,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="jobFirstCount != null">
+            <![CDATA[
+                ,job_first_count = #{jobFirstCount,jdbcType=INTEGER}
+            ]]>
+        </if>
+        <if test="jobSecondCount != null">
+            <![CDATA[
+                ,job_second_count = #{jobSecondCount,jdbcType=INTEGER}
+            ]]>
+        </if>
+        <if test="jobThirdCount != null">
+            <![CDATA[
+                ,job_third_count = #{jobThirdCount,jdbcType=INTEGER}
+            ]]>
+        </if>
+        <if test="jobCurrentCount != null">
+            <![CDATA[
+                ,job_current_count = #{jobCurrentCount,jdbcType=INTEGER}
+            ]]>
+        </if>
+        <if test="inUsedQuantity != null">
+            <![CDATA[
+                ,in_used_quantity = #{inUsedQuantity,jdbcType=INTEGER}
+            ]]>
+        </if>
+        <if test="passQuantity != null">
+            <![CDATA[
+                ,pass_quantity = #{passQuantity,jdbcType=INTEGER}
+            ]]>
+        </if>
+        <if test="addBeforeApprovalFlag != null">
+            <![CDATA[
+                ,            add_before_approval_flag = #{addBeforeApprovalFlag, jdbcType = BIT}
+            ]]>
+        </if>
+        <if test="needCheckFlag != null">
+            <![CDATA[
+                ,need_check_flag = #{needCheckFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="agreeNum != null">
+            <![CDATA[
+                ,agree_num = #{agreeNum,jdbcType=INTEGER}
+            ]]>
+        </if>
+        <![CDATA[
+                 where id = #{id,jdbcType=BIGINT}
+            ]]>
+    </update>
+
+    <update id="disabledByEnabled">
+        <![CDATA[
+            update re_demand_job set enabled_flag = 0 where id = #{id, jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReDemandJobResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rdj.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getDemandJobListByDemandId" resultMap="ReDemandJobResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rdj.demand_id = #{id,jdbcType=BIGINT}
+             and rdj.enabled_flag = 1
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReDemandJobResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReDemandJobResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="queryUsedByTrialApproval" resultMap="QueryUsedByTrialApprovalResultMap">
+            <![CDATA[
+            select rd.demand_code as demand_code, rd.id as id, rd.dept_id as dept_id,
+             rd.dept_name as dept_name, rd.office_name as office_name, rd.team as team,
+             rd.dept_first_count as dept_first_count, rd.dept_second_count as dept_second_count,
+             rd.dept_third_count as dept_second_count, rd.dept_current_count,
+             rdj.id as rdj_demand_job_id,
+             rdj.job_id as rdj_job_id, rdj.job_name as rdj_job_name, rdj.quantity as rdj_quantity,
+             isnull(rdj.in_used_quantity, 0) as rdj_in_used_quantity, isnull(rdj.pass_quantity, 0) as rdj_pass_quantity,
+             rdj.job_first_count as rdj_job_first_count, rdj.job_second_count as rdj_job_second_count,
+             rdj.job_third_count as rdj_job_third_count,
+             rdj.job_current_count as rdj_job_current_count,rdj.agree_num as rdj_agree_num
+             from re_demand rd join re_demand_job rdj on rd.id = rdj.demand_id
+            and rd.enabled_flag = 1 and rdj.enabled_flag = 1 and rd.real_demand_status = 'complete'
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.demandCode != null">
+                <![CDATA[
+            and rd.demand_code like #{criteria.demandCode, jdbcType = VARCHAR}
+        ]]>
+            </if>
+            <if test="criteria.surplusFlag != null and criteria.surplusFlag == true">
+                <![CDATA[
+            and exists (select 1 from re_demand_job rdjj where rdjj.id = rdj.id and rdjj.agree_num > isnull(rdj.in_used_quantity, 0))
+         ]]>
+            </if>
+            <if test="criteria.surplusFlag != null and criteria.surplusFlag == false">
+                <![CDATA[
+            and exists (select 1 from re_demand_job rdjj where rdjj.id = rdj.id and rdjj.quantity = isnull(rdj.in_used_quantity, 0))
+         ]]>
+            </if>
+        </if>
+    </select>
+
+    <update id="updateInUsedQuantityAfterUsed" parameterType="java.lang.Long">
+        <![CDATA[
+            update rdj set in_used_quantity = isnull(in_used_quantity, 0) + 1
+            from re_demand_job rdj
+            where rdj.id = #{id, jdbcType = BIGINT}
+            and rdj.enabled_flag = 1
+            and isnull(rdj.in_used_quantity, 0) < rdj.agree_num
+        ]]>
+    </update>
+
+    <update id="updatePassQuantityAfterUsed" parameterType="java.lang.Long">
+                <![CDATA[
+            update rdj set pass_quantity = isnull(pass_quantity, 0) + 1
+            from re_demand_job rdj
+            where rdj.id = #{id, jdbcType = BIGINT}
+            and rdj.enabled_flag = 1
+            and isnull(rdj.pass_quantity, 0) < rdj.agree_num
+        ]]>
+    </update>
+
+    <update id="updateInUsedQuantityAfterCancel" parameterType="java.lang.Long">
+                       <![CDATA[
+            update rdj set in_used_quantity = isnull(in_used_quantity, 0) -1
+            from re_demand_job rdj
+            where rdj.id = #{id, jdbcType = BIGINT}
+            and rdj.enabled_flag = 1
+            and isnull(rdj.in_used_quantity, 0) > 0
+        ]]>
+    </update>
+
+    <update id="updatePassQuantityByCharge" parameterType="com.sunten.hrms.re.domain.ReDemandJob">
+        <![CDATA[
+            update re_demand_job set
+            in_used_quantity = #{newInUsedQuantity, jdbcType = INTEGER},
+            pass_quantity = #{passQuantity, jdbcType = INTEGER},
+            demand_open_by = #{demandOpenBy, jdbcType = BIGINT},
+            demand_open_time = getdate()
+            where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <select id="checkNeedCountAfterUpdate" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from re_demand_job where need_check_flag = 1 and enabled_flag = 1
+            and demand_id = #{demandId, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="checkResidueQuantityBeforeTrialCommit" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        <![CDATA[
+            select agree_num - isnull(in_used_quantity, 0) from re_demand_job where enabled_flag =  1 and id = #{demandJobId, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="getCurrentStatusList" resultMap="BaseResultMap">
+        <![CDATA[
+            select rd.demand_code,
+                    isnull(rdj.agree_num,0)-isnull(rdj.pass_quantity,0) as remaining_personnel,
+	                rdj.job_name
+            from re_demand rd
+                left join re_demand_job rdj on rd.id=rdj.demand_id
+            where rd.dept_id=#{deptId, jdbcType = BIGINT}
+                and rd.real_demand_status='complete'
+                and (isnull(rdj.agree_num,0)-isnull(rdj.pass_quantity,0)>0)
+                and rdj.enabled_flag=1 and rd.enabled_flag=1
+                and rd.demand_code !=#{demandCode, jdbcType = VARCHAR}
+                and rd.demand_code not like 'L%'
+            order by rd.id desc
+        ]]>
+    </select>
+</mapper>

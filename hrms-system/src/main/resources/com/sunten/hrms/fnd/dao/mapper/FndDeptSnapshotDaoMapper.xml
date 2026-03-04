@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndDeptSnapshotDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndDeptSnapshot">
+        <id column="id" property="id" />
+        <result column="date" property="date" />
+        <result column="dept_id" property="deptId" />
+        <result column="dept_name" property="deptName" />
+        <result column="parent_id" property="parentId" />
+        <result column="dept_code" property="deptCode" />
+        <result column="dept_level" property="deptLevel" />
+        <result column="dept_sequence" property="deptSequence" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="attendance_id" property="attendanceId"/>
+        <result column="dept" property="dept"/>
+        <result column="department" property="department"/>
+        <result column="team" property="team"/>
+        <result column="admin_job_id" property="adminJobId"/>
+    </resultMap>
+
+    <resultMap id="FndDeptSnapshotResultMap" type="com.sunten.hrms.fnd.domain.FndDeptSnapshot" autoMapping="true">
+        <id column="id" property="id" />
+        <association
+                property="attendance"
+                javaType="com.sunten.hrms.ac.domain.AcDeptAttendance"
+                resultMap="com.sunten.hrms.ac.dao.AcDeptAttendanceDao.AcDeptAttendanceResultMap"
+                columnPrefix="ada_"
+        ></association>
+    </resultMap>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fds.id, fds.date, fds.dept_id, fds.dept_name, fds.parent_id, fds.dept_code, fds.dept_level,
+            fds.dept_sequence, fds.attribute1, fds.attribute2, fds.attribute3, fds.attribute4, fds.attribute5,
+            fds.create_by, fds.create_time, fds.update_by, fds.update_time, fds.attendance_id,fds.dept,fds.department,
+            fds.team, fds.admin_job_id
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.date as ${tAlias}_date,
+            ${tAlias}.dept_id as ${tAlias}_dept_id, ${tAlias}.dept_name as ${tAlias}_dept_name,
+            ${tAlias}.parent_id as ${tAlias}_parent_id, ${tAlias}.dept_code as ${tAlias}_dept_code,
+            ${tAlias}.dept_level as ${tAlias}_dept_level, ${tAlias}.dept_sequence as ${tAlias}_dept_sequence,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.attendance_id as ${tAlias}_attendance_id,
+            ${tAlias}.dept as ${tAlias}_dept,${tAlias}.department as ${tAlias}_department,
+            ${tAlias}.team as ${tAlias}_team,${tAlias}.admin_job_id as ${tAlias}_admin_job_id
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_dept_snapshot fds
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.date != null">
+            <![CDATA[
+                and DateDiff(dd,fds.date,#{criteria.date, jdbcType=DATE}) = 0
+            ]]>
+        </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndDeptSnapshot" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_dept_snapshot (date, dept_id, dept_name,
+                                           parent_id, dept_code, dept_level,
+                                           dept_sequence, attribute1, attribute2,
+                                           attribute3, attribute4,
+                                           attribute5, create_by,
+                                           create_time, update_by,
+                                           update_time, attendance_id
+                                           ,dept, department, team, admin_job_id
+                                           )
+            values (#{date,jdbcType=DATE}, #{deptId,jdbcType=BIGINT}, #{deptName,jdbcType=VARCHAR},
+                    #{parentId,jdbcType=BIGINT}, #{deptCode,jdbcType=VARCHAR}, #{deptLevel,jdbcType=VARCHAR},
+                    #{deptSequence,jdbcType=BIGINT}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{attendanceId,jdbcType=BIGINT},
+                    #{dept,jdbcType=VARCHAR},#{department,jdbcType=VARCHAR},#{team,jdbcType=VARCHAR},
+                    #{adminJobId, jdbcType = BIGINT})
+        ]]>
+    </insert>
+
+    <insert id="insertSnapShot" parameterType="com.sunten.hrms.fnd.domain.FndDeptSnapshot" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_dept_snapshot (date, dept_id, dept_name,
+                                           parent_id, dept_code, dept_level,
+                                           dept_sequence, attribute1, attribute2,
+                                           attribute3, attribute4,
+                                           attribute5, create_by,
+                                           create_time, update_by,
+                                           update_time, dept, department, team, admin_job_id)
+           select #{date,jdbcType=DATE}, fd.id, fd.dept_name, fd.parent_id, fd.dept_code, fd.dept_level, fd.dept_sequence,
+                    '', '', '', '', '', #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP},
+	( SELECT temp.dept_name FROM fnd_dept temp WHERE temp.id = fd.ext_dept_id ) AS dept,
+	 ( SELECT temp.dept_name FROM fnd_dept temp WHERE temp.id = fd.ext_department_id ) AS department,
+	 ( SELECT temp.dept_name FROM fnd_dept temp WHERE temp.id = fd.ext_team_id ) AS team,
+	 fd.admin_job_id
+                    from fnd_dept fd where enabled_flag = 1
+                    and deleted_flag = 0
+        ]]>
+    </insert>
+
+    <select id="countByDate" resultType="Integer">
+        <![CDATA[
+            select count(*) from fnd_dept_snapshot fds where fds.date=#{date,jdbcType=DATE}
+        ]]>
+    </select>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_dept_snapshot
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndDeptSnapshot">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndDeptSnapshot">
+        <![CDATA[
+            update fnd_dept_snapshot
+               set date          = #{date,jdbcType=DATE},
+                   dept_id       = #{deptId,jdbcType=BIGINT},
+                   dept_name     = #{deptName,jdbcType=VARCHAR},
+                   parent_id     = #{parentId,jdbcType=BIGINT},
+                   dept_code     = #{deptCode,jdbcType=VARCHAR},
+                   dept_level    = #{deptLevel,jdbcType=VARCHAR},
+                   dept_sequence = #{deptSequence,jdbcType=BIGINT},
+                   attribute1    = #{attribute1,jdbcType=VARCHAR},
+                   attribute2    = #{attribute2,jdbcType=VARCHAR},
+                   attribute3    = #{attribute3,jdbcType=VARCHAR},
+                   attribute4    = #{attribute4,jdbcType=VARCHAR},
+                   attribute5    = #{attribute5,jdbcType=VARCHAR},
+                   update_by     = #{updateBy,jdbcType=BIGINT},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP},
+                   attendance_id = #{attendanceId,jdbcType=BIGINT},
+                   dept          = #{dept,jdbcType=VARCHAR},
+                   department          = #{department,jdbcType=VARCHAR},
+                   team          = #{team,jdbcType=VARCHAR},
+                   admin_job_id = #{adminJobId, jdbcType= BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAttendanceId" parameterType="com.sunten.hrms.fnd.domain.FndDeptSnapshot">
+        <![CDATA[
+            update fnd_dept_snapshot
+               set
+                   update_by     = #{updateBy,jdbcType=BIGINT},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP},
+                   attendance_id = #{attendanceId,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndDeptSnapshotResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fds.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getTopByDate" resultMap="FndDeptSnapshotResultMap" parameterType="java.time.LocalDate">
+        <include refid="Base_Column_Query_Sql">
+        </include>
+        <![CDATA[
+             where fds.parent_id = 0  and DateDiff(dd,fds.date,#{date, jdbcType=DATE}) = 0
+        ]]>
+    </select>
+
+    <select id="getByKeyAndDate" resultMap="FndDeptSnapshotResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fds.dept_id = #{id,jdbcType=BIGINT}
+             and
+        DateDiff(dd,fds.date,#{date, jdbcType=DATE}) = 0
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndDeptSnapshotResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndDeptSnapshotResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <select id="listAllWithAttendanceByCriteria" resultMap="FndDeptSnapshotResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,
+        ]]>
+        <bind name="tAlias" value="'ada'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcDeptAttendanceDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from
+              fnd_dept_snapshot fds
+              left join ac_dept_attendance ada
+              on fds.dept_id = ada.dept_id
+               and fds.date between ada.take_effect_date and ISNULL(ada.invalid_date, fds.date)
+               AND ada.enabled_flag = 1
+              where  fds.date = #{date, jdbcType=DATE}
+        ]]>
+
+    </select>
+
+
+
+    <select id="getSnapShotByCriteria" resultMap="FndDeptSnapshotResultMap">
+        select  <include refid="Base_Column_Query_Sql"/>
+         from fnd_dept_snapshot fds  where 1 =1
+        <if test="criteria != null">
+            <if test="criteria.dateStr != null">
+                <![CDATA[
+                    and fds.date = '${criteria.dateStr}'
+                ]]>
+            </if>
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                    and fds.dept_id = #{deptId, jdbcType = BIGINT}
+                 ]]>
+            </if>
+        </if>
+    </select>
+
+</mapper>

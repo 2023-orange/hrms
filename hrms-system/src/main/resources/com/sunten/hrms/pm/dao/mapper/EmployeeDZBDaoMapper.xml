@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.EmployeeDZBDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.EmployeeDZB">
+        <id column="id" property="id" />
+        <result column="kh" property="kh" />
+        <result column="gh" property="gh" />
+        <result column="xjbs" property="xjbs" />
+        <result column="clbs" property="clbs" />
+        <result column="xm" property="xm" />
+        <result column="bh" property="bh" />
+        <result column="sj" property="sj" />
+    </resultMap>
+
+    <resultMap id="EmployeeDZBResultMap" type="com.sunten.hrms.pm.domain.EmployeeDZB" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            e.kh, e.gh, e.xjbs, e.clbs, e.xm, e.id, e.bh, e.sj
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.kh as ${tAlias}_kh, ${tAlias}.gh as ${tAlias}_gh, ${tAlias}.xjbs as ${tAlias}_xjbs,
+            ${tAlias}.clbs as ${tAlias}_clbs, ${tAlias}.xm as ${tAlias}_xm, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.bh as ${tAlias}_bh, ${tAlias}.sj as ${tAlias}_sj
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from employeeDZB e
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.EmployeeDZB" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into employeeDZB (kh, gh, xjbs,
+                                     clbs, xm, bh,
+                                     sj)
+            values (#{kh,jdbcType=VARCHAR}, #{gh,jdbcType=VARCHAR}, #{xjbs,jdbcType=INTEGER},
+                    #{clbs,jdbcType=INTEGER}, #{xm,jdbcType=VARCHAR}, #{bh,jdbcType=CHAR},
+                    #{sj,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from employeeDZB
+             where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.EmployeeDZB">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.EmployeeDZB">
+        <![CDATA[
+            update employeeDZB
+               set kh   = #{kh,jdbcType=VARCHAR},
+                   gh   = #{gh,jdbcType=VARCHAR},
+                   xjbs = #{xjbs,jdbcType=INTEGER},
+                   clbs = #{clbs,jdbcType=INTEGER},
+                   xm   = #{xm,jdbcType=VARCHAR},
+                   bh   = #{bh,jdbcType=CHAR},
+                   sj   = #{sj,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="EmployeeDZBResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where e.id = #{id,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="EmployeeDZBResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="EmployeeDZBResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

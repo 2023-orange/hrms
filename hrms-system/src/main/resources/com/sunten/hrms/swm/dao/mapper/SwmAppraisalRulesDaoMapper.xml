@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmAppraisalRulesDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmAppraisalRules">
+        <id column="id" property="id" />
+        <result column="assessment_grade" property="assessmentGrade" />
+        <result column="assessment_right" property="assessmentRight" />
+        <result column="wage_right" property="wageRight" />
+        <result column="work_flag" property="workFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="add_reason" property="addReason"/>
+        <result column="confirm_person" property="confirmPerson"/>
+    </resultMap>
+
+    <resultMap id="SwmAppraisalRulesResultMap" type="com.sunten.hrms.swm.domain.SwmAppraisalRules" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sar.id, sar.assessment_grade, sar.assessment_right, sar.wage_right, sar.work_flag, sar.create_time,
+            sar.create_by, sar.update_time, sar.update_by, sar.add_reason, sar.confirm_person
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.assessment_grade as ${tAlias}_assessment_grade,
+            ${tAlias}.assessment_right as ${tAlias}_assessment_right,
+            ${tAlias}.wage_right as ${tAlias}_wage_right, ${tAlias}.work_flag as ${tAlias}_work_flag,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.add_reason as ${tAlias}_add_reason,${tAlias}.confirm_person as ${tAlias}_confirm_person
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_appraisal_rules sar
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and sar.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmAppraisalRules" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_appraisal_rules (assessment_grade, assessment_right,
+                                             wage_right, work_flag, create_time,
+                                             create_by, update_time, update_by, add_reason,
+                                             confirm_person)
+            values (#{assessmentGrade,jdbcType=VARCHAR}, #{assessmentRight,jdbcType=INTEGER},
+                    #{wageRight,jdbcType=DECIMAL}, #{workFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{addReason, jdbcType = VARCHAR}, #{confirmPerson, jdbcType = VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_appraisal_rules
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmAppraisalRules">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="InvalidByEnabled" parameterType="com.sunten.hrms.swm.domain.SwmAppraisalRules">
+         <![CDATA[
+            update swm_appraisal_rules
+               set
+                   work_flag        = #{workFlag,jdbcType=BIT},
+                   add_reason       = #{addReason, jdbcType =VARCHAR},
+                   confirm_person   = #{confirmPerson, jdbcType = VARCHAR},
+                   update_time      = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by        = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmAppraisalRules">
+        <![CDATA[
+            update swm_appraisal_rules
+               set assessment_grade = #{assessmentGrade,jdbcType=VARCHAR},
+                   assessment_right = #{assessmentRight,jdbcType=INTEGER},
+                   wage_right       = #{wageRight,jdbcType=DECIMAL},
+                   work_flag        = #{workFlag,jdbcType=BIT},
+                   update_time      = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by        = #{updateBy,jdbcType=BIGINT},
+                   add_reason       = #{addReason, jdbcType =VARCHAR},
+                   confirm_person   = #{confirmPerson, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmAppraisalRulesResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sar.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmAppraisalRulesResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmAppraisalRulesResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="checkByGrade" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from swm_appraisal_rules where  assessment_grade = #{assessmentGrade, jdbcType = VARCHAR}
+            and work_flag = 1
+        ]]>
+
+    </select>
+
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeTitleTempDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeTitleTemp">
+        <id column="id" property="id" />
+        <result column="title_id" property="titleId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="title_level" property="titleLevel" />
+        <result column="title_name" property="titleName" />
+        <result column="evaluation_time" property="evaluationTime" />
+        <result column="new_title_flag" property="newTitleFlag" />
+        <result column="instructions_flag" property="instructionsFlag" />
+        <result column="check_flag" property="checkFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeTitleTempResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeTitleTemp" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employeeTitle"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeTitle"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeTitleDao.PmEmployeeTitleResultMap"
+                     columnPrefix="pet_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pett.title_id as pet_id, pett.employee_id, pett.title_level, pett.title_name, pett.evaluation_time, pett.new_title_flag,
+            pett.instructions_flag, pett.check_flag, pett.attribute1, pett.attribute2, pett.attribute3,
+            pett.enabled_flag, pett.id, pett.update_time, pett.create_by, pett.create_time, pett.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.title_id as ${tAlias}_pet_id, ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.title_level as ${tAlias}_title_level,
+            ${tAlias}.title_name as ${tAlias}_title_name,
+            ${tAlias}.evaluation_time as ${tAlias}_evaluation_time,
+            ${tAlias}.new_title_flag as ${tAlias}_new_title_flag,
+            ${tAlias}.instructions_flag as ${tAlias}_instructions_flag,
+            ${tAlias}.check_flag as ${tAlias}_check_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_title_temp pett
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.titleId != null">
+                <![CDATA[
+               and pett.title_id = #{criteria.titleId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pett.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pett.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.checkFlag != null">
+                <![CDATA[
+               and pett.check_flag = #{criteria.checkFlag,jdbcType=CHAR}
+                ]]>
+            </if>
+            <if test="criteria.instructionsFlag != null">
+                <![CDATA[
+               and pett.instructions_flag = #{criteria.instructionsFlag,jdbcType=CHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTitleTemp" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_title_temp (employee_id, title_id, title_level, title_name,
+                                                evaluation_time, new_title_flag,
+                                                instructions_flag, check_flag,
+                                                attribute1, attribute2,
+                                                attribute3, enabled_flag,
+                                                update_time, create_by,
+                                                create_time, update_by)
+            values (#{employeeId,jdbcType=BIGINT}, #{employeeTitle.id,jdbcType=BIGINT}, #{titleLevel,jdbcType=VARCHAR}, #{titleName,jdbcType=VARCHAR},
+                    #{evaluationTime,jdbcType=DATE}, #{newTitleFlag,jdbcType=BIT},
+                    #{instructionsFlag,jdbcType=CHAR}, #{checkFlag,jdbcType=CHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_title_temp
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTitleTemp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTitleTemp">
+        <![CDATA[
+            update pm_employee_title_temp
+               set title_id          = #{employeeTitle.id,jdbcType=BIGINT},
+                   title_level       = #{titleLevel,jdbcType=VARCHAR},
+                   title_name        = #{titleName,jdbcType=VARCHAR},
+                   evaluation_time   = #{evaluationTime,jdbcType=DATE},
+                   new_title_flag    = #{newTitleFlag,jdbcType=BIT},
+                   instructions_flag = #{instructionsFlag,jdbcType=CHAR},
+                   check_flag        = #{checkFlag,jdbcType=CHAR},
+                   attribute1        = #{attribute1,jdbcType=VARCHAR},
+                   attribute2        = #{attribute2,jdbcType=VARCHAR},
+                   attribute3        = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeTitleTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pett.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeTitleTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeTitleTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTitleTemp">
+        <![CDATA[
+        update pm_employee_title_temp
+        set
+            enabled_flag      = #{enabledFlag,jdbcType=BIT},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateCheckFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTitleTemp">
+        <![CDATA[
+        update pm_employee_title_temp
+        set
+            check_flag        = #{checkFlag,jdbcType=CHAR},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+</mapper>

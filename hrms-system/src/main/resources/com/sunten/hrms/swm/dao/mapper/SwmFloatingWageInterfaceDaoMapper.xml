@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmFloatingWageInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmFloatingWageInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="income_period" property="incomePeriod" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="allocate_performance_pay" property="allocatePerformancePay" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="pre_tax_withheld" property="preTaxWithheld"/>
+        <result column="after_tax_withheld" property="afterTaxWithheld"/>
+        <result column="production_factor" property="productionFactor" />
+        <result column="quality_factor" property="qualityFactor"/>
+        <result column="assessment_coefficient" property="assessmentCoefficient"/>
+    </resultMap>
+
+    <resultMap id="SwmFloatingWageInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmFloatingWageInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sfwi.id, sfwi.group_id, sfwi.employee_id, sfwi.income_period, sfwi.work_card, sfwi.employee_name,
+            round(sfwi.allocate_performance_pay,2) as allocate_performance_pay, sfwi.operation_code, sfwi.error_msg, sfwi.data_status,
+            sfwi.attribute1, sfwi.attribute2, sfwi.attribute3, sfwi.create_time, sfwi.create_by,
+            sfwi.update_time, sfwi.update_by,  round(sfwi.pre_tax_withheld,2) as pre_tax_withheld, round(sfwi.after_tax_withheld,2) as after_tax_withheld
+            ,  round(sfwi.production_factor,2) as production_factor,  round(sfwi.quality_factor,2) as quality_factor,  round(sfwi.assessment_coefficient,2) as assessment_coefficient
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.income_period as ${tAlias}_income_period,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.allocate_performance_pay as ${tAlias}_allocate_performance_pay,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.pre_tax_withheld as ${tAlias}_pre_tax_withheld,
+            ${tAlias}.after_tax_withheld as ${tAlias}_after_tax_withheld,
+            ${tAlias}.production_factor as ${tAlias}_production_factor,
+            ${tAlias}.quality_factor as ${tAlias}_quality_factor,
+            ${tAlias}.assessment_coefficient as ${tAlias}_assessment_coefficient
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_floating_wage_interface sfwi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and sfwi.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and sfwi.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWageInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_floating_wage_interface (group_id, employee_id, income_period,
+                                                     work_card, employee_name,
+                                                     allocate_performance_pay, operation_code,
+                                                     error_msg, data_status, attribute1,
+                                                     attribute2, attribute3,
+                                                     create_time, create_by,
+                                                     update_time, update_by,
+                                                     pre_tax_withheld, after_tax_withheld,
+                                                     production_factor,quality_factor,assessment_coefficient
+                                                     )
+            values (#{groupId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT}, #{incomePeriod,jdbcType=VARCHAR},
+                    #{workCard,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+                    #{allocatePerformancePay,jdbcType=DECIMAL}, #{operationCode,jdbcType=CHAR},
+                    #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR}, #{attribute1,jdbcType=DECIMAL},
+                    #{attribute2,jdbcType=DECIMAL}, #{attribute3,jdbcType=DECIMAL},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{preTaxWithheld,jdbcType=DECIMAL}, #{afterTaxWithheld,jdbcType=DECIMAL},
+                    #{productionFactor,jdbcType=DECIMAL},
+                    #{qualityFactor,jdbcType=DECIMAL},
+                    #{assessmentCoefficient,jdbcType=DECIMAL}
+                    )
+        ]]>
+    </insert>
+
+
+    <insert id="insertAllocatePerformancePay" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWageInterface">
+        <![CDATA[
+            insert into swm_floating_wage_interface (
+                group_id, employee_id, income_period,
+                work_card, employee_name,
+                allocate_performance_pay, operation_code,
+                error_msg, data_status,
+                create_time, create_by,
+                update_time, update_by, pre_tax_withheld,
+                after_tax_withheld,production_factor,quality_factor,assessment_coefficient
+            )
+            select
+                #{groupId, jdbcType= BIGINT},
+                ISNULL((
+                SELECT se.employee_id FROM swm_employee se WHERE
+                RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+                AND se.work_flag = 1
+                ),- 1),
+                #{incomePeriod, jdbcType=VARCHAR},
+                #{workCard, jdbcType=VARCHAR},
+                #{employeeName, jdbcType=VARCHAR},
+                #{allocatePerformancePay, jdbcType=DECIMAL},
+                'C',
+                CASE WHEN (SELECT ISNULL((SELECT se.employee_id FROM swm_employee se WHERE RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) =
+                RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 ) and se.name =  #{employeeName, jdbcType=VARCHAR}
+                AND se.work_flag = 1),- 1)) = - 1 THEN '工号姓名匹配失败' ELSE case when not exists (select 1 from swm_floating_wage sfw
+                where sfw.enabled_flag = 1 and sfw.income_period = #{incomePeriod, jdbcType=VARCHAR} and isnull(sfw.frozen_flag, 0) = 0) then '该所的期间已冻结或不存在' else
+               '' END end,
+                CASE WHEN (SELECT ISNULL((SELECT se.employee_id FROM swm_employee se WHERE
+                RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+                and se.name =  #{employeeName, jdbcType=VARCHAR}
+                AND se.work_flag = 1),- 1)) = - 1 THEN 'F' ELSE case when not exists (select 1 from swm_floating_wage sfw
+                where sfw.enabled_flag = 1 and sfw.income_period = #{incomePeriod, jdbcType=VARCHAR} and isnull(sfw.frozen_flag, 0) = 0) then 'F' else
+                'T' END end,
+                #{createTime,jdbcType=TIMESTAMP},
+                #{createBy,jdbcType=BIGINT},
+                #{updateTime,jdbcType=TIMESTAMP},
+                #{updateBy,jdbcType=BIGINT},
+                #{preTaxWithheld,jdbcType=DECIMAL},
+                #{afterTaxWithheld,jdbcType=DECIMAL},
+                #{productionFactor,jdbcType=DECIMAL},
+                #{qualityFactor,jdbcType=DECIMAL},
+                #{assessmentCoefficient,jdbcType=DECIMAL}
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_floating_wage_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWageInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWageInterface">
+        <![CDATA[
+            update swm_floating_wage_interface
+               set group_id                 = #{groupId,jdbcType=BIGINT},
+                   employee_id              = #{employeeId,jdbcType=BIGINT},
+                   income_period            = #{incomePeriod,jdbcType=VARCHAR},
+                   work_card                = #{workCard,jdbcType=VARCHAR},
+                   employee_name            = #{employeeName,jdbcType=VARCHAR},
+                   allocate_performance_pay = #{allocatePerformancePay,jdbcType=DECIMAL},
+                   operation_code           = #{operationCode,jdbcType=CHAR},
+                   error_msg                = #{errorMsg,jdbcType=VARCHAR},
+                   data_status              = #{dataStatus,jdbcType=CHAR},
+                   attribute1               = #{attribute1,jdbcType=DECIMAL},
+                   attribute2               = #{attribute2,jdbcType=DECIMAL},
+                   attribute3               = #{attribute3,jdbcType=DECIMAL},
+                   update_time              = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                = #{updateBy,jdbcType=BIGINT},
+                   pre_tax_withheld         = #{preTaxWithheld,jdbcType=DECIMAL},
+                   after_tax_withheld       = #{afterTaxWithheld,jdbcType=DECIMAL},
+                   production_factor                = #{productionFactor,jdbcType=BIGINT},
+                   quality_factor         = #{qualityFactor,jdbcType=DECIMAL},
+                   assessment_coefficient       = #{assessmentCoefficient,jdbcType=DECIMAL}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmFloatingWageInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sfwi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmFloatingWageInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmFloatingWageInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getSummaryByImportList" resultMap="SwmFloatingWageInterfaceResultMap">
+        <![CDATA[
+            select #{incomePeriod, jdbcType = VARCHAR} as income_period,
+             sum(sfwi.allocate_performance_pay) as allocate_performance_pay, sum(sfwi.pre_tax_withheld)  as pre_tax_withheld,
+             sum(sfwi.after_tax_withheld)  as after_tax_withheld,
+             sum(sfwi.production_factor)  as production_factor,
+             sum(sfwi.quality_factor)  as quality_factor,
+             sum(sfwi.assessment_coefficient)  as assessment_coefficient
+             from swm_floating_wage_interface sfwi where sfwi.income_period = #{incomePeriod, jdbcType = VARCHAR}
+            and sfwi.data_status = 'T'
+        ]]>
+        <if test="workCards != null and workCards.size > 0">
+            <![CDATA[
+                        and
+            sfwi.work_card in (]]>
+            <foreach collection="workCards" item="item" index="index" separator=",">
+                <![CDATA[
+                    right(replicate('0',6) + convert(varchar(6),#{item}),6)
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+        <if test="groupIds != null and groupIds.size > 0">
+            <![CDATA[
+                        and
+            sfwi.group_id in (]]>
+            <foreach collection="groupIds" item="groupId" index="index" separator=",">
+                <![CDATA[
+                    #{groupId}
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeePostotherDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeePostother">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="company" property="company" />
+        <result column="post" property="post" />
+        <result column="remarks" property="remarks" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeePostotherResultMap" type="com.sunten.hrms.pm.domain.PmEmployeePostother" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="postotherTemp"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeePostotherTemp"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeePostotherTempDao.PmEmployeePostotherTempResultMap"
+                     columnPrefix="pept_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pep.employee_id as pe_id, pep.company, pep.post, pep.remarks, pep.attribute1, pep.attribute2,
+            pep.attribute3, pep.enabled_flag, pep.id, pep.create_time, pep.create_by, pep.update_time,
+            pep.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.company as ${tAlias}_company,
+            ${tAlias}.post as ${tAlias}_post, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_postother pep
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pep.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pep.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeePostother" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_postother (employee_id, company, post,
+                                               remarks, attribute1, attribute2,
+                                               attribute3, enabled_flag,
+                                               create_time, create_by,
+                                               update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{company,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR},
+                    #{remarks,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_postother
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeePostother">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeePostother">
+        <![CDATA[
+            update pm_employee_postother
+               set employee_id  = #{employee.id,jdbcType=BIGINT},
+                   company      = #{company,jdbcType=VARCHAR},
+                   post         = #{post,jdbcType=VARCHAR},
+                   remarks      = #{remarks,jdbcType=VARCHAR},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeePostotherResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pep.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeePostotherResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeePostotherResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeePostother">
+        <![CDATA[
+        update pm_employee_postother
+        set
+            enabled_flag = #{enabledFlag,jdbcType=BIT},
+            update_time  = #{updateTime,jdbcType=TIMESTAMP},
+            update_by    = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeePostotherResultMap">
+        <![CDATA[
+            select
+            pepo.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pepo.company) > 0 then pepo.company else null end as company,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pepo.post) > 0 then pepo.post else null end as post,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pepo.remarks) > 0 then pepo.remarks else null end as remarks
+            from pm_employee_postother pepo join pm_employee pe on pe.id = pepo.employee_id where pepo.enabled_flag = 1
+            and pe.enabled_flag = 1 and concat(
+           pepo.company,pepo.post,pepo.remarks
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+    <sql id="Column_With_Temp_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pept'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeePostotherTempDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee_postother pep
+              left join pm_employee_postother_temp pept
+              on pep.id = pept.header_id
+              and pept.enabled_flag = 1
+              and pept.check_flag = 'D'
+              and pept.instructions_flag = 'U'
+        ]]>
+    </sql>
+    <select id="listAllAndTempByEmployee" resultMap="PmEmployeePostotherResultMap">
+        <include refid="Column_With_Temp_Query_Sql"/>
+        <![CDATA[
+          where pep.enabled_flag = 1
+          and pep.employee_id = #{employeeId,jdbcType=BIGINT}
+          order by pep.id
+         ]]>
+    </select>
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.wta.dao.WtaQuartzLogDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.wta.domain.WtaQuartzLog">
+        <id column="id" property="id" />
+        <result column="bean_name" property="beanName" />
+        <result column="cron_expression" property="cronExpression" />
+        <result column="exception_detail" property="exceptionDetail" />
+        <result column="is_success" property="success" />
+        <result column="job_name" property="jobName" />
+        <result column="method_name" property="methodName" />
+        <result column="params" property="params" />
+        <result column="time" property="time" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="WtaQuartzLogResultMap" type="com.sunten.hrms.wta.domain.WtaQuartzLog" autoMapping="true">
+        <result column="is_success" property="success" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            wql.id, wql.bean_name, wql.cron_expression, wql.exception_detail, wql.is_success, wql.job_name,
+            wql.method_name, wql.params, wql.time, wql.create_time 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.bean_name as ${tAlias}_bean_name,
+            ${tAlias}.cron_expression as ${tAlias}_cron_expression, 
+            ${tAlias}.exception_detail as ${tAlias}_exception_detail, 
+            ${tAlias}.is_success as ${tAlias}_is_success, ${tAlias}.job_name as ${tAlias}_job_name, 
+            ${tAlias}.method_name as ${tAlias}_method_name, ${tAlias}.params as ${tAlias}_params, 
+            ${tAlias}.time as ${tAlias}_time, ${tAlias}.create_time as ${tAlias}_create_time 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from wta_quartz_log wql
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.jobName != null">
+                <![CDATA[
+               and wql.job_name like #{criteria.jobName,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.success != null">
+                <![CDATA[
+               and wql.is_success = #{criteria.success,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and wql.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and wql.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.wta.domain.WtaQuartzLog" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into wta_quartz_log (bean_name, cron_expression,
+                                        exception_detail, is_success, job_name,
+                                        method_name, params, time,
+                                        create_time)
+            values (#{beanName,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR},
+                    #{exceptionDetail,jdbcType=VARCHAR}, #{success,jdbcType=BIT}, #{jobName,jdbcType=VARCHAR},
+                    #{methodName,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR}, #{time,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from wta_quartz_log
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.wta.domain.WtaQuartzLog">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.wta.domain.WtaQuartzLog">
+        <![CDATA[
+            update wta_quartz_log
+               set bean_name        = #{beanName,jdbcType=VARCHAR},
+                   cron_expression  = #{cronExpression,jdbcType=VARCHAR},
+                   exception_detail = #{exceptionDetail,jdbcType=VARCHAR},
+                   is_success       = #{success,jdbcType=BIT},
+                   job_name         = #{jobName,jdbcType=VARCHAR},
+                   method_name      = #{methodName,jdbcType=VARCHAR},
+                   params           = #{params,jdbcType=VARCHAR},
+                   time             = #{time,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="WtaQuartzLogResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where wql.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="WtaQuartzLogResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="WtaQuartzLogResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

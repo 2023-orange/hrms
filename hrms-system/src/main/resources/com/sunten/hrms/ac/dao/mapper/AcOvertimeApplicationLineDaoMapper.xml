@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOvertimeApplicationLineDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeApplicationLine">
+        <id column="id" property="id" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="nick_name" property="nickName" />
+        <result column="user_name" property="userName" />
+        <result column="position" property="position" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="total_rest_time" property="totalRestTime" />
+        <result column="hours" property="hours" />
+        <result column="month_hours" property="monthHours" />
+        <result column="review_startTime" property="reviewStarttime" />
+        <result column="review_endTime" property="reviewEndtime" />
+        <result column="review_total_rest_time" property="reviewTotalRestTime" />
+        <result column="review_hours" property="reviewHours" />
+        <result column="reviewer_nick_name" property="reviewerNickName" />
+        <result column="reviewer_user_name" property="reviewerUserName" />
+        <result column="review_time" property="reviewTime" />
+        <result column="remarks" property="remarks" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="AcOvertimeApplicationLineResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeApplicationLine" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aoal.id, aoal.oa_order, aoal.nick_name, aoal.user_name, aoal.position, aoal.start_time, 
+            aoal.end_time, aoal.total_rest_time, aoal.hours, aoal.month_hours, aoal.review_startTime, 
+            aoal.review_endTime, aoal.review_total_rest_time, aoal.review_hours, aoal.reviewer_nick_name, 
+            aoal.reviewer_user_name, aoal.review_time, aoal.remarks, aoal.enabled_flag, aoal.attribute1, 
+            aoal.attribute2, aoal.attribute3, aoal.attribute4, aoal.attribute5, aoal.create_by, 
+            aoal.create_time 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.oa_order as ${tAlias}_oa_order, 
+            ${tAlias}.nick_name as ${tAlias}_nick_name, ${tAlias}.user_name as ${tAlias}_user_name, 
+            ${tAlias}.position as ${tAlias}_position, ${tAlias}.start_time as ${tAlias}_start_time, 
+            ${tAlias}.end_time as ${tAlias}_end_time, ${tAlias}.total_rest_time as ${tAlias}_total_rest_time, 
+            ${tAlias}.hours as ${tAlias}_hours, ${tAlias}.month_hours as ${tAlias}_month_hours, 
+            ${tAlias}.review_startTime as ${tAlias}_review_startTime, 
+            ${tAlias}.review_endTime as ${tAlias}_review_endTime, 
+            ${tAlias}.review_total_rest_time as ${tAlias}_review_total_rest_time, 
+            ${tAlias}.review_hours as ${tAlias}_review_hours, 
+            ${tAlias}.reviewer_nick_name as ${tAlias}_reviewer_nick_name, 
+            ${tAlias}.reviewer_user_name as ${tAlias}_reviewer_user_name, 
+            ${tAlias}.review_time as ${tAlias}_review_time, ${tAlias}.remarks as ${tAlias}_remarks, 
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1, 
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3, 
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5, 
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_overtime_application_line aoal
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and aoal.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplicationLine" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_overtime_application_line (oa_order, nick_name, user_name,
+                                                      position, start_time,
+                                                      end_time, total_rest_time, hours,
+                                                      month_hours, review_startTime,
+                                                      review_endTime, review_total_rest_time,
+                                                      review_hours, reviewer_nick_name,
+                                                      reviewer_user_name, review_time,
+                                                      remarks, enabled_flag, attribute1,
+                                                      attribute2, attribute3,
+                                                      attribute4, attribute5,
+                                                      create_by, create_time)
+            values (#{oaOrder,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+                    #{position,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+                    #{endTime,jdbcType=TIMESTAMP}, #{totalRestTime,jdbcType=DOUBLE}, #{hours,jdbcType=DOUBLE},
+                    #{monthHours,jdbcType=DOUBLE}, #{reviewStarttime,jdbcType=TIMESTAMP},
+                    #{reviewEndtime,jdbcType=TIMESTAMP}, #{reviewTotalRestTime,jdbcType=DOUBLE},
+                    #{reviewHours,jdbcType=DOUBLE}, #{reviewerNickName,jdbcType=VARCHAR},
+                    #{reviewerUserName,jdbcType=VARCHAR}, #{reviewTime,jdbcType=TIMESTAMP},
+                    #{remarks,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR},
+                    #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_overtime_application_line
+             where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplicationLine">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplicationLine">
+        <![CDATA[
+            update ac_overtime_application_line
+               set oa_order               = #{oaOrder,jdbcType=VARCHAR},
+                   nick_name              = #{nickName,jdbcType=VARCHAR},
+                   user_name              = #{userName,jdbcType=VARCHAR},
+                   position               = #{position,jdbcType=VARCHAR},
+                   start_time             = #{startTime,jdbcType=TIMESTAMP},
+                   end_time               = #{endTime,jdbcType=TIMESTAMP},
+                   total_rest_time        = #{totalRestTime,jdbcType=DOUBLE},
+                   hours                  = #{hours,jdbcType=DOUBLE},
+                   month_hours            = #{monthHours,jdbcType=DOUBLE},
+                   review_startTime       = #{reviewStarttime,jdbcType=TIMESTAMP},
+                   review_endTime         = #{reviewEndtime,jdbcType=TIMESTAMP},
+                   review_total_rest_time = #{reviewTotalRestTime,jdbcType=DOUBLE},
+                   review_hours           = #{reviewHours,jdbcType=DOUBLE},
+                   reviewer_nick_name     = #{reviewerNickName,jdbcType=VARCHAR},
+                   reviewer_user_name     = #{reviewerUserName,jdbcType=VARCHAR},
+                   review_time            = #{reviewTime,jdbcType=TIMESTAMP},
+                   remarks                = #{remarks,jdbcType=VARCHAR},
+                   enabled_flag           = #{enabledFlag,jdbcType=BIT},
+                   attribute1             = #{attribute1,jdbcType=VARCHAR},
+                   attribute2             = #{attribute2,jdbcType=VARCHAR},
+                   attribute3             = #{attribute3,jdbcType=VARCHAR},
+                   attribute4             = #{attribute4,jdbcType=VARCHAR},
+                   attribute5             = #{attribute5,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcOvertimeApplicationLineResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aoal.id = #{id,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcOvertimeApplicationLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcOvertimeApplicationLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

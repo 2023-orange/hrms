@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeTeleDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeTele">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="tele_type" property="teleType" />
+        <result column="tele" property="tele" />
+        <result column="tele_business_flag" property="teleBusinessFlag" />
+        <result column="remarks" property="remarks" />
+        <result column="tele_enabled_flag" property="teleEnabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeTeleResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeTele" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pet.employee_id as pe_id, pet.tele_type, pet.tele, pet.tele_business_flag, pet.remarks,
+            pet.tele_enabled_flag, pet.attribute1, pet.attribute2, pet.attribute3, pet.enabled_flag, pet.id,
+            pet.create_time, pet.create_by, pet.update_time, pet.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.tele_type as ${tAlias}_tele_type,
+            ${tAlias}.tele as ${tAlias}_tele, ${tAlias}.tele_business_flag as ${tAlias}_tele_business_flag,
+            ${tAlias}.remarks as ${tAlias}_remarks, ${tAlias}.tele_enabled_flag as ${tAlias}_tele_enabled_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_tele pet
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pet.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pet.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTele" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_tele (employee_id, tele_type, tele,
+                                          tele_business_flag, remarks,
+                                          tele_enabled_flag, attribute1,
+                                          attribute2, attribute3, enabled_flag,
+                                          create_time, create_by,
+                                          update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{teleType,jdbcType=VARCHAR}, #{tele,jdbcType=VARCHAR},
+                    #{teleBusinessFlag,jdbcType=BIT}, #{remarks,jdbcType=VARCHAR},
+                    #{teleEnabledFlag,jdbcType=BIT}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_tele
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTele">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTele">
+        <![CDATA[
+            update pm_employee_tele
+               set employee_id        = #{employee.id,jdbcType=BIGINT},
+                   tele_type          = #{teleType,jdbcType=VARCHAR},
+                   tele               = #{tele,jdbcType=VARCHAR},
+                   tele_business_flag = #{teleBusinessFlag,jdbcType=BIT},
+                   remarks            = #{remarks,jdbcType=VARCHAR},
+                   tele_enabled_flag  = #{teleEnabledFlag,jdbcType=BIT},
+                   attribute1         = #{attribute1,jdbcType=VARCHAR},
+                   attribute2         = #{attribute2,jdbcType=VARCHAR},
+                   attribute3         = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag       = #{enabledFlag,jdbcType=BIT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeTeleResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pet.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeTeleResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeTeleResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTele">
+        <![CDATA[
+        update pm_employee_tele
+        set enabled_flag       = #{enabledFlag,jdbcType=BIT},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP},
+            update_by          = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeeTeleResultMap">
+        <![CDATA[
+            select
+            pet.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pet.remarks) > 0 then pet.remarks else null end as remarks,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pet.tele) > 0 then pet.tele else null end as tele,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pet.tele_type) > 0 then pet.tele_type else null end as tele_type
+            from pm_employee_tele pet join pm_employee pe on pe.id = pet.employee_id where pet.enabled_flag = 1
+            and pe.enabled_flag = 1 and concat(
+         pet.remarks,pet.tele,pet.tele_type
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+    <insert id="insertByRecruitment" parameterType="com.sunten.hrms.pm.domain.PmEmployeeTele" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_tele (employee_id, tele_type, tele,
+                                          tele_business_flag,
+                                          tele_enabled_flag, enabled_flag,
+                                          create_time, create_by,
+                                          update_time, update_by)
+            values (#{employeeId,jdbcType=BIGINT}, 2, #{tele,jdbcType=VARCHAR},
+                    0, 1, 1,
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+</mapper>

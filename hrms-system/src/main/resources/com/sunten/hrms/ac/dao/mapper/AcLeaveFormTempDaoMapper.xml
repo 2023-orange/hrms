@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcLeaveFormTempDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcLeaveFormTemp">
+        <id column="id" property="id" />
+        <result column="work_card" property="workCard" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="AcLeaveFormTempResultMap" type="com.sunten.hrms.ac.domain.AcLeaveFormTemp" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="pmEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"
+        />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            alft.work_card, alft.start_time, alft.end_time, alft.id, alft.create_time, alft.create_by,
+            alft.update_time, alft.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.start_time as ${tAlias}_start_time,
+            ${tAlias}.end_time as ${tAlias}_end_time, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_leave_form_temp alft
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and alft.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcLeaveFormTemp" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_leave_form_temp (work_card, start_time,
+                                            end_time, create_time,
+                                            create_by, update_time, update_by)
+            values (#{workCard,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+                    #{endTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <insert id="insertCollection" parameterType="java.util.List">
+        <![CDATA[
+            insert into ac_leave_form_temp (work_card, start_time,
+                                            end_time, create_time,
+                                            create_by, update_time, update_by) values
+        ]]>
+        <foreach collection="list" item="item" index="index" separator=",">
+            <![CDATA[
+            (#{item.workCard,jdbcType=VARCHAR}, #{item.startTime,jdbcType=TIMESTAMP},
+                    #{item.endTime,jdbcType=TIMESTAMP}, #{item.createTime,jdbcType=TIMESTAMP},
+                    #{item.createBy,jdbcType=BIGINT}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=BIGINT})
+            ]]>
+        </foreach>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_leave_form_temp
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcLeaveFormTemp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteAll">
+        <![CDATA[
+        truncate table ac_leave_form_temp
+         ]]>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcLeaveFormTemp">
+        <![CDATA[
+            update ac_leave_form_temp
+               set work_card   = #{workCard,jdbcType=VARCHAR},
+                   start_time  = #{startTime,jdbcType=TIMESTAMP},
+                   end_time    = #{endTime,jdbcType=TIMESTAMP},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcLeaveFormTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where alft.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcLeaveFormTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcLeaveFormTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByMatchEmp" resultMap="AcLeaveFormTempResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,
+        ]]>
+        <bind name="tAlias" value="'pe'" />
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+            from ac_leave_form_temp alft, pm_employee pe
+            where right(cast('000000'+rtrim(pe.work_card) as varchar),6) = right(cast('000000'+rtrim(alft.work_card) as varchar),6)
+            and pe.work_attendance_flag = 1
+        ]]>
+    </select>
+
+
+</mapper>

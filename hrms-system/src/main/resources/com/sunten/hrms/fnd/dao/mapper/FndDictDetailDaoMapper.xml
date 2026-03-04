@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndDictDetailDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndDictDetail">
+        <id column="id" property="id" />
+        <result column="label" property="label" />
+        <result column="value" property="value" />
+        <result column="sort" property="sort" />
+        <result column="dict_id" property="dictId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="FndDictDetailResultMap" type="com.sunten.hrms.fnd.domain.FndDictDetail" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fdd.id, fdd.label, fdd.value, fdd.sort, fdd.dict_id, fdd.create_time, fdd.create_by,
+            fdd.update_time, fdd.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.label as ${tAlias}_label,
+            ${tAlias}.value as ${tAlias}_value, ${tAlias}.sort as ${tAlias}_sort,
+            ${tAlias}.dict_id as ${tAlias}_dict_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_dict_detail fdd
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.label != null">
+                <![CDATA[
+               and fdd.name like #{criteria.label,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.value != null">
+                <![CDATA[
+               and fdd.value like #{criteria.value,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.dictName != null">
+                <![CDATA[
+               and fdd.dict_id in (
+                select fd.id
+                  from fnd_dict fd
+                 where fd.name like #{criteria.dictName,jdbcType=VARCHAR})
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndDictDetail" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_dict_detail (label, value, sort,
+                                         dict_id, create_time, create_by,
+                                         update_time, update_by)
+            values (#{label,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR},
+                    #{dict.id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_dict_detail
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndDictDetail">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndDictDetail">
+        <![CDATA[
+            update fnd_dict_detail
+               set label       = #{label,jdbcType=VARCHAR},
+                   value       = #{value,jdbcType=VARCHAR},
+                   sort        = #{sort,jdbcType=VARCHAR},
+                   dict_id     = #{dict.id,jdbcType=BIGINT},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndDictDetailResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fdd.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndDictDetailResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+			 order by fdd.sort
+		]]>
+    </select>
+
+    <select id="selectDetailByNameAndLabel" resultType="com.sunten.hrms.fnd.domain.FndDictDetail">
+        <![CDATA[
+			 select
+			 fdd.*  from fnd_dict_detail fdd, fnd_dict fd
+			 where fd.name = #{dictName, jdbcType = VARCHAR}
+			 AND fdd.label = #{label, jdbcType = VARCHAR}
+		]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndDictDetailResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

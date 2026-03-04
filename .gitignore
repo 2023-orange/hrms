@@ -1,0 +1,12 @@
+# 编译后的目录
+target/
+*.class
+*.jar
+*.war
+
+# IDEA 配置文件
+.idea/
+*.iml
+
+# 日志文件
+*.log

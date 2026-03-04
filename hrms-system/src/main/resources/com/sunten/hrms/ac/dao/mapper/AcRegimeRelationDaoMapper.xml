@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcRegimeRelationDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcRegimeRelation" autoMapping="true">
+        <id column="id" property="id" />
+        <result column="regimea_id" property="regimeaId" />
+        <result column="regime_time_id" property="regimeTimeId" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcRegimeRelationResultMap" type="com.sunten.hrms.ac.domain.AcRegimeRelation" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="acRegime"
+                     javaType="com.sunten.hrms.ac.domain.AcRegime"
+                     resultMap="com.sunten.hrms.ac.dao.AcRegimeDao.BaseResultMap"
+                     columnPrefix="ar_" />
+        <association property="acRegimeTime"
+                     javaType="com.sunten.hrms.ac.domain.AcRegimeTime"
+                     resultMap="com.sunten.hrms.ac.dao.AcRegimeTimeDao.AcRegimeTimeResultMap"
+                     columnPrefix="art_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            arr.id, arr.regimea_id, arr.regime_time_id, arr.attribute1, arr.attribute2, arr.attribute3,
+            arr.enabled_flag, arr.create_by, arr.create_time, arr.update_by, arr.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.regimea_id as ${tAlias}_regimea_id,
+            ${tAlias}.regime_time_id as ${tAlias}_regime_time_id, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'ar'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcRegimeDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'art'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcRegimeTimeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from ac_regime_relation arr,ac_regime ar,ac_regime_time art
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+             and arr.regimea_id = ar.id
+             and arr.regime_time_id = art.id
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.regimeTimeId != null">
+            <![CDATA[
+                and art.id = #{criteria.regimeTimeId,jdbcType=BIGINT}
+            ]]>
+        </if>
+        <if test="criteria.enabled != null">
+            <![CDATA[
+            and arr.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+        ]]>
+        </if>
+        <if test="criteria.regimeId != null">
+            <![CDATA[
+        and arr.regimea_id = #{criteria.regimeId,jdbcType=BIT}
+        ]]>
+        </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcRegimeRelation" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_regime_relation (regimea_id, regime_time_id,
+                                            attribute1, attribute2,
+                                            attribute3, enabled_flag, create_by,
+                                            create_time, update_by,
+                                            update_time)
+            values (#{regimeaId,jdbcType=BIGINT}, #{regimeTimeId,jdbcType=BIGINT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <update id="deleteByRegimeIdAndRegimeTimeId" parameterType="com.sunten.hrms.ac.domain.AcRegimeRelation">
+        <![CDATA[
+            update ac_regime_relation set enabled_flag = 1
+            where regimea_id = #{regimeaId,jdbcType=BIGINT}
+            and regime_time_id #{regimeTimeId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <insert id="insertCollection" parameterType="java.util.List">
+        <![CDATA[
+        insert into ac_regime_relation (regimea_id, regime_time_id,
+        attribute1, attribute2,
+        attribute3, enabled_flag, create_by,
+        create_time, update_by,
+        update_time)
+        values
+        ]]>
+        <foreach collection="list" item="item" index="index" separator=",">
+            <![CDATA[
+            (#{item.regimeaId,jdbcType=BIGINT}, #{item.regimeTimeId,jdbcType=BIGINT},
+            #{item.attribute1,jdbcType=VARCHAR}, #{item.attribute2,jdbcType=VARCHAR},
+            #{item.attribute3,jdbcType=VARCHAR}, #{item.enabledFlag,jdbcType=BIT}, #{item.createBy,jdbcType=BIGINT},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=BIGINT},
+            #{item.updateTime,jdbcType=TIMESTAMP})
+            ]]>
+        </foreach>
+    </insert>
+
+    <update id="deleteByEnabled" parameterType="com.sunten.hrms.ac.domain.AcRegimeRelation">
+        <![CDATA[
+        update ac_regime_relation set enabled_flag = 0,
+                update_by        = #{updateBy,jdbcType=BIGINT},
+                update_time      = #{updateTime,jdbcType=TIMESTAMP}
+            where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="deleteCollection" parameterType="com.sunten.hrms.ac.domain.AcRegimeRelation">
+        <foreach collection="list" item="item" index="index" separator=";">
+            <![CDATA[
+            update ac_regime_relation set enabled_flag = 0,
+                update_by        = #{item.updateBy,jdbcType=BIGINT},
+                update_time      = #{item.updateTime,jdbcType=TIMESTAMP}
+            where id = #{item.id,jdbcType=BIGINT}
+        ]]>
+        </foreach>
+    </update>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_regime_relation
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcRegimeRelation">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcRegimeRelation">
+        <![CDATA[
+            update ac_regime_relation
+               set regimea_id     = #{regimeaId,jdbcType=BIGINT},
+                   regime_time_id = #{regimeTimeId,jdbcType=BIGINT},
+                   attribute1     = #{attribute1,jdbcType=VARCHAR},
+                   attribute2     = #{attribute2,jdbcType=VARCHAR},
+                   attribute3     = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag   = #{enabledFlag,jdbcType=BIT},
+                   update_by      = #{updateBy,jdbcType=BIGINT},
+                   update_time    = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcRegimeRelationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where arr.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcRegimeRelationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcRegimeRelationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

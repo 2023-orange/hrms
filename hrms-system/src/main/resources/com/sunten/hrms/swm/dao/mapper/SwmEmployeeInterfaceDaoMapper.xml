@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmEmployeeInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmEmployeeInterface">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="group_id" property="groupId" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="lump_sum_wage" property="lumpSumWage" />
+        <result column="post_skill_salary" property="postSkillSalary" />
+        <result column="target_performance_pay" property="targetPerformancePay" />
+        <result column="base_pay" property="basePay" />
+        <result column="personal_deductibles" property="personalDeductibles" />
+        <result column="company_deductibles" property="companyDeductibles" />
+        <result column="personal_deduct_accumulation_fund" property="personalDeductAccumulationFund" />
+        <result column="company_deduct_accumulation_fund" property="companyDeductAccumulationFund" />
+        <result column="high_temperature_subsidy" property="highTemperatureSubsidy" />
+        <result column="safety_accumulation_award" property="safetyAccumulationAward"/>
+        <result column="seniority_allowance" property="seniorityAllowance"/>
+        <result column="transportation_allowance" property="transportationAllowance"/>
+        <result column="one_child_subsidy" property="oneChildSubsidy"/>
+        <result column="post_subsidy" property="postSubsidy"/>
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="SwmEmployeeInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmEmployeeInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sei.employee_id, sei.work_card, sei.name, sei.group_id, sei.operation_code, sei.error_msg,
+            sei.data_status, sei.lump_sum_wage, sei.post_skill_salary, sei.target_performance_pay,
+            sei.base_pay, sei.personal_deductibles, sei.company_deductibles,
+            sei.personal_deduct_accumulation_fund, sei.company_deduct_accumulation_fund,
+            sei.high_temperature_subsidy,
+            sei.safety_accumulation_award, sei.seniority_allowance, sei.transportation_allowance, sei.one_child_subsidy,
+            sei.post_subsidy,
+            sei.id, sei.create_time, sei.create_by, sei.update_time,
+            sei.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.lump_sum_wage as ${tAlias}_lump_sum_wage,
+            ${tAlias}.post_skill_salary as ${tAlias}_post_skill_salary,
+            ${tAlias}.target_performance_pay as ${tAlias}_target_performance_pay,
+            ${tAlias}.base_pay as ${tAlias}_base_pay,
+            ${tAlias}.personal_deductibles as ${tAlias}_personal_deductibles,
+            ${tAlias}.company_deductibles as ${tAlias}_company_deductibles,
+            ${tAlias}.personal_deduct_accumulation_fund as ${tAlias}_personal_deduct_accumulation_fund,
+            ${tAlias}.company_deduct_accumulation_fund as ${tAlias}_company_deduct_accumulation_fund,
+            ${tAlias}.high_temperature_subsidy as ${tAlias}_high_temperature_subsidy,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_employee_interface sei
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and sei.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and sei.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_employee_interface (employee_id, work_card, name,
+                                                group_id, operation_code, error_msg,
+                                                data_status, lump_sum_wage,
+                                                post_skill_salary, target_performance_pay,
+                                                base_pay, personal_deductibles,
+                                                company_deductibles, personal_deduct_accumulation_fund,
+                                                company_deduct_accumulation_fund,
+                                                high_temperature_subsidy, create_time,
+                                                create_by, update_time, update_by)
+            values (#{employeeId,jdbcType=BIGINT}, #{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                    #{groupId,jdbcType=BIGINT}, #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR},
+                    #{dataStatus,jdbcType=CHAR}, #{lumpSumWage,jdbcType=DECIMAL},
+                    #{postSkillSalary,jdbcType=DECIMAL}, #{targetPerformancePay,jdbcType=DECIMAL},
+                    #{basePay,jdbcType=DECIMAL}, #{personalDeductibles,jdbcType=DECIMAL},
+                    #{companyDeductibles,jdbcType=DECIMAL}, #{personalDeductAccumulationFund,jdbcType=DECIMAL},
+                    #{companyDeductAccumulationFund,jdbcType=DECIMAL},
+                    #{highTemperatureSubsidy,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_employee_interface
+             where id = #{id,jdbcType=NUMERIC}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInterface">
+        <![CDATA[
+            update swm_employee_interface
+               set employee_id                       = #{employeeId,jdbcType=BIGINT},
+                   work_card                         = #{workCard,jdbcType=VARCHAR},
+                   name                              = #{name,jdbcType=VARCHAR},
+                   group_id                          = #{groupId,jdbcType=BIGINT},
+                   operation_code                    = #{operationCode,jdbcType=CHAR},
+                   error_msg                         = #{errorMsg,jdbcType=VARCHAR},
+                   data_status                       = #{dataStatus,jdbcType=CHAR},
+                   lump_sum_wage                     = #{lumpSumWage,jdbcType=DECIMAL},
+                   post_skill_salary                 = #{postSkillSalary,jdbcType=DECIMAL},
+                   target_performance_pay            = #{targetPerformancePay,jdbcType=DECIMAL},
+                   base_pay                          = #{basePay,jdbcType=DECIMAL},
+                   personal_deductibles              = #{personalDeductibles,jdbcType=DECIMAL},
+                   company_deductibles               = #{companyDeductibles,jdbcType=DECIMAL},
+                   personal_deduct_accumulation_fund = #{personalDeductAccumulationFund,jdbcType=DECIMAL},
+                   company_deduct_accumulation_fund  = #{companyDeductAccumulationFund,jdbcType=DECIMAL},
+                   high_temperature_subsidy          = #{highTemperatureSubsidy,jdbcType=DECIMAL},
+                   update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=NUMERIC}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmEmployeeInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sei.id = #{id,jdbcType=NUMERIC}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmEmployeeInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmEmployeeInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getSwmEmployeeSummaryByImportList" resultMap="SwmEmployeeInterfaceResultMap">
+       <![CDATA[
+            select sum(sei.lump_sum_wage) as lump_sum_wage,
+            sum(sei.post_skill_salary) as post_skill_salary,
+            sum(sei.target_performance_pay) as target_performance_pay,
+            sum(sei.base_pay) as base_pay,
+            sum(sei.post_subsidy) as post_subsidy,
+            sum(sei.seniority_allowance) as seniority_allowance,
+            sum(sei.transportation_allowance) as transportation_allowance,
+            sum(sei.one_child_subsidy) as one_child_subsidy,
+            sum(sei.personal_deductibles) as personal_deductibles,
+            sum(sei.company_deductibles) as company_deductibles,
+            sum(sei.personal_deduct_accumulation_fund) as personal_deduct_accumulation_fund,
+            sum(sei.company_deduct_accumulation_fund) as company_deduct_accumulation_fund,
+            sum(sei.safety_accumulation_award) as safety_accumulation_award,
+            sum(sei.high_temperature_subsidy) as high_temperature_subsidy
+            from swm_employee_interface sei where sei.data_status = 'T'
+        ]]>
+        <if test="workCards != null and workCards.size > 0">
+            <![CDATA[
+                        and
+            sei.work_card in (]]>
+            <foreach collection="workCards" item="item" index="index" separator=",">
+                <![CDATA[
+                    right(replicate('0',6) + convert(varchar(6),#{item}),6)
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+        <if test="groupIds != null and groupIds.size > 0">
+            <![CDATA[
+                        and
+            sei.group_id in (]]>
+            <foreach collection="groupIds" item="groupId" index="index" separator=",">
+                <![CDATA[
+                    #{groupId}
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+    </select>
+
+    <select id="testParam" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInterface" resultType="java.lang.Integer">
+            <![CDATA[
+            SELECT
+
+           1
+
+
+              FROM swm_employee se
+                WHERE ( 1 = 1
+                ]]>
+
+        <if test="lumpSumWage != null "> <![CDATA[ AND  ISNULL(se.lump_sum_wage, 0) = #{lumpSumWage,jdbcType=DECIMAL} ]]> </if>
+        <if test="postSkillSalary != null "> <![CDATA[ AND  ISNULL(se.post_skill_salary, 0) = #{postSkillSalary,jdbcType=DECIMAL} ]]> </if>
+        <if test="targetPerformancePay != null "> <![CDATA[ AND  ISNULL(se.target_performance_pay, 0) = #{targetPerformancePay,jdbcType=DECIMAL} ]]> </if>
+        <if test="basePay != null "> <![CDATA[ AND  ISNULL(se.base_pay, 0) = #{basePay,jdbcType=DECIMAL} ]]> </if>
+        <if test="personalDeductibles != null "> <![CDATA[ AND  ISNULL(se.personal_deductibles, 0) = #{personalDeductibles,jdbcType=DECIMAL} ]]> </if>
+        <if test="companyDeductibles != null "> <![CDATA[ AND  ISNULL(se.company_deductibles, 0) = #{companyDeductibles,jdbcType=DECIMAL} ]]> </if>
+        <if test="personalDeductAccumulationFund != null "> <![CDATA[ AND  ISNULL(se.personal_deduct_accumulation_fund, 0) = #{personalDeductAccumulationFund,jdbcType=DECIMAL} ]]> </if>
+        <if test="companyDeductAccumulationFund != null "> <![CDATA[ AND  ISNULL(se.company_deduct_accumulation_fund, 0) = #{companyDeductAccumulationFund,jdbcType=DECIMAL} ]]> </if>
+        <if test="highTemperatureSubsidy != null "> <![CDATA[ AND  ISNULL(se.high_temperature_subsidy, 0) = #{highTemperatureSubsidy,jdbcType=DECIMAL} ]]> </if>
+        <if test="safetyAccumulationAward != null "> <![CDATA[ AND  ISNULL(se.safety_accumulation_award, 0) = #{safetyAccumulationAward,jdbcType=DECIMAL} ]]> </if>
+        <if test="seniorityAllowance != null "> <![CDATA[ AND  ISNULL(se.seniority_allowance, 0) = #{seniorityAllowance,jdbcType=DECIMAL} ]]> </if>
+        <if test="transportationAllowance != null "> <![CDATA[ AND  ISNULL(se.transportation_allowance, 0) = #{transportationAllowance,jdbcType=DECIMAL} ]]> </if>
+        <if test="oneChildSubsidy != null "> <![CDATA[ AND  ISNULL(se.one_child_subsidy, 0) = #{oneChildSubsidy,jdbcType=DECIMAL} ]]> </if>
+        <if test="postSubsidy != null "> <![CDATA[ AND  ISNULL(se.post_subsidy, 0) = #{postSubsidy,jdbcType=DECIMAL} ]]> </if>
+        <![CDATA[
+        )
+                AND RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( CAST( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+
+                ]]>
+    </select>
+
+
+    <insert id="insertSwmEmployeeInterface" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeInterface">
+       <![CDATA[
+                        insert into swm_employee_interface (employee_id, work_card, name,
+                                                group_id, operation_code, error_msg,
+                                                data_status, lump_sum_wage,
+                                                post_skill_salary, target_performance_pay,
+                                                base_pay, personal_deductibles,
+                                                company_deductibles, personal_deduct_accumulation_fund,
+                                                company_deduct_accumulation_fund,
+                                                high_temperature_subsidy,
+                                                safety_accumulation_award,
+                                                seniority_allowance,
+                                                transportation_allowance,
+                                                one_child_subsidy,
+                                                 post_subsidy,
+                                                 create_time,
+                                                create_by, update_time, update_by)
+
+                        select
+    ISNULL(
+            (
+            SELECT
+                se.employee_id
+            FROM
+                swm_employee se
+            WHERE
+                RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+                and se.name = #{name, jdbcType = VARCHAR}
+                AND se.work_flag = 1
+                ),- 1
+           ),
+           #{workCard, jdbcType = VARCHAR}, #{name, jdbcType = VARCHAR}, #{groupId, jdbcType = BIGINT}, 'U',
+           CASE WHEN (
+            SELECT ISNULL((SELECT se.employee_id FROM swm_employee se WHERE
+            RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            AND se.work_flag = 1 and se.name = #{name, jdbcType = VARCHAR}
+            ),- 1)) = - 1 THEN '工号或姓名匹配失败' ELSE '' END,
+           CASE WHEN (
+            SELECT ISNULL((SELECT se.employee_id FROM swm_employee se WHERE
+            RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( CAST( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            AND se.work_flag = 1 and se.name = #{name, jdbcType = VARCHAR}
+            ),- 1)) = - 1 THEN 'F'
+            WHEN EXISTS (
+            SELECT 1
+              FROM swm_employee se
+                WHERE ( 1 = 1
+                ]]>
+        <if test="lumpSumWage != null "> <![CDATA[ AND  ISNULL(se.lump_sum_wage, 0) = #{lumpSumWage,jdbcType=DECIMAL} ]]> </if>
+        <if test="postSkillSalary != null "> <![CDATA[ AND  ISNULL(se.post_skill_salary, 0) = #{postSkillSalary,jdbcType=DECIMAL} ]]> </if>
+        <if test="targetPerformancePay != null "> <![CDATA[ AND  ISNULL(se.target_performance_pay, 0) = #{targetPerformancePay,jdbcType=DECIMAL} ]]> </if>
+        <if test="basePay != null "> <![CDATA[ AND  ISNULL(se.base_pay, 0) = #{basePay,jdbcType=DECIMAL} ]]> </if>
+        <if test="personalDeductibles != null "> <![CDATA[ AND  ISNULL(se.personal_deductibles, 0) = #{personalDeductibles,jdbcType=DECIMAL} ]]> </if>
+        <if test="companyDeductibles != null "> <![CDATA[ AND  ISNULL(se.company_deductibles, 0) = #{companyDeductibles,jdbcType=DECIMAL} ]]> </if>
+        <if test="personalDeductAccumulationFund != null "> <![CDATA[ AND  ISNULL(se.personal_deduct_accumulation_fund, 0) = #{personalDeductAccumulationFund,jdbcType=DECIMAL} ]]> </if>
+        <if test="companyDeductAccumulationFund != null "> <![CDATA[ AND  ISNULL(se.company_deduct_accumulation_fund, 0) = #{companyDeductAccumulationFund,jdbcType=DECIMAL} ]]> </if>
+        <if test="highTemperatureSubsidy != null "> <![CDATA[ AND  ISNULL(se.high_temperature_subsidy, 0) = #{highTemperatureSubsidy,jdbcType=DECIMAL} ]]> </if>
+        <if test="safetyAccumulationAward != null "> <![CDATA[ AND  ISNULL(se.safety_accumulation_award, 0) = #{safetyAccumulationAward,jdbcType=DECIMAL} ]]> </if>
+        <if test="seniorityAllowance != null "> <![CDATA[ AND  ISNULL(se.seniority_allowance, 0) = #{seniorityAllowance,jdbcType=DECIMAL} ]]> </if>
+        <if test="transportationAllowance != null "> <![CDATA[ AND  ISNULL(se.transportation_allowance, 0) = #{transportationAllowance,jdbcType=DECIMAL} ]]> </if>
+        <if test="oneChildSubsidy != null "> <![CDATA[ AND  ISNULL(se.one_child_subsidy, 0) = #{oneChildSubsidy,jdbcType=DECIMAL} ]]> </if>
+        <if test="postSubsidy != null "> <![CDATA[ AND  ISNULL(se.post_subsidy, 0) = #{postSubsidy,jdbcType=DECIMAL} ]]> </if>)
+                AND RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( CAST( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            )
+            THEN 'W'
+            ELSE 'T'
+            END,
+            #{lumpSumWage,jdbcType=DECIMAL},
+            #{postSkillSalary,jdbcType=DECIMAL},
+            #{targetPerformancePay,jdbcType=DECIMAL},
+            #{basePay,jdbcType=DECIMAL}, #{personalDeductibles,jdbcType=DECIMAL},
+            #{companyDeductibles,jdbcType=DECIMAL}, #{personalDeductAccumulationFund,jdbcType=DECIMAL},
+            #{companyDeductAccumulationFund,jdbcType=DECIMAL},
+            #{highTemperatureSubsidy,jdbcType=DECIMAL}, #{safetyAccumulationAward, jdbcType=DECIMAL}, #{seniorityAllowance, jdbcType=DECIMAL},
+            #{transportationAllowance, jdbcType=DECIMAL},#{oneChildSubsidy, jdbcType=DECIMAL}, #{postSubsidy, jdbcType=DECIMAL},
+            getdate(),  #{createBy, jdbcType = BIGINT}, getdate(), #{updateBy, jdbcType = BIGINT}
+    </insert>
+
+    <insert id="interfaceToHistory" parameterType="java.lang.Long">
+        <![CDATA[
+                insert into swm_employee_history (work_card,employee_name,post_skill_salary,target_performance_pay,division_contract_flag,range_change,
+				create_time,create_by,update_time,update_by,remarks
+				,se_id,lump_sum_wage ,base_pay,post_subsidy,seniority_allowance,personal_deductibles,company_deductibles,
+				personal_deduct_accumulation_fund,company_deduct_accumulation_fund)
+				select
+				sei.work_card,sei.name,ISNULL(sei.post_skill_salary, se.post_skill_salary),isnull(sei.target_performance_pay,se.target_performance_pay),
+				se.division_contract_flag,
+				isnull(isnull(sei.post_skill_salary,isnull(se.post_skill_salary,0))
+				 +isnull(sei.target_performance_pay,isnull(se.target_performance_pay,0))
+				 +isnull(sei.lump_sum_wage,isnull(se.lump_sum_wage,0))
+				 +isnull(sei.base_pay,isnull(se.base_pay,0))
+				-isnull(se.post_skill_salary,0)-isnull(se.target_performance_pay,0)-isnull(se.lump_sum_wage,0)-isnull(se.base_pay,0),0) as range_change
+				,sei.create_time,
+				sei.create_by,sei.update_time,sei.update_by,'EXCEL批量导入',
+				se.id,isnull(sei.lump_sum_wage,se.lump_sum_wage),isnull(sei.base_pay,se.base_pay),
+				sei.post_subsidy,sei.seniority_allowance,sei.personal_deductibles,sei.company_deductibles,
+				sei.personal_deduct_accumulation_fund,sei.company_deduct_accumulation_fund
+                from swm_employee se join swm_employee_interface sei on se.employee_id = sei.employee_id  AND se.work_flag = 1 AND sei.data_status='T'
+                and sei.group_id = #{groupId, jdbcType = BIGINT}
+        ]]>
+    </insert>
+
+</mapper>
+

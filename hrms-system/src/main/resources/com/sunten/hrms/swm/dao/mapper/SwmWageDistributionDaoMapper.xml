@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmWageDistributionDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmWageDistribution">
+        <id column="id" property="id" />
+        <result column="income_period" property="incomePeriod" />
+        <result column="distribution_method_id" property="distributionMethodId" />
+        <result column="distribution_method" property="distributionMethod" />
+        <result column="generation_differentiation_flag" property="generationDifferentiationFlag" />
+        <result column="production_factor" property="productionFactor" />
+        <result column="quality_factor" property="qualityFactor" />
+        <result column="attribute5" property="attribute5" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="enabled_flag" property="enabledFlag"/>
+    </resultMap>
+
+    <resultMap id="SwmWageDistributionResultMap" type="com.sunten.hrms.swm.domain.SwmWageDistribution" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <parameterMap id="mspMap" type="java.util.Map">
+        <parameter property="period" mode="IN" jdbcType="VARCHAR"/>
+        <parameter property="userId" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="resultStr" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            swd.id, swd.income_period, swd.distribution_method_id, swd.distribution_method,
+            swd.generation_differentiation_flag, swd.production_factor, swd.quality_factor, swd.attribute5,
+            swd.attribute4, swd.attribute3, swd.attribute1, swd.attribute2, swd.create_time, swd.create_by,
+            swd.update_time, swd.update_by, swd.enabled_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.income_period as ${tAlias}_income_period,
+            ${tAlias}.distribution_method_department_id as ${tAlias}_distribution_method_id,
+            ${tAlias}.distribution_method as ${tAlias}_distribution_method,
+            ${tAlias}.generation_differentiation_flag as ${tAlias}_generation_differentiation_flag,
+            ${tAlias}.production_factor as ${tAlias}_production_factor,
+            ${tAlias}.quality_factor as ${tAlias}_quality_factor, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_wage_distribution swd
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and swd.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.period != null">
+                <![CDATA[
+                    and swd.income_period =  #{criteria.period,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmWageDistribution" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_wage_distribution (income_period, distribution_method_id,
+                                               distribution_method, generation_differentiation_flag,
+                                               production_factor, quality_factor,
+                                               attribute5, attribute4,
+                                               attribute3, attribute1,
+                                               attribute2, create_time,
+                                               create_by, update_time, update_by,
+                                               enabled_flag)
+            values (#{incomePeriod,jdbcType=VARCHAR}, #{distributionMethodId,jdbcType=BIGINT},
+                    #{distributionMethod,jdbcType=VARCHAR}, #{generationDifferentiationFlag,jdbcType=BIT},
+                    #{productionFactor,jdbcType=DECIMAL}, #{qualityFactor,jdbcType=DECIMAL},
+                    #{attribute5,jdbcType=DECIMAL}, #{attribute4,jdbcType=DECIMAL},
+                    #{attribute3,jdbcType=DECIMAL}, #{attribute1,jdbcType=DECIMAL},
+                    #{attribute2,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{enabledFlag, jdbcType=BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_wage_distribution
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmWageDistribution">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmWageDistribution">
+        <![CDATA[
+            update swm_wage_distribution
+               set income_period                   = #{incomePeriod,jdbcType=VARCHAR},
+                   distribution_method_id          = #{distributionMethodId,jdbcType=BIGINT},
+                   distribution_method             = #{distributionMethod,jdbcType=VARCHAR},
+                   generation_differentiation_flag = #{generationDifferentiationFlag,jdbcType=BIT},
+                   production_factor               = #{productionFactor,jdbcType=DECIMAL},
+                   quality_factor                  = #{qualityFactor,jdbcType=DECIMAL},
+                   attribute5                      = #{attribute5,jdbcType=DECIMAL},
+                   attribute4                      = #{attribute4,jdbcType=DECIMAL},
+                   attribute3                      = #{attribute3,jdbcType=DECIMAL},
+                   attribute1                      = #{attribute1,jdbcType=DECIMAL},
+                   attribute2                      = #{attribute2,jdbcType=DECIMAL},
+                   update_time                     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                       = #{updateBy,jdbcType=BIGINT},
+                   enabled_flag                    = #{enabledFlag, jdbcType=BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmWageDistributionResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where swd.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmWageDistributionResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmWageDistributionResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <select id="generateWageDistributionByMsp" parameterMap="mspMap" statementType="CALLABLE">
+        <![CDATA[
+            {call msp_create_wage_distribution(?,?,?)}
+        ]]>
+    </select>
+
+    <update id="deleteByPeriod" parameterType="java.lang.String">
+         <![CDATA[
+            update swm_wage_distribution set enabled_flag = 0 where income_period = #{period, jdbcType = VARCHAR}  and enabled_flag = 1
+        ]]>
+    </update>
+
+    <select id="countByPeriod" parameterType="java.lang.String" resultType="java.lang.Integer">
+                <![CDATA[
+            select count(1) from  swm_wage_distribution swd where  swd.enabled_flag = 1 and  swd.income_period = #{period, jdbcType = VARCHAR}
+        ]]>
+    </select>
+
+</mapper>

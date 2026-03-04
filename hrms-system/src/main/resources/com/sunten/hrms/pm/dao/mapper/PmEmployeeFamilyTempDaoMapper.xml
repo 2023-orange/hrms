@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeFamilyTempDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeFamilyTemp">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="name" property="name" />
+        <result column="relationship" property="relationship" />
+        <result column="company" property="company" />
+        <result column="post" property="post" />
+        <result column="tele" property="tele" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="instructions_flag" property="instructionsFlag" />
+        <result column="check_flag" property="checkFlag" />
+        <result column="remarks" property="remarks" />
+        <result column="family_id" property="familyId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeFamilyTempResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeFamilyTemp" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employeeFamily"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeFamily"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeFamilyDao.PmEmployeeFamilyResultMap"
+                     columnPrefix="pef_" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            peft.employee_id as pe_id, peft.name, peft.relationship, peft.company, peft.post, peft.tele, peft.gender,
+            peft.birthday, peft.mobile_phone, peft.attribute1, peft.attribute2, peft.attribute3,
+            peft.enabled_flag, peft.instructions_flag, peft.check_flag, peft.remarks, peft.family_id as pef_id, peft.id,
+            peft.create_time, peft.create_by, peft.update_time, peft.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.name as ${tAlias}_name,
+            ${tAlias}.relationship as ${tAlias}_relationship, ${tAlias}.company as ${tAlias}_company,
+            ${tAlias}.post as ${tAlias}_post, ${tAlias}.tele as ${tAlias}_tele,
+            ${tAlias}.gender as ${tAlias}_gender, ${tAlias}.birthday as ${tAlias}_birthday,
+            ${tAlias}.mobile_phone as ${tAlias}_mobile_phone, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.instructions_flag as ${tAlias}_instructions_flag,
+            ${tAlias}.check_flag as ${tAlias}_check_flag, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.family_id as ${tAlias}_pef_id, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_family_temp peft
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and peft.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.checkFlag != null">
+                <![CDATA[
+               and peft.check_flag = #{criteria.checkFlag,jdbcType=CHAR}
+                ]]>
+            </if>
+            <if test="criteria.instructionsFlag != null">
+                <![CDATA[
+               and peft.instructions_flag = #{criteria.instructionsFlag,jdbcType=CHAR}
+                ]]>
+            </if>
+            <if test="criteria.familyId != null">
+                <![CDATA[
+               and peft.family_id = #{criteria.familyId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and peft.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeFamilyTemp">
+        <![CDATA[
+            insert into pm_employee_family_temp (employee_id, name,
+                                                 relationship, company, post,
+                                                 tele, gender, birthday,
+                                                 mobile_phone, attribute1,
+                                                 attribute2, attribute3, enabled_flag,
+                                                 instructions_flag, check_flag, remarks,
+                                                 family_id, create_time, create_by,
+                                                 update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+                    #{relationship,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR},
+                    #{tele,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},
+                    #{mobilePhone,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{instructionsFlag,jdbcType=CHAR}, #{checkFlag,jdbcType=CHAR}, #{remarks,jdbcType=VARCHAR},
+                    #{employeeFamily.id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_family_temp
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeFamilyTemp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeFamilyTemp">
+        <![CDATA[
+            update pm_employee_family_temp
+               set employee_id       = #{employee.id,jdbcType=BIGINT},
+                   name              = #{name,jdbcType=VARCHAR},
+                   relationship      = #{relationship,jdbcType=VARCHAR},
+                   company           = #{company,jdbcType=VARCHAR},
+                   post              = #{post,jdbcType=VARCHAR},
+                   tele              = #{tele,jdbcType=VARCHAR},
+                   gender            = #{gender,jdbcType=VARCHAR},
+                   birthday          = #{birthday,jdbcType=DATE},
+                   mobile_phone      = #{mobilePhone,jdbcType=VARCHAR},
+                   attribute1        = #{attribute1,jdbcType=VARCHAR},
+                   attribute2        = #{attribute2,jdbcType=VARCHAR},
+                   attribute3        = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   instructions_flag = #{instructionsFlag,jdbcType=CHAR},
+                   check_flag        = #{checkFlag,jdbcType=CHAR},
+                   remarks           = #{remarks,jdbcType=VARCHAR},
+                   family_id         = #{employeeFamily.id,jdbcType=INTEGER},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeFamilyTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where peft.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeFamilyTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeFamilyTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeFamilyTemp">
+        <![CDATA[
+        update pm_employee_family_temp
+        set enabled_flag      = #{enabledFlag,jdbcType=BIT},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateCheckFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeFamilyTemp">
+        <![CDATA[
+        update pm_employee_family_temp
+        set check_flag        = #{checkFlag,jdbcType=CHAR},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+</mapper>

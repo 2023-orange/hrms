@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.erp.fnd.dao.TbaTestDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.erp.fnd.domain.TbaTest">
+        <id column="id" property="id" />
+        <result column="description" property="description" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tt.id, tt.description
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.description as ${tAlias}_description
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from tba_test tt
+        ]]>
+    </sql>
+
+
+    <insert id="insertAllColumn" parameterType="com.sunten.erp.fnd.domain.TbaTest">
+        <![CDATA[
+            insert into tba_test (id, description)
+            values (#{id,jdbcType=NUMERIC}, #{description,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+
+    <select id="listAllPage" resultMap="BaseResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.PmLeaveApplicationLineDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.PmLeaveApplicationLine">
+        <result column="id" property="id" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="leave_type" property="leaveType" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="number" property="number" />
+        <result column="version" property="version" />
+        <result column="work_number" property="workNumber" />
+        <result column="hr_nick_name" property="hrNickName" />
+        <result column="hr_time" property="hrTime" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="PmLeaveApplicationLineResultMap" type="com.sunten.hrms.ac.domain.PmLeaveApplicationLine" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            plal.id, plal.oa_order, plal.leave_type, plal.start_time, plal.end_time, plal.number, plal.version, 
+            plal.work_number, plal.hr_nick_name, plal.hr_time, plal.enabled_flag, plal.attribute1, 
+            plal.attribute2, plal.attribute3, plal.attribute4, plal.attribute5, plal.create_by, 
+            plal.create_time 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.oa_order as ${tAlias}_oa_order, 
+            ${tAlias}.leave_type as ${tAlias}_leave_type, ${tAlias}.start_time as ${tAlias}_start_time, 
+            ${tAlias}.end_time as ${tAlias}_end_time, ${tAlias}.number as ${tAlias}_number, 
+            ${tAlias}.version as ${tAlias}_version, ${tAlias}.work_number as ${tAlias}_work_number, 
+            ${tAlias}.hr_nick_name as ${tAlias}_hr_nick_name, ${tAlias}.hr_time as ${tAlias}_hr_time, 
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1, 
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3, 
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5, 
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_leave_application_line plal
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and plal.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.PmLeaveApplicationLine">
+        <![CDATA[
+            insert into ac_leave_application_line (id, oa_order, leave_type,
+                                                   start_time, end_time, number,
+                                                   version, work_number, hr_nick_name,
+                                                   hr_time, enabled_flag, attribute1,
+                                                   attribute2, attribute3,
+                                                   attribute4, attribute5,
+                                                   create_by, create_time)
+            values (#{id,jdbcType=INTEGER}, #{oaOrder,jdbcType=VARCHAR}, #{leaveType,jdbcType=VARCHAR},
+                    #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{number,jdbcType=DOUBLE},
+                    #{version,jdbcType=INTEGER}, #{workNumber,jdbcType=DOUBLE}, #{hrNickName,jdbcType=VARCHAR},
+                    #{hrTime,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=BIGINT}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR},
+                    #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_leave_application_line
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.PmLeaveApplicationLine">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.PmLeaveApplicationLine">
+        <![CDATA[
+            update ac_leave_application_line
+               set id           = #{id,jdbcType=INTEGER},
+                   oa_order     = #{oaOrder,jdbcType=VARCHAR},
+                   leave_type   = #{leaveType,jdbcType=VARCHAR},
+                   start_time   = #{startTime,jdbcType=TIMESTAMP},
+                   end_time     = #{endTime,jdbcType=TIMESTAMP},
+                   number       = #{number,jdbcType=DOUBLE},
+                   version      = #{version,jdbcType=INTEGER},
+                   work_number  = #{workNumber,jdbcType=DOUBLE},
+                   hr_nick_name = #{hrNickName,jdbcType=VARCHAR},
+                   hr_time      = #{hrTime,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=BIGINT},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   attribute4   = #{attribute4,jdbcType=VARCHAR},
+                   attribute5   = #{attribute5,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmLeaveApplicationLineResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmLeaveApplicationLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmLeaveApplicationLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

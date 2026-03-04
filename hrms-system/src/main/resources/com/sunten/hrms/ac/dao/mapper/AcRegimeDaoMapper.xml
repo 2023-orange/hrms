@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcRegimeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcRegime">
+        <id column="id" property="id" />
+        <result column="regime_name" property="regimeName" />
+        <result column="regime_code" property="regimeCode" />
+        <result column="remake" property="remake" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcRegimeResultMap" type="com.sunten.hrms.ac.domain.AcRegime">
+        <id column="ar_id" property="id" />
+        <result column="ar_regime_name" property="regimeName" />
+        <result column="ar_regime_code" property="regimeCode" />
+        <result column="ar_remake" property="remake" />
+        <result column="ar_attribute1" property="attribute1" />
+        <result column="ar_attribute2" property="attribute2" />
+        <result column="ar_attribute3" property="attribute3" />
+        <result column="ar_enabled_flag" property="enabledFlag" />
+        <result column="ar_create_by" property="createBy" />
+        <result column="ar_create_time" property="createTime" />
+        <result column="ar_update_by" property="updateBy" />
+        <result column="ar_update_time" property="updateTime" />
+        <collection property="acRegimeRelations" ofType="com.sunten.hrms.ac.domain.AcRegimeRelation">
+            <id column="arr_id" property="id" />
+            <result column="arr_regimea_id" property="regimeaId" />
+            <result column="arr_regime_time_id" property="regimeTimeId" />
+            <result column="arr_attribute1" property="attribute1" />
+            <result column="arr_attribute2" property="attribute2" />
+            <result column="arr_attribute3" property="attribute3" />
+            <result column="arr_enabled_flag" property="enabledFlag" />
+            <result column="arr_create_by" property="createBy" />
+            <result column="arr_create_time" property="createTime" />
+            <result column="arr_update_by" property="updateBy" />
+            <result column="arr_update_time" property="updateTime" />
+            <association property="acRegimeTime"
+                         javaType="com.sunten.hrms.ac.domain.AcRegimeTime"
+                         resultMap="com.sunten.hrms.ac.dao.AcRegimeTimeDao.AcRegimeTimeResultMap"
+                         columnPrefix="art_" />
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ar.id, ar.regime_name, ar.regime_code, ar.remake, ar.attribute1, ar.attribute2, ar.attribute3,
+            ar.enabled_flag, ar.create_by, ar.create_time, ar.update_by, ar.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.regime_name as ${tAlias}_regime_name,
+            ${tAlias}.regime_code as ${tAlias}_regime_code, ${tAlias}.remake as ${tAlias}_remake,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_regime ar
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and ar.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcRegime" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_regime (regime_name, regime_code, remake,
+                                   attribute1, attribute2,
+                                   attribute3, enabled_flag, create_by,
+                                   create_time, update_by,
+                                   update_time)
+            values (#{regimeName,jdbcType=VARCHAR}, #{regimeCode,jdbcType=VARCHAR}, #{remake,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_regime
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcRegime">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteByEnabled" parameterType="com.sunten.hrms.ac.domain.AcRegime">
+        <![CDATA[
+            update ac_regime set
+                enabled_flag     = #{enabledFlag, jdbcType = BIGINT}
+                update_by        = #{updateBy,jdbcType=BIGINT},
+                update_time      = #{updateTime,jdbcType=TIMESTAMP}
+            where id = #{id,jdbcType=BIGINT}
+           ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcRegime">
+        <![CDATA[
+            update ac_regime
+               set regime_name  = #{regimeName,jdbcType=VARCHAR},
+                   regime_code  = #{regimeCode,jdbcType=VARCHAR},
+                   remake       = #{remake,jdbcType=VARCHAR},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_by    = #{updateBy,jdbcType=BIGINT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="BaseResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ar.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="BaseResultMap">
+        <![CDATA[
+            select ar.* from ac_regime ar where 1=1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.arId != null">
+                <![CDATA[
+                and ar.id = #{criteria.arId,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+            and ar.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+            ]]>
+            </if>
+            <if test="criteria.regimeName != null">
+                <![CDATA[
+            and ar.regime_name like #{criteria.regimeName,jdbcType=VARCHAR}
+            ]]>
+            </if>
+        <![CDATA[
+            order by ar.id
+            ]]>
+        </if>
+<!--        <![CDATA[ select ar_temp.*, temp.* from  ( select ]]>-->
+<!--        <bind name="tAlias" value="'ar'"/>-->
+<!--        <include refid="Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[ from ac_regime ar   where 1 = 1 ]]>-->
+<!--        <if test="criteria != null">-->
+<!--            <if test="criteria.arId != null">-->
+<!--                <![CDATA[-->
+<!--                and ar.id = #{criteria.arId,jdbcType=BIGINT}-->
+<!--            ]]>-->
+<!--            </if>-->
+<!--            <if test="criteria.enabled != null">-->
+<!--                <![CDATA[-->
+<!--            and ar.enabled_flag = #{criteria.enabled,jdbcType=BIT}-->
+<!--            ]]>-->
+<!--            </if>-->
+<!--            <if test="criteria.regimeName != null">-->
+<!--                <![CDATA[-->
+<!--            and ar.regime_name like #{criteria.regimeName,jdbcType=VARCHAR}-->
+<!--            ]]>-->
+<!--            </if>-->
+<!--        </if>-->
+<!--        <![CDATA[ ) as ar_temp left join ( select ]]>-->
+<!--        <bind name="tAlias" value="'art'"/>-->
+<!--        <include refid="com.sunten.hrms.ac.dao.AcRegimeTimeDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[,]]>-->
+<!--        <bind name="tAlias" value="'arr'"/>-->
+<!--        <include refid="com.sunten.hrms.ac.dao.AcRegimeRelationDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[-->
+<!--         from ac_regime_relation arr,ac_regime_time art where arr.regime_time_id = art.id and arr.enabled_flag = 1 	and art.enabled_flag = 1) as temp-->
+<!--         on temp.arr_regimea_id = ar_temp.ar_id order by ar_temp.ar_id-->
+<!--        ]]>-->
+    </select>
+
+    <select id="listRelationByCriteria" resultMap="AcRegimeResultMap">
+                <![CDATA[ select ar_temp.*, temp.* from  ( select ]]>
+                <bind name="tAlias" value="'ar'"/>
+                <include refid="Base_Column_With_Param_List"/>
+                <![CDATA[ from ac_regime ar   where 1 = 1 ]]>
+                <if test="criteria != null">
+                    <if test="criteria.arId != null">
+                        <![CDATA[
+                        and ar.id = #{criteria.arId,jdbcType=BIGINT}
+                    ]]>
+                    </if>
+                    <if test="criteria.enabled != null">
+                        <![CDATA[
+                    and ar.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                    ]]>
+                    </if>
+                    <if test="criteria.regimeName != null">
+                        <![CDATA[
+                    and ar.regime_name like #{criteria.regimeName,jdbcType=VARCHAR}
+                    ]]>
+                    </if>
+                </if>
+                <![CDATA[ ) as ar_temp left join ( select ]]>
+                <bind name="tAlias" value="'art'"/>
+                <include refid="com.sunten.hrms.ac.dao.AcRegimeTimeDao.Base_Column_With_Param_List"/>
+                <![CDATA[,]]>
+                <bind name="tAlias" value="'arr'"/>
+                <include refid="com.sunten.hrms.ac.dao.AcRegimeRelationDao.Base_Column_With_Param_List"/>
+                <![CDATA[
+                 from ac_regime_relation arr,ac_regime_time art where arr.regime_time_id = art.id and arr.enabled_flag = 1 	and art.enabled_flag = 1) as temp
+                 on temp.arr_regimea_id = ar_temp.ar_id order by ar_temp.ar_id, temp.art_time_from
+                ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="BaseResultMap">
+        <![CDATA[
+            select ar.* from ac_regime ar where 1=1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.arId != null">
+                <![CDATA[
+                and ar.id = #{criteria.arId,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+            and ar.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+            ]]>
+            </if>
+            <if test="criteria.regimeName != null">
+                <![CDATA[
+            and ar.regime_name like #{criteria.regimeName,jdbcType=VARCHAR}
+            ]]>
+            </if>
+        </if>
+
+<!--        <![CDATA[ select ar_temp.*, temp.* from  ( select ]]>-->
+<!--        <bind name="tAlias" value="'ar'"/>-->
+<!--        <include refid="Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[ from ac_regime ar   where 1 = 1 ]]>-->
+<!--        <if test="criteria != null">-->
+<!--            <if test="criteria.arId != null">-->
+<!--                <![CDATA[-->
+<!--                and ar.id = #{criteria.arId,jdbcType=BIGINT}-->
+<!--            ]]>-->
+<!--            </if>-->
+<!--            <if test="criteria.enabled != null">-->
+<!--                <![CDATA[-->
+<!--            and ar.enabled_flag = #{criteria.enabled,jdbcType=BIT}-->
+<!--            ]]>-->
+<!--            </if>-->
+<!--            <if test="criteria.regimeName != null">-->
+<!--                <![CDATA[-->
+<!--            and ar.regime_name like #{criteria.regimeName,jdbcType=VARCHAR}-->
+<!--            ]]>-->
+<!--            </if>-->
+<!--        </if>-->
+<!--        <![CDATA[ ) as ar_temp left join ( select ]]>-->
+<!--        <bind name="tAlias" value="'art'"/>-->
+<!--        <include refid="com.sunten.hrms.ac.dao.AcRegimeTimeDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[,]]>-->
+<!--        <bind name="tAlias" value="'arr'"/>-->
+<!--        <include refid="com.sunten.hrms.ac.dao.AcRegimeRelationDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[-->
+<!--         from ac_regime_relation arr,ac_regime_time art where arr.regime_time_id = art.id and arr.enabled_flag = 1 	and art.enabled_flag = 1) as temp-->
+<!--         on temp.arr_regimea_id = ar_temp.ar_id-->
+<!--        ]]>-->
+    </select>
+
+</mapper>

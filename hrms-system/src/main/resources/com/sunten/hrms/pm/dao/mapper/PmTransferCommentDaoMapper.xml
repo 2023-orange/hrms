@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmTransferCommentDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmTransferComment">
+        <id column="id" property="id" />
+        <result column="transfer_id" property="transferId" />
+        <result column="internship_date" property="internshipDate" />
+        <result column="internship_by" property="internshipBy" />
+        <result column="internship_salary_date" property="internshipSalaryDate" />
+        <result column="internship_salary_by" property="internshipSalaryBy" />
+        <result column="job_prove_date" property="jobProveDate" />
+        <result column="job_prove_by" property="jobProveBy" />
+        <result column="go_job_date" property="goJobDate" />
+        <result column="go_job_by" property="goJobBy" />
+        <result column="salary_inform_date" property="salaryInformDate" />
+        <result column="salary_inform_by" property="salaryInformBy" />
+        <result column="failure_reazon" property="failureReazon" />
+        <result column="failure_date" property="failureDate" />
+        <result column="failure_by" property="failureBy" />
+        <result column="short_date" property="shortDate" />
+        <result column="short_by" property="shortBy" />
+        <result column="short_salary_date" property="shortSalaryDate" />
+        <result column="short_salary_by" property="shortSalaryBy" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute1" property="attribute1" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmTransferCommentResultMap" type="com.sunten.hrms.pm.domain.PmTransferComment" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ptc.transfer_id, ptc.internship_date, ptc.internship_by, ptc.internship_salary_date, 
+            ptc.internship_salary_by, ptc.job_prove_date, ptc.job_prove_by, ptc.go_job_date, ptc.go_job_by, 
+            ptc.salary_inform_date, ptc.salary_inform_by, ptc.failure_reazon, ptc.failure_date, ptc.failure_by, 
+            ptc.short_date, ptc.short_by, ptc.short_salary_date, ptc.short_salary_by, ptc.id, ptc.attribute2, 
+            ptc.attribute3, ptc.attribute1, ptc.create_time, ptc.create_by, ptc.update_time, ptc.update_by 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.transfer_id as ${tAlias}_transfer_id, 
+            ${tAlias}.internship_date as ${tAlias}_internship_date, 
+            ${tAlias}.internship_by as ${tAlias}_internship_by, 
+            ${tAlias}.internship_salary_date as ${tAlias}_internship_salary_date, 
+            ${tAlias}.internship_salary_by as ${tAlias}_internship_salary_by, 
+            ${tAlias}.job_prove_date as ${tAlias}_job_prove_date, 
+            ${tAlias}.job_prove_by as ${tAlias}_job_prove_by, ${tAlias}.go_job_date as ${tAlias}_go_job_date, 
+            ${tAlias}.go_job_by as ${tAlias}_go_job_by, 
+            ${tAlias}.salary_inform_date as ${tAlias}_salary_inform_date, 
+            ${tAlias}.salary_inform_by as ${tAlias}_salary_inform_by, 
+            ${tAlias}.failure_reazon as ${tAlias}_failure_reazon, 
+            ${tAlias}.failure_date as ${tAlias}_failure_date, ${tAlias}.failure_by as ${tAlias}_failure_by, 
+            ${tAlias}.short_date as ${tAlias}_short_date, ${tAlias}.short_by as ${tAlias}_short_by, 
+            ${tAlias}.short_salary_date as ${tAlias}_short_salary_date, 
+            ${tAlias}.short_salary_by as ${tAlias}_short_salary_by, ${tAlias}.id as ${tAlias}_id, 
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3, 
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.create_time as ${tAlias}_create_time, 
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time, 
+            ${tAlias}.update_by as ${tAlias}_update_by 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_transfer_comment ptc
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and ptc.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmTransferComment" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_transfer_comment (transfer_id, internship_date,
+                                             internship_by, internship_salary_date,
+                                             internship_salary_by, job_prove_date,
+                                             job_prove_by, go_job_date, go_job_by,
+                                             salary_inform_date, salary_inform_by,
+                                             failure_reazon, failure_date,
+                                             failure_by, short_date, short_by,
+                                             short_salary_date, short_salary_by,
+                                             attribute2, attribute3,
+                                             attribute1, create_time,
+                                             create_by, update_time, update_by)
+            values (#{transferId,jdbcType=BIGINT}, #{internshipDate,jdbcType=DATE},
+                    #{internshipBy,jdbcType=VARCHAR}, #{internshipSalaryDate,jdbcType=DATE},
+                    #{internshipSalaryBy,jdbcType=VARCHAR}, #{jobProveDate,jdbcType=DATE},
+                    #{jobProveBy,jdbcType=VARCHAR}, #{goJobDate,jdbcType=DATE}, #{goJobBy,jdbcType=VARCHAR},
+                    #{salaryInformDate,jdbcType=DATE}, #{salaryInformBy,jdbcType=VARCHAR},
+                    #{failureReazon,jdbcType=VARCHAR}, #{failureDate,jdbcType=DATE},
+                    #{failureBy,jdbcType=VARCHAR}, #{shortDate,jdbcType=DATE}, #{shortBy,jdbcType=VARCHAR},
+                    #{shortSalaryDate,jdbcType=DATE}, #{shortSalaryBy,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_transfer_comment
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmTransferComment">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmTransferComment">
+        <![CDATA[
+            update pm_transfer_comment
+               set transfer_id            = #{transferId,jdbcType=BIGINT},
+                   internship_date        = #{internshipDate,jdbcType=DATE},
+                   internship_by          = #{internshipBy,jdbcType=VARCHAR},
+                   internship_salary_date = #{internshipSalaryDate,jdbcType=DATE},
+                   internship_salary_by   = #{internshipSalaryBy,jdbcType=VARCHAR},
+                   job_prove_date         = #{jobProveDate,jdbcType=DATE},
+                   job_prove_by           = #{jobProveBy,jdbcType=VARCHAR},
+                   go_job_date            = #{goJobDate,jdbcType=DATE},
+                   go_job_by              = #{goJobBy,jdbcType=VARCHAR},
+                   salary_inform_date     = #{salaryInformDate,jdbcType=DATE},
+                   salary_inform_by       = #{salaryInformBy,jdbcType=VARCHAR},
+                   failure_reazon         = #{failureReazon,jdbcType=VARCHAR},
+                   failure_date           = #{failureDate,jdbcType=DATE},
+                   failure_by             = #{failureBy,jdbcType=VARCHAR},
+                   short_date             = #{shortDate,jdbcType=DATE},
+                   short_by               = #{shortBy,jdbcType=VARCHAR},
+                   short_salary_date      = #{shortSalaryDate,jdbcType=DATE},
+                   short_salary_by        = #{shortSalaryBy,jdbcType=VARCHAR},
+                   attribute2             = #{attribute2,jdbcType=VARCHAR},
+                   attribute3             = #{attribute3,jdbcType=VARCHAR},
+                   attribute1             = #{attribute1,jdbcType=VARCHAR},
+                   update_time            = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by              = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmTransferCommentResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ptc.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmTransferCommentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmTransferCommentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

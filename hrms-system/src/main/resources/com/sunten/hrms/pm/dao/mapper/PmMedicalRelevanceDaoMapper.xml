@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmMedicalRelevanceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmMedicalRelevance">
+        <id column="id" property="id" />
+        <result column="medical_job_id" property="medicalJobId" />
+        <result column="project_id" property="projectId" />
+        <result column="project_type" property="projectType" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmMedicalRelevanceResultMap" type="com.sunten.hrms.pm.domain.PmMedicalRelevance" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="medicalProject"
+                     javaType="com.sunten.hrms.pm.domain.PmMedicalProject"
+                     resultMap="com.sunten.hrms.pm.dao.PmMedicalProjectDao.PmMedicalProjectResultMap"
+                     columnPrefix="pmp_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pmr.medical_job_id, pmr.project_id, pmr.project_type, pmr.id, pmr.create_time, pmr.create_by,
+            pmr.update_time, pmr.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.medical_job_id as ${tAlias}_medical_job_id, ${tAlias}.project_id as ${tAlias}_project_id,
+            ${tAlias}.project_type as ${tAlias}_project_type, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pmp'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmMedicalProjectDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_medical_relevance pmr join
+                   pm_medical_project pmp
+                on pmr.project_id = pmp.id
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.projectType != null">
+                <![CDATA[
+                    and pmr.project_type = #{criteria.projectType,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.medicalJobId != null">
+                <![CDATA[
+                    and pmr.medical_job_id = #{criteria.medicalJobId,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmMedicalRelevance" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_medical_relevance (medical_job_id, project_id,
+                                              project_type, id, create_time,
+                                              create_by, update_time, update_by)
+            values (#{medicalJobId,jdbcType=BIGINT}, #{medicalProject.id,jdbcType=BIGINT},
+                    #{projectType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_medical_relevance
+            where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmMedicalRelevance">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmMedicalRelevance">
+        <![CDATA[
+            update pm_medical_relevance
+               set medical_job_id = #{medicalJobId,jdbcType=BIGINT},
+                   project_id     = #{medicalProject.id,jdbcType=BIGINT},
+                   project_type   = #{projectType,jdbcType=VARCHAR},
+                   update_time    = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by      = #{updateBy,jdbcType=BIGINT}
+            where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmMedicalRelevanceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pmr.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmMedicalRelevanceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmMedicalRelevanceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <delete id="deleteRelevanceByProjectId">
+        <![CDATA[
+            delete
+            from pm_medical_relevance
+            where project_id = #{projectId,jdbcType=BIGINT}
+        ]]>
+    </delete>
+
+    <delete id="deleteRelevanceByJobId">
+        <![CDATA[
+        delete
+        from pm_medical_relevance
+        where  medical_job_id = #{ medicalJobId,jdbcType=BIGINT}
+        ]]>
+    </delete>
+
+    <insert id="batchInsertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmMedicalRelevance">
+        <![CDATA[
+        insert into pm_medical_relevance (medical_job_id, project_id,
+                                          project_type, create_time,
+                                          create_by, update_time, update_by)
+        values
+        ]]>
+        <foreach collection="medicalRelevances" item="item" index="index" separator=",">
+            <![CDATA[
+               (#{item.medicalJobId,jdbcType=BIGINT}, #{item.medicalProject.id,jdbcType=BIGINT},
+                #{item.projectType,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP},
+                #{item.createBy,jdbcType=BIGINT}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=BIGINT})
+             ]]>
+        </foreach>
+    </insert>
+
+    <delete id="bathcdeleteRelevances">
+        <![CDATA[
+        delete
+        from pm_medical_relevance
+        where id  in
+        ]]>
+        <foreach collection="medicalRelevances" item="item" index="index" open="(" close=")" separator=",">
+            #{ item.id,jdbcType=BIGINT}
+        </foreach>
+    </delete>
+
+</mapper>

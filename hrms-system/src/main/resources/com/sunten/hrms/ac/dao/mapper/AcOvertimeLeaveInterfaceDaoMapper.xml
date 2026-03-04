@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOvertimeLeaveInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface">
+        <id column="id" property="id" />
+        <result column="date" property="date" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_id" property="employeeId" />
+        <result column="working_day_overtime" property="workingDayOvertime" />
+        <result column="rest_day_overtime" property="restDayOvertime" />
+        <result column="holiday_overtime" property="holidayOvertime"/>
+        <result column="off_hours" property="offHours" />
+        <result column="annual_leave" property="annualLeave" />
+        <result column="compassionate_leave" property="compassionateLeave" />
+        <result column="sick_leave" property="sickLeave" />
+        <result column="marriage_holiday" property="marriageHoliday" />
+        <result column="maternity_leave" property="maternityLeave" />
+        <result column="paternity_leave" property="paternityLeave" />
+        <result column="bereavement_leave" property="bereavementLeave" />
+        <result column="work_related_injury_leave" property="workRelatedInjuryLeave" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="group_id" property="groupId" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="family_planning_leave" property="familyPlanningLeave"/>
+        <result column="public_holiday" property="publicHoliday"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <resultMap id="AcOvertimeLeaveInterfaceResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aoli.date, aoli.work_card, aoli.employee_id, aoli.working_day_overtime, aoli.rest_day_overtime,
+            aoli.holiday_overtime,
+            aoli.off_hours, aoli.annual_leave, aoli.compassionate_leave, aoli.sick_leave,
+            aoli.marriage_holiday, aoli.maternity_leave, aoli.paternity_leave, aoli.bereavement_leave,
+            aoli.work_related_injury_leave, aoli.id, aoli.create_time, aoli.create_by, aoli.update_time,
+            aoli.update_by,aoli.group_id,aoli.operation_code,aoli.error_msg,aoli.data_status,
+            aoli.family_planning_leave,aoli.public_holiday, aoli.name, aoli.date_str
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.date as ${tAlias}_date, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.working_day_overtime as ${tAlias}_working_day_overtime,
+            ${tAlias}.rest_day_overtime as ${tAlias}_rest_day_overtime,
+             ${tAlias}.holiday_overtime as ${tAlias}_holiday_overtime,
+            ${tAlias}.off_hours as ${tAlias}_off_hours, ${tAlias}.annual_leave as ${tAlias}_annual_leave,
+            ${tAlias}.compassionate_leave as ${tAlias}_compassionate_leave,
+            ${tAlias}.sick_leave as ${tAlias}_sick_leave,
+            ${tAlias}.marriage_holiday as ${tAlias}_marriage_holiday,
+            ${tAlias}.maternity_leave as ${tAlias}_maternity_leave,
+            ${tAlias}.paternity_leave as ${tAlias}_paternity_leave,
+            ${tAlias}.bereavement_leave as ${tAlias}_bereavement_leave,
+            ${tAlias}.work_related_injury_leave as ${tAlias}_work_related_injury_leave,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.operation_code as ${tAlias}_operation_code,
+            ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status,
+            ${tAlias}.family_planning_leave as ${tAlias}_family_planning_leave,
+            ${tAlias}.public_holiday as ${tAlias}_public_holiday,
+            ${tAlias}.name as ${tAlias}_name
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_overtime_leave_interface aoli
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.groupId != null">
+            <![CDATA[
+                and aoli.group_id = #{criteria.groupId,jdbcType=BIGINT}
+            ]]>
+        </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                and aoli.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+            ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_overtime_leave_interface (date, work_card, employee_id,
+                                                     working_day_overtime, rest_day_overtime,
+                                                     holiday_overtime,
+                                                     off_hours, annual_leave,
+                                                     compassionate_leave, sick_leave,
+                                                     marriage_holiday, maternity_leave,
+                                                     paternity_leave, bereavement_leave,
+                                                     work_related_injury_leave, create_time,
+                                                     create_by, update_time, update_by,
+                                                     group_id,operation_code,error_msg,data_status,
+                                                     family_planning_leave,public_holiday, name
+                                                     )
+            values (#{date,jdbcType=DATE}, #{workCard,jdbcType=VARCHAR}, #{employeeId,jdbcType=BIGINT},
+                    #{workingDayOvertime,jdbcType=DECIMAL}, #{restDayOvertime,jdbcType=DECIMAL},
+                    #{holidayOvertime, jdbcType=DECIMAL},
+                    #{offHours,jdbcType=DECIMAL}, #{annualLeave,jdbcType=DECIMAL},
+                    #{compassionateLeave,jdbcType=DECIMAL}, #{sickLeave,jdbcType=DECIMAL},
+                    #{marriageHoliday,jdbcType=DECIMAL}, #{maternityLeave,jdbcType=DECIMAL},
+                    #{paternityLeave,jdbcType=DECIMAL}, #{bereavementLeave,jdbcType=DECIMAL},
+                    #{workRelatedInjuryLeave,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}
+                    , #{groupId,jdbcType=BIGINT}, #{operationCode,jdbcType=VARCHAR}, #{errorMsg,jdbcType=VARCHAR}
+                    , #{dataStatus,jdbcType=VARCHAR}, #{familyPlanningLeave, jdbcType = DECIMAL }, #{publicHoliday, jdbcType = DECIMAL}, #{name,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+<!--    <insert id="checkAndInsertInterFace" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface" useGeneratedKeys="true" keyProperty="id">-->
+<!--        <![CDATA[-->
+<!--        INSERT INTO ac_overtime_leave_interface (-->
+<!--            date,-->
+<!--            work_card,-->
+<!--            employee_id,-->
+<!--            working_day_overtime,-->
+<!--            rest_day_overtime,-->
+<!--            off_hours,-->
+<!--            annual_leave,-->
+<!--            compassionate_leave,-->
+<!--            sick_leave,-->
+<!--            marriage_holiday,-->
+<!--            maternity_leave,-->
+<!--            paternity_leave,-->
+<!--            bereavement_leave,-->
+<!--            work_related_injury_leave,-->
+<!--            create_time,-->
+<!--            create_by,-->
+<!--            update_time,-->
+<!--            update_by,-->
+
+<!--            group_id,operation_code,error_msg,data_status,-->
+<!--            family_planning_leave,public_holiday,-->
+<!--            name-->
+<!--            )-->
+<!--select-->
+<!--             #{date, jdbcType = DATE}, #{workCard,jdbcType=VARCHAR},-->
+<!--            (select ISNULL(-->
+<!--            (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =-->
+<!--            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)-->
+<!--            and pe.enabled_flag = 1-->
+<!--            ),-1)-->
+<!--            ) as temp1-->
+<!--            ,-->
+<!--             #{workingDayOvertime,jdbcType=DECIMAL},-->
+<!--             #{restDayOvertime,jdbcType=DECIMAL},#{offHours,jdbcType=DECIMAL},-->
+
+<!--             #{annualLeave,jdbcType=DECIMAL},-->
+<!--                    #{compassionateLeave,jdbcType=DECIMAL}, #{sickLeave,jdbcType=DECIMAL},-->
+<!--                    #{marriageHoliday,jdbcType=DECIMAL}, #{maternityLeave,jdbcType=DECIMAL},-->
+<!--                    #{paternityLeave,jdbcType=DECIMAL}, #{bereavementLeave,jdbcType=DECIMAL},-->
+<!--                    #{workRelatedInjuryLeave,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},-->
+<!--                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},-->
+
+
+<!--            #{groupId,jdbcType=BIGINT},'C',-->
+
+<!--           (select case when-->
+<!--            ISNULL(-->
+<!--            (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =-->
+
+<!--            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1-->
+<!--            and pe.name = #{name,jdbcType=VARCHAR}-->
+<!--            ), '-1') = -1 then isnull(#{errorMsg, jdbcType=VARCHAR}, '') + '工牌号姓名匹配失败'-->
+
+<!--            else #{errorMsg, jdbcType=VARCHAR} + '' END) as temp2,-->
+
+<!--          (select  case when-->
+<!--           ISNULL(-->
+<!--           (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =-->
+
+<!--            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1-->
+<!--            and pe.name = #{name,jdbcType=VARCHAR}-->
+<!--            ), '-1') = -1 then 'F'-->
+
+<!--            else 'T' END) as temp3,-->
+<!--            #{familyPlanningLeave, jdbcType = DECIMAL },-->
+<!--            #{publicHoliday, jdbcType = DECIMAL},-->
+<!--            #{name,jdbcType=VARCHAR}-->
+<!--             ]]>-->
+<!--    </insert>-->
+
+    <insert id="insertOverTimeCollection">
+        <![CDATA[
+            INSERT INTO ac_overtime_leave_interface (
+            date,
+            date_str,
+            work_card,
+            employee_id,
+            working_day_overtime,
+            rest_day_overtime,
+            holiday_overtime,
+            off_hours,
+            annual_leave,
+            compassionate_leave,
+            sick_leave,
+            marriage_holiday,
+            maternity_leave,
+            paternity_leave,
+            bereavement_leave,
+            work_related_injury_leave,
+            create_time,
+            create_by,
+            update_time,
+            update_by,
+            group_id,operation_code,error_msg,data_status,
+            family_planning_leave,public_holiday,
+            name
+            ) values
+        ]]>
+        <foreach collection="list" item="item" index="index" separator=",">
+            <![CDATA[
+            (#{item.date,jdbcType=DATE}, #{item.dateStr,jdbcType=VARCHAR}, #{item.workCard,jdbcType=VARCHAR}, #{item.employeeId, jdbcType = BIGINT},
+            #{item.workingDayOvertime,jdbcType=DECIMAL}, #{item.restDayOvertime,jdbcType=DECIMAL},
+             #{item.holidayOvertime, jdbcType=DECIMAL},
+                    #{item.offHours,jdbcType=DECIMAL}, #{item.annualLeave,jdbcType=DECIMAL},
+                    #{item.compassionateLeave,jdbcType=DECIMAL}, #{item.sickLeave,jdbcType=DECIMAL},
+                    #{item.marriageHoliday,jdbcType=DECIMAL}, #{item.maternityLeave,jdbcType=DECIMAL},
+                    #{item.paternityLeave,jdbcType=DECIMAL}, #{item.bereavementLeave,jdbcType=DECIMAL},
+                    #{item.workRelatedInjuryLeave,jdbcType=DECIMAL}, #{time,jdbcType=TIMESTAMP},
+                    #{createBy ,jdbcType=BIGINT}, #{time,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}
+                    , #{groupId, jdbcType = BIGINT}, 'C', #{item.errorMsg,jdbcType=VARCHAR}
+                    , 'T', #{item.familyPlanningLeave, jdbcType = DECIMAL }, #{item.publicHoliday, jdbcType = DECIMAL}, #{item.name,jdbcType=VARCHAR})
+            ]]>
+        </foreach>
+    </insert>
+
+    <update id="checkAfterInsertCollection" parameterType="java.lang.Long">
+        <![CDATA[
+            { call msp_ac_overtime_batch_update(#{groupId,jdbcType=BIGINT}) }
+        ]]>
+    </update>
+
+<!--    <insert id="checkAndInsertInterFaceList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">-->
+<!-- <![CDATA[-->
+<!--        INSERT INTO ac_overtime_leave_interface (-->
+<!--            DATE,-->
+<!--            work_card,-->
+<!--            employee_id,-->
+<!--            working_day_overtime,-->
+<!--            rest_day_overtime,-->
+<!--            off_hours,-->
+<!--            annual_leave,-->
+<!--            compassionate_leave,-->
+<!--            sick_leave,-->
+<!--            marriage_holiday,-->
+<!--            maternity_leave,-->
+<!--            paternity_leave,-->
+<!--            bereavement_leave,-->
+<!--            work_related_injury_leave,-->
+<!--            create_time,-->
+<!--            create_by,-->
+<!--            update_time,-->
+<!--            update_by,-->
+
+<!--            group_id,operation_code,error_msg,data_status-->
+<!--            )-->
+<!--select-->
+<!--              ]]>-->
+<!--        <foreach collection="list" item="item" index="index" separator=",">-->
+<!--            <![CDATA[-->
+<!--             #{item.date, jdbcType = DATE}, #{item.workCard,jdbcType=VARCHAR},-->
+<!--            (select ISNULL(-->
+<!--            (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =-->
+<!--            right(cast('000000'+rtrim(#{item.workCard,jdbcType=VARCHAR}) as varchar),6)-->
+<!--            ),-1)-->
+<!--            ) as temp1-->
+<!--            ,-->
+<!--             #{item.workingDayOvertime,jdbcType=DECIMAL},-->
+<!--             #{item.restDayOvertime,jdbcType=DECIMAL},#{item.offHours,jdbcType=DECIMAL},-->
+
+<!--             #{item.annualLeave,jdbcType=DECIMAL},-->
+<!--                    #{item.compassionateLeave,jdbcType=DECIMAL}, #{item.sickLeave,jdbcType=DECIMAL},-->
+<!--                    #{item.marriageHoliday,jdbcType=DECIMAL}, #{item.maternityLeave,jdbcType=DECIMAL},-->
+<!--                    #{item.paternityLeave,jdbcType=DECIMAL}, #{item.bereavementLeave,jdbcType=DECIMAL},-->
+<!--                    #{item.workRelatedInjuryLeave,jdbcType=DECIMAL}, #{item.createTime,jdbcType=TIMESTAMP},-->
+<!--                    #{item.createBy,jdbcType=BIGINT}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=BIGINT},-->
+
+
+<!--            #{item.groupId,jdbcType=BIGINT},'C',-->
+
+<!--           (select case when (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =-->
+
+<!--            right(cast('000000'+rtrim(#{item.workCard,jdbcType=VARCHAR}) as varchar),6)) = null then '工牌号匹配失败'-->
+
+<!--            else '匹配成功' END) as temp2,-->
+
+<!--          (select  case when (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =-->
+
+<!--            right(cast('000000'+rtrim(#{item.workCard,jdbcType=VARCHAR}) as varchar),6)) = null then 'F'-->
+
+<!--            else 'T' END) as temp3-->
+<!--             ]]>-->
+<!--        </foreach>-->
+
+<!--    </insert>-->
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_overtime_leave_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface">
+        <![CDATA[
+            update ac_overtime_leave_interface
+               set date                      = #{date,jdbcType=DATE},
+                   work_card                 = #{workCard,jdbcType=VARCHAR},
+                   employee_id               = #{employeeId,jdbcType=BIGINT},
+                   working_day_overtime      = #{workingDayOvertime,jdbcType=DECIMAL},
+                   rest_day_overtime         = #{restDayOvertime,jdbcType=DECIMAL},
+                   holiday_overtime          = #{holidayOvertime, jdbcType=DECIMAL},
+                   off_hours                 = #{offHours,jdbcType=DECIMAL},
+                   annual_leave              = #{annualLeave,jdbcType=DECIMAL},
+                   compassionate_leave       = #{compassionateLeave,jdbcType=DECIMAL},
+                   sick_leave                = #{sickLeave,jdbcType=DECIMAL},
+                   marriage_holiday          = #{marriageHoliday,jdbcType=DECIMAL},
+                   maternity_leave           = #{maternityLeave,jdbcType=DECIMAL},
+                   paternity_leave           = #{paternityLeave,jdbcType=DECIMAL},
+                   bereavement_leave         = #{bereavementLeave,jdbcType=DECIMAL},
+                   work_related_injury_leave = #{workRelatedInjuryLeave,jdbcType=DECIMAL},
+                   update_time               = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                 = #{updateBy,jdbcType=BIGINT},
+                   group_id                 = #{groupId,jdbcType=BIGINT},
+                   operation_code = #{operationCode,jdbcType=VARCHAR},
+                   error_msg =  #{errorMsg,jdbcType=VARCHAR},
+                   data_status = #{dataStatus,jdbcType=VARCHAR},
+                   family_planning_leave = #{familyPlanningLeave, jdbcType = DECIMAL},
+                   public_holiday = #{publicHoliday, jdbcType = DECIMAL},
+                   name = #{name,jdbcType=VARCHAR}
+
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcOvertimeLeaveInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aoli.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcOvertimeLeaveInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcOvertimeLeaveInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="preCheckAcOverTime" resultType="java.lang.Boolean" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface">
+        <![CDATA[
+            select case when
+            ISNULL(
+            (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1 and pe.leave_flag = 0
+            and pe.name = #{name,jdbcType=VARCHAR}
+            ), '-1') = -1 then 0 else 1 end
+        ]]>
+    </select>
+
+    <select id="checkOvertimeLeaveBeforAutoUpdate" resultType="java.lang.Boolean">
+        <![CDATA[
+            select case when exists (
+                select 1 from ac_overtime_leave_interface where data_status = 'T' and date_str =  #{incomePeriod, jdbcType = VARCHAR}
+            ) then 1 else 0 end
+        ]]>
+    </select>
+
+
+
+</mapper>

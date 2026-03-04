@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReEducationDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReEducation">
+        <id column="id" property="id" />
+        <result column="re_id" property="reId" />
+        <result column="school" property="school" />
+        <result column="education" property="education" />
+        <result column="enrollment_time" property="enrollmentTime" />
+        <result column="graduation_time" property="graduationTime" />
+        <result column="new_education_flag" property="newEducationFlag" />
+        <result column="specialized_subject" property="specializedSubject" />
+        <result column="enrollment" property="enrollment" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="enrollment_time_new" property="enrollmentTimeNew"/>
+    </resultMap>
+
+    <resultMap id="ReEducationResultMap" type="com.sunten.hrms.re.domain.ReEducation" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="recruitment"
+                     javaType="com.sunten.hrms.re.domain.ReRecruitment"
+                     resultMap="com.sunten.hrms.re.dao.ReRecruitmentDao.ReRecruitmentResultMap"
+                     columnPrefix="rr_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            re.re_id as rr_id, re.school, re.education, re.enrollment_time, re.graduation_time, re.new_education_flag,
+            re.specialized_subject, re.enrollment, re.attribute1, re.attribute2, re.attribute3,
+            re.enabled_flag, re.id, re.update_by, re.create_time, re.update_time, re.create_by, re.enrollment_time_new
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.re_id as ${tAlias}_rr_id, ${tAlias}.school as ${tAlias}_school,
+            ${tAlias}.education as ${tAlias}_education, ${tAlias}.enrollment_time as ${tAlias}_enrollment_time,
+            ${tAlias}.graduation_time as ${tAlias}_graduation_time,
+            ${tAlias}.new_education_flag as ${tAlias}_new_education_flag,
+            ${tAlias}.specialized_subject as ${tAlias}_specialized_subject,
+            ${tAlias}.enrollment as ${tAlias}_enrollment, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.enrollment_time_new as ${tAlias}_enrollment_time_new
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from re_education re
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.reId != null">
+                <![CDATA[
+               and re.re_id = #{criteria.reId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and re.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReEducation" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_education (re_id, school, education,
+                                      enrollment_time, graduation_time,
+                                      new_education_flag, specialized_subject,
+                                      enrollment, attribute1,
+                                      attribute2, attribute3, enabled_flag,
+                                      update_by, create_time,
+                                      update_time, create_by,enrollment_time_new)
+            values (#{recruitment.id,jdbcType=BIGINT}, #{school,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR},
+                    #{enrollmentTime,jdbcType=DATE}, #{graduationTime,jdbcType=DATE},
+                    #{newEducationFlag,jdbcType=BIT}, #{specializedSubject,jdbcType=VARCHAR},
+                    #{enrollment,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{updateBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{enrollmentTimeNew,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_education
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReEducation">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReEducation">
+        <![CDATA[
+            update re_education
+               set re_id               = #{recruitment.id,jdbcType=BIGINT},
+                   school              = #{school,jdbcType=VARCHAR},
+                   education           = #{education,jdbcType=VARCHAR},
+                   enrollment_time     = #{enrollmentTime,jdbcType=DATE},
+                   graduation_time     = #{graduationTime,jdbcType=DATE},
+                   new_education_flag  = #{newEducationFlag,jdbcType=BIT},
+                   specialized_subject = #{specializedSubject,jdbcType=VARCHAR},
+                   enrollment          = #{enrollment,jdbcType=VARCHAR},
+                   attribute1          = #{attribute1,jdbcType=VARCHAR},
+                   attribute2          = #{attribute2,jdbcType=VARCHAR},
+                   attribute3          = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag        = #{enabledFlag,jdbcType=BIT},
+                   update_by           = #{updateBy,jdbcType=BIGINT},
+                   update_time         = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReEducationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where re.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReEducationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReEducationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.re.domain.ReEducation">
+        <![CDATA[
+        update re_education
+        set
+            enabled_flag        = #{enabledFlag,jdbcType=BIT},
+            update_by           = #{updateBy,jdbcType=BIGINT},
+            update_time         = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

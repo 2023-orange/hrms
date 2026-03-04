@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeWorkhistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeWorkhistory">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="company" property="company" />
+        <result column="post" property="post" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="tele" property="tele" />
+        <result column="remarks" property="remarks" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeWorkhistoryResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeWorkhistory" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="workhistoryTemp"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeWorkhistoryTemp"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeWorkhistoryTempDao.PmEmployeeWorkhistoryTempResultMap"
+                     columnPrefix="pewt_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pew.employee_id as pe_id, pew.company, pew.post, pew.start_time, pew.end_time, pew.tele, pew.remarks,
+            pew.attribute1, pew.attribute2, pew.attribute3, pew.enabled_flag, pew.id, pew.create_time,
+            pew.create_by, pew.update_time, pew.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.company as ${tAlias}_company,
+            ${tAlias}.post as ${tAlias}_post, ${tAlias}.start_time as ${tAlias}_start_time,
+            ${tAlias}.end_time as ${tAlias}_end_time, ${tAlias}.tele as ${tAlias}_tele,
+            ${tAlias}.remarks as ${tAlias}_remarks, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_workhistory pew
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pew.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pew.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeWorkhistory" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_workhistory (employee_id, company, post,
+                                                 start_time, end_time, tele,
+                                                 remarks, attribute1, attribute2,
+                                                 attribute3, enabled_flag,
+                                                 create_time, create_by,
+                                                 update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{company,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR},
+                    #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{tele,jdbcType=VARCHAR},
+                    #{remarks,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_workhistory
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeWorkhistory">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeWorkhistory">
+        <![CDATA[
+            update pm_employee_workhistory
+               set employee_id  = #{employee.id,jdbcType=BIGINT},
+                   company      = #{company,jdbcType=VARCHAR},
+                   post         = #{post,jdbcType=VARCHAR},
+                   start_time   = #{startTime,jdbcType=DATE},
+                   end_time     = #{endTime,jdbcType=DATE},
+                   tele         = #{tele,jdbcType=VARCHAR},
+                   remarks      = #{remarks,jdbcType=VARCHAR},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeWorkhistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pew.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeWorkhistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeWorkhistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeWorkhistory">
+        <![CDATA[
+        update pm_employee_workhistory
+        set enabled_flag = #{enabledFlag,jdbcType=BIT},
+            update_time  = #{updateTime,jdbcType=TIMESTAMP},
+            update_by    = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeeWorkhistoryResultMap">
+        <![CDATA[
+            select
+            pew.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pew.company) > 0 then pew.company else null end as company,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pew.post) > 0 then pew.post else null end as post,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pew.remarks) > 0 then pew.remarks else null end as remarks,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pew.tele) > 0 then pew.tele else null end as tele
+            from pm_employee_workhistory pew join pm_employee pe on pe.id = pew.employee_id where pew.enabled_flag = 1
+            and pe.enabled_flag = 1 and concat(
+         pew.company,pew.post,pew.remarks,pew.tele
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+    <sql id="Column_With_Temp_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pewt'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeWorkhistoryTempDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee_workhistory pew
+              left join pm_employee_workhistory_temp pewt
+              on pew.id = pewt.header_id
+              and pewt.enabled_flag = 1
+              and pewt.check_flag = 'D'
+              and pewt.instructions_flag = 'U'
+        ]]>
+    </sql>
+    <select id="listAllAndTempByEmployee" resultMap="PmEmployeeWorkhistoryResultMap">
+        <include refid="Column_With_Temp_Query_Sql"/>
+        <![CDATA[
+          where pew.enabled_flag = 1
+          and pew.employee_id = #{employeeId,jdbcType=BIGINT}
+          order by pew.id
+         ]]>
+    </select>
+</mapper>

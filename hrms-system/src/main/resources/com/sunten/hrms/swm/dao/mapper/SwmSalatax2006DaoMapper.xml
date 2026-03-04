@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmSalatax2006Dao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmSalatax2006">
+        <result column="XH" property="xh" />
+        <result column="KSQJ" property="ksqj" />
+        <result column="SDQJ" property="sdqj" />
+        <result column="gph" property="gph" />
+        <result column="SFZH" property="sfzh" />
+        <result column="XM" property="xm" />
+        <result column="SRZE" property="srze" />
+        <result column="FDFYKCE" property="fdfykce" />
+        <result column="YNSSDE" property="ynssde" />
+        <result column="SL" property="sl" />
+        <result column="SSKCS" property="sskcs" />
+        <result column="YNSE_NULL" property="ynseNull" />
+        <result column="YNSE_ZE" property="ynseZe" />
+    </resultMap>
+
+    <resultMap id="SwmSalatax2006ResultMap" type="com.sunten.hrms.swm.domain.SwmSalatax2006" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ss2.XH, ss2.KSQJ, ss2.SDQJ, ss2.gph, ss2.SFZH, ss2.XM, ss2.SRZE, ss2.FDFYKCE, ss2.YNSSDE, ss2.SL, 
+            ss2.SSKCS, ss2.YNSE_NULL, ss2.YNSE_ZE
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.XH as ${tAlias}_XH, ${tAlias}.KSQJ as ${tAlias}_KSQJ, ${tAlias}.SDQJ as ${tAlias}_SDQJ, 
+            ${tAlias}.gph as ${tAlias}_gph, ${tAlias}.SFZH as ${tAlias}_SFZH, ${tAlias}.XM as ${tAlias}_XM, 
+            ${tAlias}.SRZE as ${tAlias}_SRZE, ${tAlias}.FDFYKCE as ${tAlias}_FDFYKCE, 
+            ${tAlias}.YNSSDE as ${tAlias}_YNSSDE, ${tAlias}.SL as ${tAlias}_SL, 
+            ${tAlias}.SSKCS as ${tAlias}_SSKCS, ${tAlias}.YNSE_NULL as ${tAlias}_YNSE_NULL, 
+            ${tAlias}.YNSE_ZE as ${tAlias}_YNSE_ZE
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_salatax_2006 ss2
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and ss2.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmSalatax2006">
+        <![CDATA[
+            insert into swm_salatax_2006 (XH, KSQJ, SDQJ,
+                                          gph, SFZH, XM,
+                                          SRZE, FDFYKCE, YNSSDE,
+                                          SL, SSKCS, YNSE_NULL,
+                                          YNSE_ZE)
+            values (#{xh,jdbcType=INTEGER}, #{ksqj,jdbcType=VARCHAR}, #{sdqj,jdbcType=VARCHAR},
+                    #{gph,jdbcType=VARCHAR}, #{sfzh,jdbcType=VARCHAR}, #{xm,jdbcType=VARCHAR},
+                    #{srze,jdbcType=DOUBLE}, #{fdfykce,jdbcType=DOUBLE}, #{ynssde,jdbcType=DOUBLE},
+                    #{sl,jdbcType=DOUBLE}, #{sskcs,jdbcType=DOUBLE}, #{ynseNull,jdbcType=DECIMAL},
+                    #{ynseZe,jdbcType=DOUBLE})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_salatax_2006
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmSalatax2006">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmSalatax2006">
+        <![CDATA[
+            update swm_salatax_2006
+               set XH          = #{xh,jdbcType=INTEGER},
+                   KSQJ        = #{ksqj,jdbcType=VARCHAR},
+                   SDQJ        = #{sdqj,jdbcType=VARCHAR},
+                   gph         = #{gph,jdbcType=VARCHAR},
+                   SFZH        = #{sfzh,jdbcType=VARCHAR},
+                   XM          = #{xm,jdbcType=VARCHAR},
+                   SRZE        = #{srze,jdbcType=DOUBLE},
+                   FDFYKCE     = #{fdfykce,jdbcType=DOUBLE},
+                   YNSSDE      = #{ynssde,jdbcType=DOUBLE},
+                   SL          = #{sl,jdbcType=DOUBLE},
+                   SSKCS       = #{sskcs,jdbcType=DOUBLE},
+                   YNSE_NULL   = #{ynseNull,jdbcType=DECIMAL},
+                   YNSE_ZE     = #{ynseZe,jdbcType=DOUBLE}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmSalatax2006ResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmSalatax2006ResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmSalatax2006ResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getOldSalatax2006" resultMap="SwmSalatax2006ResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+             from swm_salatax_2006 ss2
+             where
+             RIGHT ( cast( '000000' + rtrim( ss2.GPH ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+        ]]>
+    </select>
+
+</mapper>

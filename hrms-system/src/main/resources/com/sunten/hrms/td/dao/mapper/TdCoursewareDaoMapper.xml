@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdCoursewareDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdCourseware">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="dependent_project" property="dependentProject" />
+        <result column="dependent_id" property="dependentId" />
+        <result column="employee_type" property="employeeType" />
+        <result column="in_work_card" property="inWorkCard" />
+        <result column="in_name" property="inName" />
+        <result column="in_employee_id" property="inEmployeeId" />
+        <result column="out_name" property="outName" />
+        <result column="out_organization" property="outOrganization" />
+        <result column="use_object" property="useObject" />
+        <result column="jurisdiction_setting" property="jurisdictionSetting" />
+        <result column="file_id" property="fileId" />
+        <result column="download_flag" property="downloadFlag" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="approval_status" property="approvalStatus" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="last_verdict" property="lastVerdict" />
+        <result column="approval_end_time" property="approvalEndTime" />
+        <result column="self_flag" property="selfFlag" />
+        <collection property="employees" ofType="com.sunten.hrms.td.domain.TdCoursewareEmployee" javaType="ArrayList">
+            <result column="aid" property="id" />
+            <result column="a_courseware_id" property="coursewareId" />
+            <result column="a_employee_id" property="employeeId" />
+            <result column="a_employee_name" property="employeeName" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="TdCoursewareResultMap" type="com.sunten.hrms.td.domain.TdCourseware" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="storage"
+                     javaType="com.sunten.hrms.tool.domain.ToolLocalStorage"
+                     resultMap="com.sunten.hrms.tool.dao.ToolLocalStorageDao.ToolLocalStorageResultMap"
+                     columnPrefix="tls_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tc.name, tc.dependent_project, tc.dependent_id, tc.employee_type, tc.in_work_card, tc.in_name,
+            tc.in_employee_id, tc.out_name, tc.out_organization, tc.use_object, tc.jurisdiction_setting,
+            tc.file_id, tc.download_flag, tc.enabled_flag, tc.id, tc.create_time, tc.create_by, tc.update_time,
+            tc.update_by, tc.approval_status,tc.oa_order,tc.last_verdict,tc.approval_end_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.dependent_project as ${tAlias}_dependent_project,
+            ${tAlias}.dependent_id as ${tAlias}_dependent_id,
+            ${tAlias}.employee_type as ${tAlias}_employee_type,
+            ${tAlias}.in_work_card as ${tAlias}_in_work_card, ${tAlias}.in_name as ${tAlias}_in_name,
+            ${tAlias}.in_employee_id as ${tAlias}_in_employee_id, ${tAlias}.out_name as ${tAlias}_out_name,
+            ${tAlias}.out_organization as ${tAlias}_out_organization,
+            ${tAlias}.use_object as ${tAlias}_use_object,
+            ${tAlias}.jurisdiction_setting as ${tAlias}_jurisdiction_setting,
+            ${tAlias}.file_id as ${tAlias}_file_id, ${tAlias}.download_flag as ${tAlias}_download_flag,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.approval_status as ${tAlias}_approval_status, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.last_verdict as ${tAlias}_last_verdict,
+            ${tAlias}.approval_end_time as ${tAlias}_approval_end_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+<!--        <![CDATA[ ,tce.id as aid,tce.courseware_id as a_courseware_id,tce.employee_id as a_employee_id,tce.employee_name as a_employee_name,]]>-->
+        <![CDATA[ ,  ]]>
+        <bind name="tAlias" value="'tls'"/>
+        <include refid="com.sunten.hrms.tool.dao.ToolLocalStorageDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from td_courseware tc
+              join tool_local_storage tls on tc.file_id = tls.id
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.jurisdictionSetting != null">
+                <![CDATA[ and  tc.jurisdiction_setting = #{criteria.jurisdictionSetting,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.adminFlag != null">
+                <![CDATA[
+                  and  (
+                    (tc.jurisdiction_setting = '公司全体人员可见' and (tc.approval_status = 'pass' or tc.approval_status is null))
+                  or tc.create_by = #{criteria.userId,jdbcType=BIGINT}
+                  or tc.dependent_id in (
+                   select distinct tpi.id from td_plan_implement tpi
+                    join td_plan_employee tpe on tpe.plan_implement_id = tpi.id and tpe.type = 'employee'
+                    where tpe.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                  )
+                  or tc.id in (
+                      select distinct tce.courseware_id
+                      from td_courseware_employee tce
+                      where tce.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                  )
+                  )
+                ]]>
+            </if>
+            <if test="criteria.value != null">
+                <choose>
+                    <when test="criteria.column == 'upload_date'">
+                        <![CDATA[
+                          and tls.create_time ${criteria.symbol} #{criteria.value,jdbcType=TIMESTAMP}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'in_name'">
+                        <![CDATA[
+                          and (tc.in_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                            or tc.out_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR})
+                        ]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                          and tc.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdCourseware" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_courseware (name, dependent_project,
+                                       dependent_id, employee_type,
+                                       in_work_card, in_name, in_employee_id,
+                                       out_name, out_organization,
+                                       use_object, jurisdiction_setting,
+                                       file_id, download_flag, enabled_flag,
+                                       create_time, create_by,
+                                       update_time, update_by,approval_status,oa_order,last_verdict,approval_end_time)
+            values (#{name,jdbcType=VARCHAR}, #{dependentProject,jdbcType=VARCHAR},
+                    #{dependentId,jdbcType=BIGINT}, #{employeeType,jdbcType=VARCHAR},
+                    #{inWorkCard,jdbcType=VARCHAR}, #{inName,jdbcType=VARCHAR}, #{inEmployeeId,jdbcType=BIGINT},
+                    #{outName,jdbcType=VARCHAR}, #{outOrganization,jdbcType=VARCHAR},
+                    #{useObject,jdbcType=VARCHAR}, #{jurisdictionSetting,jdbcType=VARCHAR},
+                    #{storage.id,jdbcType=BIGINT}, #{downloadFlag,jdbcType=BIT}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{approvalStatus,jdbcType=VARCHAR}, #{oaOrder,jdbcType=VARCHAR},
+                    #{lastVerdict,jdbcType=VARCHAR},
+                    #{approvalEndTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_courseware
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdCourseware">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdCourseware">
+        <![CDATA[
+            update td_courseware
+               set name                 = #{name,jdbcType=VARCHAR},
+                   dependent_project    = #{dependentProject,jdbcType=VARCHAR},
+                   dependent_id         = #{dependentId,jdbcType=BIGINT},
+                   employee_type        = #{employeeType,jdbcType=VARCHAR},
+                   in_work_card         = #{inWorkCard,jdbcType=VARCHAR},
+                   in_name              = #{inName,jdbcType=VARCHAR},
+                   in_employee_id       = #{inEmployeeId,jdbcType=BIGINT},
+                   out_name             = #{outName,jdbcType=VARCHAR},
+                   out_organization     = #{outOrganization,jdbcType=VARCHAR},
+                   use_object           = #{useObject,jdbcType=VARCHAR},
+                   jurisdiction_setting = #{jurisdictionSetting,jdbcType=VARCHAR},
+                   file_id              = #{storage.id,jdbcType=BIGINT},
+                   download_flag        = #{downloadFlag,jdbcType=BIT},
+                   enabled_flag         = #{enabledFlag,jdbcType=BIT},
+                   update_time          = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by            = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdCoursewareResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tc.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdCoursewareResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdCoursewareResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateByApproval" parameterType="com.sunten.hrms.td.domain.TdCourseware">
+        <![CDATA[
+        update td_courseware
+        set approval_status                 = #{approvalStatus,jdbcType=VARCHAR},
+            last_verdict                 = #{lastVerdict,jdbcType=VARCHAR},
+            approval_end_time            = #{approvalEndTime,jdbcType=TIMESTAMP}
+        where oa_order = #{oaOrder,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getByOaOrder" resultMap="TdCoursewareResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tc.oa_order = #{oaOrder,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <resultMap id="CoursewareEmployeeResultMap" type="com.sunten.hrms.td.domain.TdCoursewareEmployee">
+        <id column="id" property="id" />
+        <result column="aid" property="id" />
+        <result column="courseware_id" property="coursewareId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="employee_name" property="employeeName" />
+    </resultMap>
+
+    <insert id="insertCoursewareEmployee" parameterType="com.sunten.hrms.td.domain.TdCoursewareEmployee">
+        <![CDATA[
+        insert into td_courseware_employee(courseware_id,employee_id,employee_name)
+        values
+          (#{coursewareId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT},#{employeeName,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <insert id="insertCoursewareEmployeeList" parameterType="java.util.List">
+        <![CDATA[
+        insert into td_courseware_employee(courseware_id,employee_id,employee_name)
+        values ]]>
+        <foreach collection="list" item="item" index="index" separator=",">
+            <![CDATA[
+            (#{item.coursewareId,jdbcType=BIGINT}, #{item.employeeId,jdbcType=BIGINT},#{item.employeeName,jdbcType=TIMESTAMP})
+            ]]>
+        </foreach>
+    </insert>
+
+    <select id="getEmployeeByCoursewareId" resultMap="CoursewareEmployeeResultMap">
+        <![CDATA[
+          select id,courseware_id,employee_id,employee_name
+          from td_courseware_employee
+          where courseware_id = #{coursewareId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <delete id="deleteEmployeeNotInList">
+        <![CDATA[
+          delete from td_courseware_employee
+          where courseware_id = #{coursewareId,jdbcType=BIGINT}
+        ]]>
+        <if test="ids != null and ids.size>0">
+            <![CDATA[ and id not in ( ]]>
+            <foreach collection="ids" item="item" index="index" separator=",">
+                <![CDATA[
+                    #{item,jdbcType=BIGINT}
+                  ]]>
+            </foreach>
+            <![CDATA[ ) ]]>
+        </if>
+
+    </delete>
+
+</mapper>

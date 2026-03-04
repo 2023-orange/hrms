@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.wta.dao.WtaSyncChangeDao">
+
+    <select id="autoSyncChange" statementType="CALLABLE" resultType="int">
+        <![CDATA[
+            {call msp_sync_change()}
+        ]]>
+    </select>
+
+    <select id="autoSyncFndChange" statementType="CALLABLE" resultType="int">
+        <![CDATA[
+            {call msp_sync_change_fnd()}
+        ]]>
+    </select>
+
+</mapper>

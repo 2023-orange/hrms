@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.tool.dao.ToolEmailConfigDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.tool.domain.ToolEmailConfig">
+        <id column="id" property="id" />
+        <result column="from_user" property="fromUser" />
+        <result column="host" property="host" />
+        <result column="pass" property="pass" />
+        <result column="port" property="port" />
+        <result column="username" property="username" />
+        <result column="is_need_auth" property="needAuth" />
+        <result column="is_ssl_enable" property="sslEnable" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="ToolEmailConfigResultMap" type="com.sunten.hrms.tool.domain.ToolEmailConfig" autoMapping="true">
+        <id column="id" property="id" />
+        <result column="is_need_auth" property="needAuth" />
+        <result column="is_ssl_enable" property="sslEnable" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tec.id, tec.from_user, tec.host, tec.pass, tec.port, tec.username, tec.is_need_auth, tec.is_ssl_enable,
+            tec.create_time, tec.create_by, tec.update_time, tec.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.from_user as ${tAlias}_from_user, 
+            ${tAlias}.host as ${tAlias}_host, ${tAlias}.pass as ${tAlias}_pass, 
+            ${tAlias}.port as ${tAlias}_port, ${tAlias}.username as ${tAlias}_username,
+            ${tAlias}.is_need_auth as ${tAlias}_is_need_auth,
+            ${tAlias}.is_ssl_enable as ${tAlias}_is_ssl_enable,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by, 
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from tool_email_config tec
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--              and xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.tool.domain.ToolEmailConfig" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into tool_email_config (from_user, host, pass,
+                                           port, username, is_need_auth,
+                                           is_ssl_enable, create_time, create_by,
+                                           update_time, update_by)
+            values (#{fromUser,jdbcType=VARCHAR}, #{host,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR},
+                    #{port,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{needAuth,jdbcType=BIT},
+                    #{sslEnable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from tool_email_config
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.tool.domain.ToolEmailConfig">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.tool.domain.ToolEmailConfig">
+        <![CDATA[
+            update tool_email_config
+               set from_user     = #{fromUser,jdbcType=VARCHAR},
+                   host          = #{host,jdbcType=VARCHAR},
+                   pass          = #{pass,jdbcType=VARCHAR},
+                   port          = #{port,jdbcType=VARCHAR},
+                   username      = #{username,jdbcType=VARCHAR},
+                   is_need_auth  = #{needAuth,jdbcType=BIT},
+                   is_ssl_enable = #{sslEnable,jdbcType=BIT},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by     = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ToolEmailConfigResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tec.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ToolEmailConfigResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ToolEmailConfigResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

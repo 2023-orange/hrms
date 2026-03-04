@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmBonusPaymentInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmBonusPaymentInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="bonus_name" property="bonusName" />
+        <result column="employee_id" property="employeeId" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="bank_account" property="bankAccount" />
+        <result column="bank_name" property="bankName" />
+        <result column="payable_amount" property="payableAmount" />
+        <result column="amount_pre_tax" property="amountPreTax" />
+        <result column="deduct_income_tax" property="deductIncomeTax" />
+        <result column="amount_after_tax" property="amountAfterTax" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="bonus_id" property="bonusId"/>
+    </resultMap>
+
+    <resultMap id="SwmBonusPaymentInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmBonusPaymentInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sbpi.id, sbpi.group_id, sbpi.bonus_name, sbpi.employee_id, sbpi.work_card, sbpi.employee_name,
+            sbpi.bank_account, sbpi.bank_name, sbpi.payable_amount, sbpi.amount_pre_tax,
+            sbpi.deduct_income_tax, sbpi.amount_after_tax, sbpi.operation_code, sbpi.error_msg,
+            sbpi.data_status, sbpi.create_time, sbpi.create_by, sbpi.update_time, sbpi.update_by,
+            sbpi.bonus_id,sbpi.entry_time,sbpi.department,sbpi.administrative_office,sbpi.cost_center,sbpi.cost_center_num,sbpi.service_department
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.bonus_name as ${tAlias}_bonus_name, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.bank_account as ${tAlias}_bank_account, ${tAlias}.bank_name as ${tAlias}_bank_name,
+            ${tAlias}.payable_amount as ${tAlias}_payable_amount,
+            ${tAlias}.amount_pre_tax as ${tAlias}_amount_pre_tax,
+            ${tAlias}.deduct_income_tax as ${tAlias}_deduct_income_tax,
+            ${tAlias}.amount_after_tax as ${tAlias}_amount_after_tax,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,${tAlias}.bonus_id as ${tAlias}_bonus_id
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_bonus_payment_interface sbpi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and sbpi.group_id =  #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and sbpi.data_status =  #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmBonusPaymentInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_bonus_payment_interface (group_id, bonus_name, employee_id,
+                                                     work_card, employee_name,
+                                                     bank_account, bank_name,
+                                                     payable_amount, amount_pre_tax,
+                                                     deduct_income_tax, amount_after_tax,
+                                                     operation_code, error_msg, data_status,
+                                                     create_time, create_by,
+                                                     update_time, update_by, bonus_id)
+            values (#{groupId,jdbcType=BIGINT}, #{bonusName,jdbcType=VARCHAR}, #{employeeId,jdbcType=BIGINT},
+                    #{workCard,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+                    #{bankAccount,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR},
+                    #{payableAmount,jdbcType=DECIMAL}, #{amountPreTax,jdbcType=DECIMAL},
+                    #{deductIncomeTax,jdbcType=DECIMAL}, #{amountAfterTax,jdbcType=DECIMAL},
+                    #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{bonusId, jdbcType = BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_bonus_payment_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmBonusPaymentInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmBonusPaymentInterface">
+        <![CDATA[
+            update swm_bonus_payment_interface
+               set group_id          = #{groupId,jdbcType=BIGINT},
+                   bonus_name        = #{bonusName,jdbcType=VARCHAR},
+                   employee_id       = #{employeeId,jdbcType=BIGINT},
+                   work_card         = #{workCard,jdbcType=VARCHAR},
+                   employee_name     = #{employeeName,jdbcType=VARCHAR},
+                   bank_account      = #{bankAccount,jdbcType=VARCHAR},
+                   bank_name         = #{bankName,jdbcType=VARCHAR},
+                   payable_amount    = #{payableAmount,jdbcType=DECIMAL},
+                   amount_pre_tax    = #{amountPreTax,jdbcType=DECIMAL},
+                   deduct_income_tax = #{deductIncomeTax,jdbcType=DECIMAL},
+                   amount_after_tax  = #{amountAfterTax,jdbcType=DECIMAL},
+                   operation_code    = #{operationCode,jdbcType=CHAR},
+                   error_msg         = #{errorMsg,jdbcType=VARCHAR},
+                   data_status       = #{dataStatus,jdbcType=CHAR},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT},
+                   bonus_id          = #{bonusId, jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmBonusPaymentInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sbpi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmBonusPaymentInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmBonusPaymentInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="insertByExcel" parameterType="com.sunten.hrms.swm.domain.SwmBonusPaymentInterface">
+        <![CDATA[
+            WITH cte AS
+             (SELECT #{groupId,jdbcType=BIGINT} group_id, #{bonusName,jdbcType=VARCHAR} bonus_name, #{employeeId,jdbcType=BIGINT} employee_id,
+                    #{workCard,jdbcType=VARCHAR} work_card, #{employeeName,jdbcType=VARCHAR} employee_name,
+                    #{bankAccount,jdbcType=VARCHAR} bank_account, #{bankName,jdbcType=VARCHAR} bank_name,
+                    #{payableAmount,jdbcType=DECIMAL} payable_amount, #{amountPreTax,jdbcType=DECIMAL} amount_pre_tax,
+                    #{deductIncomeTax,jdbcType=DECIMAL} deduct_income_tax, #{amountAfterTax,jdbcType=DECIMAL} amount_after_tax,
+                    #{operationCode,jdbcType=CHAR} operation_code, #{errorMsg,jdbcType=VARCHAR} error_msg, #{dataStatus,jdbcType=CHAR} data_status,
+                    #{createTime,jdbcType=TIMESTAMP} create_time, #{createBy,jdbcType=BIGINT} create_by,
+                    #{updateTime,jdbcType=TIMESTAMP} update_time, #{updateBy,jdbcType=BIGINT} update_by, #{bonusId, jdbcType = BIGINT} bonus_id,
+					#{costCenter,jdbcType=VARCHAR} cost_center,#{costCenterNum,jdbcType=BIGINT} cost_center_num,#{entryTime,jdbcType=DATE} entry_time,
+					#{department,jdbcType=VARCHAR} department,#{administrativeOffice,jdbcType=VARCHAR} administrative_office,#{serviceDepartment,jdbcType=VARCHAR} service_department
+			 )
+            insert into swm_bonus_payment_interface(group_id, bonus_name, employee_id,
+                                                     work_card, employee_name,
+                                                     bank_account, bank_name,
+                                                     payable_amount, amount_pre_tax,
+                                                     deduct_income_tax, amount_after_tax,
+                                                     operation_code,error_msg, data_status,
+                                                     create_time, create_by,
+                                                     update_time, update_by,bonus_id,cost_center,cost_center_num,entry_time,department,administrative_office,service_department)
+            select
+			cte.group_id,cte.bonus_name,isnull(se.employee_id,-1),right(replicate('0',6) + convert(varchar(6),cte.work_card),6) ,cte.employee_name,
+			isnull(cte.bank_account,se.bank_account),
+			isnull(cte.bank_name,se.bank_name),cte.payable_amount,cte.amount_pre_tax,cte.deduct_income_tax,cte.amount_after_tax,cte.operation_code,
+			case when isnull(cte.bank_account,isnull(se.bank_account,'@#$%^&*'))='@#$%^&*' then '此人无银行账号' when isnull(cte.cost_center_num,isnull(se.cost_center_num,-1))=-1 then '此人无成本中心号' ELSE '' END,
+			case when isnull(cte.bank_account,isnull(se.bank_account,'@#$%^&*'))='@#$%^&*' then 'F' when isnull(cte.cost_center_num,isnull(se.cost_center_num,-1))=-1 then 'F' ELSE 'T' END,
+			getDate(), cte.create_by,
+            getDate(), cte.update_by,cte.bonus_id,
+			isnull(cte.cost_center,se.cost_center),isnull(cte.cost_center_num,se.cost_center_num),
+			isnull(cte.entry_time,se.entry_time),isnull(cte.department,se.department),
+			isnull(cte.administrative_office,se.administrative_office),isnull(cte.service_department,se.service_department)
+			from cte left join swm_employee se on RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) =
+			RIGHT ( cast( '000000' + rtrim(cte.work_card) AS VARCHAR ), 6 )
+			AND se.name =cte.employee_name AND se.work_flag = 1
+        ]]>
+    </insert>
+
+    <select id="getBonusPaymentSummaryByImportList" resultMap="SwmBonusPaymentInterfaceResultMap">
+        <![CDATA[
+            select
+            sum(sbpi.payable_amount) as payable_amount,
+            sum(sbpi.amount_pre_tax) as amount_pre_tax,
+            sum(sbpi.deduct_income_tax) as deduct_income_tax,
+            sum(sbpi.amount_after_tax) as amount_after_tax
+            from swm_bonus_payment_interface sbpi
+            where sbpi.data_status = 'T'
+
+        ]]>
+        <if test="workCards != null and workCards.size > 0">
+            <![CDATA[
+                        and
+            sbpi.work_card in (]]>
+            <foreach collection="workCards" item="item" index="index" separator=",">
+                <![CDATA[
+                    right(replicate('0',6) + convert(varchar(6),#{item}),6)
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+        <if test="groupIds != null and groupIds.size > 0">
+            <![CDATA[
+                        and
+            sbpi.group_id in (]]>
+            <foreach collection="groupIds" item="groupId" index="index" separator=",">
+                <![CDATA[
+                    #{groupId}
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+    </select>
+
+    <select id="ifExistsRecord" resultType="java.lang.Boolean">
+        select case when exists (select 1
+                          from swm_bonus_payment
+                          where bonus_id = #{bonusId, jdbcType = BIGINT} and enabled_flag=1
+                          and work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+                         )
+             then 1 else 0
+        end
+    </select>
+
+</mapper>

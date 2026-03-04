@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndJobDeptDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndJobDept">
+        <id column="dept_id" property="deptId" />
+        <id column="job_id" property="jobId" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <resultMap id="FndJobDeptResultMap" type="com.sunten.hrms.fnd.domain.FndJobDept" autoMapping="true">
+        <id column="dept_id" property="deptId" />
+        <id column="job_id" property="jobId" />
+    </resultMap>
+
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fjd.dept_id, fjd.job_id, fjd.update_time, fjd.create_time, fjd.update_by, fjd.create_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.dept_id as ${tAlias}_dept_id, ${tAlias}.job_id as ${tAlias}_job_id,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.create_by as ${tAlias}_create_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_job_dept fjd
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and fjd.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndJobDept">
+        <![CDATA[
+            insert into fnd_job_dept (dept_id, job_id, update_time,
+                                      create_time, update_by, create_by)
+            values (#{deptId,jdbcType=BIGINT}, #{jobId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{createBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_job_dept
+             where dept_id = #{deptId,jdbcType=BIGINT}
+               and job_id = #{jobId,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndJobDept">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndJobDept">
+        <![CDATA[
+            update fnd_job_dept
+               set update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+             where dept_id = #{deptId,jdbcType=BIGINT}
+               and job_id = #{jobId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndJobDeptResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fjd.dept_id = #{deptId,jdbcType=BIGINT}
+               and fjd.job_id = #{jobId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndJobDeptResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by dept_id, job_id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndJobDeptResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <delete id="deleteByJobId">
+        <![CDATA[
+            delete
+              from fnd_job_dept
+             where job_id = #{jobId,jdbcType=BIGINT}
+        ]]>
+    </delete>
+
+    <select id="listDeptNameById" resultType="java.lang.String" parameterType="java.lang.Long">
+        select dept_name from fnd_dept where id = #{Id,jdbcType=BIGINT}
+    </select>
+
+
+
+
+
+</mapper>

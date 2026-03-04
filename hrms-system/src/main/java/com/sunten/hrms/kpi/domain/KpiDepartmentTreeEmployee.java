@@ -1,0 +1,83 @@
+package com.sunten.hrms.kpi.domain;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.sunten.hrms.base.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+/**
+ * <p>
+ * KPI资料填写人中间表
+ * </p>
+ *
+ * @author zhoujy
+ * @since 2023-11-27
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Accessors(chain = true)
+public class KpiDepartmentTreeEmployee extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    @NotNull(groups = Update.class)
+    private Long id;
+
+    /**
+     * 资料填写人编号
+     */
+    @NotNull
+    private Long employeeId;
+
+    /**
+     * 部门编号
+     */
+    @NotNull
+    private Long departmentTreeId;
+
+    /**
+     * 弹性域1
+     */
+    private String attribute1;
+
+    /**
+     * 弹性域2
+     */
+    private String attribute2;
+
+    /**
+     * 弹性域3
+     */
+    private String attribute3;
+
+    /**
+     * 弹性域4
+     */
+    private String attribute4;
+
+    /**
+     * 弹性域5
+     */
+    private String attribute5;
+
+    private Boolean enabledFlag;
+
+    /**
+     * 人员姓名
+     */
+    private String name;
+
+    private String workCard;
+
+    private String deptName;
+}

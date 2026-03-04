@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.tool.dao.ToolEmailServerDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.tool.domain.ToolEmailServer">
+        <id column="id" property="id" />
+        <result column="from_user" property="fromUser" />
+        <result column="host" property="host" />
+        <result column="pass" property="pass" />
+        <result column="port" property="port" />
+        <result column="username" property="username" />
+        <result column="need_auth_flag" property="needAuthFlag" />
+        <result column="ssl_enable_flag" property="sslEnableFlag" />
+        <result column="priority_level" property="priorityLevel" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="server_name" property="serverName" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="ToolEmailServerResultMap" type="com.sunten.hrms.tool.domain.ToolEmailServer" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tes.id, tes.from_user, tes.host, tes.pass, tes.port, tes.username, tes.need_auth_flag,
+            tes.ssl_enable_flag, tes.priority_level, tes.enabled_flag, tes.attribute1, tes.attribute2,
+            tes.attribute3, tes.attribute4, tes.attribute5, tes.server_name, tes.description, tes.create_time,
+            tes.update_by, tes.create_by, tes.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.from_user as ${tAlias}_from_user,
+            ${tAlias}.host as ${tAlias}_host, ${tAlias}.pass as ${tAlias}_pass,
+            ${tAlias}.port as ${tAlias}_port, ${tAlias}.username as ${tAlias}_username,
+            ${tAlias}.need_auth_flag as ${tAlias}_need_auth_flag,
+            ${tAlias}.ssl_enable_flag as ${tAlias}_ssl_enable_flag,
+            ${tAlias}.priority_level as ${tAlias}_priority_level,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.server_name as ${tAlias}_server_name, ${tAlias}.description as ${tAlias}_description,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from tool_email_server tes
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.blurry != null">
+                <![CDATA[
+               and (tes.server_name like #{criteria.blurry,jdbcType=VARCHAR}
+                    or tes.host like #{criteria.blurry,jdbcType=VARCHAR}
+                   )
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and tes.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.fromUser != null">
+                and tes.from_user = #{criteria.fromUser, jdbcType = VARCHAR}
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.tool.domain.ToolEmailServer" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into tool_email_server (from_user, host, pass,
+                                           port, username, need_auth_flag,
+                                           ssl_enable_flag, priority_level,
+                                           enabled_flag, attribute1, attribute2,
+                                           attribute3, attribute4,
+                                           attribute5, server_name,
+                                           description, create_time,
+                                           update_by, create_by, update_time)
+            values (#{fromUser,jdbcType=VARCHAR}, #{host,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR},
+                    #{port,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{needAuthFlag,jdbcType=BIT},
+                    #{sslEnableFlag,jdbcType=BIT}, #{priorityLevel,jdbcType=INTEGER},
+                    #{enabledFlag,jdbcType=BIT}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR},
+                    #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{updateBy,jdbcType=BIGINT}, #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from tool_email_server
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.tool.domain.ToolEmailServer">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.tool.domain.ToolEmailServer">
+        <![CDATA[
+            update tool_email_server
+               set from_user       = #{fromUser,jdbcType=VARCHAR},
+                   host            = #{host,jdbcType=VARCHAR},
+                   pass            = #{pass,jdbcType=VARCHAR},
+                   port            = #{port,jdbcType=VARCHAR},
+                   username        = #{username,jdbcType=VARCHAR},
+                   need_auth_flag  = #{needAuthFlag,jdbcType=BIT},
+                   ssl_enable_flag = #{sslEnableFlag,jdbcType=BIT},
+                   priority_level  = #{priorityLevel,jdbcType=INTEGER},
+                   enabled_flag    = #{enabledFlag,jdbcType=BIT},
+                   attribute1      = #{attribute1,jdbcType=VARCHAR},
+                   attribute2      = #{attribute2,jdbcType=VARCHAR},
+                   attribute3      = #{attribute3,jdbcType=VARCHAR},
+                   attribute4      = #{attribute4,jdbcType=VARCHAR},
+                   attribute5      = #{attribute5,jdbcType=VARCHAR},
+                   server_name     = #{serverName,jdbcType=VARCHAR},
+                   description     = #{description,jdbcType=VARCHAR},
+                   update_by       = #{updateBy,jdbcType=BIGINT},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ToolEmailServerResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tes.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ToolEmailServerResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ToolEmailServerResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

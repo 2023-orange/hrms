@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndSuperQueryTableDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndSuperQueryTable">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="table_name" property="tableName" />
+        <result column="table_description" property="tableDescription" />
+        <result column="table_abbreviation" property="tableAbbreviation" />
+        <result column="select_area" property="selectArea" />
+        <result column="table_area" property="tableArea" />
+        <result column="where_area" property="whereArea" />
+        <result column="sort" property="sort" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="FndSuperQueryTableResultMap" type="com.sunten.hrms.fnd.domain.FndSuperQueryTable" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="group"
+                     javaType="com.sunten.hrms.fnd.domain.FndSuperQueryGroup"
+                     resultMap="com.sunten.hrms.fnd.dao.FndSuperQueryGroupDao.FndSuperQueryGroupResultMap"
+                     columnPrefix="fsqg_"/>
+        <collection property="columns"
+                    resultMap="com.sunten.hrms.fnd.dao.FndSuperQueryTableColumnDao.FndSuperQueryTableColumnResultMap"
+                    columnPrefix="fsqtc_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fsqt.id, fsqt.group_id, fsqt.table_name, fsqt.table_description, fsqt.table_abbreviation,
+            fsqt.select_area, fsqt.table_area, fsqt.where_area, fsqt.sort, fsqt.enabled_flag,
+            fsqt.create_time, fsqt.create_by, fsqt.update_time, fsqt.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.table_name as ${tAlias}_table_name,
+            ${tAlias}.table_description as ${tAlias}_table_description,
+            ${tAlias}.table_abbreviation as ${tAlias}_table_abbreviation,
+            ${tAlias}.select_area as ${tAlias}_select_area,
+            ${tAlias}.table_area as ${tAlias}_table_area, ${tAlias}.where_area as ${tAlias}_where_area,
+            ${tAlias}.sort as ${tAlias}_sort, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_super_query_table fsqt
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and fsqt.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndSuperQueryTable" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_super_query_table (group_id, table_name,
+                                               table_description, table_abbreviation,
+                                               select_area, table_area, where_area, sort,
+                                               enabled_flag, create_time, create_by,
+                                               update_time, update_by)
+            values (#{groupId,jdbcType=BIGINT}, #{tableName,jdbcType=VARCHAR},
+                    #{tableDescription,jdbcType=VARCHAR}, #{tableAbbreviation,jdbcType=VARCHAR},
+                    #{selectArea,jdbcType=VARCHAR}, #{tableArea,jdbcType=VARCHAR}, #{whereArea,jdbcType=VARCHAR},
+                    #{sort,jdbcType=INTEGER}, #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_super_query_table
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndSuperQueryTable">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndSuperQueryTable">
+        <![CDATA[
+            update fnd_super_query_table
+               set group_id           = #{groupId,jdbcType=BIGINT},
+                   table_name         = #{tableName,jdbcType=VARCHAR},
+                   table_description  = #{tableDescription,jdbcType=VARCHAR},
+                   table_abbreviation = #{tableAbbreviation,jdbcType=VARCHAR},
+                   select_area        = #{selectArea,jdbcType=VARCHAR},
+                   table_area         = #{tableArea,jdbcType=VARCHAR},
+                   where_area         = #{whereArea,jdbcType=VARCHAR},
+                   sort               = #{sort,jdbcType=INTEGER},
+                   enabled_flag       = #{enabledFlag,jdbcType=BIT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndSuperQueryTableResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fsqt.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndSuperQueryTableResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndSuperQueryTableResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

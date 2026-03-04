@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiAssessmentIndicatorsMonthDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsMonth">
+        <id column="id" property="id" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="kpi_assessment_indicators_id" property="kpiAssessmentIndicatorsId" />
+        <result column="January" property="January" />
+        <result column="February" property="February" />
+        <result column="March" property="March" />
+        <result column="April" property="April" />
+        <result column="May" property="May" />
+        <result column="June" property="June" />
+        <result column="July" property="July" />
+        <result column="August" property="August" />
+        <result column="September" property="September" />
+        <result column="October" property="October" />
+        <result column="November" property="November" />
+        <result column="December" property="December" />
+        <result column="spring" property="spring" />
+        <result column="spring_assessment_results" property="springAssessmentResults" />
+        <result column="spring_assessment_score" property="springAssessmentScore" />
+        <result column="spring_revise_assessment_results" property="springReviseAssessmentResults" />
+        <result column="spring_correction_score" property="springCorrectionScore" />
+        <result column="summer" property="summer" />
+        <result column="summer_assessment_results" property="summerAssessmentResults" />
+        <result column="summer_assessment_score" property="summerAssessmentScore" />
+        <result column="summer_revise_assessment_results" property="summerReviseAssessmentResults" />
+        <result column="summer_correction_score" property="summerCorrectionScore" />
+        <result column="autumn" property="autumn" />
+        <result column="autumn_assessment_results" property="autumnAssessmentResults" />
+        <result column="autumn_assessment_score" property="autumnAssessmentScore" />
+        <result column="autumn_revise_assessment_results" property="autumnReviseAssessmentResults" />
+        <result column="autumn_correction_score" property="autumnCorrectionScore" />
+        <result column="winter" property="winter" />
+        <result column="winter_assessment_results" property="winterAssessmentResults" />
+        <result column="winter_assessment_score" property="winterAssessmentScore" />
+        <result column="spring_score" property="springScore" />
+        <result column="spring_correct" property="springCorrect" />
+        <result column="summer_score" property="summerScore" />
+        <result column="summer_correct" property="summerCorrect" />
+        <result column="autumn_score" property="autumnScore" />
+        <result column="autumn_correct" property="autumnCorrect" />
+        <result column="winter_score" property="winterScore" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="KpiAssessmentIndicatorsMonthResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsMonth" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            kaim.id, kaim.attribute1, kaim.attribute2, kaim.attribute3, kaim.attribute4, kaim.attribute5, 
+            kaim.kpi_assessment_indicators_id, kaim.January, kaim.February, kaim.March, kaim.April, kaim.May, 
+            kaim.June, kaim.July, kaim.August, kaim.September, kaim.October, kaim.November, kaim.December, 
+            kaim.spring, kaim.spring_assessment_results, kaim.spring_assessment_score, 
+            kaim.spring_revise_assessment_results, kaim.spring_correction_score, kaim.summer, 
+            kaim.summer_assessment_results, kaim.summer_assessment_score, 
+            kaim.summer_revise_assessment_results, kaim.summer_correction_score, kaim.autumn, 
+            kaim.autumn_assessment_results, kaim.autumn_assessment_score, 
+            kaim.autumn_revise_assessment_results, kaim.autumn_correction_score, kaim.winter, 
+            kaim.winter_assessment_results, kaim.winter_assessment_score, kaim.spring_score, 
+            kaim.spring_correct, kaim.summer_score, kaim.summer_correct, kaim.autumn_score, 
+            kaim.autumn_correct, kaim.winter_score, kaim.create_time, kaim.create_by, kaim.update_time, 
+            kaim.update_by 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.attribute1 as ${tAlias}_attribute1, 
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3, 
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5, 
+            ${tAlias}.kpi_assessment_indicators_id as ${tAlias}_kpi_assessment_indicators_id, 
+            ${tAlias}.January as ${tAlias}_January, ${tAlias}.February as ${tAlias}_February, 
+            ${tAlias}.March as ${tAlias}_March, ${tAlias}.April as ${tAlias}_April, 
+            ${tAlias}.May as ${tAlias}_May, ${tAlias}.June as ${tAlias}_June, ${tAlias}.July as ${tAlias}_July, 
+            ${tAlias}.August as ${tAlias}_August, ${tAlias}.September as ${tAlias}_September, 
+            ${tAlias}.October as ${tAlias}_October, ${tAlias}.November as ${tAlias}_November, 
+            ${tAlias}.December as ${tAlias}_December, ${tAlias}.spring as ${tAlias}_spring, 
+            ${tAlias}.spring_assessment_results as ${tAlias}_spring_assessment_results, 
+            ${tAlias}.spring_assessment_score as ${tAlias}_spring_assessment_score, 
+            ${tAlias}.spring_revise_assessment_results as ${tAlias}_spring_revise_assessment_results, 
+            ${tAlias}.spring_correction_score as ${tAlias}_spring_correction_score, 
+            ${tAlias}.summer as ${tAlias}_summer, 
+            ${tAlias}.summer_assessment_results as ${tAlias}_summer_assessment_results, 
+            ${tAlias}.summer_assessment_score as ${tAlias}_summer_assessment_score, 
+            ${tAlias}.summer_revise_assessment_results as ${tAlias}_summer_revise_assessment_results, 
+            ${tAlias}.summer_correction_score as ${tAlias}_summer_correction_score, 
+            ${tAlias}.autumn as ${tAlias}_autumn, 
+            ${tAlias}.autumn_assessment_results as ${tAlias}_autumn_assessment_results, 
+            ${tAlias}.autumn_assessment_score as ${tAlias}_autumn_assessment_score, 
+            ${tAlias}.autumn_revise_assessment_results as ${tAlias}_autumn_revise_assessment_results, 
+            ${tAlias}.autumn_correction_score as ${tAlias}_autumn_correction_score, 
+            ${tAlias}.winter as ${tAlias}_winter, 
+            ${tAlias}.winter_assessment_results as ${tAlias}_winter_assessment_results, 
+            ${tAlias}.winter_assessment_score as ${tAlias}_winter_assessment_score, 
+            ${tAlias}.spring_score as ${tAlias}_spring_score, 
+            ${tAlias}.spring_correct as ${tAlias}_spring_correct, 
+            ${tAlias}.summer_score as ${tAlias}_summer_score, 
+            ${tAlias}.summer_correct as ${tAlias}_summer_correct, 
+            ${tAlias}.autumn_score as ${tAlias}_autumn_score, 
+            ${tAlias}.autumn_correct as ${tAlias}_autumn_correct, 
+            ${tAlias}.winter_score as ${tAlias}_winter_score, ${tAlias}.create_time as ${tAlias}_create_time, 
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time, 
+            ${tAlias}.update_by as ${tAlias}_update_by 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_assessment_indicators_month kaim
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and kaim.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsMonth" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into kpi_assessment_indicators_month (attribute1, attribute2,
+                                                         attribute3, attribute4,
+                                                         attribute5, kpi_assessment_indicators_id,
+                                                         January, February, March,
+                                                         April, May, June,
+                                                         July, August, September,
+                                                         October, November, December,
+                                                         spring, spring_assessment_results,
+                                                         spring_assessment_score,
+                                                         spring_revise_assessment_results,
+                                                         spring_correction_score, summer,
+                                                         summer_assessment_results, summer_assessment_score,
+                                                         summer_revise_assessment_results,
+                                                         summer_correction_score, autumn,
+                                                         autumn_assessment_results, autumn_assessment_score,
+                                                         autumn_revise_assessment_results,
+                                                         autumn_correction_score, winter,
+                                                         winter_assessment_results, winter_assessment_score,
+                                                         spring_score, spring_correct,
+                                                         summer_score, summer_correct,
+                                                         autumn_score, autumn_correct,
+                                                         winter_score, create_time,
+                                                         create_by, update_time, update_by)
+            values (#{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{kpiAssessmentIndicatorsId,jdbcType=BIGINT},
+                    #{January,jdbcType=VARCHAR}, #{February,jdbcType=VARCHAR}, #{March,jdbcType=VARCHAR},
+                    #{April,jdbcType=VARCHAR}, #{May,jdbcType=VARCHAR}, #{June,jdbcType=VARCHAR},
+                    #{July,jdbcType=VARCHAR}, #{August,jdbcType=VARCHAR}, #{September,jdbcType=VARCHAR},
+                    #{October,jdbcType=VARCHAR}, #{November,jdbcType=VARCHAR}, #{December,jdbcType=VARCHAR},
+                    #{spring,jdbcType=VARCHAR}, #{springAssessmentResults,jdbcType=VARCHAR},
+                    #{springAssessmentScore,jdbcType=VARCHAR},
+                    #{springReviseAssessmentResults,jdbcType=VARCHAR},
+                    #{springCorrectionScore,jdbcType=VARCHAR}, #{summer,jdbcType=VARCHAR},
+                    #{summerAssessmentResults,jdbcType=VARCHAR}, #{summerAssessmentScore,jdbcType=VARCHAR},
+                    #{summerReviseAssessmentResults,jdbcType=VARCHAR},
+                    #{summerCorrectionScore,jdbcType=VARCHAR}, #{autumn,jdbcType=VARCHAR},
+                    #{autumnAssessmentResults,jdbcType=VARCHAR}, #{autumnAssessmentScore,jdbcType=VARCHAR},
+                    #{autumnReviseAssessmentResults,jdbcType=VARCHAR},
+                    #{autumnCorrectionScore,jdbcType=VARCHAR}, #{winter,jdbcType=VARCHAR},
+                    #{winterAssessmentResults,jdbcType=VARCHAR}, #{winterAssessmentScore,jdbcType=VARCHAR},
+                    #{springScore,jdbcType=VARCHAR}, #{springCorrect,jdbcType=VARCHAR},
+                    #{summerScore,jdbcType=VARCHAR}, #{summerCorrect,jdbcType=VARCHAR},
+                    #{autumnScore,jdbcType=VARCHAR}, #{autumnCorrect,jdbcType=VARCHAR},
+                    #{winterScore,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_assessment_indicators_month
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsMonth">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsMonth">
+        <![CDATA[
+            update kpi_assessment_indicators_month
+               set attribute1                       = #{attribute1,jdbcType=VARCHAR},
+                   attribute2                       = #{attribute2,jdbcType=VARCHAR},
+                   attribute3                       = #{attribute3,jdbcType=VARCHAR},
+                   attribute4                       = #{attribute4,jdbcType=VARCHAR},
+                   attribute5                       = #{attribute5,jdbcType=VARCHAR},
+                   kpi_assessment_indicators_id     = #{kpiAssessmentIndicatorsId,jdbcType=BIGINT},
+                   January                          = #{January,jdbcType=VARCHAR},
+                   February                         = #{February,jdbcType=VARCHAR},
+                   March                            = #{March,jdbcType=VARCHAR},
+                   April                            = #{April,jdbcType=VARCHAR},
+                   May                              = #{May,jdbcType=VARCHAR},
+                   June                             = #{June,jdbcType=VARCHAR},
+                   July                             = #{July,jdbcType=VARCHAR},
+                   August                           = #{August,jdbcType=VARCHAR},
+                   September                        = #{September,jdbcType=VARCHAR},
+                   October                          = #{October,jdbcType=VARCHAR},
+                   November                         = #{November,jdbcType=VARCHAR},
+                   December                         = #{December,jdbcType=VARCHAR},
+                   spring                           = #{spring,jdbcType=VARCHAR},
+                   spring_assessment_results        = #{springAssessmentResults,jdbcType=VARCHAR},
+                   spring_assessment_score          = #{springAssessmentScore,jdbcType=VARCHAR},
+                   spring_revise_assessment_results = #{springReviseAssessmentResults,jdbcType=VARCHAR},
+                   spring_correction_score          = #{springCorrectionScore,jdbcType=VARCHAR},
+                   summer                           = #{summer,jdbcType=VARCHAR},
+                   summer_assessment_results        = #{summerAssessmentResults,jdbcType=VARCHAR},
+                   summer_assessment_score          = #{summerAssessmentScore,jdbcType=VARCHAR},
+                   summer_revise_assessment_results = #{summerReviseAssessmentResults,jdbcType=VARCHAR},
+                   summer_correction_score          = #{summerCorrectionScore,jdbcType=VARCHAR},
+                   autumn                           = #{autumn,jdbcType=VARCHAR},
+                   autumn_assessment_results        = #{autumnAssessmentResults,jdbcType=VARCHAR},
+                   autumn_assessment_score          = #{autumnAssessmentScore,jdbcType=VARCHAR},
+                   autumn_revise_assessment_results = #{autumnReviseAssessmentResults,jdbcType=VARCHAR},
+                   autumn_correction_score          = #{autumnCorrectionScore,jdbcType=VARCHAR},
+                   winter                           = #{winter,jdbcType=VARCHAR},
+                   winter_assessment_results        = #{winterAssessmentResults,jdbcType=VARCHAR},
+                   winter_assessment_score          = #{winterAssessmentScore,jdbcType=VARCHAR},
+                   spring_score                     = #{springScore,jdbcType=VARCHAR},
+                   spring_correct                   = #{springCorrect,jdbcType=VARCHAR},
+                   summer_score                     = #{summerScore,jdbcType=VARCHAR},
+                   summer_correct                   = #{summerCorrect,jdbcType=VARCHAR},
+                   autumn_score                     = #{autumnScore,jdbcType=VARCHAR},
+                   autumn_correct                   = #{autumnCorrect,jdbcType=VARCHAR},
+                   winter_score                     = #{winterScore,jdbcType=VARCHAR},
+                   update_time                      = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                        = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiAssessmentIndicatorsMonthResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where kaim.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiAssessmentIndicatorsMonthResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiAssessmentIndicatorsMonthResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

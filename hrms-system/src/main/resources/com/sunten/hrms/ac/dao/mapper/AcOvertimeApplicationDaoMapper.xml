@@ -1,0 +1,1948 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOvertimeApplicationDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        <id column="id" property="id"/>
+        <result column="oa_order" property="oaOrder"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="user_name" property="userName"/>
+        <result column="overtime_type" property="overtimeType"/>
+        <result column="user_department" property="userDepartment"/>
+        <result column="user_section" property="userSection"/>
+        <result column="groups" property="groups"/>
+        <result column="reason" property="reason"/>
+        <result column="total_number" property="totalNumber"/>
+        <result column="total_time" property="totalTime"/>
+        <result column="approval_node" property="approvalNode"/>
+        <result column="approval_employee" property="approvalEmployee"/>
+        <result column="approval_result" property="approvalResult"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="attribute1" property="attribute1"/>
+        <result column="attribute2" property="attribute2"/>
+        <result column="attribute3" property="attribute3"/>
+        <result column="attribute4" property="attribute4"/>
+        <result column="attribute5" property="attribute5"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <resultMap id="AcOvertimeApplicationResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeApplication"
+               autoMapping="true">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+        distinct
+        aoa.id,aoa.oa_order, aoa.nick_name, aoa.user_name, aoa.overtime_type, aoa.user_department,
+            aoa.user_section, aoa.groups, aoa.reason, aoa.total_number, aoa.total_time, aoa.approval_node,
+            aoa.approval_employee, aoa.approval_result, aoa.enabled_flag, aoa.attribute1, aoa.attribute2,
+            aoa.attribute3, aoa.attribute4, aoa.attribute5, aoa.create_by, aoa.create_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+        ${tAlias}
+        .
+        id
+        as ${tAlias}_id,
+        ${tAlias}
+        .
+        oa_order
+        as
+        ${
+        tAlias
+        }
+        _oa_order,
+        ${tAlias}
+        .
+        nick_name
+        as
+        ${
+        tAlias
+        }
+        _nick_name,
+        ${tAlias}
+        .
+        user_name
+        as
+        ${
+        tAlias
+        }
+        _user_name,
+        ${tAlias}
+        .
+        overtime_type
+        as
+        ${
+        tAlias
+        }
+        _overtime_type,
+        ${tAlias}
+        .
+        user_department
+        as
+        ${
+        tAlias
+        }
+        _user_department,
+        ${tAlias}
+        .
+        user_section
+        as
+        ${
+        tAlias
+        }
+        _user_section,
+        ${tAlias}
+        .
+        groups
+        as
+        ${
+        tAlias
+        }
+        _groups,
+        ${tAlias}
+        .
+        reason
+        as
+        ${
+        tAlias
+        }
+        _reason,
+        ${tAlias}
+        .
+        total_number
+        as
+        ${
+        tAlias
+        }
+        _total_number,
+        ${tAlias}
+        .
+        total_time
+        as
+        ${
+        tAlias
+        }
+        _total_time,
+        ${tAlias}
+        .
+        approval_node
+        as
+        ${
+        tAlias
+        }
+        _approval_node,
+        ${tAlias}
+        .
+        approval_employee
+        as
+        ${
+        tAlias
+        }
+        _approval_employee,
+        ${tAlias}
+        .
+        approval_result
+        as
+        ${
+        tAlias
+        }
+        _approval_result,
+        ${tAlias}
+        .
+        enabled_flag
+        as
+        ${
+        tAlias
+        }
+        _enabled_flag,
+        ${tAlias}
+        .
+        attribute1
+        as
+        ${
+        tAlias
+        }
+        _attribute1,
+        ${tAlias}
+        .
+        attribute2
+        as
+        ${
+        tAlias
+        }
+        _attribute2,
+        ${tAlias}
+        .
+        attribute3
+        as
+        ${
+        tAlias
+        }
+        _attribute3,
+        ${tAlias}
+        .
+        attribute4
+        as
+        ${
+        tAlias
+        }
+        _attribute4,
+        ${tAlias}
+        .
+        attribute5
+        as
+        ${
+        tAlias
+        }
+        _attribute5,
+        ${tAlias}
+        .
+        create_by
+        as
+        ${
+        tAlias
+        }
+        _create_by,
+        ${tAlias}
+        .
+        create_time
+        as
+        ${
+        tAlias
+        }
+        _create_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_overtime_application aoa inner join ac_overtime_application_line aoal on aoa.oa_order = aoal.oa_order
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.user_name != null">
+                and (aoa.user_name = #{criteria.user_name} or aoal.user_name = #{criteria.user_name})
+            </if>
+            <if test="criteria.approvalResult != null">
+                <![CDATA[ and aoa.approval_result = #{criteria.approvalResult,jdbcType=VARCHAR} ]]>
+            </if>
+            <if test="criteria.beginDate != null &amp;&amp; criteria.endDate != null">
+                <![CDATA[ and aoal.start_time BETWEEN #{criteria.beginDate, jdbcType = DATE} and #{criteria.endDate, jdbcType = DATE} ]]>
+            </if>
+            <choose>
+                <when test='criteria.reqStatus eq "全部申请单"'>
+                    and 1 = 1
+                </when>
+                <when test='criteria.reqStatus eq "已结束申请单"'>
+                    and (aoa.approval_result = 'pass' or aoa.approval_result = 'Cancel' or aoa.approval_result ='notPass' or aoa.approval_result = 'Pass' )
+                </when>
+                <when test='criteria.reqStatus eq "审批中申请单"'>
+                    and aoa.approval_result IS NULL
+                </when>
+            </choose>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplication" useGeneratedKeys="true"
+            keyProperty="id">
+        <![CDATA[
+        insert into ac_overtime_application (oa_order, nick_name, user_name,
+                                             overtime_type, user_department,
+                                             user_section, groups, reason,
+                                             total_number, total_time,
+                                             approval_node, approval_employee,
+                                             approval_result, enabled_flag,
+                                             attribute1, attribute2,
+                                             attribute3, attribute4,
+                                             attribute5, create_by,
+                                             create_time)
+        values (#{oaOrder,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+                #{overtimeType,jdbcType=VARCHAR}, #{userDepartment,jdbcType=VARCHAR},
+                #{userSection,jdbcType=VARCHAR}, #{groups,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR},
+                #{totalNumber,jdbcType=INTEGER}, #{totalTime,jdbcType=DOUBLE},
+                #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                #{approvalResult,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                #{attribute5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+    <insert id="addMainTableInfo">
+        insert into ac_overtime_application(oa_order, nick_name, user_name, user_department, user_section, groups,
+                                            reason, total_number, total_time, create_by, create_time, enabled_flag)
+        values (#{oa_order}, #{nick_name}, #{user_name}, #{user_department}, #{user_section}, #{groups}, #{reason},
+                #{total_number}, #{total_time}, #{create_by}, GETDATE(), 1)
+    </insert>
+    <insert id="addSubInfo">
+        INSERT INTO ac_overtime_application_line (oa_order, nick_name, user_name, position, start_time, end_time,
+        total_rest_time,
+        hours, month_hours, create_by, create_time, enabled_flag)
+        VALUES
+        <foreach collection="subDataList2" item="item" index="index" separator=",">
+            (#{item.oa_order}, #{item.name}, #{item.work_card}, #{item.job_name}, #{item.start_time}, #{item.end_time},
+            #{item.total_rest_time}, #{item.hours}, #{item.month_hours}, #{item.create_by}, GETDATE(),1)
+        </foreach>
+    </insert>
+    <insert id="addOvertimeReviewUser">
+        insert into ac_overtime_personnel_review(dept_id, section_id, work_card, create_by, create_time)
+        values (#{dept_id}, #{section_id}, #{work_card}, #{create_by}, GETDATE())
+    </insert>
+    <sql id="Delete_Sql">
+        <![CDATA[
+        delete
+        from ac_overtime_application
+        where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        <include refid="Delete_Sql"/>
+    </delete>
+    <delete id="deleteOvertimeReviewInfo">
+        delete
+        from ac_overtime_personnel_review
+        where id = #{id}
+    </delete>
+    <update id="cancelOvertimeSub">
+        update ac_overtime_application_line
+        set enabled_flag = 0
+        where oa_order = #{oaOrder}
+    </update>
+    <update id="cancelOvertimeMain">
+        update ac_overtime_application
+        set enabled_flag = 0
+        where oa_order = #{oaOrder}
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        <![CDATA[
+        update ac_overtime_application
+        set oa_order          = #{oaOrder,jdbcType=VARCHAR},
+            nick_name         = #{nickName,jdbcType=VARCHAR},
+            user_name         = #{userName,jdbcType=VARCHAR},
+            overtime_type     = #{overtimeType,jdbcType=VARCHAR},
+            user_department   = #{userDepartment,jdbcType=VARCHAR},
+            user_section      = #{userSection,jdbcType=VARCHAR},
+            groups            = #{groups,jdbcType=VARCHAR},
+            reason            = #{reason,jdbcType=VARCHAR},
+            total_number      = #{totalNumber,jdbcType=INTEGER},
+            total_time        = #{totalTime,jdbcType=DOUBLE},
+            approval_node     = #{approvalNode,jdbcType=VARCHAR},
+            approval_employee = #{approvalEmployee,jdbcType=VARCHAR},
+            approval_result   = #{approvalResult,jdbcType=VARCHAR},
+            enabled_flag      = #{enabledFlag,jdbcType=BIT},
+            attribute1        = #{attribute1,jdbcType=VARCHAR},
+            attribute2        = #{attribute2,jdbcType=VARCHAR},
+            attribute3        = #{attribute3,jdbcType=VARCHAR},
+            attribute4        = #{attribute4,jdbcType=VARCHAR},
+            attribute5        = #{attribute5,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </update>
+    <update id="updateOaReq">
+        update ac_overtime_application
+        set approval_node     = #{approvalNode},
+            approval_employee = #{approvalEmployee}
+        where oa_order = #{oaOrder}
+    </update>
+    <update id="updateResultToHrOvertime">
+        update ac_overtime_application
+        set approval_result = #{approvalResult}
+        where oa_order = #{oa_order}
+    </update>
+    <update id="updateOvertimeReview">
+        update ac_overtime_personnel_review
+        set dept_id    = #{deptId},
+            section_id = #{sectionId},
+            work_card=#{workCard}
+        where id = #{id}
+    </update>
+    <update id="updateReviewFormData">
+        <foreach collection="updatedSubFormData" item="item" index="index" separator=";">
+            <![CDATA[
+        update ac_overtime_application_line
+        set month_hours = #{item.month_hours},
+            review_startTime = #{item.review_startTime},
+            review_endTime = #{item.review_endTime},
+            review_total_rest_time = #{item.review_total_rest_time},
+            review_hours = #{item.review_hours},
+            reviewer_nick_name = #{item.reviewer_nick_name},
+            reviewer_user_name = #{item.reviewer_user_name},
+            remarks = #{item.remarks},
+            review_time = GETDATE()
+        where user_name = #{item.work_card} and oa_order = #{item.oa_order}
+        ]]>
+        </foreach>
+    </update>
+
+    <select id="getByKey" resultMap="AcOvertimeApplicationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aoa.id = #{id,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcOvertimeApplicationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcOvertimeApplicationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+    <select id="getMySelfOvertimeListInfo" resultType="java.util.HashMap">
+        SELECT pej.job_name, pej.dept_id, pej.dept_name, pej.attribute4, pe.work_card, pe.name
+        FROM pm_employee_job pej
+                 LEFT JOIN pm_employee pe ON pej.employee_id = pe.id
+                 LEFT JOIN fnd_dept fd ON fd.id = pej.dept_id
+        where pej.dept_id = #{deptId}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1
+    </select>
+    <select id="getOvertimeInfo" resultType="java.lang.Float">
+        SELECT sum(ROUND(aoal.hours, 2)) as month_hours
+        FROM ac_overtime_application_line aoal
+                 left join ac_overtime_application aoa on aoal.oa_order = aoa.oa_order
+        WHERE aoal.user_name = #{tempCard}
+            AND MONTH (
+            aoal.start_time) = MONTH (GETDATE())
+          AND YEAR (aoal.start_time) = YEAR (GETDATE())
+          AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass'
+           OR aoa.approval_result is null)
+    </select>
+<!--    <select id="getOvertimeInfo" resultType="java.lang.Float">-->
+<!--        SELECT MAX(month_hours) as month_hours-->
+<!--        FROM ac_overtime_application_line aoal-->
+<!--                 left join ac_overtime_application aoa on aoal.oa_order = aoa.oa_order-->
+<!--        WHERE aoal.user_name = #{tempCard}-->
+<!--            AND MONTH (-->
+<!--            aoal.start_time) = MONTH (GETDATE())-->
+<!--          AND YEAR (aoal.start_time) = YEAR (GETDATE())-->
+<!--          AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass'-->
+<!--           OR aoa.approval_result is null)-->
+<!--    </select>-->
+    <select id="getDeptUsedOvertimeInfo" resultType="java.util.HashMap">
+        select  TOP 1 *
+        from ac_overtime_mangement_backup
+        where dept_id = #{deptId} AND MONTH (backup_time) = MONTH (GETDATE())
+          AND YEAR (backup_time) = YEAR (GETDATE())
+    </select>
+    <select id="getUsedMonthHours" resultType="java.lang.Float">
+--         SELECT SUM(aoal.month_hours) used_month_hours
+        SELECT SUM(aoal.hours) used_month_hours
+        FROM ac_overtime_application_line aoal
+                 inner join ac_overtime_application aoa on aoal.oa_order = aoa.oa_order
+        WHERE MONTH (aoal.start_time) = MONTH (GETDATE())
+          AND YEAR (aoal.create_time) = YEAR (GETDATE())
+          AND aoal.user_name IN
+            (SELECT work_card
+            FROM pm_employee_job pej
+            inner JOIN pm_employee pe ON pej.employee_id=pe.id
+            inner JOIN fnd_dept fd ON fd.id=pej.dept_id
+            where pej.dept_id= #{deptId}
+          and pe.leave_flag=0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1)
+          AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass'
+           OR aoa.approval_result is null)
+    </select>
+    <select id="checkOvertimeInfo" resultType="java.util.HashMap">
+        SELECT *
+        FROM ac_overtime_application_line aoal
+                 join ac_overtime_application aoa on aoa.oa_order = aoal.oa_order
+        where aoal.user_name = #{workCard}
+          AND (aoa.approval_result like 'Pass' or aoa.approval_result is null or aoa.approval_result = 'pass')
+          AND (
+                (aoal.start_time >= #{startTime} AND aoal.start_time &lt;= #{endTime})
+                OR (aoal.start_time &lt;= #{startTime} AND aoal.end_time >= #{endTime})
+                OR (aoal.end_time >= #{startTime} AND aoal.end_time &lt;= #{endTime})
+            )
+    </select>
+    <select id="newCheckOvertimeInfo" resultType="java.util.HashMap">
+        SELECT TOP 1 *
+        FROM ac_overtime_application_line aoal
+                 join ac_overtime_application aoa on aoa.oa_order = aoal.oa_order
+        where aoal.user_name = #{workCard}
+          AND (aoa.approval_result like 'Pass' or aoa.approval_result is null or aoa.approval_result = 'pass')
+          AND (
+                (aoal.start_time >= #{startTime} AND aoal.start_time &lt;= #{endTime})
+                OR (aoal.start_time &lt;= #{startTime} AND aoal.end_time >= #{endTime})
+                OR (aoal.end_time >= #{startTime} AND aoal.end_time &lt;= #{endTime})
+            )
+    </select>
+    <select id="getAcOvertimeInfo" resultType="java.util.HashMap">
+        select *
+        from ac_overtime_application
+        where oa_order = #{oaOrder}
+    </select>
+    <select id="getAcOvertimeSubInfo" resultType="java.util.HashMap">
+        select distinct nick_name,user_name,position,start_time,end_time,total_rest_time,hours,month_hours,review_startTime,review_endTime,
+               review_total_rest_time,review_hours,reviewer_nick_name,reviewer_user_name,review_time, remarks
+        from ac_overtime_application_line
+        where oa_order = #{oaOrder}
+    </select>
+    <select id="getAllDepartment" resultType="java.util.HashMap">
+        select id as dept_id, dept_name
+        from fnd_dept
+        where dept_level  like '%部%'
+          AND enabled_flag = 1
+    </select>
+    <select id="getDepartmentByParentId" resultType="java.util.HashMap">
+        select id as dept_id, dept_name
+        from fnd_dept
+        where parent_id = #{parentId}
+          AND dept_level like '%科室%'
+    </select>
+    <select id="getOvertimeReviewInfo" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0 and aopr.section_id is not null
+    </select>
+<!--    <select id="getOvertimeReviewInfo" resultType="java.util.HashMap">-->
+<!--        SELECT pe.name       as name,-->
+<!--               pe.work_card  as work_card,-->
+<!--               fd.dept_name  as dept_name,-->
+<!--               fd2.dept_name as section_name,-->
+<!--               aopr.id,-->
+<!--               aopr.dept_id,-->
+<!--               aopr.section_id-->
+<!--        FROM ac_overtime_personnel_review aopr-->
+<!--                 JOIN fnd_dept fd ON fd.id = aopr.dept_id-->
+<!--                 JOIN fnd_dept fd2 ON fd2.id = aopr.section_id-->
+<!--                 JOIN pm_employee pe ON pe.work_card = aopr.work_card-->
+<!--        WHERE pe.leave_flag = 0-->
+<!--    </select>-->
+    <select id="getOvertimeReviewUserInfo" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN fnd_dept fd2 ON fd2.id = aopr.section_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0
+          and aopr.id = #{id}
+    </select>
+    <select id="simpleQueryByDeptName" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0
+          AND fd.dept_name like #{value}
+    </select>
+<!--    <select id="simpleQueryByDeptName" resultType="java.util.HashMap">-->
+<!--        SELECT pe.name       as name,-->
+<!--               pe.work_card  as work_card,-->
+<!--               fd.dept_name  as dept_name,-->
+<!--               fd2.dept_name as section_name,-->
+<!--               aopr.id,-->
+<!--               aopr.dept_id,-->
+<!--               aopr.section_id-->
+<!--        FROM ac_overtime_personnel_review aopr-->
+<!--                 JOIN fnd_dept fd ON fd.id = aopr.dept_id-->
+<!--                 JOIN fnd_dept fd2 ON fd2.id = aopr.section_id-->
+<!--                 JOIN pm_employee pe ON pe.work_card = aopr.work_card-->
+<!--        WHERE pe.leave_flag = 0-->
+<!--          AND fd.dept_name like #{value}-->
+<!--    </select>-->
+    <select id="simpleQueryBySectionName" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN fnd_dept fd2 ON fd2.id = aopr.section_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0
+          AND fd2.dept_name like #{value}
+    </select>
+    <select id="simpleQueryByWorCard" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0
+          AND pe.work_card like #{value}
+    </select>
+<!--    <select id="simpleQueryByWorCard" resultType="java.util.HashMap">-->
+<!--        SELECT pe.name       as name,-->
+<!--               pe.work_card  as work_card,-->
+<!--               fd.dept_name  as dept_name,-->
+<!--               fd2.dept_name as section_name,-->
+<!--               aopr.id,-->
+<!--               aopr.dept_id,-->
+<!--               aopr.section_id-->
+<!--        FROM ac_overtime_personnel_review aopr-->
+<!--                 JOIN fnd_dept fd ON fd.id = aopr.dept_id-->
+<!--                 JOIN fnd_dept fd2 ON fd2.id = aopr.section_id-->
+<!--                 JOIN pm_employee pe ON pe.work_card = aopr.work_card-->
+<!--        WHERE pe.leave_flag = 0-->
+<!--          AND pe.work_card like #{value}-->
+<!--    </select>-->
+    <select id="simpleQueryByUserName" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0
+          AND pe.name like #{value}
+    </select>
+<!--    <select id="simpleQueryByUserName" resultType="java.util.HashMap">-->
+<!--        SELECT pe.name       as name,-->
+<!--               pe.work_card  as work_card,-->
+<!--               fd.dept_name  as dept_name,-->
+<!--               fd2.dept_name as section_name,-->
+<!--               aopr.id,-->
+<!--               aopr.dept_id,-->
+<!--               aopr.section_id-->
+<!--        FROM ac_overtime_personnel_review aopr-->
+<!--                 JOIN fnd_dept fd ON fd.id = aopr.dept_id-->
+<!--                 JOIN fnd_dept fd2 ON fd2.id = aopr.section_id-->
+<!--                 JOIN pm_employee pe ON pe.work_card = aopr.work_card-->
+<!--        WHERE pe.leave_flag = 0-->
+<!--          AND pe.name like #{value}-->
+<!--    </select>-->
+<!--    <select id="checkReviewUser" resultType="java.util.HashMap">-->
+<!--        SELECT-->
+<!--            pe.name AS name,-->
+<!--            pe.work_card AS work_card,-->
+<!--            aopr.id,-->
+<!--            CASE-->
+
+<!--                WHEN fd.dept_level LIKE '%班%' THEN-->
+<!--                    fd2.dept_name-->
+<!--                WHEN fd.dept_level LIKE '%科室%' THEN-->
+<!--                    fd1.dept_name-->
+<!--                WHEN fd.dept_level LIKE '%部%' THEN-->
+<!--                    pej.dept_name ELSE NULL &#45;&#45; 或者你可以设置默认值-->
+<!--                END AS dept_name,-->
+<!--            CASE-->
+
+<!--                WHEN fd.dept_level LIKE '%班%' THEN-->
+<!--                    fd1.dept_name-->
+<!--                WHEN fd.dept_level LIKE '%科室%' THEN-->
+<!--                    '' &#45;&#45; 因为没有明确的section_name-->
+<!--                ELSE NULL &#45;&#45; 或者你可以设置默认值-->
+<!--                END AS section_name-->
+<!--        FROM-->
+<!--            pm_employee pe-->
+<!--                INNER JOIN pm_employee_job pej ON pej.employee_id = pe.id-->
+<!--                INNER JOIN fnd_dept fd ON fd.id = pej.dept_id-->
+<!--                LEFT JOIN fnd_dept fd1 ON fd1.id = fd.parent_id-->
+<!--                LEFT JOIN fnd_dept fd2 ON fd2.id = fd1.parent_id-->
+<!--                inner JOIN ac_overtime_personnel_review aopr ON fd.id = aopr.dept_id-->
+<!--        WHERE-->
+<!--            pe.work_card = #{workCard}-->
+<!--          AND pej.job_main_flag = 1-->
+<!--          AND pe.leave_flag = 0-->
+<!--          AND pe.enabled_flag = 1-->
+<!--          AND pej.enabled_flag = 1-->
+<!--    </select>-->
+    <select id="checkReviewUser" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               fd2.dept_name as section_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN fnd_dept fd2 ON fd2.id = aopr.section_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0
+          and pe.work_card = #{workCard}
+    </select>
+    <select id="getOvertimeApplicationReviews" resultType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        select distinct aoa.id, aoa.oa_order, aoa.nick_name, aoa.user_name, aoa.overtime_type, aoa.user_department,
+        aoa.user_section, aoa.groups, aoa.reason, aoa.total_number, aoa.total_time, aoa.approval_node,
+        aoa.approval_employee, aoa.approval_result, aoa.enabled_flag, aoa.attribute1, aoa.attribute2,
+        aoa.attribute3, aoa.attribute4, aoa.attribute5, aoa.create_by, aoa.create_time
+        from ac_overtime_application aoa join ac_overtime_application_line aoal on aoa.oa_order = aoal.oa_order
+        where 1 = 1 AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass')
+        AND aoal.review_endTime IS NULL
+--           2025-1-2 开年第一天发现查询跨年的加班申请日期转换出错了，所以使用一下sql
+        AND CONVERT(DATE, aoal.end_time) >= CONVERT(DATE, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0)) -- 上一个月的第一天
+        AND CONVERT(DATE, aoal.end_time) &lt; CONVERT(DATE, DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 2, 0))) -- 下两个月的前一天
+--         AND CONVERT(DATE, aoal.end_time) >= CONVERT(DATE, CONVERT(VARCHAR(4), YEAR(GETDATE())) + '-' + RIGHT('0' + CONVERT (VARCHAR(2), MONTH(GETDATE()) - 1), 2) + '-01')
+--         AND CONVERT(DATE, aoal.end_time) &lt; CONVERT(DATE,
+--         CASE
+--         WHEN MONTH(GETDATE()) + 2 > 12 THEN CONVERT(VARCHAR(4), YEAR(GETDATE()) + 1) + '-' + RIGHT('0' + CONVERT(VARCHAR(2), (MONTH(GETDATE()) + 2) - 12), 2) + '-01'
+--         ELSE CONVERT(VARCHAR(4), YEAR(GETDATE())) + '-' + RIGHT('0' + CONVERT(VARCHAR(2), MONTH(GETDATE()) + 2), 2) + '-01'
+--         END)
+--         AND (
+--         DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) - 1, 1) &lt;= aoal.end_time
+--         AND aoal.end_time &lt; DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 2, 1)
+--         )
+        AND ( aoa.user_department LIKE #{userDepartment} AND aoa.user_section LIKE #{userSection} )
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </select>
+    <select id="getOvertimeApplicationReviews2" resultType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        select aoa.id, aoa.oa_order, aoa.nick_name, aoa.user_name, aoa.overtime_type, aoa.user_department,
+        aoa.user_section, aoa.groups, aoa.reason, aoa.total_number, aoa.total_time, aoa.approval_node,
+        aoa.approval_employee, aoa.approval_result, aoa.enabled_flag, aoa.attribute1, aoa.attribute2,
+        aoa.attribute3, aoa.attribute4, aoa.attribute5, aoa.create_by, aoa.create_time
+        from ac_overtime_application aoa join ac_overtime_application_line aoal on aoa.oa_order = aoal.oa_order
+        where 1 = 1 AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass')
+        AND aoal.review_endTime IS NULL
+        AND CONVERT(DATE, aoal.end_time) >= CONVERT(DATE, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0)) -- 上一个月的第一天
+        AND CONVERT(DATE, aoal.end_time) &lt; CONVERT(DATE, DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 2, 0))) -- 下两个月的前一天
+--         AND CONVERT(DATE, aoal.end_time) >= CONVERT(DATE, CONVERT(VARCHAR(4), YEAR(GETDATE())) + '-' + RIGHT('0' + CONVERT(VARCHAR(2), MONTH(GETDATE()) - 1), 2) + '-01')
+--         AND CONVERT(DATE, aoal.end_time) &lt; CONVERT(DATE,
+--         CASE
+--         WHEN MONTH(GETDATE()) + 2 > 12 THEN CONVERT(VARCHAR(4), YEAR(GETDATE()) + 1) + '-' + RIGHT('0' + CONVERT(VARCHAR(2), (MONTH(GETDATE()) + 2) - 12), 2) + '-01'
+--         ELSE CONVERT(VARCHAR(4), YEAR(GETDATE())) + '-' + RIGHT('0' + CONVERT(VARCHAR(2), MONTH(GETDATE()) + 2), 2) + '-01'
+--         END)
+--         AND (
+--         DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) - 1, 1) &lt;= aoal.end_time
+--         AND aoal.end_time &lt; DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 2, 1)
+--         )
+        AND ( aoa.user_department LIKE #{userDepartment})
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </select>
+    <select id="getRecentlyRecord" resultType="java.util.HashMap">
+        SELECT CONCAT(acr.date, ' ', CONVERT(VARCHAR (5), acr.clock_time)) as clockDate,
+        pm.work_card,
+        acr.card_machine_no
+        FROM ac_clock_record acr
+        JOIN pm_employee pm ON acr.employee_id = pm.id
+        WHERE pm.work_card = #{workCard}
+        AND acr.date >= DATEADD(day, -3, #{parsedDate}) -- 后三天
+        AND acr.date &lt;= #{parsedDate} -- 前三天
+        order by acr.date, acr.clock_time
+    </select>
+    <select id="getOvertimeLeaveStatisticsQueryList" resultType="com.sunten.hrms.ac.domain.OvertimeLeaveCheckList">
+        SELECT a.formatted_month,
+               a.nick_name,
+               a.user_name,
+               CASE
+                   WHEN fd.dept_level LIKE '%班%' THEN fd2.dept_name
+                   WHEN fd.dept_level LIKE '%科室%' THEN fd1.dept_name
+                   WHEN fd.dept_level LIKE '%部%' THEN pej.dept_name
+                   ELSE NULL -- 或者你可以设置默认值
+                   END AS dept_name,
+               CASE
+                   WHEN fd.dept_level LIKE '%班%' THEN fd1.dept_name
+                   WHEN fd.dept_level LIKE '%科室%' OR fd.dept_level LIKE '%部%' THEN '' -- 因为没有明确的section_name
+                   ELSE NULL -- 或者你可以设置默认值
+                   END AS section_name,
+               CASE
+                   WHEN fd.dept_level LIKE '%班%' THEN pej.dept_name
+                   ELSE '' -- 对于其他级别，没有group_name
+                   END AS group_name,
+               pej.job_name,
+               SUM(CASE WHEN a.xxrbs = 0 THEN a.reviewhours ELSE 0 END)                  workDayOvertime,
+               ROUND(SUM(CASE WHEN a.xxrbs = 1 THEN a.reviewhours ELSE 0 END), 1) AS restDayOvertime,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2) AS DECIMAL(18,2)) AS TXTS,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS DECIMAL(18,2)) AS TXXS,
+               SUM(CASE WHEN a.leave_type = '年假' THEN a.number ELSE 0 END)       NJ,
+               SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END)       SJ,
+               SUM(CASE WHEN a.leave_type = '病假' THEN a.number ELSE 0 END)       BJ,
+               SUM(CASE WHEN a.leave_type = '婚假' THEN a.number ELSE 0 END)       HJ,
+               SUM(CASE WHEN a.leave_type = '产假' THEN a.number ELSE 0 END)       CJ,
+               SUM(CASE WHEN a.leave_type = '陪产假' THEN a.number ELSE 0 END)     PCJ,
+               SUM(CASE WHEN a.leave_type = '丧假' THEN a.number ELSE 0 END)       SAJ,
+               SUM(CASE WHEN a.leave_type = '工伤假' THEN a.number ELSE 0 END)     GSJ,
+               SUM(CASE WHEN a.leave_type = '计划生育假' THEN a.number ELSE 0 END) JHSYJ,
+               SUM(CASE WHEN a.leave_type = '公假' THEN a.number ELSE 0 END)       GJ,
+               SUM(CASE WHEN a.leave_type = '育儿假' THEN a.number ELSE 0 END)     YEJ,
+               SUM(CASE WHEN a.leave_type = '护理假' THEN a.number ELSE 0 END)     HLJ
+        FROM (SELECT CONVERT
+                         (VARCHAR (7), alal.start_time, 120) AS formatted_month,
+                     ala.nick_name,
+                     ala.user_name,
+                     CASE WHEN alal.leave_type = '事假' or alaL.leave_type = '年假' THEN alal.work_number ELSE alal.number END as number,
+--                      alal.number,
+--                      ala.total_number,
+                     alal.leave_type,
+                     0                                       AS reviewhours,
+                     99                                      AS xxrbs
+              FROM ac_leave_application ala
+                       JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+              WHERE YEAR (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND ala.approval_result = 'Pass' and ala.enabled_flag = 1
+              UNION ALL
+              SELECT CONVERT
+                  ( VARCHAR ( 7 ), aoal.start_time, 120 ) AS formatted_month,
+                  aoal.nick_name,
+                  aoal.user_name,
+                  0 AS txts,
+                  '加班' AS LeaveType,
+                  aoal.review_hours,
+                  c.XXRBS
+              FROM
+                  ac_overtime_application aoa
+                  JOIN ac_overtime_application_line aoal
+              ON aoa.oa_order = aoal.oa_order
+                  LEFT JOIN ( SELECT c.RQ, C.XXRBS FROM v_kq_date c ) c ON CONVERT ( VARCHAR ( 10 ), aoal.review_startTime, 23 ) = c.RQ
+              WHERE YEAR (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND aoa.approval_result = 'Pass' and aoal.enabled_flag = 1) a
+                 JOIN pm_employee pe ON a.user_name = pe.work_card
+                 LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                 INNER JOIN fnd_dept fd ON fd.id = pej.dept_id
+                 LEFT JOIN fnd_dept fd1 ON fd1.id = fd.parent_id
+                 LEFT JOIN fnd_dept fd2 ON fd2.id = fd1.parent_id
+        WHERE pej.job_main_flag = 1 AND pej.enabled_flag = 1
+          AND ( fd.dept_level LIKE '%班%' OR fd.dept_level LIKE '%科室%' OR fd.dept_level LIKE '%部%' )
+          AND a.nick_name != ''
+        GROUP BY a.formatted_month,
+            a.nick_name,
+            a.user_name,
+            pej.attribute2,
+            pej.dept_name,
+            pej.attribute4,
+            pej.job_name,
+            fd.dept_level,
+            fd.dept_name,
+            fd1.dept_name,
+            fd2.dept_name
+        order by a.formatted_month desc
+        OFFSET (#{pages}) * #{sizes} ROWS FETCH NEXT #{sizes} ROWS ONLY
+    </select>
+    <select id="getOvertimeLeaveStatisticsQueryList2" resultType="com.sunten.hrms.ac.domain.OvertimeLeaveCheckList">
+        SELECT a.formatted_month,
+               a.nick_name,
+               a.user_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_dept_id = fdt.id ) AS dept_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_department_id = fdt.id ) AS section_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_team_id = fdt.id ) AS group_name,
+               pej.job_name,
+               SUM(CASE WHEN a.xxrbs = 0 THEN a.reviewhours ELSE 0 END)                  workDayOvertime,
+               ROUND(SUM(CASE WHEN a.xxrbs = 1 THEN a.reviewhours ELSE 0 END), 1) AS restDayOvertime,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2) AS DECIMAL(18,2)) AS TXTS,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS DECIMAL(18,2)) AS TXXS,
+               SUM(CASE WHEN a.leave_type = '年假' THEN a.number ELSE 0 END)       NJ,
+               ROUND(SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END),2)       SJ,
+               SUM(CASE WHEN a.leave_type = '病假' THEN a.number ELSE 0 END)       BJ,
+               SUM(CASE WHEN a.leave_type = '婚假' THEN a.number ELSE 0 END)       HJ,
+               SUM(CASE WHEN a.leave_type = '产假' THEN a.number ELSE 0 END)       CJ,
+               SUM(CASE WHEN a.leave_type = '陪产假' THEN a.number ELSE 0 END)     PCJ,
+               SUM(CASE WHEN a.leave_type = '丧假' THEN a.number ELSE 0 END)       SAJ,
+               SUM(CASE WHEN a.leave_type = '工伤假' THEN a.number ELSE 0 END)     GSJ,
+               SUM(CASE WHEN a.leave_type = '计划生育假' THEN a.number ELSE 0 END) JHSYJ,
+               SUM(CASE WHEN a.leave_type = '公假' THEN a.number ELSE 0 END)       GJ,
+               SUM(CASE WHEN a.leave_type = '育儿假' THEN a.number ELSE 0 END)     YEJ,
+               SUM(CASE WHEN a.leave_type = '护理假' THEN a.number ELSE 0 END)     HLJ
+        FROM (SELECT CONVERT
+                         (VARCHAR (7), alal.start_time, 120) AS formatted_month,
+                     ala.nick_name,
+                     ala.user_name,
+                     (CASE
+                          WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+                              alal.work_number
+                          ELSE
+                              alal.number
+                         END) AS number,
+--                      COALESCE(
+--                              ala.hr_total, -- 如果 ala.hr_total 不为 NULL，则使用它的值
+--                              CASE
+--                                  WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+--                                      alal.work_number
+--                                  ELSE
+--                                      alal.number
+--                                  END
+--                          ) AS number,
+--                      CASE WHEN alal.leave_type = '事假' or alaL.leave_type = '年假' THEN alal.work_number ELSE alal.number END as number,
+--                      alal.number,
+--                      ala.total_number,
+                     alal.leave_type,
+                     0                                       AS reviewhours,
+                     99                                      AS xxrbs
+              FROM ac_leave_application ala
+                       JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+              WHERE YEAR (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND ala.approval_result = 'Pass'
+              and ala.enabled_flag = 1 and ala.enabled_flag = 1
+              UNION ALL
+              SELECT CONVERT
+                  ( VARCHAR ( 7 ), aoal.start_time, 120 ) AS formatted_month,
+                  aoal.nick_name,
+                  aoal.user_name,
+                  0 AS txts,
+                  '加班' AS LeaveType,
+                  ROUND(aoal.review_hours, 1) AS review_hours,
+--                   aoal.review_hours,
+                  c.XXRBS
+              FROM
+                  ac_overtime_application aoa
+                  JOIN ac_overtime_application_line aoal
+              ON aoa.oa_order = aoal.oa_order
+                  LEFT JOIN ( SELECT c.RQ, C.XXRBS FROM v_kq_date c ) c ON CONVERT ( VARCHAR ( 10 ), aoal.review_startTime, 23 ) = c.RQ
+              WHERE YEAR (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND aoa.approval_result = 'Pass'
+              and aoal.enabled_flag = 1) a
+                 JOIN pm_employee pe ON a.user_name = pe.work_card
+                 LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                 INNER JOIN fnd_dept fds ON fds.id = pej.dept_id
+        where	(fds.ext_dept_id = #{deptId} AND fds.ext_department_id = #{administrativeOfficeId})
+        and  pej.job_main_flag = 1  AND pej.enabled_flag = 1
+          AND a.nick_name != ''
+        GROUP BY
+            a.formatted_month,
+            a.nick_name,
+            a.user_name,
+            pej.attribute2,
+            pej.dept_name,
+            pej.attribute4,
+            pej.job_name,fds.ext_dept_id,fds.ext_department_id,fds.ext_team_id
+        order by a.formatted_month desc
+        OFFSET (#{pages}) * #{sizes} ROWS FETCH NEXT #{sizes} ROWS ONLY
+    </select>
+    <select id="getOvertimeLeaveStatisticsQueryList3" resultType="com.sunten.hrms.ac.domain.OvertimeLeaveCheckList">
+        SELECT a.formatted_month,
+               a.nick_name,
+               a.user_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_dept_id = fdt.id ) AS dept_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_department_id = fdt.id ) AS section_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_team_id = fdt.id ) AS group_name,
+               pej.job_name,
+               SUM(CASE WHEN a.xxrbs = 0 THEN a.reviewhours ELSE 0 END)                  workDayOvertime,
+               ROUND(SUM(CASE WHEN a.xxrbs = 1 THEN a.reviewhours ELSE 0 END), 1) AS restDayOvertime,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2) AS DECIMAL(18,2)) AS TXTS,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS DECIMAL(18,2)) AS TXXS,
+               SUM(CASE WHEN a.leave_type = '年假' THEN a.number ELSE 0 END)       NJ,
+               ROUND(SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END),2)       SJ,
+               SUM(CASE WHEN a.leave_type = '病假' THEN a.number ELSE 0 END)       BJ,
+               SUM(CASE WHEN a.leave_type = '婚假' THEN a.number ELSE 0 END)       HJ,
+               SUM(CASE WHEN a.leave_type = '产假' THEN a.number ELSE 0 END)       CJ,
+               SUM(CASE WHEN a.leave_type = '陪产假' THEN a.number ELSE 0 END)     PCJ,
+               SUM(CASE WHEN a.leave_type = '丧假' THEN a.number ELSE 0 END)       SAJ,
+               SUM(CASE WHEN a.leave_type = '工伤假' THEN a.number ELSE 0 END)     GSJ,
+               SUM(CASE WHEN a.leave_type = '计划生育假' THEN a.number ELSE 0 END) JHSYJ,
+               SUM(CASE WHEN a.leave_type = '公假' THEN a.number ELSE 0 END)       GJ,
+               SUM(CASE WHEN a.leave_type = '育儿假' THEN a.number ELSE 0 END)     YEJ,
+               SUM(CASE WHEN a.leave_type = '护理假' THEN a.number ELSE 0 END)     HLJ
+        FROM (SELECT CONVERT
+                         (VARCHAR (7), alal.start_time, 120) AS formatted_month,
+                     ala.nick_name,
+                     ala.user_name,
+        (CASE
+        WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+        alal.work_number
+        ELSE
+        alal.number
+        END) AS number,
+--                      COALESCE(
+--                              ala.hr_total, -- 如果 ala.hr_total 不为 NULL，则使用它的值
+--                              CASE
+--                                  WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+--                                      alal.work_number
+--                                  ELSE
+--                                      alal.number
+--                                  END
+--                          ) AS number,
+--                      CASE WHEN alal.leave_type = '事假' or alaL.leave_type = '年假' THEN alal.work_number ELSE alal.number END as number,
+--                      alal.number,
+--                      ala.total_number,
+                     alal.leave_type,
+                     0                                       AS reviewhours,
+                     99                                      AS xxrbs
+              FROM ac_leave_application ala
+                       JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+              WHERE YEAR (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND ala.approval_result = 'Pass' and ala.enabled_flag = 1
+              UNION ALL
+              SELECT CONVERT
+                  ( VARCHAR ( 7 ), aoal.start_time, 120 ) AS formatted_month,
+                  aoal.nick_name,
+                  aoal.user_name,
+                  0 AS txts,
+                  '加班' AS LeaveType,
+                  ROUND(aoal.review_hours, 1) AS review_hours,
+--                   aoal.review_hours,
+                  c.XXRBS
+              FROM
+                  ac_overtime_application aoa
+                  JOIN ac_overtime_application_line aoal
+              ON aoa.oa_order = aoal.oa_order
+                  LEFT JOIN ( SELECT c.RQ, C.XXRBS FROM v_kq_date c ) c ON CONVERT ( VARCHAR ( 10 ), aoal.review_startTime, 23 ) = c.RQ
+              WHERE YEAR (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND aoa.approval_result = 'Pass' and aoal.enabled_flag = 1) a
+                 JOIN pm_employee pe ON a.user_name = pe.work_card
+                 LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                 INNER JOIN fnd_dept fds ON fds.id = pej.dept_id
+        where
+        fds.ext_dept_id IN
+        <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+          and  pej.job_main_flag = 1  AND pej.enabled_flag = 1
+          AND a.nick_name != ''
+        GROUP BY
+            a.formatted_month,
+            a.nick_name,
+            a.user_name,
+            pej.attribute2,
+            pej.dept_name,
+            pej.attribute4,
+            pej.job_name,fds.ext_dept_id,fds.ext_department_id,fds.ext_team_id
+        order by a.formatted_month desc
+        OFFSET (#{pages}) * #{sizes} ROWS FETCH NEXT #{sizes} ROWS ONLY
+    </select>
+    <select id="getOvertimeLeaveStatisticsQueryList4"
+            resultType="com.sunten.hrms.ac.domain.OvertimeLeaveCheckList">
+        SELECT a.formatted_month,
+               a.nick_name,
+               a.user_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_dept_id = fdt.id ) AS dept_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_department_id = fdt.id ) AS section_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_team_id = fdt.id ) AS group_name,
+               pej.job_name,
+               SUM(CASE WHEN a.xxrbs = 0 THEN a.reviewhours ELSE 0 END)                  workDayOvertime,
+               ROUND(SUM(CASE WHEN a.xxrbs = 1 THEN a.reviewhours ELSE 0 END), 1) AS restDayOvertime,
+--                ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2)       TXTS,
+--                ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS TXXS,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2) AS DECIMAL(18,2)) AS TXTS,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS DECIMAL(18,2)) AS TXXS,
+               SUM(CASE WHEN a.leave_type = '年假' THEN a.number ELSE 0 END)       NJ,
+--                ROUND(SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END),2)       SJ,
+               CAST(ROUND(SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END),2) AS DECIMAL(18,2)) SJ,
+               SUM(CASE WHEN a.leave_type = '病假' THEN a.number ELSE 0 END)       BJ,
+               SUM(CASE WHEN a.leave_type = '婚假' THEN a.number ELSE 0 END)       HJ,
+               SUM(CASE WHEN a.leave_type = '产假' THEN a.number ELSE 0 END)       CJ,
+               SUM(CASE WHEN a.leave_type = '陪产假' THEN a.number ELSE 0 END)     PCJ,
+               SUM(CASE WHEN a.leave_type = '丧假' THEN a.number ELSE 0 END)       SAJ,
+               SUM(CASE WHEN a.leave_type = '工伤假' THEN a.number ELSE 0 END)     GSJ,
+               SUM(CASE WHEN a.leave_type = '计划生育假' THEN a.number ELSE 0 END) JHSYJ,
+               SUM(CASE WHEN a.leave_type = '公假' THEN a.number ELSE 0 END)       GJ,
+               SUM(CASE WHEN a.leave_type = '育儿假' THEN a.number ELSE 0 END)     YEJ,
+               SUM(CASE WHEN a.leave_type = '护理假' THEN a.number ELSE 0 END)     HLJ
+        FROM (SELECT CONVERT
+                         (VARCHAR (7), alal.start_time, 120) AS formatted_month,
+                     ala.nick_name,
+                     ala.user_name,
+                     (CASE
+                          WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+                              alal.work_number
+                          ELSE
+                              alal.number
+                         END) AS number,
+--                      COALESCE(
+--                              ala.hr_total, -- 如果 ala.hr_total 不为 NULL，则使用它的值
+--                              CASE
+--                                  WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+--                                      alal.work_number
+--                                  ELSE
+--                                      alal.number
+--                                  END
+--                          ) AS number,
+--                      CASE WHEN alal.leave_type = '事假' or alaL.leave_type = '年假' THEN alal.work_number ELSE alal.number END as number,
+--                      alal.number,
+--                      ala.total_number,
+                     alal.leave_type,
+                     0                                       AS reviewhours,
+                     99                                      AS xxrbs
+              FROM ac_leave_application ala
+                       JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+              WHERE YEAR (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND ala.approval_result = 'Pass' and ala.enabled_flag = 1
+              UNION ALL
+              SELECT CONVERT
+                  ( VARCHAR ( 7 ), aoal.start_time, 120 ) AS formatted_month,
+                  aoal.nick_name,
+                  aoal.user_name,
+                  0 AS txts,
+                  '加班' AS LeaveType,
+                  ROUND(aoal.review_hours, 1) AS review_hours,
+--                   aoal.review_hours,
+                  c.XXRBS
+              FROM
+                  ac_overtime_application aoa
+                  JOIN ac_overtime_application_line aoal
+              ON aoa.oa_order = aoal.oa_order
+                  LEFT JOIN ( SELECT c.RQ, C.XXRBS FROM v_kq_date c ) c ON CONVERT ( VARCHAR ( 10 ), aoal.review_startTime, 23 ) = c.RQ
+              WHERE YEAR (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND aoa.approval_result = 'Pass' and aoal.enabled_flag = 1) a
+                 JOIN pm_employee pe ON a.user_name = pe.work_card
+                 LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                 INNER JOIN fnd_dept fds ON fds.id = pej.dept_id
+        WHERE
+            pej.job_main_flag = 1
+          AND pej.enabled_flag = 1
+          AND a.nick_name != ''
+        GROUP BY
+            a.formatted_month,
+            a.nick_name,
+            a.user_name,
+            pej.attribute2,
+            pej.dept_name,
+            pej.attribute4,
+            pej.job_name,fds.ext_dept_id,fds.ext_department_id,fds.ext_team_id
+        order by a.formatted_month desc
+        OFFSET (#{pages}) * #{sizes} ROWS FETCH NEXT #{sizes} ROWS ONLY
+    </select>
+    <select id="getOvertimeByCheckMonthAndWorkCard" resultType="java.util.HashMap">
+        WITH RankedData AS (
+            SELECT
+                aoal.oa_order,
+                aoal.user_name,
+                aoal.nick_name,
+                aoal.start_time,
+                aoal.end_time,
+                aoal.hours,
+                aoal.review_startTime,
+                aoal.review_endTime,
+                aoal.review_hours,
+                aoal.reviewer_nick_name,
+                aoal.review_time,
+                aoal.remarks,
+                ROW_NUMBER() OVER (
+            PARTITION BY
+              	aoal.oa_order,
+				aoal.user_name,
+                aoal.nick_name,
+                aoal.start_time,
+                aoal.end_time,
+                aoal.hours,
+                aoal.review_startTime,
+                aoal.review_endTime,
+                aoal.review_hours,
+                aoal.reviewer_nick_name,
+                aoal.review_time,
+                aoal.remarks
+            ORDER BY
+                aoal.review_time DESC  -- 降序排列，以便最新的 review_time 排在前面
+        ) AS rn
+            FROM
+                ac_overtime_application aoa
+                    INNER JOIN ac_overtime_application_line aoal ON aoa.oa_order = aoal.oa_order
+            WHERE
+            YEAR(aoal.start_time) = CAST(SUBSTRING(#{checkMonth}, 1, 4) AS INT)
+            AND MONTH(aoal.start_time) = CAST(SUBSTRING(#{checkMonth}, 6, 2) AS INT)
+            AND aoal.user_name =  #{workCard}
+            AND aoa.enabled_flag = 1
+            AND aoa.approval_result = 'Pass'
+            )
+        SELECT
+            distinct
+            oa_order,
+            user_name,
+            nick_name,
+            start_time,
+            end_time,
+            hours,
+            review_startTime,
+            review_endTime,
+            ROUND(review_hours,1) as review_hours,
+            reviewer_nick_name,
+            review_time,
+            remarks
+        FROM
+            RankedData
+        WHERE
+            rn = 1;
+    </select>
+    <select id="getLeaveByCheckMonthAndWorkCard" resultType="java.util.HashMap">
+        select distinct alal.oa_order,
+                        ala.nick_name,
+                        alal.leave_type,
+                        alal.start_time,
+                        alal.end_time,
+                        COALESCE(
+                                ala.hr_total,-- 如果 ala.hr_total 不为 NULL，则使用它的值
+                                CASE
+                                    WHEN alal.leave_type = '事假'
+                                        OR alal.leave_type = '年假'
+                                        OR alal.leave_type = '调休'
+                                        OR alal.leave_type = '病假' THEN
+                                        alal.work_number
+                                    ELSE alal.number
+                                    END
+                            ) AS number
+        from ac_leave_application ala
+                 left join ac_leave_application_line alal on ala.oa_order = alal.oa_order and ala.version = alal.version
+        where ((YEAR (alal.start_time) = CAST (SUBSTRING (#{checkMonth}
+            , 1
+            , 4) AS INT)
+            AND MONTH (alal.start_time) = CAST (SUBSTRING (#{checkMonth}
+            , 6
+            , 2) AS INT)) or
+               (
+        FORMAT(alal.start_time, 'yyyy-MM') != FORMAT(alal.end_time, 'yyyy-MM')
+        AND (
+        FORMAT(alal.start_time, 'yyyy-MM') = #{checkMonth}
+        OR FORMAT(alal.end_time, 'yyyy-MM') = #{checkMonth}
+        OR (FORMAT(alal.start_time, 'yyyy-MM') &lt; #{checkMonth} AND FORMAT(alal.end_time, 'yyyy-MM') > #{checkMonth})
+        OR (FORMAT(alal.start_time, 'yyyy-MM') = #{checkMonth} AND FORMAT(alal.end_time, 'yyyy-MM') > #{checkMonth})
+        OR (FORMAT(alal.start_time, 'yyyy-MM') &lt; #{checkMonth} AND FORMAT(alal.end_time, 'yyyy-MM') = #{checkMonth})
+        )
+            )
+            )
+          and ala.user_name = #{workCard}
+          and ala.enabled_flag = 1
+          and (ala.approval_result = 'Pass')
+    </select>
+<!--    <select id="getLeaveByCheckMonthAndWorkCard" resultType="java.util.HashMap">-->
+<!--        select-->
+<!--            distinct-->
+<!--            alal.oa_order,-->
+<!--            ala.nick_name,-->
+<!--            alal.leave_type,-->
+<!--            alal.start_time,-->
+<!--            alal.end_time,-->
+<!--            alal.number-->
+<!--        from ac_leave_application ala-->
+<!--                 left join ac_leave_application_line alal on ala.oa_order = alal.oa_order-->
+<!--        where YEAR (alal.start_time) = CAST (SUBSTRING (#{checkMonth}-->
+<!--            , 1-->
+<!--            , 4) AS INT)-->
+<!--          AND MONTH (alal.end_time) = CAST (SUBSTRING (#{checkMonth}-->
+<!--            , 6-->
+<!--            , 2) AS INT)-->
+<!--          and ala.user_name = #{workCard}-->
+<!--          and ala.enabled_flag = 1-->
+<!--    </select>-->
+    <select id="getCrossMonthInfo" resultType="java.util.HashMap">
+        select distinct TOP 1 *
+        from ac_overtime_mangement_backup
+        where dept_id = #{deptId} AND MONTH (backup_time) = MONTH (#{endTime})
+          AND YEAR (backup_time) = YEAR (#{endTime})
+    </select>
+    <select id="getCrossUsedMonthHours" resultType="java.lang.Float">
+        SELECT sum(ROUND(aoal.hours, 2)) used_month_hours
+        FROM ac_overtime_application_line aoal
+                 left join ac_overtime_application aoa on aoal.oa_order = aoa.oa_order
+        WHERE MONTH (aoal.start_time) = MONTH (#{endTime})
+          AND YEAR (aoal.create_time) = YEAR (#{endTime})
+          AND aoal.user_name IN
+            (SELECT work_card
+            FROM pm_employee_job pej
+            LEFT JOIN pm_employee pe ON pej.employee_id=pe.id
+            LEFT JOIN fnd_dept fd ON fd.id=pej.dept_id
+            where pej.dept_id= #{deptId}
+          and pe.leave_flag=0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1)
+          AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass'
+           OR aoa.approval_result is null)
+    </select>
+<!--    <select id="getCrossUsedMonthHours" resultType="java.lang.Float">-->
+<!--        SELECT SUM(aoal.month_hours) used_month_hours-->
+<!--        FROM ac_overtime_application_line aoal-->
+<!--                 left join ac_overtime_application aoa on aoal.oa_order = aoa.oa_order-->
+<!--        WHERE MONTH (aoal.start_time) = MONTH (#{endTime})-->
+<!--          AND YEAR (aoal.create_time) = YEAR (#{endTime})-->
+<!--          AND aoal.user_name IN-->
+<!--            (SELECT work_card-->
+<!--            FROM pm_employee_job pej-->
+<!--            LEFT JOIN pm_employee pe ON pej.employee_id=pe.id-->
+<!--            LEFT JOIN fnd_dept fd ON fd.id=pej.dept_id-->
+<!--            where pej.dept_id= #{deptId}-->
+<!--          and pe.leave_flag=0-->
+<!--          and pej.enabled_flag = 1-->
+<!--          and pej.job_main_flag = 1)-->
+<!--          AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass'-->
+<!--           OR aoa.approval_result is null)-->
+<!--    </select>-->
+    <select id="getMySelfOvertimeListInfoByParentId" resultType="java.util.HashMap">
+        SELECT pej.job_name, pej.dept_id, pej.dept_name, pej.attribute4, pe.work_card, pe.name
+        FROM pm_employee_job pej
+                 LEFT JOIN pm_employee pe ON pej.employee_id = pe.id
+                 LEFT JOIN fnd_dept fd ON fd.id = pej.dept_id
+        where fd.parent_id = #{deptId}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1
+    </select>
+    <select id="getMySelfOvertimeListInfoByParentId2" resultType="java.util.HashMap">
+        SELECT pej.job_name, pej.dept_id, pej.dept_name, pej.attribute4, pe.work_card, pe.name
+        FROM pm_employee_job pej
+                 LEFT JOIN pm_employee pe ON pej.employee_id = pe.id
+                 LEFT JOIN fnd_dept fd ON fd.id = pej.dept_id
+        where fd.parent_id = #{deptId}
+          and pej.attribute4 like #{teamName}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1
+    </select>
+    <select id="getTeamNameList" resultType="java.util.HashMap">
+        SELECT DISTINCT pej.attribute4 as label,pej.attribute4 as value
+        FROM pm_employee_job pej
+            INNER JOIN pm_employee pe ON pej.employee_id = pe.id
+            INNER JOIN fnd_dept fd ON fd.id = pej.dept_id
+        where fd.parent_id = #{deptId}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1
+          AND pej.attribute4 is not null
+    </select>
+    <select id="searchDeptNumber" resultType="java.lang.Integer">
+        SELECT COUNT(1) as userNumber
+        FROM fnd_dept fd
+                 JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                 JOIN pm_employee pe ON pej.employee_id = pe.id
+                 JOIN fnd_user fu on fu.employee_id = pe.id
+                 JOIN fnd_users_roles fur on fur.user_id = fu.id
+                 JOIN fnd_role fr on fr.id = fur.role_id
+        WHERE fd.dept_level = '科室'
+          AND fd.enabled_flag = 1
+          AND pej.enabled_flag = 1
+          AND pe.leave_flag = 0
+          AND fd.id = #{deptId}
+          AND fu.enabled_flag = 1
+          AND pe.work_card NOT LIKE '01%'
+          AND pej.dept_name NOT LIKE '业务经理'
+          AND pej.dept_name NOT LIKE '销售经理'
+          AND pej.dept_name NOT LIKE '销售助理'
+          AND pe.administration_category='NDVC'
+          AND fr.name NOT LIKE '顺特管理层'
+    </select>
+    <select id="getDeptInfoListByDeptName" resultType="java.util.HashMap">
+        SELECT COUNT
+                   ( DISTINCT pe.name ) AS userNumber,
+               fd.id,
+               fd.dept_name,
+               pej.attribute1 AS parentName
+        FROM
+            fnd_dept fd
+                INNER JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                INNER JOIN pm_employee pe ON pej.employee_id = pe.id
+                INNER JOIN fnd_user fu ON fu.employee_id = pe.id
+                INNER JOIN fnd_users_roles fur ON fur.user_id = fu.id
+                INNER JOIN fnd_role fr ON fr.id = fur.role_id
+        WHERE
+--
+            (fd.dept_name LIKE #{deptName})
+          AND ( pej.attribute1 IS NOT NULL OR (pej.attribute1 is NULL AND pej.attribute2 is NULL AND pej.attribute3 is NULL AND pej.attribute4 is NULL AND pej.attribute5 is NULL))
+          AND fr.name NOT LIKE '顺特管理层'
+--           AND pe.administration_category= 'NDVC'
+          AND pe.work_card NOT LIKE '01%'
+          AND pej.dept_name NOT LIKE '业务经理'
+          AND pej.dept_name NOT LIKE '销售经理'
+          AND pej.dept_name NOT LIKE '销售助理'
+          AND pe.leave_flag = 0
+        GROUP BY
+            fd.id,
+            fd.dept_name,
+            pej.attribute1
+    </select>
+    <select id="getChildNumber" resultType="java.lang.Integer">
+        SELECT COUNT( distinct pe.work_card ) as userNumber
+        FROM
+            fnd_dept fd
+                INNER JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                INNER JOIN pm_employee pe ON pej.employee_id = pe.id
+                INNER JOIN fnd_user fu ON fu.employee_id = pe.id
+                INNER JOIN fnd_users_roles fur ON fur.user_id = fu.id
+                INNER JOIN fnd_role fr ON fr.id = fur.role_id
+        WHERE
+          pe.work_card NOT LIKE '01%'
+          AND fr.name NOT LIKE '顺特管理层' --           AND pe.administration_category= 'NDVC'
+          AND pe.work_card NOT LIKE '01%'
+          AND pej.dept_name NOT LIKE '业务经理'
+          AND pej.dept_name NOT LIKE '销售经理'
+          AND pej.dept_name NOT LIKE '销售助理'
+          AND pe.leave_flag = 0
+          AND pe.enabled_flag = 1
+          AND pej.job_main_flag = 1
+          AND pej.enabled_flag = 1
+          AND pe.employee_type = '正式员工'
+          AND fd.parent_id = #{dept_id}
+    </select>
+    <select id="getExpirationReview" resultType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        select distinct aoa.id, aoa.oa_order, aoa.nick_name, aoa.user_name, aoa.overtime_type, aoa.user_department,
+        aoa.user_section, aoa.groups, aoa.reason, aoa.total_number, aoa.total_time, aoa.approval_node,
+        aoa.approval_employee, aoa.approval_result, aoa.enabled_flag, aoa.attribute1, aoa.attribute2,
+        aoa.attribute3, aoa.attribute4, aoa.attribute5, aoa.create_by, aoa.create_time
+        from ac_overtime_application aoa join ac_overtime_application_line aoal on aoa.oa_order = aoal.oa_order
+        where 1 = 1 AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass')
+        AND aoal.review_endTime IS NULL
+        AND (
+        aoal.end_time >= DATEADD(MONTH, -2, DATEADD(DAY, 1 - DAY(GETDATE()), GETDATE()))
+        AND aoal.end_time &lt; DATEADD(MONTH, -1, DATEADD(DAY, 1 - DAY(GETDATE()), GETDATE()))
+        )
+        AND ( aoa.user_department LIKE #{userDepartment} AND aoa.user_section LIKE #{userSection} )
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </select>
+    <select id="getExpirationReview2" resultType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        select aoa.id, aoa.oa_order, aoa.nick_name, aoa.user_name, aoa.overtime_type, aoa.user_department,
+        aoa.user_section, aoa.groups, aoa.reason, aoa.total_number, aoa.total_time, aoa.approval_node,
+        aoa.approval_employee, aoa.approval_result, aoa.enabled_flag, aoa.attribute1, aoa.attribute2,
+        aoa.attribute3, aoa.attribute4, aoa.attribute5, aoa.create_by, aoa.create_time
+        from ac_overtime_application aoa join ac_overtime_application_line aoal on aoa.oa_order = aoal.oa_order
+        where 1 = 1 AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass')
+        AND aoal.review_endTime IS NULL
+        AND (
+        aoal.end_time >= DATEADD(MONTH, -2, DATEADD(DAY, 1 - DAY(GETDATE()), GETDATE()))
+        AND aoal.end_time &lt; DATEADD(MONTH, -1, DATEADD(DAY, 1 - DAY(GETDATE()), GETDATE()))
+        )
+        AND ( aoa.user_department LIKE #{userDepartment})
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </select>
+    <select id="getReviewedList" resultType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        select distinct aoa.id, aoa.oa_order, aoa.nick_name, aoa.user_name, aoa.overtime_type, aoa.user_department,
+        aoa.user_section, aoa.groups, aoa.reason, aoa.total_number, aoa.total_time, aoa.approval_node,
+        aoa.approval_employee, aoa.approval_result, aoa.enabled_flag, aoa.attribute1, aoa.attribute2,
+        aoa.attribute3, aoa.attribute4, aoa.attribute5, aoa.create_by, aoa.create_time
+        from ac_overtime_application aoa join ac_overtime_application_line aoal on aoa.oa_order = aoal.oa_order
+        where 1 = 1 AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass')
+        AND aoal.review_endTime IS not NULL
+        AND ( aoa.user_department LIKE #{userDepartment} AND aoa.user_section LIKE #{userSection} )
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </select>
+    <select id="getReviewedList2" resultType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        select distinct aoa.id, aoa.oa_order, aoa.nick_name, aoa.user_name, aoa.overtime_type, aoa.user_department,
+        aoa.user_section, aoa.groups, aoa.reason, aoa.total_number, aoa.total_time, aoa.approval_node,
+        aoa.approval_employee, aoa.approval_result, aoa.enabled_flag, aoa.attribute1, aoa.attribute2,
+        aoa.attribute3, aoa.attribute4, aoa.attribute5, aoa.create_by, aoa.create_time
+        from ac_overtime_application aoa join ac_overtime_application_line aoal on aoa.oa_order = aoal.oa_order
+        where 1 = 1 AND (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass')
+        AND aoal.review_endTime IS not NULL
+        AND ( aoa.user_department LIKE #{userDepartment})
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </select>
+    <select id="getUserNumberByTreeId" resultType="java.lang.Integer">
+        SELECT COUNT
+                   ( DISTINCT pe.name ) AS userNumber
+        FROM
+            fnd_dept fd
+                INNER JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                INNER JOIN pm_employee pe ON pej.employee_id = pe.id
+                INNER JOIN fnd_user fu ON fu.employee_id = pe.id
+                INNER JOIN fnd_users_roles fur ON fur.user_id = fu.id
+                INNER JOIN fnd_role fr ON fr.id = fur.role_id
+        WHERE
+            fd.id = #{deptId}
+          AND fr.name NOT LIKE '顺特管理层'
+          AND pe.work_card NOT LIKE '01%'
+          AND pej.dept_name NOT LIKE '%业务经理%'
+          AND pej.dept_name NOT LIKE '%销售经理%'
+          AND pej.dept_name NOT LIKE '%销售助理%'
+          AND pe.leave_flag = 0
+          AND pe.enabled_flag = 1
+          AND pej.job_main_flag = 1
+          AND pej.enabled_flag = 1
+          AND pe.employee_type = '正式员工'
+    </select>
+    <select id="getMySelfOvertimeByParentId" resultType="java.util.HashMap">
+        SELECT pej.job_name, pej.dept_id, pej.dept_name, pej.attribute4, pe.work_card, pe.name
+        FROM pm_employee_job pej
+                 LEFT JOIN pm_employee pe ON pej.employee_id = pe.id
+                 LEFT JOIN fnd_dept fd ON fd.id = pej.dept_id
+        where fd.parent_id = #{deptId}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1
+    </select>
+    <select id="getMySelfOvertimeByNDVC" resultType="java.util.HashMap">
+        SELECT pej.job_name, pej.dept_id, pej.dept_name, pej.attribute4, pe.work_card, pe.name
+        FROM pm_employee_job pej
+                 LEFT JOIN pm_employee pe ON pej.employee_id = pe.id
+                 LEFT JOIN fnd_dept fd ON fd.id = pej.dept_id
+        where fd.parent_id = #{deptId}
+          and pe.leave_flag = 0
+          and pej.enabled_flag = 1
+          and pej.job_main_flag = 1
+    </select>
+    <select id="getUserProductionCategory" resultType="java.lang.String">
+        select pe.administration_category
+        from pm_employee pe
+        where pe.enabled_flag = 1 and pe.leave_flag = 0 and pe.work_card = #{workCard}
+    </select>
+    <select id="getOvertimeLeaveBySection" resultType="com.sunten.hrms.ac.domain.OvertimeLeaveCheckList">
+        SELECT a.formatted_month,
+               a.nick_name,
+               a.user_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_dept_id = fdt.id ) AS dept_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_department_id = fdt.id ) AS section_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_team_id = fdt.id ) AS group_name,
+               pej.job_name,
+               SUM(CASE WHEN a.xxrbs = 0 THEN a.reviewhours ELSE 0 END)                  workDayOvertime,
+               SUM(CASE WHEN a.xxrbs = 1 THEN a.reviewhours ELSE 0 END)                  restDayOvertime,
+               ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2)       TXTS,
+               ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS TXXS,
+               SUM(CASE WHEN a.leave_type = '年假' THEN a.number ELSE 0 END)       NJ,
+               ROUND(SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END),2)       SJ,
+               SUM(CASE WHEN a.leave_type = '病假' THEN a.number ELSE 0 END)       BJ,
+               SUM(CASE WHEN a.leave_type = '婚假' THEN a.number ELSE 0 END)       HJ,
+               SUM(CASE WHEN a.leave_type = '产假' THEN a.number ELSE 0 END)       CJ,
+               SUM(CASE WHEN a.leave_type = '陪产假' THEN a.number ELSE 0 END)     PCJ,
+               SUM(CASE WHEN a.leave_type = '丧假' THEN a.number ELSE 0 END)       SAJ,
+               SUM(CASE WHEN a.leave_type = '工伤假' THEN a.number ELSE 0 END)     GSJ,
+               SUM(CASE WHEN a.leave_type = '计划生育假' THEN a.number ELSE 0 END) JHSYJ,
+               SUM(CASE WHEN a.leave_type = '公假' THEN a.number ELSE 0 END)       GJ,
+               SUM(CASE WHEN a.leave_type = '育儿假' THEN a.number ELSE 0 END)     YEJ,
+               SUM(CASE WHEN a.leave_type = '护理假' THEN a.number ELSE 0 END)     HLJ
+        FROM (SELECT CONVERT
+                         (VARCHAR (7), alal.start_time, 120) AS formatted_month,
+                     ala.nick_name,
+                     ala.user_name,
+                     (CASE
+                          WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+                              alal.work_number
+                          ELSE
+                              alal.number
+                         END) AS number,
+--                      COALESCE(
+--                              ala.hr_total, -- 如果 ala.hr_total 不为 NULL，则使用它的值
+--                              CASE
+--                                  WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+--                                      alal.work_number
+--                                  ELSE
+--                                      alal.number
+--                                  END
+--                          ) AS number,
+--                      CASE WHEN alal.leave_type = '事假' or alaL.leave_type = '年假' THEN alal.work_number ELSE alal.number END as number,
+--                      alal.number,
+--                      ala.total_number,
+                     alal.leave_type,
+                     0                                       AS reviewhours,
+                     99                                      AS xxrbs
+              FROM ac_leave_application ala
+                       JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+              WHERE YEAR (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND ala.approval_result = 'Pass'
+              UNION ALL
+              SELECT CONVERT
+                  ( VARCHAR ( 7 ), aoal.start_time, 120 ) AS formatted_month,
+                  aoal.nick_name,
+                  aoal.user_name,
+                  0 AS txts,
+                  '加班' AS LeaveType,
+                  ROUND(aoal.review_hours, 1) AS review_hours,
+--                   aoal.review_hours,
+                  c.XXRBS
+              FROM
+                  ac_overtime_application aoa
+                  JOIN ac_overtime_application_line aoal
+              ON aoa.oa_order = aoal.oa_order
+                  LEFT JOIN ( SELECT c.RQ, C.XXRBS FROM v_kq_date c ) c ON CONVERT ( VARCHAR ( 10 ), aoal.review_startTime, 23 ) = c.RQ
+              WHERE YEAR (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND aoa.approval_result = 'Pass') a
+                 JOIN pm_employee pe ON a.user_name = pe.work_card
+                 LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                 INNER JOIN fnd_dept fds ON fds.id = pej.dept_id
+        where
+            (fds.ext_dept_id = #{deptId})
+          and  pej.job_main_flag = 1  AND pe.leave_flag = 0 AND pe.enabled_flag = 1 AND pej.enabled_flag = 1
+          AND a.nick_name != ''
+        GROUP BY
+            a.formatted_month,
+            a.nick_name,
+            a.user_name,
+            pej.attribute2,
+            pej.dept_name,
+            pej.attribute4,
+            pej.job_name,fds.ext_dept_id,fds.ext_department_id,fds.ext_team_id
+        order by a.formatted_month desc
+        OFFSET (#{pages}) * #{sizes} ROWS FETCH NEXT #{sizes} ROWS ONLY
+    </select>
+    <select id="getOvertimeReviewUserInfo2" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0
+          and aopr.id = #{id}
+    </select>
+    <select id="getSectionName" resultType="java.lang.String">
+        select fd.dept_name as section_name
+        from fnd_dept fd
+        where fd.id = #{sectionId}
+        and fd.enabled_flag = 1
+    </select>
+    <select id="getOvertimeReviewInfo2" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0 and aopr.section_id is null
+    </select>
+    <select id="checkReviewUser2" resultType="java.util.HashMap">
+        SELECT pe.name       as name,
+               pe.work_card  as work_card,
+               fd.dept_name  as dept_name,
+               '' as section_name,
+               aopr.id,
+               aopr.dept_id,
+               aopr.section_id
+        FROM ac_overtime_personnel_review aopr
+                 JOIN fnd_dept fd ON fd.id = aopr.dept_id
+                 JOIN pm_employee pe ON pe.work_card = aopr.work_card
+        WHERE pe.leave_flag = 0 and aopr.section_id is null
+          and pe.work_card = #{workCard}
+    </select>
+    <select id="getDetpId" resultType="java.lang.Integer">
+        select TOP 1 fd.id from fnd_dept fd where fd.dept_name like #{workCard} and fd.enabled_flag = 1
+    </select>
+    <select id="getOvertimeLeaveStatisticsQueryListTeam"
+            resultType="com.sunten.hrms.ac.domain.OvertimeLeaveCheckList">
+        SELECT a.formatted_month,
+               a.nick_name,
+               a.user_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_dept_id = fdt.id ) AS dept_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_department_id = fdt.id ) AS section_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_team_id = fdt.id ) AS group_name,
+               pej.job_name,
+               SUM(CASE WHEN a.xxrbs = 0 THEN a.reviewhours ELSE 0 END)                  workDayOvertime,
+               SUM(CASE WHEN a.xxrbs = 1 THEN a.reviewhours ELSE 0 END)                  restDayOvertime,
+               ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2)       TXTS,
+               ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS TXXS,
+               SUM(CASE WHEN a.leave_type = '年假' THEN a.number ELSE 0 END)       NJ,
+               ROUND(SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END),2)       SJ,
+               SUM(CASE WHEN a.leave_type = '病假' THEN a.number ELSE 0 END)       BJ,
+               SUM(CASE WHEN a.leave_type = '婚假' THEN a.number ELSE 0 END)       HJ,
+               SUM(CASE WHEN a.leave_type = '产假' THEN a.number ELSE 0 END)       CJ,
+               SUM(CASE WHEN a.leave_type = '陪产假' THEN a.number ELSE 0 END)     PCJ,
+               SUM(CASE WHEN a.leave_type = '丧假' THEN a.number ELSE 0 END)       SAJ,
+               SUM(CASE WHEN a.leave_type = '工伤假' THEN a.number ELSE 0 END)     GSJ,
+               SUM(CASE WHEN a.leave_type = '计划生育假' THEN a.number ELSE 0 END) JHSYJ,
+               SUM(CASE WHEN a.leave_type = '公假' THEN a.number ELSE 0 END)       GJ,
+               SUM(CASE WHEN a.leave_type = '育儿假' THEN a.number ELSE 0 END)     YEJ,
+               SUM(CASE WHEN a.leave_type = '护理假' THEN a.number ELSE 0 END)     HLJ
+        FROM (SELECT CONVERT
+                         (VARCHAR (7), alal.start_time, 120) AS formatted_month,
+                     ala.nick_name,
+                     ala.user_name,
+                     (CASE
+                          WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+                              alal.work_number
+                          ELSE
+                              alal.number
+                         END) AS number,
+--                      COALESCE(
+--                              ala.hr_total, -- 如果 ala.hr_total 不为 NULL，则使用它的值
+--                              CASE
+--                                  WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+--                                      alal.work_number
+--                                  ELSE
+--                                      alal.number
+--                                  END
+--                          ) AS number,
+--                      CASE WHEN alal.leave_type = '事假' or alaL.leave_type = '年假' THEN alal.work_number ELSE alal.number END as number,
+--                      alal.number,
+--                      ala.total_number,
+                     alal.leave_type,
+                     0                                       AS reviewhours,
+                     99                                      AS xxrbs
+              FROM ac_leave_application ala
+                       JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+              WHERE YEAR (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND ala.approval_result = 'Pass'
+              UNION ALL
+              SELECT CONVERT
+                  ( VARCHAR ( 7 ), aoal.start_time, 120 ) AS formatted_month,
+                  aoal.nick_name,
+                  aoal.user_name,
+                  0 AS txts,
+                  '加班' AS LeaveType,
+                  ROUND(aoal.review_hours, 1) AS review_hours,
+--                   aoal.review_hours,
+                  c.XXRBS
+              FROM
+                  ac_overtime_application aoa
+                  JOIN ac_overtime_application_line aoal
+              ON aoa.oa_order = aoal.oa_order
+                  LEFT JOIN ( SELECT c.RQ, C.XXRBS FROM v_kq_date c ) c ON CONVERT ( VARCHAR ( 10 ), aoal.review_startTime, 23 ) = c.RQ
+              WHERE YEAR (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND aoa.approval_result = 'Pass') a
+                 JOIN pm_employee pe ON a.user_name = pe.work_card
+                 LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                 INNER JOIN fnd_dept fds ON fds.id = pej.dept_id
+        where	(fds.ext_dept_id = #{deptId} AND fds.ext_department_id = #{administrativeOfficeId} AND fds.ext_team_id = #{groupsId})
+          and  pej.job_main_flag = 1  AND pe.leave_flag = 0 AND pe.enabled_flag = 1 AND pej.enabled_flag = 1
+          AND a.nick_name != ''
+        GROUP BY
+            a.formatted_month,
+            a.nick_name,
+            a.user_name,
+            pej.attribute2,
+            pej.dept_name,
+            pej.attribute4,
+            pej.job_name,fds.ext_dept_id,fds.ext_department_id,fds.ext_team_id
+        order by a.formatted_month desc
+        OFFSET (#{pages}) * #{sizes} ROWS FETCH NEXT #{sizes} ROWS ONLY
+    </select>
+    <select id="getOvertimeLeaveStatisticsQueryListMyList"
+            resultType="com.sunten.hrms.ac.domain.OvertimeLeaveCheckList">
+        SELECT a.formatted_month,
+               a.nick_name,
+               a.user_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_dept_id = fdt.id ) AS dept_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_department_id = fdt.id ) AS section_name,
+               ( SELECT dept_name FROM fnd_dept fdt WHERE fds.ext_team_id = fdt.id ) AS group_name,
+               pej.job_name,
+               SUM(CASE WHEN a.xxrbs = 0 THEN a.reviewhours ELSE 0 END)                  workDayOvertime,
+               SUM(CASE WHEN a.xxrbs = 1 THEN a.reviewhours ELSE 0 END)                  restDayOvertime,
+               ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END), 2)       TXTS,
+               ROUND(SUM(CASE WHEN a.leave_type = '调休' THEN a.number ELSE 0 END) * 7.5, 2) AS TXXS,
+               SUM(CASE WHEN a.leave_type = '年假' THEN a.number ELSE 0 END)       NJ,
+               ROUND(SUM(CASE WHEN a.leave_type = '事假' THEN a.number ELSE 0 END),2)       SJ,
+               SUM(CASE WHEN a.leave_type = '病假' THEN a.number ELSE 0 END)       BJ,
+               SUM(CASE WHEN a.leave_type = '婚假' THEN a.number ELSE 0 END)       HJ,
+               SUM(CASE WHEN a.leave_type = '产假' THEN a.number ELSE 0 END)       CJ,
+               SUM(CASE WHEN a.leave_type = '陪产假' THEN a.number ELSE 0 END)     PCJ,
+               SUM(CASE WHEN a.leave_type = '丧假' THEN a.number ELSE 0 END)       SAJ,
+               SUM(CASE WHEN a.leave_type = '工伤假' THEN a.number ELSE 0 END)     GSJ,
+               SUM(CASE WHEN a.leave_type = '计划生育假' THEN a.number ELSE 0 END) JHSYJ,
+               SUM(CASE WHEN a.leave_type = '公假' THEN a.number ELSE 0 END)       GJ,
+               SUM(CASE WHEN a.leave_type = '育儿假' THEN a.number ELSE 0 END)     YEJ,
+               SUM(CASE WHEN a.leave_type = '护理假' THEN a.number ELSE 0 END)     HLJ
+        FROM (SELECT CONVERT
+                         (VARCHAR (7), alal.start_time, 120) AS formatted_month,
+                     ala.nick_name,
+                     ala.user_name,
+                     (CASE
+                          WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+                              alal.work_number
+                          ELSE
+                              alal.number
+                         END) AS number,
+--                      COALESCE(
+--                              ala.hr_total, -- 如果 ala.hr_total 不为 NULL，则使用它的值
+--                              CASE
+--                                  WHEN alal.leave_type = '事假' OR alal.leave_type = '年假' OR alal.leave_type = '调休' OR alal.leave_type = '病假' THEN
+--                                      alal.work_number
+--                                  ELSE
+--                                      alal.number
+--                                  END
+--                          ) AS number,
+--                      CASE WHEN alal.leave_type = '事假' or alaL.leave_type = '年假' THEN alal.work_number ELSE alal.number END as number,
+--                      alal.number,
+--                      ala.total_number,
+                     alal.leave_type,
+                     0                                       AS reviewhours,
+                     99                                      AS xxrbs
+              FROM ac_leave_application ala
+                       JOIN ac_leave_application_line alal ON ala.oa_order = alal.oa_order and ala.version = alal.version
+              WHERE YEAR (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (start_time) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND ala.approval_result = 'Pass'
+              UNION ALL
+              SELECT CONVERT
+                  ( VARCHAR ( 7 ), aoal.start_time, 120 ) AS formatted_month,
+                  aoal.nick_name,
+                  aoal.user_name,
+                  0 AS txts,
+                  '加班' AS LeaveType,
+                  ROUND(aoal.review_hours, 1) AS review_hours,
+--                   aoal.review_hours,
+                  c.XXRBS
+              FROM
+                  ac_overtime_application aoa
+                  JOIN ac_overtime_application_line aoal
+              ON aoa.oa_order = aoal.oa_order
+                  LEFT JOIN ( SELECT c.RQ, C.XXRBS FROM v_kq_date c ) c ON CONVERT ( VARCHAR ( 10 ), aoal.review_startTime, 23 ) = c.RQ
+              WHERE YEAR (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 1
+                  , 4) AS INT)
+                AND MONTH (aoal.review_startTime) = CAST (SUBSTRING (#{checkMonth}
+                  , 6
+                  , 2) AS INT) AND aoa.approval_result = 'Pass') a
+                 JOIN pm_employee pe ON a.user_name = pe.work_card
+                 LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                 INNER JOIN fnd_dept fds ON fds.id = pej.dept_id
+        where	pe.work_card = #{workCard}
+          and  pej.job_main_flag = 1  AND pe.leave_flag = 0 AND pe.enabled_flag = 1 AND pej.enabled_flag = 1
+          AND a.nick_name != ''
+        GROUP BY
+            a.formatted_month,
+            a.nick_name,
+            a.user_name,
+            pej.attribute2,
+            pej.dept_name,
+            pej.attribute4,
+            pej.job_name,fds.ext_dept_id,fds.ext_department_id,fds.ext_team_id
+        order by a.formatted_month desc
+        OFFSET (#{pages}) * #{sizes} ROWS FETCH NEXT #{sizes} ROWS ONLY
+    </select>
+
+    <select id="getOvertimeApplicationStatisticsPage" resultMap="AcOvertimeApplicationResultMap">
+        <include refid="Select_All_Criteria_Sql3"/>
+    </select>
+    <select id="listAllStatisticsByCriteria" resultMap="AcOvertimeApplicationResultMap">
+        <include refid="Select_All_Criteria_Sql3"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+    <select id="getDeptIds" resultType="java.lang.Integer">
+        SELECT DISTINCT
+            fd.ext_dept_id
+        FROM
+            fnd_dept fd
+        WHERE
+            fd.admin_job_id = ( SELECT DISTINCT job_id FROM pm_employee_job AS pej WHERE pej.employee_id = #{id} AND enabled_flag = 1 AND job_main_flag = 1 )
+    </select>
+    <sql id="Select_All_Criteria_Sql3">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.approvalResult != null">
+                <![CDATA[ and aoa.approval_result = #{criteria.approvalResult,jdbcType=VARCHAR} ]]>
+            </if>
+            <if test="criteria.beginDate != null &amp;&amp; criteria.endDate != null">
+                <![CDATA[ and aoal.start_time BETWEEN #{criteria.beginDate, jdbcType = DATE} and #{criteria.endDate, jdbcType = DATE} ]]>
+            </if>
+            <choose>
+                <when test='criteria.reqStatus eq "全部申请单"'>
+                    and 1 = 1
+                </when>
+                <when test='criteria.reqStatus eq "已结束申请单"'>
+                    and (aoa.approval_result = 'pass' or aoa.approval_result = 'Cancel' or aoa.approval_result ='notPass' or aoa.approval_result = 'Pass' )
+                </when>
+                <when test='criteria.reqStatus eq "审批中申请单"'>
+                    and aoa.approval_result IS NULL
+                </when>
+            </choose>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+    <sql id="Select_All_Criteria_Sql2">
+        <include refid="Base_Column_Query_Sql2"/>
+        <![CDATA[
+             where 1 = 1 AND  (aoa.approval_result = 'Pass' or aoa.approval_result = 'pass')
+            AND aoal.review_endTime IS NULL AND (
+		    aoal.end_time >= DATEADD( MONTH, - 1, GETDATE( ) )
+	        AND aoal.end_time <= DATEADD( MONTH, 1, GETDATE( ) )
+	        )
+            AND ( ( aoa.user_department LIKE #{userDepartment} AND aoa.user_section LIKE #{userSection} ) OR ( aoa.user_department LIKE #{userDepartment} ) )
+        ]]>
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </sql>
+    <sql id="Base_Column_Query_Sql2">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_overtime_application aoa join ac_overtime_application_line aoal
+        ]]>
+    </sql>
+
+    <update id="updateByApprovalEnd" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+        <![CDATA[
+        update ac_overtime_application
+          set   approval_result   = #{approvalResult,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByApprovalUnderwar" parameterType="com.sunten.hrms.ac.domain.AcOvertimeApplication">
+       <![CDATA[
+        update ac_overtime_application
+          set    approval_node      = #{approvalNode,jdbcType=VARCHAR},
+                 approval_employee  = #{approvalEmployee,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+</mapper>

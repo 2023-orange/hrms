@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdTrainEmployeeJurisdictionDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdTrainEmployeeJurisdiction">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="dept_id" property="deptId" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdTrainEmployeeJurisdictionResultMap" type="com.sunten.hrms.td.domain.TdTrainEmployeeJurisdiction" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="pmEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ttej.employee_id, ttej.dept_id, ttej.enabled_flag, ttej.attribute3, ttej.attribute1, ttej.id,
+            ttej.attribute2, ttej.create_time, ttej.create_by, ttej.update_time, ttej.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_train_employee_jurisdiction ttej
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <!--<if test="criteria != null">-->
+            <!--<if test="criteria.enabledFlag != null">-->
+                <!--<![CDATA[-->
+                    <!--and ttej.enabledFlag = #{criteria.enabledFlag,jdbcType=BIT}-->
+                <!--]]>-->
+            <!--</if>-->
+        <!--</if>-->
+    </sql>
+
+    <sql id="Select_All_Employee_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,fdev.ext_dept_name AS pe_dept_name,
+                   fdev.ext_department_name AS pe_department,
+                   fdev.ext_team_name AS pe_team,
+        ]]>
+        <bind name="tAlias" value="'pe_pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+            from pm_employee pe join
+              (select * from td_train_employee_jurisdiction where id in (select max(id) from td_train_employee_jurisdiction group by employee_id)) ttej
+            on pe.id = ttej.employee_id and pe.enabled_flag = 1
+            left outer join pm_employee_job pe_pej
+                    on pe.id = pe_pej.employee_id
+                    and pe_pej.job_main_flag = 1
+                    and pe_pej.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+                    on pe_pej.dept_id = fdev.id
+                    and fdev.enabled_flag = 1
+                    and fdev.deleted_flag = 0
+              left outer join fnd_job pe_pej_fj
+                    on pe_pej.job_id = pe_pej_fj.id
+                    and pe_pej_fj.enabled_flag = 1
+                    and pe_pej_fj.deleted_flag = 1
+            where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.value != null">
+                <choose>
+                    <when test="criteria.column == 'name' or criteria.column == 'work_card'">
+                        <![CDATA[
+                          and pe.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'ext_dept_name' || criteria.column == 'ext_department_name' || criteria.column == 'ext_team_name'">
+                        <![CDATA[
+                          and fdev.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                          and tt.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdTrainEmployeeJurisdiction" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_train_employee_jurisdiction (employee_id, dept_id, enabled_flag,
+                                                        attribute3, attribute1,
+                                                        attribute2, create_time,
+                                                        create_by, update_time, update_by)
+            values (#{employeeId,jdbcType=BIGINT}, #{deptId,jdbcType=BIGINT}, #{enabledFlag,jdbcType=BIT},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_train_employee_jurisdiction
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdTrainEmployeeJurisdiction">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdTrainEmployeeJurisdiction">
+        <![CDATA[
+            update td_train_employee_jurisdiction
+               set employee_id  = #{employeeId,jdbcType=BIGINT},
+                   dept_id      = #{deptId,jdbcType=BIGINT},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdTrainEmployeeJurisdictionResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ttej.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdTrainEmployeeJurisdictionResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdTrainEmployeeJurisdictionResultMap">
+        <include refid="Select_All_Employee_Sql"/>
+    </select>
+
+    <select id="getDeptsByEmployeeeId" resultType="Long">
+        <![CDATA[
+            select dept_id
+              from td_train_employee_jurisdiction ttej
+            where ttej.employee_id = #{employeeId,jdbcType=BIGINT}
+              and ttej.enabled_flag = 1
+        ]]>
+    </select>
+
+    <delete id="deleteByEmployeeAndDept">
+        <![CDATA[
+        delete from td_train_employee_jurisdiction
+        where employee_id = #{employeeId,jdbcType=BIGINT}
+          and dept_id = #{deptId,jdbcType=BIGINT}
+        ]]>
+    </delete>
+
+    <delete id="deleteByEmployee">
+        <![CDATA[
+        delete from td_train_employee_jurisdiction
+        where employee_id = #{employeeId,jdbcType=BIGINT}
+        ]]>
+    </delete>
+
+    <select id="getByDept" resultMap="TdTrainEmployeeJurisdictionResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+          select top 1 *
+            from td_train_employee_jurisdiction
+             where td_train_employee_jurisdiction.dept_id = #{deptId,jdbcType=BIGINT}
+        ]]>
+    </select>
+</mapper>

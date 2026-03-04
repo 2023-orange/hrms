@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmMonthlyQuarterlyAssessmentDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+        <id column="id" property="id" />
+        <result column="assessment_month" property="assessmentMonth" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="assessment_level" property="assessmentLevel" />
+        <result column="submission_identification_flag" property="submissionIdentificationFlag" />
+        <result column="submitter" property="submitter" />
+        <result column="submit_time" property="submitTime" />
+        <result column="assessment_type" property="assessmentType" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="se_id" property="seId"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="assessment_num" property="assessmentNum"/>
+        <result column="frozen_flag" property="frozenFlag" />
+    </resultMap>
+
+    <resultMap id="SwmMonthlyQuarterlyAssessmentResultMap" type="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <parameterMap id="mspMap" type="java.util.Map">
+        <parameter property="period" mode="IN" jdbcType="VARCHAR"/>
+        <parameter property="userId" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="resultStr" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            smqa.id, smqa.assessment_month, smqa.work_card, smqa.name, smqa.assessment_level,
+            smqa.submission_identification_flag, smqa.submitter, smqa.submit_time, smqa.assessment_type,
+            smqa.create_time, smqa.create_by, smqa.update_time, smqa.update_by, smqa.se_id, smqa.enabled_flag,
+            smqa.assessment_num, smqa.frozen_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.assessment_month as ${tAlias}_assessment_month,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.name as ${tAlias}_name,
+            ${tAlias}.assessment_level as ${tAlias}_assessment_level,
+            ${tAlias}.submission_identification_flag as ${tAlias}_submission_identification_flag,
+            ${tAlias}.submitter as ${tAlias}_submitter, ${tAlias}.submit_time as ${tAlias}_submit_time,
+            ${tAlias}.assessment_type as ${tAlias}_assessment_type,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.se_id as ${tAlias}_se_id,  ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+             ${tAlias}.assessment_num as ${tAlias}_assessment_num, ${tAlias}.frozen_flag as ${tAlias}_frozen_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+             isnull((select pe.name  from  pm_employee pe join fnd_user fu on fu.id = smqa.update_by and fu.employee_id = pe.id  ), '') as update_by_str,
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        ,se.department as department, se.administrative_office as administrative_office
+              from swm_monthly_quarterly_assessment smqa , swm_employee se
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <![CDATA[
+        select temp.* from
+        (select
+             isnull((select pe.name  from  pm_employee pe join fnd_user fu on fu.id = smqa.update_by and fu.employee_id = pe.id  ), '') as update_by_str,
+             isnull((SELECT pej.dept_id FROM pm_employee_job pej JOIN pm_employee pe ON pe.work_card = smqa.work_card AND pej.employee_id = pe.id and pej.enabled_flag=1 and  pej.job_main_flag=1 and smqa.enabled_flag=1 and pe.enabled_flag=1), '') AS dept_id,
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,se.department as department, se.administrative_office as administrative_office
+            from swm_monthly_quarterly_assessment smqa , swm_employee se where smqa.enabled_flag = 1
+             and se.work_flag = 1 and smqa.se_id = se.id and smqa.assessment_type = 'month'
+             union all
+             select isnull((select pe.name  from  pm_employee pe join fnd_user fu on fu.id = smqa.update_by and fu.employee_id = pe.id  ), '') as update_by_str,
+             isnull((SELECT pej.dept_id FROM pm_employee_job pej JOIN pm_employee pe ON pe.work_card = smqa.work_card AND pej.employee_id = pe.id and pej.enabled_flag=1 and  pej.job_main_flag=1 and smqa.enabled_flag=1 and pe.enabled_flag=1), '') AS dept_id,
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,spss.department as department, spss.administrative_office as administrative_office
+            from swm_monthly_quarterly_assessment smqa join swm_post_skill_salary spss on spss.work_card = smqa.work_card
+            and spss.employee_name = smqa.name and spss.income_period = smqa.assessment_month and smqa.assessment_type = 'month'
+            and spss.enabled_flag = 1  and smqa.se_id = -1
+        ]]>
+        <![CDATA[
+        ) temp where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptAndAdministrativeOfficeVos != null and criteria.deptAndAdministrativeOfficeVos.size > 0">
+                <![CDATA[   and ( (1 = 0) or
+                ]]>
+                <foreach collection="criteria.deptAndAdministrativeOfficeVos" item="item" index="index" separator="or">
+                     (temp.department = #{item.department, jdbcType=VARCHAR} and
+                    isnull(temp.administrative_office, '-1') = isnull(#{item.administrativeOffice, jdbcType=VARCHAR}, '-1')
+                    )
+                </foreach>
+                <![CDATA[)]]>
+            </if>
+
+            <if test="criteria.managerLookSelfFlag == false and criteria.selfPmEmpId != null">
+                <![CDATA[
+                    and temp.work_card !=  (select work_card from swm_employee where employee_id = #{criteria.selfPmEmpId,jdbcType=BIGINT})
+                ]]>
+            </if>
+            <if test="criteria.period != null">
+                <![CDATA[
+                    and temp.assessment_month = #{criteria.period,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.assessmentType != null">
+                <![CDATA[
+                    and temp.assessment_type = #{criteria.assessmentType,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.frozenFlag != null">
+                <![CDATA[
+                    and temp.frozen_flag = #{criteria.frozenFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.managerFlag == true">
+                <if test="criteria.managerDepartment != null">
+                    <![CDATA[
+                        and temp.department = #{criteria.managerDepartment, jdbcType=VARCHAR}
+                    ]]>
+                </if>
+                <if test="criteria.managerAdministrativeOffice != null">
+                    <![CDATA[
+                        and se.administrative_office = #{criteria.managerAdministrativeOffice, jdbcType=VARCHAR}
+                    ]]>
+                </if>
+            </if>
+            <!--            <if test="criteria.managerFlag == true ">-->
+            <!--                <![CDATA[-->
+            <!--                    and exists (select 1  from swm_employee se where-->
+            <!--              smqa.se_id = se.id and se.work_flag = 1-->
+            <!--                ]]>-->
+            <!--                <if test="criteria.managerDepartment != null">-->
+            <!--                    <![CDATA[-->
+            <!--                        and se.department = #{criteria.managerDepartment, jdbcType=VARCHAR}-->
+            <!--                   ]]>-->
+            <!--                </if>-->
+            <!--                <if test="criteria.managerAdministrativeOffice != null">-->
+            <!--                    <![CDATA[-->
+            <!--                        and se.administrative_office = #{criteria.managerAdministrativeOffice, jdbcType=VARCHAR}-->
+            <!--                     ]]>-->
+            <!--                </if>-->
+            <!--                <![CDATA[-->
+            <!--                       )-->
+            <!--                   ]]>-->
+            <!--            </if>-->
+
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_monthly_quarterly_assessment (assessment_month, work_card, name,
+                                                          assessment_level, submission_identification_flag,
+                                                          submitter, submit_time,
+                                                          assessment_type, create_time,
+                                                          create_by, update_time, update_by, se_id, enabled_flag,assessment_num, frozen_flag)
+            values (#{assessmentMonth,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                    #{assessmentLevel,jdbcType=VARCHAR}, #{submissionIdentificationFlag,jdbcType=BIT},
+                    #{submitter,jdbcType=VARCHAR}, #{submitTime,jdbcType=TIMESTAMP},
+                    #{assessmentType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{seId, jdbcType = BIGINT},
+                    #{enabledFlag, jdbcType=BIT}, #{assessmentNum, jdbcType = DECIMAL}, #{frozenFlag,jdbcType=BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_monthly_quarterly_assessment
+             where id = #{id,jdbcType=BIGINT} and frozen_flag = 0
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteMonthlyByPeriod" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+        <![CDATA[
+            update  swm_monthly_quarterly_assessment set enabled_flag = 0,
+                    update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                    update_by    = #{updateBy,jdbcType=BIGINT}
+             where assessment_month = #{assessmentMonth, jdbcType = VARCHAR}
+            and assessment_type = #{assessmentType, jdbcType = VARCHAR} and enabled_flag = 1
+        ]]>
+    </update>
+
+    <delete id="deleteQuarterByPeriod" parameterType="java.lang.String">
+        <![CDATA[
+            update smqa
+            set enabled_flag = 0
+            from swm_monthly_quarterly_assessment smqa
+            where smqa.assessment_month = #{incomePeriod, jdbcType = VARCHAR}
+            and smqa.assessment_type = 'quarter' and smqa.enabled_flag = 1
+            and not exists (select 1 from swm_floating_wage sfw where sfw.enabled_flag = 1 and sfw.income_period = #{incomePeriod, jdbcType = VARCHAR}
+            and sfw.frozen_flag = 1
+            )
+        ]]>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+        <![CDATA[
+            update swm_monthly_quarterly_assessment
+               set assessment_month               = #{assessmentMonth,jdbcType=VARCHAR},
+                   work_card                      = #{workCard,jdbcType=VARCHAR},
+                   name                           = #{name,jdbcType=VARCHAR},
+                   assessment_level               = #{assessmentLevel,jdbcType=VARCHAR},
+                   submission_identification_flag = #{submissionIdentificationFlag,jdbcType=BIT},
+                   submitter                      = #{submitter,jdbcType=VARCHAR},
+                   submit_time                    = #{submitTime,jdbcType=TIMESTAMP},
+                   assessment_type                = #{assessmentType,jdbcType=VARCHAR},
+                   update_time                    = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                      = #{updateBy,jdbcType=BIGINT},
+                   se_id                          = #{seId, jdbcType=BIGINT},
+                   enabled_flag                   = #{enabledFlag, jdbcType=BIT},
+                   assessment_num                 = #{assessmentNum, jdbcType = DECIMAL}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmMonthlyQuarterlyAssessmentResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where smqa.se_id = se.id
+             and smqa.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getAssessmentList" resultMap="SwmMonthlyQuarterlyAssessmentResultMap">
+        <![CDATA[
+            select  smqa.work_card, smqa.assessment_month as year, smqa.YS, smqa.S as typeS, smqa.A as typeA, smqa.B as typeB, smqa.C as typeC, smqa.D as typeD, t2.FZ as score from
+                (select sqa.work_card,LEFT(sqa.assessment_month, 4) AS assessment_month,COUNT(*) AS YS,SUM(CASE sqa.assessment_level WHEN 'S' THEN 1 ELSE 0 END) AS S,
+                     SUM(CASE sqa.assessment_level WHEN 'A' THEN 1 ELSE 0 END) AS A,
+                     SUM(CASE sqa.assessment_level WHEN 'B' THEN 1 ELSE 0 END) AS B,
+                     SUM(CASE sqa.assessment_level WHEN 'C' THEN 1 ELSE 0 END) AS C,
+                     SUM(CASE sqa.assessment_level WHEN 'D' THEN 1 ELSE 0 END) AS D
+                from swm_monthly_quarterly_assessment sqa
+                where sqa.enabled_flag=1 and sqa.assessment_type='month'
+                group by sqa.work_card,LEFT(sqa.assessment_month, 4)) smqa inner join
+                (select t1.work_card ,LEFT(t1.assessment_month, 4) as ND,sum(sar.assessment_right) as fz
+                from swm_monthly_quarterly_assessment t1
+                    inner join swm_appraisal_rules sar
+                    on t1.assessment_level=sar.assessment_grade
+                group by t1.work_card,LEFT(t1.assessment_month, 4)) as t2
+                    on smqa.assessment_month=t2.nd and smqa.work_card=t2.work_card
+            where smqa.work_card= #{workCard, jdbcType = VARCHAR}
+            order by smqa.assessment_month desc
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmMonthlyQuarterlyAssessmentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmMonthlyQuarterlyAssessmentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="createMonthlyAssessment" parameterMap="mspMap" statementType="CALLABLE">
+         <![CDATA[
+            {call msp_create_monthly_assessment(?,?,?)}
+        ]]>
+    </select>
+
+    <select id="getTopMonthPeriod" resultType="java.lang.String">
+        <![CDATA[
+            select top 1 smqa.assessment_month  from swm_monthly_quarterly_assessment smqa  where (left(smqa.assessment_month, 4) + RIGHT(smqa.assessment_month, 2))
+            = (select max((left(smqat.assessment_month, 4) + RIGHT(smqat.assessment_month, 2))) from swm_monthly_quarterly_assessment smqat where smqat.enabled_flag = 1
+            and smqat.assessment_type = 'month'
+            )
+            and smqa.enabled_flag = 1
+            and smqa.assessment_type = 'month'
+        ]]>
+    </select>
+
+    <select id="countByMonth" resultType="java.lang.Integer" parameterType="java.lang.String">
+               <![CDATA[
+            select count(1) from  swm_monthly_quarterly_assessment smqa where smqa.assessment_type = 'month'
+             and smqa.enabled_flag = 1 and smqa.assessment_month = #{period, jdbcType = VARCHAR}
+        ]]>
+    </select>
+
+
+
+    <update id="updateAssessmentLevel" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+        <![CDATA[
+        update swm_monthly_quarterly_assessment
+            set assessment_level = #{assessmentLevel,jdbcType=VARCHAR},
+                submission_identification_flag = 1,
+                submitter = #{submitter, jdbcType = VARCHAR},
+                submit_time = #{submitTime, jdbcType = TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        and enabled_flag = 1
+        ]]>
+    </update>
+
+    <update id="updateQuarterSubMonthAssessmentLevel">
+        <![CDATA[
+        update
+        swm_monthly_quarterly_assessment set
+                submission_identification_flag = 1,
+                assessment_num = sqa.assessment_num,
+                submitter = sqa.submitter,
+                submit_time = sqa.submit_time
+            from swm_monthly_quarterly_assessment smqa join swm_quarterly_assessment sqa
+            on smqa.work_card = sqa.work_card and smqa.se_id = sqa.se_id
+            where
+            sqa.assessment_quarter = #{quarter, jdbcType = VARCHAR}
+            and  smqa.assessment_type = 'quarter'
+            and  smqa.enabled_flag = 1 and sqa.enabled_flag = 1
+            and smqa.assessment_month in
+             (]]>
+        <foreach collection="periodList" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        <![CDATA[)
+
+       ]]>
+    </update>
+
+
+    <update id="updateFlozenFlagByLimit" parameterType="java.lang.Long">
+        <![CDATA[
+            update  swm_monthly_quarterly_assessment  set frozen_flag = 1
+              where frozen_flag = 0 and enabled_flag = 1 and assessment_type = 'month'
+                    and convert(bigint, left(assessment_month,4) + right(assessment_month,2))  <= #{updateLimit,jdbcType=BIGINT}
+                ]]>
+    </update>
+
+    <update id="cancelFrozen" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+        <![CDATA[
+            update  swm_monthly_quarterly_assessment  set frozen_flag = #{frozenFlag,jdbcType=BIT}
+              where enabled_flag = 1 and assessment_type = 'month'
+                    and assessment_month = #{assessmentMonth,jdbcType=VARCHAR} and work_card = #{workCard,jdbcType=VARCHAR}
+                ]]>
+    </update>
+
+    <select id="countByFrozenFlag" resultType="java.lang.Integer" parameterType="java.lang.String">
+               <![CDATA[
+            select count(1) from  swm_monthly_quarterly_assessment smqa where smqa.assessment_type = 'month'
+             and smqa.enabled_flag = 1 and smqa.assessment_month = #{period, jdbcType = VARCHAR} and smqa.frozen_flag=1
+        ]]>
+    </select>
+
+    <select id="countNumByWorkCard" resultType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessmentNum" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessmentNum">
+               <![CDATA[
+    SELECT   pej.dept_id,ISNULL(a.department, '') AS department, ISNULL(a.administrative_office, '') AS administrative_office, COUNT(*) AS total_num,
+   CASE WHEN COUNT(*) < 11 THEN CONVERT(integer, LEFT(CONVERT(varchar, COUNT(*)
+                + 9), 1)) WHEN COUNT(*) < 100 AND COUNT(*) > 10 THEN CONVERT(integer, LEFT(CONVERT(varchar, COUNT(*)), 1) + 1)
+                WHEN COUNT(*) >= 100 THEN CONVERT(integer, LEFT(CONVERT(varchar, COUNT(*) + 10), 2)) END AS actual_num,
+				isnull((
+		select count(*) from swm_monthly_quarterly_assessment smqa left join swm_employee se on se.work_card=smqa.work_card
+	where smqa.assessment_level='A' and smqa.enabled_flag=1 and smqa.assessment_month=  #{assessmentMonth,jdbcType = VARCHAR}
+	 and se.department= #{department, jdbcType = VARCHAR} and se.administrative_office= #{administrativeOffice, jdbcType = VARCHAR}),'') as currentNum
+    FROM      swm_employee a left join swm_employee b on isnull(a.department,'')=isnull(b.department,'') and isnull(a.administrative_office,'')=isnull(b.administrative_office,'')
+    left join pm_employee_job pej on pej.employee_id=b.employee_id
+    WHERE   a.accessment_form = 'month' and b.work_card= #{workCard, jdbcType = VARCHAR} and pej.enabled_flag=1
+    GROUP BY pej.dept_id,
+    ISNULL(a.department, ''),  -- 分组统一空值
+    ISNULL(a.administrative_office, '')
+        ]]>
+    </select>
+
+    <select id="limitDept" resultType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessmentNum" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+               <![CDATA[
+                SELECT 0 as no_limit_dept_flag, a.department,
+                       a.administrative_office,
+                       COUNT(*) AS total_num,
+                       CEILING(COUNT(*)/10.0) AS actual_num,
+                       isnull((SELECT COUNT(*)
+                                FROM swm_monthly_quarterly_assessment smqa
+                                LEFT JOIN swm_employee se
+                                  ON se.work_card = smqa.work_card
+                               WHERE smqa.assessment_level = 'A'
+                                 AND smqa.enabled_flag = 1
+                                 AND smqa.assessment_month =  #{assessmentMonth,jdbcType = VARCHAR}
+                                 AND se.department = a.department
+                                 AND ISNULL(se.administrative_office,'#') = ISNULL(a.administrative_office,'#')), '') AS current_num
+                  FROM swm_employee a
+                  LEFT JOIN swm_employee b
+                    ON isnull(a.department, '') = isnull(b.department, '')
+                   AND isnull(a.administrative_office, '') =
+                       isnull(b.administrative_office, '')
+                 WHERE a.accessment_form = 'month'
+                   AND b.work_card = #{workCard,jdbcType = VARCHAR}
+                   AND a.work_flag = 1
+                 GROUP BY a.department,
+                          a.administrative_office
+        ]]>
+    </select>
+
+    <select id="noLimitDept" resultType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessmentNum" parameterType="com.sunten.hrms.swm.domain.SwmMonthlyQuarterlyAssessment">
+               <![CDATA[
+            SELECT 1 as no_limit_dept_flag,tmp.department,
+                   SUM(tmp.actual_num) actual_num,
+                   isnull((SELECT COUNT(*)
+                            FROM swm_monthly_quarterly_assessment smqa
+                            LEFT JOIN swm_employee se
+                              ON se.work_card = smqa.work_card
+                           WHERE smqa.assessment_level = 'A'
+                             AND smqa.enabled_flag = 1
+                             AND smqa.assessment_month =  #{assessmentMonth,jdbcType = VARCHAR}
+                             AND se.department = tmp.department), '') AS current_num
+              FROM (SELECT a.department,
+                            a.administrative_office,
+                            COUNT(*) AS total_num,
+                            CEILING(COUNT(*)/10.0) AS actual_num
+                      FROM swm_employee a
+                      LEFT JOIN swm_employee b
+                        ON isnull(a.department, '') = isnull(b.department, '')
+                     WHERE a.accessment_form = 'month'
+                       AND b.work_card = #{workCard,jdbcType = VARCHAR}
+                       AND a.work_flag = 1
+                     GROUP BY a.department,
+                               a.administrative_office
+                    ) tmp
+             GROUP BY tmp.department
+        ]]>
+    </select>
+
+</mapper>

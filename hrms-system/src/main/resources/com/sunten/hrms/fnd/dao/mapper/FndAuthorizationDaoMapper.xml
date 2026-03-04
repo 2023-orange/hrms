@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndAuthorizationDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndAuthorization">
+        <id column="id" property="id" />
+        <result column="authorization_by" property="authorizationBy" />
+        <result column="authorization_to" property="authorizationTo" />
+        <result column="authorization_type" property="authorizationType" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="enable_flag" property="enableFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="FndAuthorizationResultMap" type="com.sunten.hrms.fnd.domain.FndAuthorization" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="toEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="byEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pec_" />
+    </resultMap>
+
+    <resultMap id="FndAuthorizationResultAndChildResultMap" type="com.sunten.hrms.fnd.domain.FndAuthorization" autoMapping="true">
+        <id column="id" property="id" />
+        <collection property="fndAuthorizationDts" ofType="com.sunten.hrms.fnd.domain.FndAuthorizationDts">
+            <id column="id" property="id" />
+            <result column="authorization_id" property="authorizationId" />
+            <result column="dept_id" property="deptId" />
+            <result column="enable_flag" property="enableFlag" />
+            <result column="create_by" property="createBy" />
+            <result column="create_time" property="createTime" />
+            <result column="update_by" property="updateBy" />
+            <result column="update_time" property="updateTime" />
+            <association property="fndDept"
+                         javaType="com.sunten.hrms.fnd.domain.FndDept"
+                         resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                         columnPrefix="fd_"
+            />
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fa.authorization_by, fa.authorization_to, fa.authorization_type,
+            fa.begin_date, fa.end_date, fa.enable_flag, fa.id, fa.create_time, fa.create_by, fa.update_time,
+            fa.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.authorization_by as ${tAlias}_authorization_by,
+            ${tAlias}.authorization_to as ${tAlias}_authorization_to,
+            ${tAlias}.authorization_type as ${tAlias}_authorization_type,
+            ${tAlias}.begin_date as ${tAlias}_begin_date, ${tAlias}.end_date as ${tAlias}_end_date,
+            ${tAlias}.enable_flag as ${tAlias}_enable_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pec'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe_pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pec_pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+                   ,fdev.ext_dept_name AS pe_dept_name,fdev.ext_department_name AS pe_department,fdev.ext_team_name AS pe_team
+                   ,fdevc.ext_dept_name AS pec_dept_name,fdevc.ext_department_name AS pec_department,fdevc.ext_team_name AS pec_team
+              from fnd_authorization fa
+              left join pm_employee pe
+                on pe.id = fa.authorization_to
+               and pe.enabled_flag = 1
+              left join pm_employee pec
+                on pec.id = fa.authorization_by
+               and pec.enabled_flag = 1
+              left outer join pm_employee_job pe_pej on pe.id = pe_pej.employee_id and pe_pej.job_main_flag = 1 and pe_pej.enabled_flag = 1
+              left outer join pm_employee_job pec_pej on pec.id = pec_pej.employee_id and pec_pej.job_main_flag = 1 and pec_pej.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev on pe_pej.dept_id = fdev.id and fdev.enabled_flag = 1 and fdev.deleted_flag = 0
+              left outer join fnd_dept_ext_v fdevc on pec_pej.dept_id = fdevc.id and fdevc.enabled_flag = 1 and fdevc.deleted_flag = 0
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql_With_Child">
+        <![CDATA[
+            select
+            fa.authorization_by, fa.authorization_to, fa.authorization_type,
+            fa.begin_date, fa.end_date, fa.enable_flag, fa.id, fa.create_time, fa.create_by, fa.update_time,
+            fa.update_by,
+           ]]>
+            <bind name="tAlias" value="'fad'"/>
+            <include refid="com.sunten.hrms.fnd.dao.FndAuthorizationDtsDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+            ,
+            ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+            from fnd_authorization fa join fnd_authorization_dts fad on fa.id = fad.authorization_id
+            and fad.enable_flag = 1
+            join fnd_dept fd on fd.id = fad.dept_id and fd.enabled_flag = 1 and fd.deleted_flag = 0
+            where
+             ((getdate() between fa.begin_date and fa.end_date) or (fa.begin_date >= getdate()))
+        ]]>
+    </sql>
+
+    <sql id="Criteria_Query_Sql">
+        <if test="criteria != null">
+            <if test="criteria.toEmployeeId != null">
+                <![CDATA[
+                    and fa.authorization_to = #{criteria.toEmployeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.byEmployeeId != null">
+                <![CDATA[
+                    and fa.authorization_by = #{criteria.byEmployeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.authorizationType != null">
+                <![CDATA[
+                    and fa.authorization_type = #{criteria.authorizationType,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.enableFlag != null">
+                <![CDATA[
+                    and fa.enable_flag = #{criteria.enableFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.byEmployeeIds != null and criteria.byEmployeeIds.size > 0">
+                <![CDATA[
+                    and fa.authorization_by in
+                 ]]>
+                <foreach collection="criteria.byEmployeeIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                </foreach>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+             and ((getdate() between fa.begin_date and fa.end_date) or (fa.begin_date >= getdate()))
+        ]]>
+        <include refid="Criteria_Query_Sql"/>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndAuthorization" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_authorization (authorization_by,
+                                           authorization_to, authorization_type,
+                                            begin_date, end_date,
+                                           enable_flag, create_time,
+                                           create_by, update_time, update_by)
+            values (#{authorizationBy,jdbcType=BIGINT},
+                    #{authorizationTo,jdbcType=BIGINT}, #{authorizationType,jdbcType=VARCHAR},
+                     #{beginDate,jdbcType=DATE}, #{endDate,jdbcType=DATE},
+                    #{enableFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_authorization
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndAuthorization">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndAuthorization">
+        <![CDATA[
+            update fnd_authorization
+               set authorization_by   = #{authorizationBy,jdbcType=BIGINT},
+                   authorization_to   = #{authorizationTo,jdbcType=BIGINT},
+                   authorization_type = #{authorizationType,jdbcType=VARCHAR},
+                   begin_date         = #{beginDate,jdbcType=DATE},
+                   end_date           = #{endDate,jdbcType=DATE},
+                   enable_flag        = #{enableFlag,jdbcType=BIT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndAuthorizationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fa.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndAuthorizationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndAuthorizationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlagByKey">
+        <![CDATA[
+        update fnd_authorization
+        set enable_flag        = 0,
+            update_time        = #{updateTime,jdbcType=TIMESTAMP},
+            update_by          = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listAllByCriteriaWithChild" resultMap="FndAuthorizationResultAndChildResultMap">
+        <include refid="Base_Column_Query_Sql_With_Child"/>
+        <include refid="Criteria_Query_Sql"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanImplementDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanImplement">
+        <id column="id" property="id" />
+        <result column="plan_id" property="planId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="training_time_quantity" property="trainingTimeQuantity" />
+        <result column="training_address" property="trainingAddress" />
+        <result column="check_method" property="checkMethod" />
+        <result column="training_money" property="trainingMoney" />
+        <result column="request_by" property="requestBy" />
+        <result column="request_date" property="requestDate" />
+        <result column="current_node" property="currentNode" />
+        <result column="current_person" property="currentPerson" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="approval_status" property="approvalStatus" />
+        <result column="out_teacher" property="outTeacher" />
+        <result column="out_emp" property="outEmp" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="payment_des" property="paymentDes"/>
+        <result column="overall_attendance_description" property="overallAttendanceDescription"/>
+    </resultMap>
+
+    <resultMap id="TdPlanImplementResultMap" type="com.sunten.hrms.td.domain.TdPlanImplement" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="plan"
+                     javaType="com.sunten.hrms.td.domain.TdPlan"
+                     resultMap="com.sunten.hrms.td.dao.TdPlanDao.TdPlanResultMap"
+                     columnPrefix="tp_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpi.plan_id, tpi.begin_date, tpi.end_date, tpi.training_time_quantity, tpi.training_address,
+
+            STUFF((
+			SELECT
+				'，' + tpcm.check_method
+			FROM
+				td_plan_check_method tpcm
+				where tpcm.plan_implement_id = tpi.id and tpcm.enabled_flag = 1
+		        FOR XML PATH ( '' )),
+			1,
+			1,
+			''
+			) as check_method, tpi.training_money, tpi.request_by, tpi.request_date, tpi.current_node,
+            tpi.current_person, tpi.oa_order, tpi.enabled_flag, tpi.approval_status, tpi.out_teacher,
+            tpi.out_emp, tpi.id, tpi.create_time, tpi.create_by, tpi.update_time, tpi.update_by,
+            tpi.payment_des, tpi.overall_attendance_description,tpi.practicalParticipationTotal  as  practical_participation_total
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.plan_id as ${tAlias}_plan_id, ${tAlias}.begin_date as ${tAlias}_begin_date,
+            ${tAlias}.end_date as ${tAlias}_end_date,
+            ${tAlias}.training_time_quantity as ${tAlias}_training_time_quantity,
+            ${tAlias}.training_address as ${tAlias}_training_address,
+            ${tAlias}.check_method as ${tAlias}_check_method,
+            ${tAlias}.training_money as ${tAlias}_training_money, ${tAlias}.request_by as ${tAlias}_request_by,
+            ${tAlias}.request_date as ${tAlias}_request_date, ${tAlias}.current_node as ${tAlias}_current_node,
+            ${tAlias}.current_person as ${tAlias}_current_person, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.approval_status as ${tAlias}_approval_status,
+            ${tAlias}.out_teacher as ${tAlias}_out_teacher, ${tAlias}.out_emp as ${tAlias}_out_emp,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,
+             ${tAlias}.payment_des as ${tAlias}_payment_des,
+             ${tAlias}.overall_attendance_description as ${tAlias}_overall_attendance_description, ${tAlias}.absenceTotal as ${tAlias}_absenceTotal,${tAlias}.practicalParticipationTotal as ${tAlias}_practicalParticipationTotal
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,
+    tp.training_no as tp_training_no,
+	tp.training_name AS tp_training_name,
+	tp.training_method AS tp_training_method,
+	tp.training_content AS tp_training_content,
+	tp.training_purpose AS tp_training_purpose,
+	tp.training_level AS tp_training_level,
+	tp.profession_classify AS tp_profession_classify,
+	tp.dependence_dept AS tp_dependence_dept,
+	isnull(
+	    (select fdt.dept_name from fnd_dept fdt where fdt.id = tp.host_dept_id and fdt.enabled_flag = 1 and fdt.deleted_flag = 0 and tp.enabled_flag = 1 )
+        , tp.host_dept
+	) as tp_host_dept,
+	tp.teacher AS tp_teacher,
+	tp.employee_describes AS tp_employee_describes,
+	tp.plan_date AS tp_plan_date,
+	case when (select count(1) from td_plan_result tpr_t where tpr_t.plan_id = tp.id and tpr_t.enabled_flag = 1 ) > 0 then
+	(select count(1) from td_plan_result tpr_t where tpr_t.plan_id = tp.id and tpr_t.enabled_flag = 1 ) else null end  as tp_employee_quantity,
+	tp.plan_money AS tp_plan_money,
+	tp.online_flag AS tp_online_flag,
+	tp.remark AS tp_remark,
+	tp.enabled_flag AS tp_enabled_flag,
+	tp.plan_status AS tp_plan_status,
+	tp.id AS tp_id,
+	tp.create_time AS tp_create_time,
+	tp.create_by AS tp_create_by,
+	tp.update_time AS tp_update_time,
+	tp.update_by AS tp_update_by,
+	tp.plan_type AS tp_plan_type,
+	tp.plan_charge_id AS tp_plan_charge_id,
+	tp.dept_charge_id AS tp_dept_charge_id,
+	tp.show_flag AS tp_show_flag
+        ]]>
+        <![CDATA[
+            , isnull(pe.name, '')  as tp_dept_charge_name
+            , isnull(pet.name, '') as tp_plan_charge_name
+            , isnull(pe.work_card, '') as tp_dept_charge_work_card
+            , isnull(pet.work_card, '') as tp_plan_charge_work_card
+            , (select top 1 isnull(pe.email_inside, fu.email) from fnd_user fu where fu.employee_id = pe.id and fu.enabled_flag = 1 ) as tp_dept_charge_email
+            , (select top 1 isnull(pe.email_inside, fu.email) from fnd_user fu where fu.employee_id = pet.id and fu.enabled_flag = 1 ) as tP_plan_charge_email
+        ]]>
+        <![CDATA[
+              from td_plan_implement tpi left join td_plan tp on tpi.plan_id = tp.id and tpi.enabled_flag = 1
+              left join pm_employee pe on pe.id = tp.dept_charge_id
+              left join pm_employee pet on pet.id =  tp.plan_charge_id and pet.enabled_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1  and tp.enabled_flag = 1 and pe.enabled_flag = 1 and tp.show_flag = 1 and pet.enabled_flag = 1 and tp.safety_training_flag = 0
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                                    and tpi.enabled_flag = #{criteria.enabledFlag, jdbcType = BIT}
+                                ]]>
+            </if>
+            <if test="criteria.approvalStatus != null">
+                <![CDATA[
+                                    and tpi.approval_status = #{criteria.approvalStatus, jdbcType = VARCHAR}
+                                ]]>
+            </if>
+            <if test="criteria.requestBy != null or criteria.deptChargeId != null or criteria.deptIds != null">
+                <![CDATA[
+                               and ( 1 = 0
+                                     ]]>
+                <if test="criteria.planChargeId != null">
+                    <![CDATA[
+                               or tp.plan_charge_id = #{criteria.planChargeId, jdbcType = BIGINT}
+                        ]]>
+                </if>
+                <if test="criteria.deptChargeId != null ">
+                    <![CDATA[
+                    or tp.dept_charge_id = #{criteria.deptChargeId, jdbcType = BIGINT}
+                     ]]>
+                </if>
+                <![CDATA[
+                           )
+                        ]]>
+                <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                    <![CDATA[ and exists (SELECT 1
+                                  FROM td_plan tpt
+                                 WHERE tpt.id = tp.id
+                                   AND tpt.host_dept_id IN ]]>
+                    <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                    #{item, jdbcType=BIGINT}
+                ]]>
+                    </foreach>
+                    <![CDATA[ )]]>
+                </if>
+            </if>
+            <if test="criteria.value != null and criteria.value != '' and criteria.colName != '' and criteria.symbol != ''">
+                <choose>
+                    <when test="criteria.colName == 'td_training_no'">
+                        <![CDATA[
+                            and tp.training_no ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'td_plan_type'">
+                        <![CDATA[
+                            and tp.plan_type ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'td_training_name'">
+                        <![CDATA[
+                            and tp.training_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'begin_date'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DATE}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'end_date'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DATE}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'training_time_quantity'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DOUBLE}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'training_address'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'check_method'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'training_money'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=DECIMAL}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'tp_dependence_dept'">
+                        <![CDATA[
+                            and tp.dependence_dept ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'plan_charge_name'">
+                        <![CDATA[
+                            and pet.name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'current_node'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'current_person'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'oa_order'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'approval_status'">
+                        <![CDATA[
+                            and tpi.${criteria.colName} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                </choose>
+            </if>
+            <if test="criteria.advancedQuerys != null and criteria.advancedQuerys.size > 0">
+                <foreach collection="criteria.advancedQuerys" item="item" index="index">
+                    <if test="item.value != null and item.colValue != '' and item.symbol != ''">
+                        <choose>
+                            <when test="item.value == 'td_plan_type'">
+                                <![CDATA[
+                           and tp.plan_type ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'td_training_name'">
+                                <![CDATA[
+                            and tp.training_name ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'begin_date'">
+                                <![CDATA[
+                            and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = DATE}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'end_date'">
+                                <![CDATA[
+                          and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = DATE}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'training_time_quantity'">
+                                <![CDATA[
+                              and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = DOUBLE}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'training_address'">
+                                <![CDATA[
+                                    and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'check_method'">
+                                <![CDATA[
+                              and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+
+                        ]]>
+                            </when>
+                            <when test="item.value == 'training_money'">
+                                <![CDATA[
+                              and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = DECIMAL}
+
+                        ]]>
+                            </when>
+                            <when test="item.value == 'tp_dependence_dept'">
+                                <![CDATA[
+                                    and tp.dependence_dept ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+
+                        ]]>
+                            </when>
+                            <when test="item.value == 'plan_charge_name'">
+                                <![CDATA[
+                             and pet.name ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'current_node'">
+                                <![CDATA[
+                            and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'current_person'">
+                                <![CDATA[
+                       and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'oa_order'">
+                                <![CDATA[
+                                 and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                            <when test="item.value == 'approval_status'">
+                                <![CDATA[
+                                   and tpi.${item.value} ${item.symbol} #{item.colValue, jdbcType = VARCHAR}
+                        ]]>
+                            </when>
+                        </choose>
+                    </if>
+                </foreach>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanImplement" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_implement (plan_id, begin_date, end_date,
+                                           training_time_quantity, training_address,
+                                           check_method, training_money,
+                                           request_by, request_date, current_node,
+                                           current_person, oa_order, enabled_flag,
+                                           approval_status, out_teacher,
+                                           out_emp, create_time, create_by,
+                                           update_time, update_by, payment_des, overall_attendance_description)
+            values (#{planId,jdbcType=BIGINT}, #{beginDate,jdbcType=DATE}, #{endDate,jdbcType=DATE},
+                    #{trainingTimeQuantity,jdbcType=DOUBLE}, #{trainingAddress,jdbcType=VARCHAR},
+                    #{checkMethod,jdbcType=VARCHAR}, #{trainingMoney,jdbcType=DECIMAL},
+                    #{requestBy,jdbcType=BIGINT}, #{requestDate,jdbcType=DATE}, #{currentNode,jdbcType=VARCHAR},
+                    #{currentPerson,jdbcType=VARCHAR}, #{oaOrder,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{approvalStatus,jdbcType=VARCHAR}, #{outTeacher,jdbcType=VARCHAR},
+                    #{outEmp,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{paymentDes, jdbcType = VARCHAR},
+                    #{overallAttendanceDescription, jdbcType = VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_implement
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanImplement">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanImplement">
+        <![CDATA[
+            update td_plan_implement
+            set
+                               update_time            = #{updateTime,jdbcType=TIMESTAMP}
+                   ,update_by              = #{updateBy,jdbcType=BIGINT}
+                           ]]>
+        <if test="planId != null">
+            ,plan_id     = #{planId,jdbcType=BIGINT}
+        </if>
+        <if test="beginDate != null">
+            ,begin_date             = #{beginDate,jdbcType=DATE}
+        </if>
+        <if test="endDate != null">
+            ,end_date               = #{endDate,jdbcType=DATE}
+        </if>
+        <if test="trainingTimeQuantity != null">
+            ,training_time_quantity = #{trainingTimeQuantity,jdbcType=DOUBLE}
+        </if>
+        <if test="trainingAddress != null">
+            ,training_address       = #{trainingAddress,jdbcType=VARCHAR}
+        </if>
+        <if test="checkMethod != null">
+            ,check_method           = #{checkMethod,jdbcType=VARCHAR}
+        </if>
+        <if test="trainingMoney != null">
+            ,training_money         = #{trainingMoney,jdbcType=DECIMAL}
+        </if>
+        <if test="requestBy != null">
+            ,request_by             = #{requestBy,jdbcType=BIGINT}
+        </if>
+        <if test="requestDate != null">
+            ,request_date           = #{requestDate,jdbcType=DATE}
+        </if>
+        <if test="currentNode != null">
+            ,current_node           = #{currentNode,jdbcType=VARCHAR}
+        </if>
+        <if test="currentPerson != null">
+            ,current_person         = #{currentPerson,jdbcType=VARCHAR}
+        </if>
+        <if test="oaOrder != null">
+            ,oa_order               = #{oaOrder,jdbcType=VARCHAR}
+        </if>
+        <if test="enabledFlag != null">
+            ,enabled_flag           = #{enabledFlag,jdbcType=BIT}
+        </if>
+        <if test="approvalStatus != null">
+            ,approval_status        = #{approvalStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="outTeacher != null">
+            ,out_teacher            = #{outTeacher,jdbcType=VARCHAR}
+        </if>
+        <if test="outEmp != null">
+            ,out_emp                = #{outEmp,jdbcType=VARCHAR}
+        </if>
+        <if test="overallAttendanceDescription != null">
+            ,overall_attendance_description                = #{overallAttendanceDescription,jdbcType=VARCHAR}
+        </if>
+        <if test="absenceTotal != null">
+            ,absenceTotal                = #{absenceTotal,jdbcType=INTEGER}
+        </if>
+        <if test="paymentDes != null">
+            ,payment_Des                = #{paymentDes,jdbcType=VARCHAR}
+        </if>
+        <if test="practicalParticipationTotal != null">
+            ,practicalParticipationTotal                = #{practicalParticipationTotal,jdbcType=INTEGER}
+        </if>
+        <![CDATA[
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanImplementResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tpi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getByPlanIdForTemplate" resultMap="TdPlanImplementResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+            select id, (select plan_charge_id  from td_plan where enabled_flag = 1 and id = #{id, jdbcType = BIGINT}) as tp_plan_charge_id
+            from td_plan_implement
+            where plan_id = #{id, jdbcType = BIGINT}
+            and enabled_flag = 1
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanImplementResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanImplementResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1  and tp.enabled_flag = 1 and pe.enabled_flag = 1 and tp.show_flag = 1 and pet.enabled_flag = 1 and tp.safety_training_flag = 0
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                                    and tpi.enabled_flag = #{criteria.enabledFlag, jdbcType = BIT}
+                                ]]>
+            </if>
+            <if test="criteria.approvalStatus != null">
+                <![CDATA[
+                                    and tpi.approval_status = #{criteria.approvalStatus, jdbcType = VARCHAR}
+                                ]]>
+            </if>
+            <if test="criteria.requestBy != null or criteria.deptChargeId != null or criteria.deptIds != null">
+                <![CDATA[
+                               and ( 1 = 0
+                                     ]]>
+                <if test="criteria.planChargeId != null">
+                    <![CDATA[
+                               or tp.plan_charge_id = #{criteria.planChargeId, jdbcType = BIGINT}
+                        ]]>
+                </if>
+                <if test="criteria.deptChargeId != null ">
+                    <![CDATA[
+                    or tp.dept_charge_id = #{criteria.deptChargeId, jdbcType = BIGINT}
+                     ]]>
+                </if>
+                <![CDATA[
+                           )
+                        ]]>
+                <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                    <![CDATA[ and exists (SELECT 1
+                                  FROM td_plan tpt
+                                 WHERE tpt.id = tp.id
+                                   AND tpt.host_dept_id IN ]]>
+                    <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                    #{item, jdbcType=BIGINT}
+                ]]>
+                    </foreach>
+                    <![CDATA[ )]]>
+                </if>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </select>
+
+    <select id="selectByPlanId" resultMap="TdPlanImplementResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            from td_plan_implement tpi where tpi.enabled_flag = 1 and tpi.plan_id = #{planId, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+
+
+</mapper>

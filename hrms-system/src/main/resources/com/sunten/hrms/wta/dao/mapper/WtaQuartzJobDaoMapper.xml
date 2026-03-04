@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.wta.dao.WtaQuartzJobDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.wta.domain.WtaQuartzJob">
+        <id column="id" property="id" />
+        <result column="bean_name" property="beanName" />
+        <result column="cron_expression" property="cronExpression" />
+        <result column="is_pause" property="pause" />
+        <result column="job_name" property="jobName" />
+        <result column="method_name" property="methodName" />
+        <result column="params" property="params" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="WtaQuartzJobResultMap" type="com.sunten.hrms.wta.domain.WtaQuartzJob" autoMapping="true">
+        <result column="is_pause" property="pause" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            wqj.id, wqj.bean_name, wqj.cron_expression, wqj.is_pause, wqj.job_name, wqj.method_name,
+            wqj.params, wqj.remark, wqj.create_time, wqj.create_by, wqj.update_time, wqj.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.bean_name as ${tAlias}_bean_name,
+            ${tAlias}.cron_expression as ${tAlias}_cron_expression, ${tAlias}.is_pause as ${tAlias}_is_pause,
+            ${tAlias}.job_name as ${tAlias}_job_name, ${tAlias}.method_name as ${tAlias}_method_name,
+            ${tAlias}.params as ${tAlias}_params, ${tAlias}.remark as ${tAlias}_remark,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from wta_quartz_job wqj
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.jobName != null">
+                <![CDATA[
+               and wqj.job_name like #{criteria.jobName,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and wqj.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and wqj.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.wta.domain.WtaQuartzJob" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into wta_quartz_job (bean_name, cron_expression, is_pause,
+                                        job_name, method_name, params,
+                                        remark, create_time, create_by,
+                                        update_time, update_by)
+            values (#{beanName,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, #{pause,jdbcType=BIT},
+                    #{jobName,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR},
+                    #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from wta_quartz_job
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.wta.domain.WtaQuartzJob">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.wta.domain.WtaQuartzJob">
+        <![CDATA[
+            update wta_quartz_job
+               set bean_name       = #{beanName,jdbcType=VARCHAR},
+                   cron_expression = #{cronExpression,jdbcType=VARCHAR},
+                   is_pause        = #{pause,jdbcType=BIT},
+                   job_name        = #{jobName,jdbcType=VARCHAR},
+                   method_name     = #{methodName,jdbcType=VARCHAR},
+                   params          = #{params,jdbcType=VARCHAR},
+                   remark          = #{remark,jdbcType=VARCHAR},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by       = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="WtaQuartzJobResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where wqj.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="WtaQuartzJobResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="WtaQuartzJobResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listEnableJob" resultMap="WtaQuartzJobResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where wqj.is_pause = 0
+             order by wqj.id asc
+        ]]>
+    </select>
+
+    <select id="listPauseJob" resultMap="WtaQuartzJobResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where wqj.is_pause = 1
+             order by wqj.id asc
+        ]]>
+    </select>
+
+    <update id="updatePause" parameterType="com.sunten.hrms.wta.domain.WtaQuartzJob">
+        <![CDATA[
+            update wta_quartz_job
+               set is_pause        = #{pause,jdbcType=BIT},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by       = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

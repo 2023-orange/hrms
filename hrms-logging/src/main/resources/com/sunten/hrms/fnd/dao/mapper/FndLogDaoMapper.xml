@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndLogDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndLog">
+        <id column="id" property="id" />
+        <result column="description" property="description" />
+        <result column="exception_detail" property="exceptionDetail" />
+        <result column="log_type" property="logType" />
+        <result column="method" property="method" />
+        <result column="params" property="params" />
+        <result column="request_ip" property="requestIp" />
+        <result column="time" property="time" />
+        <result column="username" property="username" />
+        <result column="address" property="address" />
+        <result column="browser" property="browser" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="FndLogResultMap" type="com.sunten.hrms.fnd.domain.FndLog" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fl.id, fl.description, fl.exception_detail, fl.log_type, fl.method, fl.params, fl.request_ip, 
+            fl.time, fl.username, fl.address, fl.browser, fl.create_time 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.description as ${tAlias}_description, 
+            ${tAlias}.exception_detail as ${tAlias}_exception_detail, ${tAlias}.log_type as ${tAlias}_log_type, 
+            ${tAlias}.method as ${tAlias}_method, ${tAlias}.params as ${tAlias}_params, 
+            ${tAlias}.request_ip as ${tAlias}_request_ip, ${tAlias}.time as ${tAlias}_time, 
+            ${tAlias}.username as ${tAlias}_username, ${tAlias}.address as ${tAlias}_address, 
+            ${tAlias}.browser as ${tAlias}_browser, ${tAlias}.create_time as ${tAlias}_create_time 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_log fl
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.blurry != null">
+                <![CDATA[
+               and (fl.username like #{criteria.blurry,jdbcType=VARCHAR}
+                 or fl.description like #{criteria.blurry,jdbcType=VARCHAR}
+                 or fl.address like #{criteria.blurry,jdbcType=VARCHAR}
+                 or fl.request_ip like #{criteria.blurry,jdbcType=VARCHAR}
+                 or fl.method like #{criteria.blurry,jdbcType=VARCHAR}
+                 or fl.params like #{criteria.blurry,jdbcType=VARCHAR})
+                ]]>
+            </if>
+            <if test="criteria.logType != null">
+                <![CDATA[
+               and fl.log_type like #{criteria.logType,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and fl.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and fl.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndLog" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_log (description, exception_detail,
+                                 log_type, method, params,
+                                 request_ip, time, username,
+                                 address, browser, create_time)
+            values (#{description,jdbcType=VARCHAR}, #{exceptionDetail,jdbcType=VARCHAR},
+                    #{logType,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR},
+                    #{requestIp,jdbcType=VARCHAR}, #{time,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR},
+                    #{address,jdbcType=VARCHAR}, #{browser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_log
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndLog">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndLog">
+        <![CDATA[
+            update fnd_log
+               set description      = #{description,jdbcType=VARCHAR},
+                   exception_detail = #{exceptionDetail,jdbcType=VARCHAR},
+                   log_type         = #{logType,jdbcType=VARCHAR},
+                   method           = #{method,jdbcType=VARCHAR},
+                   params           = #{params,jdbcType=VARCHAR},
+                   request_ip       = #{requestIp,jdbcType=VARCHAR},
+                   time             = #{time,jdbcType=BIGINT},
+                   username         = #{username,jdbcType=VARCHAR},
+                   address          = #{address,jdbcType=VARCHAR},
+                   browser          = #{browser,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndLogResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fl.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndLogResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndLogResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="findIp" resultType="java.lang.Long">
+        <![CDATA[
+            select count(*)
+              from (select fl.request_ip
+                      from fnd_log fl
+                     where fl.create_time between #{date1,jdbcType=VARCHAR} and #{date2,jdbcType=VARCHAR}
+                     group by fl.request_ip) tmp
+        ]]>
+    </select>
+</mapper>

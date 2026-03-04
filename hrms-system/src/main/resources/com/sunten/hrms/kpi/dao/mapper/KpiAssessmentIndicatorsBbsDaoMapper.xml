@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiAssessmentIndicatorsBbsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsBbs">
+        <id column="id" property="id" />
+        <result column="kpi_assessment_indicators_id" property="kpiAssessmentIndicatorsId" />
+        <result column="BBS_content" property="bbsContent" />
+        <result column="create_name" property="createName" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="enabled_flag" property="enabledFlag" />
+    </resultMap>
+
+    <resultMap id="KpiAssessmentIndicatorsBbsResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsBbs" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            kaiB.id, kaiB.kpi_assessment_indicators_id, kaiB.BBS_content, kaiB.create_name, kaiB.create_by,
+            kaiB.create_time, kaiB.update_by, kaiB.update_time, kaiB.enabled_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.kpi_assessment_indicators_id as ${tAlias}_kpi_assessment_indicators_id,
+            ${tAlias}.BBS_content as ${tAlias}_BBS_content, ${tAlias}.create_name as ${tAlias}_create_name,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_assessment_indicators_BBS kaiB
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.kpiAssessmentIndicatorsId != null">
+            <![CDATA[
+                and kaiB.kpi_assessment_indicators_id like #{criteria.kpiAssessmentIndicatorsId,jdbcType=BIGINT}
+            ]]>
+        </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsBbs">
+        <![CDATA[
+            insert into kpi_assessment_indicators_BBS (kpi_assessment_indicators_id,
+                                                       BBS_content, create_name, create_by,
+                                                       create_time, update_by,
+                                                       update_time, enabled_flag)
+            values (#{kpiAssessmentIndicatorsId,jdbcType=BIGINT},
+                    #{bbsContent,jdbcType=VARCHAR}, #{createName,jdbcType=VARCHAR}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, 1)
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_assessment_indicators_BBS
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsBbs">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsBbs">
+        <![CDATA[
+            update kpi_assessment_indicators_BBS
+               set id                           = #{id,jdbcType=BIGINT},
+                   kpi_assessment_indicators_id = #{kpiAssessmentIndicatorsId,jdbcType=BIGINT},
+                   BBS_content                  = #{bbsContent,jdbcType=VARCHAR},
+                   create_name                  = #{createName,jdbcType=VARCHAR},
+                   update_by                    = #{updateBy,jdbcType=BIGINT},
+                   update_time                  = #{updateTime,jdbcType=TIMESTAMP},
+                   enabled_flag                 = #{enabledFlag,jdbcType=BIT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiAssessmentIndicatorsBbsResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiAssessmentIndicatorsBbsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        order by id
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiAssessmentIndicatorsBbsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

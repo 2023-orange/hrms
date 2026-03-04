@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmQuarterlyAssessmentInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmQuarterlyAssessmentInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="assessment_quarter" property="assessmentQuarter" />
+        <result column="assessment_num" property="assessmentNum" />
+        <result column="se_id" property="seId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="SwmQuarterlyAssessmentInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmQuarterlyAssessmentInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sqai.id, sqai.group_id, sqai.work_card, sqai.employee_name, sqai.operation_code, sqai.error_msg,
+            sqai.data_status, sqai.assessment_quarter, sqai.assessment_num, sqai.se_id, sqai.create_time,
+            sqai.create_by, sqai.update_time, sqai.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status,
+            ${tAlias}.assessment_quarter as ${tAlias}_assessment_quarter,
+            ${tAlias}.assessment_num as ${tAlias}_assessment_num, ${tAlias}.se_id as ${tAlias}_se_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_quarterly_assessment_interface sqai
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and sqai.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and sqai.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessmentInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_quarterly_assessment_interface (group_id, work_card, employee_name,
+                                                            operation_code, error_msg, data_status,
+                                                            assessment_quarter, assessment_num,
+                                                            se_id, create_time, create_by,
+                                                            update_time, update_by)
+            values (#{groupId,jdbcType=BIGINT}, #{workCard,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+                    #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR},
+                    #{assessmentQuarter,jdbcType=VARCHAR}, #{assessmentNum,jdbcType=DECIMAL},
+                    #{seId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_quarterly_assessment_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessmentInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessmentInterface">
+        <![CDATA[
+            update swm_quarterly_assessment_interface
+               set group_id           = #{groupId,jdbcType=BIGINT},
+                   work_card          = #{workCard,jdbcType=VARCHAR},
+                   employee_name      = #{employeeName,jdbcType=VARCHAR},
+                   operation_code     = #{operationCode,jdbcType=CHAR},
+                   error_msg          = #{errorMsg,jdbcType=VARCHAR},
+                   data_status        = #{dataStatus,jdbcType=CHAR},
+                   assessment_quarter = #{assessmentQuarter,jdbcType=VARCHAR},
+                   assessment_num     = #{assessmentNum,jdbcType=DECIMAL},
+                   se_id              = #{seId,jdbcType=BIGINT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmQuarterlyAssessmentInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sqai.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmQuarterlyAssessmentInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmQuarterlyAssessmentInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <insert id="insertByInterface" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessmentInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_quarterly_assessment_interface (group_id, work_card, employee_name,
+                                                            operation_code, error_msg, data_status,
+                                                            assessment_quarter, assessment_num,
+                                                            se_id, create_time, create_by,
+                                                            update_time, update_by)
+
+            select #{groupId,jdbcType=BIGINT}, RIGHT ( cast( '000000' + rtrim( #{workCard,jdbcType=VARCHAR} ) AS VARCHAR ), 6 ),
+            #{employeeName,jdbcType=VARCHAR},
+            'U',
+            CASE
+            WHEN (
+        SELECT
+        ISNULL(
+        (
+        SELECT
+        se.employee_id
+        FROM
+        swm_employee se
+        WHERE
+        se.name = #{employeeName,jdbcType=VARCHAR} and
+        RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            AND se.work_flag = 1
+            ),- 1
+            )
+            ) = - 1 THEN
+                '工号匹配失败' ELSE ''
+            END,
+            CASE
+            WHEN (
+        SELECT
+        ISNULL(
+        (
+        SELECT
+        se.employee_id
+        FROM
+        swm_employee se
+        WHERE
+        se.name = #{employeeName,jdbcType=VARCHAR} and
+        RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            AND se.work_flag = 1
+            ),- 1
+            )
+            ) = - 1 THEN
+                'F' ELSE 'T'
+            END,
+            #{assessmentQuarter,jdbcType=VARCHAR}, #{assessmentNum,jdbcType=DECIMAL},
+            isnull((select se.id from swm_employee se  WHERE
+        se.name = #{employeeName,jdbcType=VARCHAR} and
+        RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+            AND se.work_flag = 1), -1),
+            getdate(), #{createBy, jdbcType = TIMESTAMP}, getdate(), #{updateBy, jdbcType = TIMESTAMP}
+
+
+
+        ]]>
+    </insert>
+
+</mapper>

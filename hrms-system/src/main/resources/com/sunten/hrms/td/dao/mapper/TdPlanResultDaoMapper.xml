@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanResultDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanResult">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="plan_id" property="planId" />
+        <result column="attendance" property="attendance" />
+        <result column="duration" property="duration" />
+        <result column="grade" property="grade" />
+        <result column="evaluate" property="evaluate" />
+        <result column="need_flag" property="needFlag" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="name" property="name"/>
+        <result column="work_card" property="workCard"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="department" property="department"/>
+        <result column="team" property="team"/>
+        <result column="scoreLine" property="score_line"/>
+        <result column="remarks" property="remarks"/>
+        <result column="name" property="name"/>
+        <result column="work_card" property="workCard"/>
+        <result column="match_implement_flag" property="matchImplementFlag"/>
+        <result column="check_method" property="checkMethod"/>
+    </resultMap>
+
+    <resultMap id="TdPlanResultResultMap" type="com.sunten.hrms.td.domain.TdPlanResult" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <resultMap id="DeptPlanExcelResulMap" type="com.sunten.hrms.td.vo.DeptPlanExcelVo" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <resultMap id="PmPlanExcelResultMap" type="com.sunten.hrms.td.vo.PmPlanExcelVo" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <resultMap id="PmPlanHistoryResultMap" type="com.sunten.hrms.td.vo.PmPlanHistoryVo" autoMapping="true">
+        <id column="pe_id" property="peId"/>
+    </resultMap>
+
+    <resultMap id="AgreementExcelResultMap" type="com.sunten.hrms.td.vo.AgreementExcelVo" autoMapping="true">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <resultMap id="ChildPlanResultMap" type="com.sunten.hrms.td.vo.PlanChildResultVo" autoMapping="true">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpr.employee_id, tpr.plan_id, tpr.attendance, tpr.duration, tpr.grade, tpr.evaluate, tpr.need_flag,
+            tpr.enabled_flag, tpr.id, tpr.create_time, tpr.create_by, tpr.update_time, tpr.update_by,
+            tpr.score_line, tpr.remarks,tpr.match_implement_flag, tpr.check_method
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.plan_id as ${tAlias}_plan_id,
+            ${tAlias}.attendance as ${tAlias}_attendance, ${tAlias}.duration as ${tAlias}_duration,
+            ${tAlias}.grade as ${tAlias}_grade, ${tAlias}.evaluate as ${tAlias}_evaluate,
+            ${tAlias}.need_flag as ${tAlias}_need_flag, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.score_line as ${tAlias}_score_line,
+             ${tAlias}.remarks as ${tAlias}_remarks, ${tAlias}.name as ${tAlias}_name,
+              ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.match_implement_flag as ${tAlias}_match_implement_flag,
+              ${tAlias}.check_method as ${tAlias}_check_method
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,
+    isnull( pe.work_card, tpr.work_card ) AS work_card,
+	isnull( pe.NAME, tpr.NAME ) AS NAME,
+	isnull( pe.id_number, '' ) AS id_number,
+	fdev.ext_dept_name AS dept_name,
+	fdev.ext_department_name AS department,
+	fdev.ext_team_name AS team,
+	0 AS edit_flag,
+	tpec.start_time AS contract_start_date,
+	tpec.end_time AS contract_end_date,
+CASE
+
+	WHEN EXISTS (
+SELECT
+1
+FROM
+td_plan_agreement tpa
+WHERE
+tpa.employee_id = tpr.employee_id
+AND tpa.plan_id = tpr.plan_id
+AND tpa.enabled_flag = 1
+AND tpr.enabled_flag = 1
+and tpa.check_method = tpr.check_method
+) THEN
+		1 ELSE 0
+		END AS have_agreement_flag
+FROM
+	td_plan_result tpr
+	LEFT JOIN pm_employee pe ON pe.id = tpr.employee_id and 	pe.enabled_flag = 1
+	LEFT JOIN pm_employee_job pej ON pe.id = pej.employee_id
+	AND pej.enabled_flag = 1
+	AND pej.job_main_flag = 1
+	LEFT OUTER JOIN fnd_dept_ext_v fdev ON pej.dept_id = fdev.id 	AND fdev.enabled_flag = 1
+	AND fdev.deleted_flag = 0  OUTER APPLY (
+	SELECT
+		TOP ( 1 ) pec.*
+	FROM
+		pm_employee_contract pec
+	WHERE
+		pec.employee_id = tpr.employee_id
+		AND pec.enabled_flag = 1
+		AND new_contract_flag = 1
+	) tpec
+WHERE
+ tpr.enabled_flag = 1
+
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and tpr.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.planId != null">
+                <![CDATA[
+                    and tpr.plan_id = #{criteria.planId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.checkMethod != null">
+                <![CDATA[
+                    and tpr.check_method = #{criteria.checkMethod,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanResult" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_result (employee_id, plan_id, attendance,
+                                        duration, grade, evaluate,
+                                        need_flag, enabled_flag, create_time,
+                                        create_by, update_time, update_by, score_line,
+                                        remarks, name, work_card, match_implement_flag,
+                                        check_method
+                                        )
+            values (#{employeeId,jdbcType=BIGINT}, #{planId,jdbcType=BIGINT}, #{attendance,jdbcType=VARCHAR},
+                    #{duration,jdbcType=DOUBLE}, #{grade,jdbcType=DOUBLE}, #{evaluate,jdbcType=VARCHAR},
+                    #{needFlag,jdbcType=BIT}, #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{scoreLine, jdbcType=DOUBLE}
+                    , #{remarks , jdbcType=VARCHAR}, #{name, jdbcType = VARCHAR}, #{workCard, jdbcType = VARCHAR}, #{matchImplementFlag, jdbcType=BIT}
+                    , #{checkMethod, jdbcType = VARCHAR})
+        ]]>
+    </insert>
+
+    <insert id="interfaceToMain" parameterType="java.lang.Long">
+        <![CDATA[
+              insert into td_plan_result (employee_id, plan_id, attendance,
+                                        duration, grade, evaluate,
+                                        need_flag, enabled_flag, create_time,
+                                        create_by, update_time, update_by, score_line,
+                                        name, work_card, match_implement_flag, remarks, check_method)
+                                 select
+                                 tpri.employee_id , tpri.plan_id , tpri.attendance, tpri.duration, tpri.grade, tpri.evaluate,
+                                 tpri.need_flag , 1, tpri.create_time,  tpri.create_by, tpri.update_time,  tpri.update_by, tpri.score_line,
+                                 tpri.name , tpri.work_card, tpri.match_implement_flag, tpri.remarks, tpri.check_method
+                                 from
+                                 td_plan_result_interface  tpri
+                                 where
+                                 tpri.group_id = #{groupId, jdbcType = BIGINT}
+                                 and tpri.data_status = 'T'
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_result
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanResult">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="disabledByPlanId" parameterType="com.sunten.hrms.td.domain.TdPlanResult">
+      <![CDATA[
+            update td_plan_result set enabled_flag = 0
+            where plan_id      = #{planId,jdbcType=BIGINT} and enabled_flag = 1
+            and check_method = #{checkMethod, jdbcType = VARCHAR}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanResult">
+        <![CDATA[
+            update td_plan_result
+               set employee_id  = #{employeeId,jdbcType=BIGINT},
+                   plan_id      = #{planId,jdbcType=BIGINT},
+                   attendance   = #{attendance,jdbcType=VARCHAR},
+                   duration     = #{duration,jdbcType=DOUBLE},
+                   grade        = #{grade,jdbcType=DOUBLE},
+                   evaluate     = #{evaluate,jdbcType=VARCHAR},
+                   need_flag    = #{needFlag,jdbcType=BIT},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT},
+                   score_line = #{scoreLine, jdbcType = DOUBLE},
+                    remarks = #{remarks, jdbcType = VARCHAR},
+                    name = #{name, jdbcType = VARCHAR},
+                    work_card = #{workCard, jdbcType = VARCHAR},
+                    match_implement_flag = #{matchImplementFlag, jdbcType=BIT},
+                    check_method = #{checkMethod, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanResultResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             and tpr.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanResultResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanResultResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id=""></select>
+
+    <select id="listEmpByPlanExcelVo" resultMap="PmPlanExcelResultMap" parameterType="com.sunten.hrms.td.vo.PmPlanExcelVo">
+        <![CDATA[
+
+select td.training_name as training_name,
+td.training_method as training_method,
+td.training_content as training_content,
+tpi.check_method as check_method,
+
+CASE
+
+	WHEN isnull( tpi.out_teacher, '' ) = '' THEN
+	(
+	SELECT
+		STUFF((
+			SELECT
+				',' + pe.name
+			FROM
+				pm_employee pe
+				JOIN td_plan_employee tpe ON pe.id = tpe.employee_id
+				AND tpe.plan_implement_id = tpi.id
+				AND tpe.enabled_flag = 1
+				AND tpe.type = 'teacher'
+			WHERE
+				pe.enabled_flag = 1 FOR XML PATH ( '' )),
+			1,
+			1,
+			''
+		)
+		) ELSE (
+	SELECT
+		tpi.out_teacher + '，' + STUFF((
+			SELECT
+				',' + pe.name
+			FROM
+				pm_employee pe
+				JOIN td_plan_employee tpe ON pe.id = tpe.employee_id
+				AND tpe.plan_implement_id = tpi.id
+				AND tpe.enabled_flag = 1
+				AND tpe.type = 'teacher'
+			WHERE
+				pe.enabled_flag = 1 FOR XML PATH ( '' )),
+			1,
+			1,
+			''
+		)
+	)
+	END AS teacher,
+tpi.training_address as training_address,
+tpi.training_time_quantity as training_time_quantity,
+td.employee_quantity as employee_quantity,
+
+( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_dept_id = fdt.id ) AS dept_name,
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_department_id = fdt.id ) AS department,
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_team_id = fdt.id ) AS team,
+	pe.name as name, isnull(tpr.duration, 0) as duration, isnull(tpr.evaluate, 0) as evaluate,
+isnull(tpr.grade, 0) as grade , tpr.score_line as score_line,
+tpi.begin_date as begin_date, tpi.end_date as end_date,
+temp.pass_number as pass_number,
+pe.id as id
+
+FROM
+	td_plan td
+	JOIN td_plan_implement tpi ON td.id = tpi.plan_id
+	AND td.enabled_flag = 1
+	AND td.show_flag = 1
+	and td.safety_training_flag = 0
+	AND tpi.enabled_flag = 1
+	AND tpi.approval_status = '已完成'
+	JOIN td_plan_employee tpe ON tpe.plan_implement_id = tpi.id
+	AND tpe.type = 'employee'
+	AND tpe.enabled_flag = 1
+	join pm_employee pe on pe.id = tpe.employee_id and pe.enabled_flag = 1
+	join pm_employee_job pej on pej.employee_id = pe.id and pej.enabled_flag = 1 and pej.job_main_flag = 1
+	join fnd_dept fd on fd.id = pej.dept_id and fd.deleted_flag = 0
+	LEFT JOIN td_plan_result tpr ON tpr.plan_id = td.id
+	AND tpr.employee_id = tpe.employee_id
+
+	left join (
+
+		select
+ count(tpr.plan_id) as pass_number, tpr.plan_id as plan_id
+from td_plan tp  JOIN td_plan_implement tpi ON tp.id = tpi.plan_id 	AND tpi.enabled_flag = 1 and tp.safety_training_flag = 0
+	AND tpi.approval_status = '已完成'
+	 ]]>
+
+        <if test="beginDate != null and endDate != null">
+            <![CDATA[
+ 	and tpi.begin_date BETWEEN #{beginDate, jdbcType = DATE} and #{endDate, jdbcType = DATE}
+	and tpi.end_date BETWEEN #{beginDate, jdbcType = DATE} and #{endDate, jdbcType = DATE}
+  ]]>
+        </if>
+
+        <![CDATA[
+	left join td_plan_result tpr on tp.id = tpr.plan_id and tp.show_flag = 1  	AND tp.enabled_flag = 1
+	where tpr.grade >= isnull(tpr.score_line, 0)
+	and tpr.enabled_flag = 1
+GROUP BY tpr.plan_id
+	) temp on temp.plan_id = td.id
+
+	where 	tpr.enabled_flag = 1
+ ]]>
+        <if test="beginDate != null and endDate != null">
+        <![CDATA[
+ 	and tpi.begin_date BETWEEN #{beginDate, jdbcType = DATE} and #{endDate, jdbcType = DATE}
+	and tpi.end_date BETWEEN #{beginDate, jdbcType = DATE} and #{endDate, jdbcType = DATE}
+  ]]>
+        </if>
+ <![CDATA[
+	order by td.id,fd.dept_name,pe.work_card
+	  ]]>
+
+    </select>
+
+    <select id="listDeptPlanExcelVo" resultMap="DeptPlanExcelResulMap" parameterType="com.sunten.hrms.td.vo.DeptPlanExcelVo">
+        <![CDATA[
+SELECT
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_dept_id = fdt.id ) AS dept_name,
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_department_id = fdt.id ) AS department,
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_team_id = fdt.id ) AS team,
+	dept_menber.dept_menber_count AS dept_menber_count,
+	fd.id,
+	isnull( temp2.plan_menber, 0 ) AS plan_menber,
+	isnull( temp2.duration, 0 ) AS duration,
+	isnull( temp2.grade, 0 ) AS grade,
+	isnull( temp2.evaluate, 0 ) AS evaluate,
+	isnull( temp2.main_plan_count, 0 ) AS main_plan_count,
+	isnull( temp2.main_plan_pass_count, 0 ) AS main_plan_pass_count
+	  ]]>
+        <if test="beginDate != null and endDate != null">
+            ,#{beginDate, jdbcType = DATE} as begin_date,
+            #{endDate, jdbcType = DATE} as end_date
+        </if>
+        <![CDATA[
+FROM
+	(
+SELECT
+	fd.id AS id,
+	count( isnull( pej.id, - 1 ) ) AS dept_menber_count
+FROM
+	fnd_dept fd
+	LEFT OUTER JOIN pm_employee_job pej ON pej.dept_id = fd.id
+	join pm_employee pe on  pej.employee_id = pe.id
+WHERE
+	fd.enabled_flag = 1
+	AND fd.deleted_flag = 0
+	AND pej.job_main_flag = 1
+	AND pej.enabled_flag = 1
+    and pe.enabled_flag  = 1
+	and pe.leave_flag =  0
+GROUP BY
+	fd.id
+	) dept_menber
+	JOIN fnd_dept fd ON fd.id = dept_menber.id
+	LEFT JOIN (
+SELECT
+	count( DISTINCT pej.employee_id ) AS plan_menber,
+	pej.dept_id AS dept_id,
+	sum(isnull( tpr.duration, 0 ) ) AS duration,
+	sum(isnull( tpr.grade, 0 ) ) AS grade,
+	sum(tpr.evaluate ) AS evaluate,
+	(
+SELECT
+	count( temp_tp.host_dept_id )
+FROM
+	td_plan temp_tp
+WHERE
+	temp_tp.host_dept_id = pej.dept_id
+	AND temp_tp.enabled_flag = 1
+	AND temp_tp.show_flag = 1
+	and temp_tp.safety_training_flag = 0
+	) AS main_plan_count,
+	(
+SELECT
+	count( temp_tp.host_dept_id )
+FROM
+	td_plan temp_tp
+WHERE
+	temp_tp.host_dept_id = pej.dept_id
+	AND temp_tp.enabled_flag = 1
+	AND temp_tp.show_flag = 1
+	AND temp_tp.plan_status = '实施审批通过'
+	and temp_tp.safety_training_flag = 0
+	) AS main_plan_pass_count
+FROM
+	td_plan td
+	JOIN td_plan_implement tpi ON td.id = tpi.plan_id
+	AND td.enabled_flag = 1
+	AND td.show_flag = 1
+	and td.safety_training_flag = 0
+	AND tpi.enabled_flag = 1
+	AND tpi.approval_status = '已完成'
+	  ]]>
+	<if test="beginDate != null and endDate != null">
+        AND tpi.begin_date BETWEEN  #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+        AND tpi.end_date BETWEEN #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+    </if>
+	 <![CDATA[
+	JOIN td_plan_employee tpe ON tpe.plan_implement_id = tpi.id
+	AND tpe.type = 'employee'
+	AND tpe.enabled_flag = 1
+	JOIN pm_employee_job pej ON pej.employee_id = tpe.employee_id
+	AND pej.job_main_flag = 1
+	AND pej.enabled_flag = 1
+	join pm_employee pe on pe.id = pej.employee_id
+	and pe.enabled_flag = 1
+	and pe.leave_flag = 0
+	LEFT JOIN td_plan_result tpr ON tpr.plan_id = td.id
+	AND tpr.employee_id = tpe.employee_id
+WHERE
+	tpr.enabled_flag = 1
+GROUP BY
+	pej.dept_id
+	) temp2 ON fd.id = temp2.dept_id
+ORDER BY
+		dept_name, department, team
+        ]]>
+    </select>
+
+    <select id="listEmpPlanHistory" parameterType="com.sunten.hrms.td.vo.PmPlanHistoryVo" resultMap="PmPlanHistoryResultMap">
+        <![CDATA[
+        SELECT
+	temp.name AS name,
+	temp.work_card AS work_card,
+	temp.pe_id AS pe_id,
+	temp.duration AS sum_duration,
+	temp.participate_num AS participate_num,
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_dept_id = fdt.id ) AS dept_name,
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_department_id = fdt.id ) AS department,
+	( SELECT fdt.dept_name FROM fnd_dept fdt WHERE fd.ext_team_id = fdt.id ) AS team,
+	tpr.duration AS duration,
+	tpr.grade AS grade,
+	tpr.evaluate AS evaluate,
+	tp.training_name AS training_name,
+	tp.training_method AS training_method,
+	tp.training_content AS training_content,
+	tpi.begin_date AS begin_date,
+	tpi.end_date AS end_date,
+	tpi.training_address AS training_address,
+	tpi.training_time_quantity AS training_time_quantity,
+CASE
+
+	WHEN isnull( tpi.out_teacher, '' ) = '' THEN
+	(
+	SELECT
+		STUFF((
+			SELECT
+				',' + pe.name
+			FROM
+				pm_employee pe
+				JOIN td_plan_employee tpe ON pe.id = tpe.employee_id
+				AND tpe.plan_implement_id = tpi.id
+				AND tpe.enabled_flag = 1
+				AND tpe.type = 'teacher'
+			WHERE
+				pe.enabled_flag = 1 FOR XML PATH ( '' )),
+			1,
+			1,
+			''
+		)
+		) ELSE (
+	SELECT
+		tpi.out_teacher + STUFF((
+			SELECT
+				',' + pe.name
+			FROM
+				pm_employee pe
+				JOIN td_plan_employee tpe ON pe.id = tpe.employee_id
+				AND tpe.plan_implement_id = tpi.id
+				AND tpe.enabled_flag = 1
+				AND tpe.type = 'teacher'
+			WHERE
+				pe.enabled_flag = 1 FOR XML PATH ( '' )),
+			1,
+			1,
+			''
+		)
+	)
+	END AS teacher
+FROM
+	(
+	SELECT
+		pe.name,
+		pe.work_card,
+		pe.id AS pe_id,
+		sum ( tpr.duration ) AS duration,
+		COUNT ( tpr.employee_id ) AS participate_num
+	FROM
+		td_plan tp
+		JOIN td_plan_implement tpi ON tp.id = tpi.plan_id
+		AND tp.enabled_flag = 1
+		AND tp.show_flag = 1
+		and tp.safety_training_flag = 0
+		AND tpi.enabled_flag = 1
+		AND tpi.approval_status = '已完成'
+		JOIN td_plan_employee tpe ON tpe.plan_implement_id = tpi.id
+		AND tpe.type = 'employee'
+		AND tpe.enabled_flag = 1
+		JOIN pm_employee pe ON pe.id = tpe.employee_id
+		AND pe.enabled_flag = 1
+		LEFT JOIN td_plan_result tpr ON tpr.plan_id = tp.id
+		AND tpr.employee_id = tpe.employee_id
+	WHERE
+		tpr.enabled_flag = 1
+
+		   ]]>
+        <if test="beginDate != null and endDate != null">
+        <![CDATA[
+		            AND tpi.begin_date BETWEEN  #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+        AND tpi.end_date BETWEEN #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+		     ]]>
+           </if>
+		  <![CDATA[
+	GROUP BY
+		pe.name,
+		pe.work_card,
+		pe.id
+	) temp
+	JOIN pm_employee_job pej ON pej.employee_id = temp.pe_id
+	AND pej.enabled_flag = 1
+	AND pej.job_main_flag = 1
+	JOIN fnd_dept fd ON fd.id = pej.dept_id
+	AND fd.deleted_flag = 0
+	LEFT JOIN td_plan_result tpr ON tpr.employee_id = temp.pe_id
+	JOIN td_plan tp ON tpr.plan_id = tp.id
+	AND tp.enabled_flag = 1
+	AND tp.show_flag = 1
+	and tp.safety_training_flag = 0
+	JOIN td_plan_implement tpi ON tp.id = tpi.plan_id
+	AND tpi.enabled_flag = 1
+	AND tpi.approval_status = '已完成'
+WHERE
+	tpr.enabled_flag = 1
+           ]]>
+        <if test="beginDate != null and endDate != null">
+            <![CDATA[
+		            AND tpi.begin_date BETWEEN  #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+        AND tpi.end_date BETWEEN #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+		     ]]>
+        </if>
+        <![CDATA[
+        order by tp.id, temp.work_card
+          ]]>
+    </select>
+    <select id="listAgreementForExcel" parameterType="com.sunten.hrms.td.vo.AgreementExcelVo" resultMap="AgreementExcelResultMap">
+        <![CDATA[
+        select
+        tpa.id,
+        tp.training_name as training_name, tpi.training_address as  training_address,
+        tpi.training_time_quantity as training_time_quantity,
+        tpi.begin_date as begin_date, tpi.end_date as end_date,
+        tp.plan_money as plan_money, tpi.training_money as training_money,
+        pe.name as name , pe.work_card as work_card, pe.id_number as id_number, tpa.service_year as service_year,
+        tpa.begin_date as service_begin_date, tpa.end_date as service_end_date
+
+        from
+        td_plan tp
+            JOIN td_plan_implement tpi ON tp.id = tpi.plan_id
+            AND tp.enabled_flag = 1
+            AND tp.show_flag = 1
+            and tp.safety_training_flag = 0
+            AND tpi.enabled_flag = 1
+            AND tpi.approval_status = '已完成'
+        join
+        td_plan_result tpr
+        on tpr.plan_id = tp.id
+        and tpr.enabled_flag = 1 and tpr.need_flag  = 1
+        join pm_employee pe on tpr.employee_id = pe.id
+        and pe.enabled_flag = 1
+        join td_plan_agreement tpa  on tpa.plan_id = tpr.plan_id and tpa.enabled_flag = 1
+        and tpa.employee_id = pe.id
+        where 1 = 1
+          ]]>
+        <if test="beginDate != null and endDate != null">
+            <![CDATA[
+             AND tpi.begin_date BETWEEN  #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+        AND tpi.end_date BETWEEN #{beginDate, jdbcType = DATE}
+        AND #{endDate, jdbcType = DATE}
+          ]]>
+        </if>
+          <if test="planId != null">
+              <![CDATA[
+              and tp.id = #{planId, jdbcType = BIGINT}
+                 ]]>
+          </if>
+        <if test="serviceBeginDate != null and serviceEndDate != null">
+        <![CDATA[
+                        AND tpa.begin_date BETWEEN  #{serviceBeginDate, jdbcType = DATE}
+        AND #{serviceEndDate, jdbcType = DATE}
+        AND tpa.end_date BETWEEN #{serviceBeginDate, jdbcType = DATE}
+        AND #{serviceEndDate, jdbcType = DATE}
+             ]]>
+        </if>
+        <if test="checkMethod != null">
+            <![CDATA[
+              and tpr.check_method = #{checkMethod, jdbcType = VARCHAR}
+              and tpa.check_method = #{checkMethod, jdbcType = VARCHAR}
+         ]]>
+        </if>
+        <![CDATA[
+             order by tp.id, pe.work_card
+              ]]>
+
+
+    </select>
+    <select id="listForChild" parameterType="java.lang.Long" resultMap="ChildPlanResultMap">
+        <![CDATA[
+            select
+                tp.training_name, tpi.begin_date, tpi.end_date, tp.training_content, tpr.remarks
+                from
+                td_plan_result tpr
+                join pm_employee pe
+                on tpr.employee_id = pe.id and tpr.enabled_flag = 1 and pe.enabled_flag = 1
+                join td_plan tp on tp.id = tpr.plan_id and tp.enabled_flag = 1 and tp.safety_training_flag = 0
+                join td_plan_implement tpi on tp.id = tpi.plan_id and tpi.enabled_flag = 1
+                where pe.id = #{employeeId, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="ChildPlanResultMap">
+        <![CDATA[
+            select
+            pe.id as employee_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, tp.training_name) > 0 then tp.training_name else null end as training_name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, tp.training_content) > 0 then tp.training_content else null end as training_content
+           from
+                td_plan_result tpr
+                join pm_employee pe
+                on tpr.employee_id = pe.id and tpr.enabled_flag = 1 and pe.enabled_flag = 1
+                join td_plan tp on tp.id = tpr.plan_id and tp.enabled_flag = 1 and tp.safety_training_flag = 0
+                join td_plan_implement tpi on tp.id = tpi.plan_id and tpi.enabled_flag = 1 and concat(
+         tp.training_name,tp.training_content
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+</mapper>

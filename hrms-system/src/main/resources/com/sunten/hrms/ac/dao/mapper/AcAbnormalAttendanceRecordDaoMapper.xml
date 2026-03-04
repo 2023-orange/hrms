@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcAbnormalAttendanceRecordDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcAbnormalAttendanceRecord">
+        <id column="id" property="id" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="execution_status" property="executionStatus" />
+        <result column="execution_time" property="executionTime" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="AcAbnormalAttendanceRecordResultMap" type="com.sunten.hrms.ac.domain.AcAbnormalAttendanceRecord" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aaar.start_time, aaar.end_time, aaar.execution_status, aaar.execution_time, aaar.attribute1,
+            aaar.attribute2, aaar.attribute3, aaar.attribute4, aaar.attribute5, aaar.id, aaar.create_by,
+            aaar.update_time, aaar.update_by, aaar.create_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.start_time as ${tAlias}_start_time, ${tAlias}.end_time as ${tAlias}_end_time,
+            ${tAlias}.execution_status as ${tAlias}_execution_status,
+            ${tAlias}.execution_time as ${tAlias}_execution_time, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_time as ${tAlias}_create_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_abnormal_attendance_record aaar
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and aaar.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcAbnormalAttendanceRecord" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_abnormal_attendance_record (start_time, end_time, execution_status,
+                                                       execution_time, attribute1,
+                                                       attribute2, attribute3,
+                                                       attribute4, attribute5, create_by,
+                                                       update_time, update_by,
+                                                       create_time)
+            values (#{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{executionStatus,jdbcType=VARCHAR},
+                    #{executionTime,jdbcType=TIMESTAMP}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_abnormal_attendance_record
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcAbnormalAttendanceRecord">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcAbnormalAttendanceRecord">
+        <![CDATA[
+            update ac_abnormal_attendance_record
+               set start_time       = #{startTime,jdbcType=DATE},
+                   end_time         = #{endTime,jdbcType=DATE},
+                   execution_status = #{executionStatus,jdbcType=VARCHAR},
+                   execution_time   = #{executionTime,jdbcType=TIMESTAMP},
+                   attribute1       = #{attribute1,jdbcType=VARCHAR},
+                   attribute2       = #{attribute2,jdbcType=VARCHAR},
+                   attribute3       = #{attribute3,jdbcType=VARCHAR},
+                   attribute4       = #{attribute4,jdbcType=VARCHAR},
+                   attribute5       = #{attribute5,jdbcType=VARCHAR},
+                   update_time      = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by        = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcAbnormalAttendanceRecordResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aaar.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcAbnormalAttendanceRecordResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcAbnormalAttendanceRecordResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getLastOne" resultMap="AcAbnormalAttendanceRecordResultMap">
+        select top 1 * from ac_abnormal_attendance_record where execution_status = 'SUCCESS' order by id desc
+    </select>
+
+</mapper>

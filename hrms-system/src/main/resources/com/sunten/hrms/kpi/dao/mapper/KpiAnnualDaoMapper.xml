@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiAnnualDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiAnnual">
+        <id column="id" property="id" />
+        <result column="year" property="year" />
+        <result column="examine_status" property="examineStatus" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="KpiAnnualResultMap" type="com.sunten.hrms.kpi.domain.KpiAnnual" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ka.id, ka.year, ka.examine_status, ka.attribute1, ka.attribute2, ka.attribute3, ka.attribute4,
+            ka.attribute5, ka.create_time, ka.create_by, ka.update_time, ka.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.year as ${tAlias}_year,
+            ${tAlias}.examine_status as ${tAlias}_examine_status, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_annual ka
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.year != null">
+              <![CDATA[
+                  and ka.year = #{criteria.year,jdbcType=VARCHAR}
+             ]]>
+           </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiAnnual" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into kpi_annual (year, examine_status, attribute1,
+                                    attribute2, attribute3,
+                                    attribute4, attribute5,
+                                    create_time, create_by,
+                                    update_time, update_by)
+            values (#{year,jdbcType=VARCHAR}, #{examineStatus,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_annual
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiAnnual">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiAnnual">
+        <![CDATA[
+            update kpi_annual
+               set year           = #{year,jdbcType=VARCHAR},
+                   examine_status = #{examineStatus,jdbcType=VARCHAR},
+                   attribute1     = #{attribute1,jdbcType=VARCHAR},
+                   attribute2     = #{attribute2,jdbcType=VARCHAR},
+                   attribute3     = #{attribute3,jdbcType=VARCHAR},
+                   attribute4     = #{attribute4,jdbcType=VARCHAR},
+                   attribute5     = #{attribute5,jdbcType=VARCHAR},
+                   update_time    = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by      = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiAnnualResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ka.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiAnnualResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiAnnualResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getMaxYear" resultType="java.lang.Integer">
+        SELECT MAX(YEAR) FROM kpi_annual
+    </select>
+
+    <select id="getEnabledAnnual" resultType="java.lang.Integer">
+        <![CDATA[
+            SELECT COUNT(*) FROM kpi_annual WHERE examine_status <> '终稿定稿'
+        ]]>
+    </select>
+
+    <select id="getEnabledAnnualByYear" resultType="java.lang.Integer">
+        <![CDATA[
+            SELECT COUNT(*) FROM kpi_annual WHERE
+            examine_status <> '终稿定稿' AND
+            examine_status <> '数据初始化'
+            AND YEAR = #{criteria.year,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <select id="getDataBeginByYear" resultType="java.lang.Integer">
+        <![CDATA[
+            SELECT COUNT(*) FROM kpi_annual WHERE
+            examine_status = '数据初始化'
+            AND YEAR = #{criteria.year,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+</mapper>

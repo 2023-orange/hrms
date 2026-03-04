@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOvertimeMangementDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeMangement">
+        <id column="id" property="id" />
+        <result column="dept_id" property="deptId" />
+        <result column="total_number" property="totalNumber" />
+        <result column="average_overtime_hour" property="averageOvertimeHour" />
+        <result column="system_limit_hour" property="systemLimitHour" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcOvertimeMangementResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeMangement" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aom.id, aom.dept_id, aom.total_number, aom.average_overtime_hour, aom.system_limit_hour,
+            aom.attribute1, aom.attribute2, aom.attribute3, aom.attribute4, aom.enabled_flag, aom.create_by,
+            aom.create_time, aom.update_by, aom.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.total_number as ${tAlias}_total_number,
+            ${tAlias}.average_overtime_hour as ${tAlias}_average_overtime_hour,
+            ${tAlias}.system_limit_hour as ${tAlias}_system_limit_hour,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_overtime_mangement aom
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and aom.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcOvertimeMangement">
+        <![CDATA[
+            insert into ac_overtime_mangement (id, dept_id, total_number,
+                                               average_overtime_hour, system_limit_hour,
+                                               attribute1, attribute2,
+                                               attribute3, attribute4,
+                                               enabled_flag, create_by,
+                                               create_time, update_by,
+                                               update_time)
+            values (#{id,jdbcType=BIGINT}, #{deptId,jdbcType=INTEGER}, #{totalNumber,jdbcType=INTEGER},
+                    #{averageOvertimeHour,jdbcType=DOUBLE}, #{systemLimitHour,jdbcType=DOUBLE},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+    <insert id="addOvertimeManagementDetail">
+        insert into ac_overtime_mangement(dept_id,total_number,average_overtime_hour,system_limit_hour, create_by, create_time,enabled_flag)
+        values(#{dept_id},#{total_number},#{averageOvertimeHour},#{systemLimitHour},#{createBy},GETDATE(),1)
+    </insert>
+    <insert id="backupOvertimeManagementList">
+        INSERT INTO ac_overtime_mangement_backup (dept_id, total_number, average_overtime_hour, system_limit_hour, create_by, create_time, enabled_flag, backup_time)
+        SELECT dept_id, total_number, average_overtime_hour, system_limit_hour, create_by, GETDATE(), 1, GETDATE()
+        FROM ac_overtime_mangement;
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_overtime_mangement
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeMangement">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeMangement">
+        <![CDATA[
+            update ac_overtime_mangement
+               set dept_id               = #{deptId,jdbcType=INTEGER},
+                   total_number          = #{totalNumber,jdbcType=INTEGER},
+                   average_overtime_hour = #{averageOvertimeHour,jdbcType=DOUBLE},
+                   system_limit_hour     = #{systemLimitHour,jdbcType=DOUBLE},
+                   attribute1            = #{attribute1,jdbcType=VARCHAR},
+                   attribute2            = #{attribute2,jdbcType=VARCHAR},
+                   attribute3            = #{attribute3,jdbcType=VARCHAR},
+                   attribute4            = #{attribute4,jdbcType=VARCHAR},
+                   enabled_flag          = #{enabledFlag,jdbcType=INTEGER},
+                   update_by             = #{updateBy,jdbcType=VARCHAR},
+                   update_time           = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+    <update id="changeAcApprovalDepartmentStatus">
+        update ac_overtime_mangement
+        set enabled_flag = #{enabledFlag}
+        where id = #{id} and dept_id = #{deptId}
+    </update>
+    <update id="updateOvertimeManagementDetail">
+        update ac_overtime_mangement
+        set total_number = #{total_number}, average_overtime_hour=#{averageOvertimeHour},system_limit_hour=#{systemLimitHour},update_by = #{updateBy}, update_time = GETDATE()
+        where id=#{id}
+    </update>
+    <update id="updateTotalNumber">
+        UPDATE ac_overtime_mangement
+        SET total_number = (
+            SELECT COUNT
+                       ( DISTINCT pe.name ) AS userNumber
+            FROM
+                fnd_dept fd
+                    INNER JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                    INNER JOIN pm_employee pe ON pej.employee_id = pe.id
+                    INNER JOIN fnd_user fu ON fu.employee_id = pe.id
+                    INNER JOIN fnd_users_roles fur ON fur.user_id = fu.id
+                    INNER JOIN fnd_role fr ON fr.id = fur.role_id
+            WHERE
+                fd.id = ac_overtime_mangement.dept_id
+              AND ( pej.attribute1 IS NOT NULL OR (pej.attribute1 is NULL AND pej.attribute2 is NULL AND pej.attribute3 is NULL AND pej.attribute4 is NULL AND pej.attribute5 is NULL))
+              AND fr.name NOT LIKE '顺特管理层'
+--               AND pe.administration_category= 'NDVC'
+              AND pe.work_card NOT LIKE '01%'
+              AND pej.dept_name NOT LIKE '业务经理'
+              AND pej.dept_name NOT LIKE '销售经理'
+              AND pej.dept_name NOT LIKE '销售助理'
+              AND pe.leave_flag = 0
+              AND pe.enabled_flag = 1
+              AND pej.job_main_flag = 1
+              AND pej.enabled_flag = 1
+              AND pe.employee_type = '正式员工'
+        ),
+            system_limit_hour  =
+                (
+                    SELECT COUNT
+                               ( DISTINCT pe.name ) * average_overtime_hour
+                    FROM
+                        fnd_dept fd
+                            INNER JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                            INNER JOIN pm_employee pe ON pej.employee_id = pe.id
+                            INNER JOIN fnd_user fu ON fu.employee_id = pe.id
+                            INNER JOIN fnd_users_roles fur ON fur.user_id = fu.id
+                            INNER JOIN fnd_role fr ON fr.id = fur.role_id
+                    WHERE
+                        fd.id = ac_overtime_mangement.dept_id
+                      AND ( pej.attribute1 IS NOT NULL OR (pej.attribute1 is NULL AND pej.attribute2 is NULL AND pej.attribute3 is NULL AND pej.attribute4 is NULL AND pej.attribute5 is NULL))
+                      AND fr.name NOT LIKE '顺特管理层'
+--               AND pe.administration_category= 'NDVC'
+                      AND pe.work_card NOT LIKE '01%'
+                      AND pej.dept_name NOT LIKE '业务经理'
+                      AND pej.dept_name NOT LIKE '销售经理'
+                      AND pej.dept_name NOT LIKE '销售助理'
+                      AND pe.leave_flag = 0
+                      AND pe.enabled_flag = 1
+                      AND pe.enabled_flag = 1
+                      AND pej.job_main_flag = 1
+                      AND pej.enabled_flag = 1
+                      AND pe.employee_type = '正式员工'
+                )
+--         WHERE
+--                 dept_id IN ( SELECT DISTINCT id FROM fnd_dept fd WHERE fd.dept_level = '科室' AND fd.enabled_flag = 1 )
+    </update>
+    <update id="updateTotalNumberById">
+        update
+            ac_overtime_mangement
+        set total_number = #{totalNumber},system_limit_hour = (#{totalNumber} * average_overtime_hour)
+        where id = #{id}
+    </update>
+    <update id="updateTotalNumberByIdToBackup">
+        update
+            ac_overtime_mangement_backup
+        set total_number = #{totalNumber},system_limit_hour = (#{totalNumber} * average_overtime_hour)
+        where id = #{id}
+    </update>
+
+
+    <select id="getByKey" resultMap="AcOvertimeMangementResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aom.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcOvertimeMangementResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcOvertimeMangementResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+    <select id="getOvertimeManagementList" resultType="java.util.HashMap">
+        SELECT DISTINCT
+            aom.id,
+            aom.total_number,
+            aom.average_overtime_hour,
+            aom.system_limit_hour,
+            aom.dept_id,
+-- 	fd.dept_name AS dept_name,
+            aom.enabled_flag,
+            (
+                CASE
+
+                    WHEN (
+                            (
+                                SELECT TOP
+                                    1 pej.attribute1
+                                FROM
+                                    fnd_dept parentDept
+                                        INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                                WHERE
+                                    parentDept.dept_name = fd.dept_name
+                            ) IS NULL
+                            OR (
+                                   SELECT TOP
+                                       1 pej.attribute1
+                                   FROM
+                                       fnd_dept parentDept
+                                           INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                                   WHERE
+                                       parentDept.dept_name = fd.dept_name
+                               ) = ''
+                        ) THEN
+                        fd.dept_name ELSE fd.dept_name + '---' + (
+                    SELECT TOP
+                        1 pej.attribute1
+                    FROM
+                        fnd_dept parentDept
+                            INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                    WHERE
+                        parentDept.dept_name = fd.dept_name
+                )
+                    END
+                ) AS dept_name
+        FROM
+            ac_overtime_mangement aom
+                INNER JOIN fnd_dept fd ON aom.dept_id = fd.id
+                INNER JOIN pm_employee_job pej ON pej.dept_id = fd.id
+        WHERE
+            1 =1
+--         select aom.id,aom.total_number,aom.average_overtime_hour,aom.system_limit_hour, aom.dept_id,fd.dept_name as dept_name, aom.enabled_flag
+--         FROM   ac_overtime_mangement aom
+--                    INNER join fnd_dept fd  on aom.dept_id=fd.id
+--         ORDER BY aom.id
+    </select>
+    <select id="getOvertimeManagementDetail" resultType="java.util.HashMap">
+        select aom.id,aom.total_number,aom.average_overtime_hour,aom.system_limit_hour, aom.dept_id,fd.dept_name as dept_name, aom.enabled_flag
+        FROM   ac_overtime_mangement aom
+                   INNER join fnd_dept fd  on aom.dept_id=fd.id
+        where aom.id=#{id} and aom.dept_id=#{deptId}
+    </select>
+    <select id="checkList" resultType="java.util.HashMap" parameterType="String">
+        SELECT DISTINCT aom.id, aom.total_number, aom.average_overtime_hour, aom.system_limit_hour, aom.dept_id,
+                        fd.dept_name AS dept_name, aom.enabled_flag,
+                        (SELECT TOP 1 pej.attribute1 FROM fnd_dept parentDept INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                         WHERE parentDept.dept_name = fd.dept_name) AS parentName
+        FROM ac_overtime_mangement aom
+                 INNER JOIN fnd_dept fd ON aom.dept_id = fd.id
+                 INNER JOIN pm_employee_job pej ON pej.dept_id = fd.id
+--         WHERE
+--             fd.dept_name LIKE #{deptName}
+--         select aom.id,aom.total_number,aom.average_overtime_hour,aom.system_limit_hour, aom.dept_id,fd.dept_name as dept_name, aom.enabled_flag
+--         FROM   ac_overtime_mangement aom
+--                    INNER join fnd_dept fd  on aom.dept_id=fd.id
+--         WHERE dept_name LIKE #{deptName}
+    </select>
+    <select id="checkIsRole" resultType="java.util.HashMap">
+        select DISTINCT fd.parent_id,fd.id,pej.job_name,pej.job_id
+        FROM fnd_dept fd
+                 JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                 JOIN pm_employee pe ON pej.employee_id = pe.id
+        WHERE pe.leave_flag = 0 AND pe.work_card=#{workCard} AND pej.job_main_flag = 1 AND pej.enabled_flag = 1
+    </select>
+    <select id="checkUserRole" resultType="java.util.HashMap">
+        select * from pm_employee_job pej left join pm_employee pe on pej.employee_id=pe.id left join fnd_dept fd on fd.id=pej.dept_id where  pe.work_card=#{workCard}                                                                                                                     and pe.leave_flag=0 and pej.enabled_flag = 1 and pej.job_main_flag = 1
+    </select>
+    <select id="getDepartmentOvertimeList" resultType="java.util.HashMap">
+        select aom.id,aom.total_number,aom.average_overtime_hour,aom.system_limit_hour, aom.dept_id,fd.dept_name as dept_name, aom.enabled_flag
+        FROM   ac_overtime_mangement aom
+                   INNER join fnd_dept fd  on aom.dept_id=fd.id
+        WHERE fd.id=#{deptId}
+    </select>
+    <select id="getMangerOvertimeList" resultType="java.util.HashMap">
+        select aom.id,aom.total_number,aom.average_overtime_hour,aom.system_limit_hour, aom.dept_id,fd.dept_name as dept_name, aom.enabled_flag
+        FROM   ac_overtime_mangement aom
+                   INNER join fnd_dept fd  on aom.dept_id=fd.id
+        WHERE fd.parent_id in (#{deptId})
+        ORDER BY aom.id
+    </select>
+    <select id="getBackupOvertimeManagementList" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+        WHERE fd.id = #{deptId}
+        order by aomb.backup_time desc
+    </select>
+    <select id="getBackupOvertimeManagementListByDate" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+        WHERE fd.id = #{deptId} and aomb.backup_time between #{beginDate} and #{endDate}
+        order by aomb.backup_time desc
+    </select>
+    <select id="getBackUpDepartmentOvertimeList" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+        WHERE fd.id=#{deptId} and fd.id LIKE #{checkDeptId}
+        order by aomb.backup_time desc
+    </select>
+    <select id="getBackUpMangerOvertimeList" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+        WHERE fd.parent_id in (#{deptId}) and fd.id LIKE #{checkDeptId}
+        order by aomb.backup_time desc
+    </select>
+    <select id="getDepartmentOvertimeListByDate" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+        WHERE fd.id=#{deptId} and fd.id = #{checkDeptId} and aomb.backup_time between #{beginDate} and #{endDate}
+        order by aomb.backup_time desc
+    </select>
+    <select id="getMangerOvertimeListByDate" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+        WHERE fd.parent_id in (#{deptId}) and fd.id = #{checkDeptId} and aomb.backup_time between #{beginDate} and #{endDate}
+        order by aomb.backup_time desc
+    </select>
+    <select id="getSelfNumber" resultType="java.lang.Integer">
+        SELECT COUNT ( DISTINCT pe.name ) AS userNumber
+        FROM
+            fnd_dept fd
+                INNER JOIN pm_employee_job pej ON fd.id = pej.dept_id
+                INNER JOIN pm_employee pe ON pej.employee_id = pe.id
+                INNER JOIN fnd_user fu ON fu.employee_id = pe.id
+                INNER JOIN fnd_users_roles fur ON fur.user_id = fu.id
+                INNER JOIN fnd_role fr ON fr.id = fur.role_id
+        WHERE ( fd.id = #{dept_id} ) --             (fd.dept_name LIKE '%总装车间%'  OR pej.attribute3 LIKE '%总装车间%')
+          AND (
+                pej.attribute1 IS NOT NULL
+                OR (
+                        pej.attribute1 IS NULL
+                        AND pej.attribute2 IS NULL
+                        AND pej.attribute3 IS NULL
+                        AND pej.attribute4 IS NULL
+                        AND pej.attribute5 IS NULL
+                    )
+            )
+          AND fr.name NOT LIKE '顺特管理层' --
+          AND pe.administration_category= 'NDVC'
+          AND pe.work_card NOT LIKE '01%'
+          AND pej.dept_name NOT LIKE '业务经理'
+          AND pej.dept_name NOT LIKE '销售经理'
+          AND pej.dept_name NOT LIKE '销售助理'
+          AND pe.leave_flag = 0
+    </select>
+    <select id="checkList2" resultType="java.util.HashMap">
+        SELECT DISTINCT aom.id, aom.total_number, aom.average_overtime_hour, aom.system_limit_hour, aom.dept_id,
+                        fd.dept_name AS dept_name, aom.enabled_flag,
+                        (SELECT TOP 1 pej.attribute1 FROM fnd_dept parentDept INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                         WHERE parentDept.dept_name = fd.dept_name) AS attribute1
+        FROM ac_overtime_mangement aom
+                 INNER JOIN fnd_dept fd ON aom.dept_id = fd.id
+                 INNER JOIN pm_employee_job pej ON pej.dept_id = fd.id
+    </select>
+    <select id="checkList3" resultType="java.util.HashMap">
+        SELECT DISTINCT TOP 1
+    aom.id,
+                aom.total_number,
+                        aom.average_overtime_hour,
+                        aom.system_limit_hour,
+                        aom.dept_id,
+                        aom.enabled_flag,
+                        fd.dept_level,
+                        -- 动态拼接 deptName
+                        COALESCE(
+                            -- 如果group_name不为空，则使用它，否则尝试使用section_name和dept_name
+                                CONCAT(
+                                        NULLIF(
+                                                CASE
+                                                    WHEN fd.dept_level LIKE '%班%' THEN pej.dept_name
+                                                    ELSE ''
+                                                    END,
+                                                ''
+                                            ),
+                                        '-',
+                                        NULLIF(
+                                                CASE
+                                                    WHEN fd.dept_level LIKE '%班%' THEN fd1.dept_name
+                                                    WHEN fd.dept_level LIKE '%科室%' THEN fd.dept_name
+                                                    ELSE ''
+                                                    END,
+                                                ''
+                                            ),
+                                        '-',
+                                        NULLIF(
+                                                CASE
+                                                    WHEN fd.dept_level LIKE '%班%' THEN fd2.dept_name
+                                                    WHEN fd.dept_level LIKE '%科室%' THEN fd1.dept_name
+                                                    WHEN fd.dept_level LIKE '%部%' THEN pej.dept_name
+                                                    ELSE NULL
+                                                    END,
+                                                NULL
+                                            )
+                                    ),
+                            -- 如果group_name为空，则尝试使用section_name和dept_name
+                                CONCAT(
+                                        NULLIF(
+                                                CASE
+                                                    WHEN fd.dept_level LIKE '%科室%' THEN fd.dept_name
+                                                    WHEN fd.dept_level LIKE '%部%' THEN pej.dept_name
+                                                    ELSE ''
+                                                    END,
+                                                ''
+                                            ),
+                                        '-',
+                                        NULLIF(
+                                                CASE
+                                                    WHEN fd.dept_level LIKE '%班%' THEN fd2.dept_name
+                                                    WHEN fd.dept_level LIKE '%科室%' THEN fd1.dept_name
+                                                    WHEN fd.dept_level LIKE '%部%' THEN pej.dept_name
+                                                    ELSE NULL
+                                                    END,
+                                                NULL
+                                            )
+                                    ),
+                            -- 如果前两个都为空，则只使用dept_name
+                                CASE
+                                    WHEN fd.dept_level LIKE '%部%' THEN pej.dept_name
+                                    WHEN fd.dept_level LIKE '%科室%' THEN fd.dept_name
+                                    WHEN fd.dept_level LIKE '%班%' THEN fd2.dept_name
+                                    ELSE NULL
+                                    END
+                            ) AS dept_name
+        FROM
+            ac_overtime_mangement aom
+                INNER JOIN fnd_dept fd ON aom.dept_id = fd.id
+                INNER JOIN pm_employee_job pej ON pej.dept_id = fd.id
+                INNER JOIN pm_employee pe ON pe.id = pej.employee_id
+                LEFT JOIN fnd_dept fd1 ON fd1.id = fd.parent_id
+                LEFT JOIN fnd_dept fd2 ON fd2.id = fd1.parent_id
+        WHERE
+            pej.job_main_flag = 1
+          AND pe.leave_flag = 0
+          AND pe.enabled_flag = 1
+          AND pej.enabled_flag = 1
+          AND (fd.dept_level LIKE '%班%' OR fd.dept_level LIKE '%科室%' OR fd.dept_level LIKE '%部%')
+          AND fd.id = #{deptId}
+    </select>
+<!--    <select id="checkList3" resultType="java.util.HashMap">-->
+<!--        SELECT DISTINCT-->
+<!--            aom.id,-->
+<!--            aom.total_number,-->
+<!--            aom.average_overtime_hour,-->
+<!--            aom.system_limit_hour,-->
+<!--            aom.dept_id,-->
+<!--            aom.enabled_flag,-->
+<!--            (-->
+<!--                CASE-->
+
+<!--                    WHEN (-->
+<!--                            (-->
+<!--                                SELECT TOP-->
+<!--                                    1 pej.attribute1-->
+<!--                                FROM-->
+<!--                                    fnd_dept parentDept-->
+<!--                                        INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id-->
+<!--                                WHERE-->
+<!--                                    parentDept.dept_name = fd.dept_name-->
+<!--                            ) IS NULL-->
+<!--                            OR (-->
+<!--                                   SELECT TOP-->
+<!--                                       1 pej.attribute1-->
+<!--                                   FROM-->
+<!--                                       fnd_dept parentDept-->
+<!--                                           INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id-->
+<!--                                   WHERE-->
+<!--                                       parentDept.dept_name = fd.dept_name-->
+<!--                               ) = ''-->
+<!--                        ) THEN-->
+<!--                        fd.dept_name ELSE fd.dept_name + '-' + (-->
+<!--                    SELECT TOP-->
+<!--                        1 pej.attribute1-->
+<!--                    FROM-->
+<!--                        fnd_dept parentDept-->
+<!--                            INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id-->
+<!--                    WHERE-->
+<!--                        parentDept.dept_name = fd.dept_name-->
+<!--                )-->
+<!--                    END-->
+<!--                ) AS dept_name-->
+<!--        FROM-->
+<!--            ac_overtime_mangement aom-->
+<!--                INNER JOIN fnd_dept fd ON aom.dept_id = fd.id-->
+<!--                INNER JOIN pm_employee_job pej ON pej.dept_id = fd.id-->
+<!--        where fd.id = #{deptId}-->
+<!--    </select>-->
+    <select id="getBackupOvertimeManagementListAll" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+    </select>
+    <select id="getBackupOvertimeManagementListByDateAll" resultType="java.util.HashMap">
+        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time
+        FROM   ac_overtime_mangement_backup aomb
+                   INNER join fnd_dept fd  on aomb.dept_id=fd.id
+        WHERE aomb.backup_time between #{beginDate} and #{endDate}
+        order by aomb.backup_time desc
+    </select>
+    <select id="getOvertimeManagementBackupList" resultType="java.util.HashMap">
+        SELECT DISTINCT
+            aom.id,
+            aom.total_number,
+            aom.average_overtime_hour,
+            aom.system_limit_hour,
+            aom.dept_id,
+-- 	fd.dept_name AS dept_name,
+            aom.enabled_flag,
+            (
+                CASE
+
+                    WHEN (
+                            (
+                                SELECT TOP
+                                    1 pej.attribute1
+                                FROM
+                                    fnd_dept parentDept
+                                        INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                                WHERE
+                                    parentDept.dept_name = fd.dept_name
+                            ) IS NULL
+                            OR (
+                                   SELECT TOP
+                                       1 pej.attribute1
+                                   FROM
+                                       fnd_dept parentDept
+                                           INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                                   WHERE
+                                       parentDept.dept_name = fd.dept_name
+                               ) = ''
+                        ) THEN
+                        fd.dept_name ELSE fd.dept_name + '---' + (
+                    SELECT TOP
+                        1 pej.attribute1
+                    FROM
+                        fnd_dept parentDept
+                            INNER JOIN pm_employee_job pej ON pej.dept_id = parentDept.id
+                    WHERE
+                        parentDept.dept_name = fd.dept_name
+                )
+                    END
+                ) AS dept_name
+        FROM
+            ac_overtime_mangement_backup aom
+                INNER JOIN fnd_dept fd ON aom.dept_id = fd.id
+                INNER JOIN pm_employee_job pej ON pej.dept_id = fd.id
+        WHERE
+        1 = 1 AND
+        aom.create_time >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)  -- 当月的第一天
+        AND aom.create_time &lt; DATEADD(MONTH, 1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))  -- 下个月的第一天（即本月的最后一天）
+    </select>
+    <!--    <select id="getBackOvertimeManagementListNew" resultType="com.sunten.hrms.ac.domain.AcOvertimeBackUp">-->
+<!--        select aomb.id,aomb.total_number,aomb.average_overtime_hour,aomb.system_limit_hour, aomb.dept_id,fd.dept_name as dept_name, aomb.enabled_flag,aomb.backup_time-->
+<!--        FROM   ac_overtime_mangement_backup aomb-->
+<!--                   INNER join fnd_dept fd  on aomb.dept_id=fd.id-->
+<!--        <![CDATA[-->
+<!--        where 1 = 1-->
+<!--        ]]>-->
+<!--        <if test="criteria != null">-->
+<!--            <if test="criteria.beginDate != null &amp;&amp; criteria.endDate != null">-->
+<!--                <![CDATA[ and aomb.backup_time BETWEEN #{criteria.beginDate, jdbcType = DATE} and #{criteria.endDate, jdbcType = DATE} ]]>-->
+<!--            </if>-->
+<!--        </if>-->
+<!--        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>-->
+<!--        order by aomb.backup_time desc-->
+<!--    </select>-->
+
+</mapper>

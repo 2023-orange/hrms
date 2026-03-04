@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdTeacherApplyDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdTeacherApply">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="teach_experience" property="teachExperience" />
+        <result column="other_experience_compose" property="otherExperienceCompose" />
+        <result column="my_experience_compose" property="myExperienceCompose" />
+        <result column="ever_experience" property="everExperience" />
+        <result column="be_good_at" property="beGoodAt" />
+        <result column="dept_opinion" property="deptOpinion" />
+        <result column="dept_by" property="deptBy" />
+        <result column="judge_opinion" property="judgeOpinion" />
+        <result column="judge_by" property="judgeBy" />
+        <result column="submit_flag" property="submitFlag" />
+        <result column="level" property="level" />
+        <result column="score" property="score" />
+        <result column="file_id" property="fileId" />
+        <result column="dept_opinion_date" property="deptOpinionDate" />
+        <result column="judge_opinion_date" property="judgeOpinionDate" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="attribute2" property="attribute2" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="approval_node" property="approvalNode" />
+        <result column="approval_employee" property="approvalEmployee" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdTeacherApplyResultMap" type="com.sunten.hrms.td.domain.TdTeacherApply" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="pmEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="storage"
+                     javaType="com.sunten.hrms.tool.domain.ToolLocalStorage"
+                     resultMap="com.sunten.hrms.tool.dao.ToolLocalStorageDao.ToolLocalStorageResultMap"
+                     columnPrefix="tls_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tta.employee_id, tta.title, tta.content, tta.teach_experience, tta.other_experience_compose,
+            tta.my_experience_compose, tta.ever_experience, tta.be_good_at, tta.dept_opinion, tta.dept_by,
+            tta.judge_opinion, tta.judge_by, tta.submit_flag, tta.level, tta.score, tta.file_id,
+            tta.dept_opinion_date, tta.judge_opinion_date, tta.attribute3, tta.id, tta.attribute1,
+            tta.attribute4, tta.attribute5, tta.attribute2, tta.approval_result, tta.oa_order, tta.approval_date,
+            tta.approval_node, tta.approval_employee,tta.create_time, tta.create_by, tta.update_time,
+            tta.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.title as ${tAlias}_title,
+            ${tAlias}.content as ${tAlias}_content, ${tAlias}.teach_experience as ${tAlias}_teach_experience,
+            ${tAlias}.other_experience_compose as ${tAlias}_other_experience_compose,
+            ${tAlias}.my_experience_compose as ${tAlias}_my_experience_compose,
+            ${tAlias}.ever_experience as ${tAlias}_ever_experience,
+            ${tAlias}.be_good_at as ${tAlias}_be_good_at, ${tAlias}.dept_opinion as ${tAlias}_dept_opinion,
+            ${tAlias}.dept_by as ${tAlias}_dept_by, ${tAlias}.judge_opinion as ${tAlias}_judge_opinion,
+            ${tAlias}.judge_by as ${tAlias}_judge_by, ${tAlias}.submit_flag as ${tAlias}_submit_flag,
+            ${tAlias}.level as ${tAlias}_level, ${tAlias}.score as ${tAlias}_score,
+            ${tAlias}.file_id as ${tAlias}_file_id, ${tAlias}.dept_opinion_date as ${tAlias}_dept_opinion_date,
+            ${tAlias}.judge_opinion_date as ${tAlias}_judge_opinion_date,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.approval_result as ${tAlias}_approval_result, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.approval_date as ${tAlias}_approval_date,
+            ${tAlias}.approval_node as ${tAlias}_approval_node,
+            ${tAlias}.approval_employee as ${tAlias}_approval_employee,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,fdev.ext_dept_name AS pe_dept_name,
+                   fdev.ext_department_name AS pe_department,
+                   fdev.ext_team_name AS pe_team,
+        ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'tls'"/>
+        <include refid="com.sunten.hrms.tool.dao.ToolLocalStorageDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_pee'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEducationDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_peen'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEntryDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe_pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from td_teacher_apply tta
+              join pm_employee pe on tta.employee_id = pe.id and pe.enabled_flag = 1
+                left join tool_local_storage tls on tta.file_id = tls.id
+                left join pm_employee_education pe_pee on pe.id = pe_pee.employee_id and pe_pee.enabled_flag = 1 and pe_pee.new_education_flag = 1
+                left join pm_employee_entry pe_peen on pe.id = pe_peen.employee_id and pe_peen.enabled_flag = 1
+                left outer join pm_employee_job pe_pej
+                    on pe.id = pe_pej.employee_id
+                    and pe_pej.job_main_flag = 1
+                    and pe_pej.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+                    on pe_pej.dept_id = fdev.id
+                    and fdev.enabled_flag = 1
+                    and fdev.deleted_flag = 0
+              left outer join fnd_job pe_pej_fj
+                    on pe_pej.job_id = pe_pej_fj.id
+                    and pe_pej_fj.enabled_flag = 1
+                    and pe_pej_fj.deleted_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[ and  pe.id = #{criteria.employeeId,jdbcType=BIGINT}]]>
+            </if>
+            <if test="criteria.submitFlag != null">
+                <![CDATA[ and  tta.submit_flag = #{criteria.submitFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.status != null and criteria.status != ''">
+                <choose>
+                    <when test="criteria.status == 'notSubmit'">
+                        <![CDATA[
+                          and tta.submit_flag = 0
+                        ]]>
+                    </when>
+                    <when test="criteria.status == 'inAppoval'">
+                        <![CDATA[
+                          and tta.submit_flag = 1
+                          and tta.judge_opinion is null
+                          and tta.dept_opinion != '不同意推荐'
+                        ]]>
+                    </when>
+                    <when test="criteria.status == 'notPass'">
+                        <![CDATA[
+                          and (tta.dept_opinion = '不同意推荐' or tta.judge_opinion = '不符合')
+                        ]]>
+                    </when>
+                    <when test="criteria.status == 'attestation'">
+                        <![CDATA[
+                          and tta.attribute1 = 1
+                        ]]>
+                    </when>
+                    <when test="criteria.status == 'notAttestation'">
+                        <![CDATA[
+                          and tta.attribute1 = 0
+                          and tta.judge_opinion = '符合'
+                        ]]>
+                    </when>
+                </choose>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.ID
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.value != null">
+                <choose>
+                    <when test="criteria.column == 'name' or criteria.column == 'work_card'">
+                        <![CDATA[
+                          and pe.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'dept_name'">
+                        <![CDATA[
+                          and fdev.ext_dept_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'department'">
+                        <![CDATA[
+                          and fdev.ext_department_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'team'">
+                        <![CDATA[
+                          and fdev.ext_team_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                          and tta.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdTeacherApply" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_teacher_apply (employee_id, title, content,
+                                          teach_experience, other_experience_compose,
+                                          my_experience_compose, ever_experience,
+                                          be_good_at, dept_opinion, dept_by,
+                                          judge_opinion, judge_by, submit_flag,
+                                          level, score, file_id,
+                                          dept_opinion_date, judge_opinion_date,
+                                          attribute3, attribute1,
+                                          attribute4, attribute5,
+                                          attribute2, approval_result, oa_order,
+                                          approval_date, approval_node, approval_employee,
+                                          create_time,
+                                          create_by, update_time, update_by)
+            values (#{pmEmployee.id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+                    #{teachExperience,jdbcType=DECIMAL}, #{otherExperienceCompose,jdbcType=DECIMAL},
+                    #{myExperienceCompose,jdbcType=DECIMAL}, #{everExperience,jdbcType=VARCHAR},
+                    #{beGoodAt,jdbcType=VARCHAR}, #{deptOpinion,jdbcType=VARCHAR}, #{deptBy,jdbcType=VARCHAR},
+                    #{judgeOpinion,jdbcType=VARCHAR}, #{judgeBy,jdbcType=VARCHAR}, #{submitFlag,jdbcType=BIT},
+                    #{level,jdbcType=VARCHAR}, #{score,jdbcType=DECIMAL}, #{storage.id,jdbcType=BIGINT},
+                    #{deptOpinionDate,jdbcType=TIMESTAMP}, #{judgeOpinionDate,jdbcType=TIMESTAMP},
+                    #{attribute3,jdbcType=BIT}, #{attribute1,jdbcType=BIT},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=TIMESTAMP},
+                    #{approvalResult,jdbcType=VARCHAR}, #{oaOrder,jdbcType=VARCHAR},
+                    #{approvalDate,jdbcType=TIMESTAMP},
+                    #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_teacher_apply
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdTeacherApply">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdTeacherApply">
+        <![CDATA[
+            update td_teacher_apply
+               set employee_id              = #{pmEmployee.id,jdbcType=BIGINT},
+                   title                    = #{title,jdbcType=VARCHAR},
+                   content                  = #{content,jdbcType=VARCHAR},
+                   teach_experience         = #{teachExperience,jdbcType=DECIMAL},
+                   other_experience_compose = #{otherExperienceCompose,jdbcType=DECIMAL},
+                   my_experience_compose    = #{myExperienceCompose,jdbcType=DECIMAL},
+                   ever_experience          = #{everExperience,jdbcType=VARCHAR},
+                   be_good_at               = #{beGoodAt,jdbcType=VARCHAR},
+                   dept_opinion             = #{deptOpinion,jdbcType=VARCHAR},
+                   dept_by                  = #{deptBy,jdbcType=VARCHAR},
+                   judge_opinion            = #{judgeOpinion,jdbcType=VARCHAR},
+                   judge_by                 = #{judgeBy,jdbcType=VARCHAR},
+                   submit_flag              = #{submitFlag,jdbcType=BIT},
+                   level                    = #{level,jdbcType=VARCHAR},
+                   score                    = #{score,jdbcType=DECIMAL},
+                   file_id                  = #{storage.id,jdbcType=BIGINT},
+                   dept_opinion_date        = #{deptOpinionDate,jdbcType=TIMESTAMP},
+                   judge_opinion_date       = #{judgeOpinionDate,jdbcType=TIMESTAMP},
+                   attribute3               = #{attribute3,jdbcType=BIT},
+                   attribute1               = #{attribute1,jdbcType=BIT},
+                   attribute4               = #{attribute4,jdbcType=VARCHAR},
+                   attribute5               = #{attribute5,jdbcType=VARCHAR},
+                   attribute2               = #{attribute2,jdbcType=TIMESTAMP},
+                   approval_result        = #{approvalResult,jdbcType=VARCHAR},
+                   oa_order               = #{oaOrder,jdbcType=VARCHAR},
+                   approval_date          = #{approvalDate,jdbcType=TIMESTAMP},
+                   approval_node          = #{approvalNode,jdbcType=VARCHAR},
+                   approval_employee      = #{approvalEmployee,jdbcType=VARCHAR},
+                   update_time              = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdTeacherApplyResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tta.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdTeacherApplyResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdTeacherApplyResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateAttestation" parameterType="com.sunten.hrms.td.domain.TdTeacherApply">
+        <![CDATA[
+        update td_teacher_apply
+        set level                    = #{level,jdbcType=VARCHAR},
+            score                    = #{score,jdbcType=DECIMAL},
+            file_id                  = #{storage.id,jdbcType=BIGINT},
+            attribute1               = #{attribute1,jdbcType=BIT},
+            attribute3               = #{attribute3,jdbcType=BIT},
+            attribute2               = #{updateTime,jdbcType=TIMESTAMP},
+            update_time              = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByReqCode" resultMap="TdTeacherApplyResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tta.oa_order = #{reqCode,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <update id="updateByApprovalEnd" parameterType="com.sunten.hrms.td.domain.TdTeacherApply">
+        <![CDATA[
+        update td_teacher_apply
+        set judge_opinion            = #{judgeOpinion,jdbcType=VARCHAR},
+            judge_by                 = #{judgeBy,jdbcType=VARCHAR},
+            judge_opinion_date       = #{updateTime,jdbcType=TIMESTAMP},
+            approval_date              = #{updateTime,jdbcType=TIMESTAMP},
+            approval_result            = #{approvalResult,jdbcType=VARCHAR},
+            update_time                = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                  = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByApprovalUnderwar" parameterType="com.sunten.hrms.td.domain.TdTeacherApply">
+        <![CDATA[
+        update td_teacher_apply
+        set dept_opinion             = #{deptOpinion,jdbcType=VARCHAR},
+            dept_by                  = #{deptBy,jdbcType=VARCHAR},
+            dept_opinion_date        = #{updateTime,jdbcType=TIMESTAMP},
+            approval_node              = #{approvalNode,jdbcType=VARCHAR},
+            approval_employee          = #{approvalEmployee,jdbcType=VARCHAR},
+        ]]>
+            <if test="approvalResult != null and approvalResult != ''">
+                approval_result            = #{approvalResult,jdbcType=VARCHAR},
+            </if>
+        <![CDATA[
+            update_time              = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listByEnable" resultMap="TdTeacherApplyResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tta.approval_result != 'notPass'
+             and tta.employee_id = #{employeeId,jdbcType=VARCHAR}
+        ]]>
+    </select>
+</mapper>

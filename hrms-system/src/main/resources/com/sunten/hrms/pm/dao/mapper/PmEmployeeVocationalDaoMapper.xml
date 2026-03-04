@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeVocationalDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeVocational">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="vocational_name" property="vocationalName" />
+        <result column="vocational_level" property="vocationalLevel" />
+        <result column="evaluation_time" property="evaluationTime" />
+        <result column="evaluation_mechanism" property="evaluationMechanism" />
+        <result column="vocational_validity" property="vocationalValidity" />
+        <result column="remarks" property="remarks" />
+        <result column="new_vocational_flag" property="newVocationalFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeVocationalResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeVocational" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="vocationalTemp"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeVocationalTemp"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeVocationalTempDao.PmEmployeeVocationalTempResultMap"
+                     columnPrefix="pevt_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pev.employee_id as pe_id, pev.vocational_name, pev.vocational_level, pev.evaluation_time,
+            pev.evaluation_mechanism, pev.vocational_validity, pev.remarks, pev.new_vocational_flag,
+            pev.attribute1, pev.attribute2, pev.attribute3, pev.enabled_flag, pev.id, pev.create_time,
+            pev.create_by, pev.update_time, pev.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id,
+            ${tAlias}.vocational_name as ${tAlias}_vocational_name,
+            ${tAlias}.vocational_level as ${tAlias}_vocational_level,
+            ${tAlias}.evaluation_time as ${tAlias}_evaluation_time,
+            ${tAlias}.evaluation_mechanism as ${tAlias}_evaluation_mechanism,
+            ${tAlias}.vocational_validity as ${tAlias}_vocational_validity,
+            ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.new_vocational_flag as ${tAlias}_new_vocational_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_vocational pev
+        ]]>
+    </sql>
+
+    <sql id="Column_With_Temp_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pevt'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeVocationalTempDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee_vocational pev
+              left join pm_employee_vocational_temp pevt
+              on pev.id = pevt.vocational_id
+              and pevt.enabled_flag = 1
+              and pevt.check_flag = 'D'
+        ]]>
+    </sql>
+
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pev.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.newVocationalFlag != null">
+                <![CDATA[
+               and pev.new_vocational_flag = #{criteria.newVocationalFlag,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pev.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeVocational" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_vocational (employee_id, vocational_name,
+                                                vocational_level, evaluation_time,
+                                                evaluation_mechanism, vocational_validity,
+                                                remarks, new_vocational_flag,
+                                                attribute1, attribute2,
+                                                attribute3, enabled_flag,
+                                                create_time, create_by,
+                                                update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{vocationalName,jdbcType=VARCHAR},
+                    #{vocationalLevel,jdbcType=VARCHAR}, #{evaluationTime,jdbcType=DATE},
+                    #{evaluationMechanism,jdbcType=VARCHAR}, #{vocationalValidity,jdbcType=DATE},
+                    #{remarks,jdbcType=VARCHAR}, #{newVocationalFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_vocational
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeVocational">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeVocational">
+        <![CDATA[
+            update pm_employee_vocational
+               set employee_id          = #{employee.id,jdbcType=BIGINT},
+                   vocational_name      = #{vocationalName,jdbcType=VARCHAR},
+                   vocational_level     = #{vocationalLevel,jdbcType=VARCHAR},
+                   evaluation_time      = #{evaluationTime,jdbcType=DATE},
+                   evaluation_mechanism = #{evaluationMechanism,jdbcType=VARCHAR},
+                   vocational_validity  = #{vocationalValidity,jdbcType=DATE},
+                   remarks              = #{remarks,jdbcType=VARCHAR},
+                   new_vocational_flag  = #{newVocationalFlag,jdbcType=BIT},
+                   attribute1           = #{attribute1,jdbcType=VARCHAR},
+                   attribute2           = #{attribute2,jdbcType=VARCHAR},
+                   attribute3           = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag         = #{enabledFlag,jdbcType=BIT},
+                   update_time          = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by            = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeVocationalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pev.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getMainVocationalByKey" resultMap="PmEmployeeVocationalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pev.employee_id = #{employeeId,jdbcType=BIGINT}
+               and pev.enabled_flag = 1
+               and pev.new_vocational_flag = 1
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeVocationalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeVocationalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeVocational">
+        <![CDATA[
+        update pm_employee_vocational
+        set enabled_flag         = #{enabledFlag,jdbcType=BIT},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP},
+            update_by            = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listAllAndTempByEmployee" resultMap="PmEmployeeVocationalResultMap">
+        <include refid="Column_With_Temp_Query_Sql"/>
+        <![CDATA[
+          where pev.enabled_flag = 1
+          and pev.employee_id = #{employeeId,jdbcType=BIGINT}
+          order by id
+         ]]>
+    </select>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="PmEmployeeVocationalResultMap">
+        <![CDATA[
+            select
+            pev.employee_id as pe_id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pev.evaluation_mechanism) > 0 then pev.evaluation_mechanism else null end as evaluation_mechanism,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pev.remarks) > 0 then pev.remarks else null end as remarks,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pev.vocational_level) > 0 then pev.vocational_level else null end as vocational_level,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pev.vocational_name) > 0 then pev.vocational_name else null end as vocational_name
+            from pm_employee_vocational pev join pm_employee pe on pe.id = pev.employee_id where pev.enabled_flag = 1
+            and pe.enabled_flag = 1 and concat(
+         pev.evaluation_mechanism,pev.remarks,pev.vocational_level,pev.vocational_name
+            ) like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+</mapper>

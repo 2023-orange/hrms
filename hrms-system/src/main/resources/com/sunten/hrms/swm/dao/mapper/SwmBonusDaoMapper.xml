@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmBonusDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmBonus">
+        <id column="id" property="id" />
+        <result column="bonus_name" property="bonusName" />
+        <result column="month" property="month" />
+        <result column="release_time" property="releaseTime" />
+        <result column="money" property="money" />
+        <result column="comment" property="comment" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="enabled_flag" property="enabledFlag"/>
+    </resultMap>
+
+    <resultMap id="SwmBonusResultMap" type="com.sunten.hrms.swm.domain.SwmBonus" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sb.id, sb.bonus_name, sb.month, sb.release_time, sb.money, sb.comment, sb.create_time,
+            sb.create_by, sb.update_time, sb.update_by, sb.enabled_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.bonus_name as ${tAlias}_bonus_name,
+            ${tAlias}.month as ${tAlias}_month, ${tAlias}.release_time as ${tAlias}_release_time,
+            ${tAlias}.money as ${tAlias}_money, ${tAlias}.comment as ${tAlias}_comment,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+             ${tAlias}.enabled_flag as ${tAlias}_enabled_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+            isnull((select top 1 pe.name  from  pm_employee pe join fnd_user fu on fu.id = sb.update_by and fu.employee_id = pe.id  ), '') as last_update_by,
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_bonus sb
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and sb.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.value != null and criteria.colName != '' and criteria.symbol != ''">
+                <choose>
+                    <when test="criteria.colName == 'bonus_name'">
+                        <![CDATA[
+              and sb.${criteria.colName} ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+        ]]>
+                    </when>
+                    <when test="criteria.colName == 'month'">
+                        <![CDATA[
+              and sb.${criteria.colName} ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+        ]]>
+                    </when>
+                    <when test="criteria.colName == 'release_time'">
+                        <![CDATA[
+                                     and sb.${criteria.colName} ${criteria.symbol} #{criteria.value, jdbcType = DATE}
+        ]]>
+                    </when>
+                    <when test="criteria.colName == 'money'">
+                        <![CDATA[
+                                      and sb.${criteria.colName} ${criteria.symbol} #{criteria.value, jdbcType = DECIMAL}
+        ]]>
+                    </when>
+                    <when test="criteria.colName == 'comment'">
+                        <![CDATA[
+                                      and sb.${criteria.colName} ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+        ]]>
+                    </when>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmBonus" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_bonus (bonus_name, month, release_time,
+                                   money, comment, create_time,
+                                   create_by, update_time, update_by, enabled_flag)
+            values (#{bonusName,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{releaseTime,jdbcType=DATE},
+                    #{money,jdbcType=DECIMAL}, #{comment,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{enabledFlag, jdbcType=BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_bonus
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmBonus">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteByEnabled" parameterType="com.sunten.hrms.swm.domain.SwmBonus">
+        <![CDATA[
+            update swm_bonus
+               set enabled_flag = 0,
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmBonus">
+        <![CDATA[
+            update swm_bonus
+               set bonus_name   = #{bonusName,jdbcType=VARCHAR},
+                   month        = #{month,jdbcType=VARCHAR},
+                   release_time = #{releaseTime,jdbcType=DATE},
+                   money        = #{money,jdbcType=DECIMAL},
+                   comment      = #{comment,jdbcType=VARCHAR},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT},
+                   enabled_flag = #{enabledFlag, jdbcType=BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmBonusResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sb.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmBonusResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmBonusResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

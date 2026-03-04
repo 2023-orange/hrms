@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReHobbyInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReHobbyInterface">
+        <id column="id" property="id" />
+        <result column="re_id" property="reId" />
+        <result column="hobby" property="hobby" />
+        <result column="level_myself" property="levelMyself" />
+        <result column="level_mechanism" property="levelMechanism" />
+        <result column="remarks" property="remarks" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="ReHobbyInterfaceResultMap" type="com.sunten.hrms.re.domain.ReHobbyInterface" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="recruitmentInterface"
+                     javaType="com.sunten.hrms.re.domain.ReRecruitmentInterface"
+                     resultMap="com.sunten.hrms.re.dao.ReRecruitmentInterfaceDao.ReRecruitmentInterfaceResultMap"
+                     columnPrefix="rri_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            rhi.re_id as rri_id, rhi.hobby, rhi.level_myself, rhi.level_mechanism, rhi.remarks, rhi.attribute1,
+            rhi.attribute2, rhi.attribute3, rhi.enabled_flag, rhi.id, rhi.update_time, rhi.create_by,
+            rhi.create_time, rhi.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.re_id as ${tAlias}_rri_id, ${tAlias}.hobby as ${tAlias}_hobby,
+            ${tAlias}.level_myself as ${tAlias}_level_myself,
+            ${tAlias}.level_mechanism as ${tAlias}_level_mechanism, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from re_hobby_interface rhi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.recruitmentId != null">
+                <![CDATA[
+               and rhi.re_id = #{criteria.recruitmentId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and rhi.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReHobbyInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_hobby_interface (re_id, hobby, level_myself,
+                                            level_mechanism, remarks,
+                                            attribute1, attribute2,
+                                            attribute3, enabled_flag,
+                                            update_time, create_by,
+                                            create_time, update_by)
+            values (#{recruitmentInterface.id,jdbcType=BIGINT}, #{hobby,jdbcType=VARCHAR}, #{levelMyself,jdbcType=VARCHAR},
+                    #{levelMechanism,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_hobby_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReHobbyInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReHobbyInterface">
+        <![CDATA[
+            update re_hobby_interface
+               set re_id           = #{recruitmentInterface.id,jdbcType=BIGINT},
+                   hobby           = #{hobby,jdbcType=VARCHAR},
+                   level_myself    = #{levelMyself,jdbcType=VARCHAR},
+                   level_mechanism = #{levelMechanism,jdbcType=VARCHAR},
+                   remarks         = #{remarks,jdbcType=VARCHAR},
+                   attribute1      = #{attribute1,jdbcType=VARCHAR},
+                   attribute2      = #{attribute2,jdbcType=VARCHAR},
+                   attribute3      = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag    = #{enabledFlag,jdbcType=BIT},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by       = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReHobbyInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rhi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReHobbyInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReHobbyInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

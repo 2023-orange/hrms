@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmEntryBatchSettingHistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmEntryBatchSettingHistory">
+        <id column="id" property="id" />
+        <result column="income_period" property="incomePeriod" />
+        <result column="work_card" property="workCard" />
+        <result column="entry_name" property="entryName" />
+        <result column="price" property="price" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="SwmEntryBatchSettingHistoryResultMap" type="com.sunten.hrms.swm.domain.SwmEntryBatchSettingHistory" autoMapping="true">
+        <id column="id" property="id" />
+        <result column="emp_name" property="empName"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sebsh.id, sebsh.income_period, sebsh.work_card, sebsh.entry_name, sebsh.price, sebsh.description,
+            sebsh.create_time, sebsh.create_by, sebsh.update_time, sebsh.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.income_period as ${tAlias}_income_period,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.entry_name as ${tAlias}_entry_name,
+            ${tAlias}.price as ${tAlias}_price, ${tAlias}.description as ${tAlias}_description,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            , pe.name as emp_name
+        ]]>
+        <![CDATA[
+              from swm_entry_batch_setting_history sebsh left join
+              fnd_user fu on sebsh.create_by = fu.id left join
+              pm_employee pe on fu.employee_id = pe.id
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and sebsh.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmEntryBatchSettingHistory" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_entry_batch_setting_history (income_period, work_card,
+                                                         entry_name, price, description,
+                                                         create_time, create_by,
+                                                         update_time, update_by)
+            values (#{incomePeriod,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR},
+                    #{entryName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{description,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_entry_batch_setting_history
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmEntryBatchSettingHistory">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmEntryBatchSettingHistory">
+        <![CDATA[
+            update swm_entry_batch_setting_history
+               set income_period = #{incomePeriod,jdbcType=VARCHAR},
+                   work_card     = #{workCard,jdbcType=VARCHAR},
+                   entry_name    = #{entryName,jdbcType=VARCHAR},
+                   price         = #{price,jdbcType=DECIMAL},
+                   description   = #{description,jdbcType=VARCHAR},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by     = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmEntryBatchSettingHistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sebsh.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmEntryBatchSettingHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmEntryBatchSettingHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

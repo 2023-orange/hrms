@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmTransferRequestDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmTransferRequest">
+        <id column="id" property="id" />
+        <result column="transfer_code" property="transferCode" />
+        <result column="pm_employee_id" property="pmEmployeeId" />
+        <result column="from_salary" property="fromSalary" />
+        <result column="to_dept_name" property="toDeptName" />
+        <result column="to_office_name" property="toOfficeName" />
+        <result column="to_team_name" property="toTeamName" />
+        <result column="to_dept_id" property="toDeptId" />
+        <result column="to_job_name" property="toJobName" />
+        <result column="to_job_id" property="toJobId" />
+        <result column="internship_salary" property="internshipSalary" />
+        <result column="formal_salary" property="formalSalary" />
+        <result column="reason" property="reason" />
+        <result column="self_idea" property="selfIdea" />
+        <result column="idea_date" property="ideaDate" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="approval_node" property="approvalNode" />
+        <result column="approval_employee" property="approvalEmployee" />
+        <result column="submit_flag" property="submitFlag" />
+        <result column="demand_code" property="demandCode" />
+        <result column="reason_other_describes" property="reasonOtherDescribes" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="inface_begin_date" property="infaceBeginDate" />
+        <result column="from_dept_name" property="fromDeptName" />
+        <result column="from_office_name" property="fromOfficeName" />
+        <result column="from_team_name" property="fromTeamName" />
+        <result column="from_dept_id" property="fromDeptId" />
+        <result column="from_job_name" property="fromJobName" />
+        <result column="from_job_id" property="fromJobId" />
+        <result column="transfer_type" property="transferType" />
+        <result column="medical_type" property="medicalType" />
+        <result column="medical_result" property="medicalResult" />
+        <result column="medical_date" property="medicalDate" />
+        <result column="authentication_flag" property="authenticationFlag" />
+        <result column="transfer_flag" property="transferFlag" />
+        <result column="salary_change" property="salaryChange" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute5" property="attribute5" />
+        <result column="swm_change_flag" property="swmChangeFlag" />
+        <result column="teacher_contract_flag" property="teacherContractFlag" />
+        <result column="attribute2" property="attribute2" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="from_salary_str" property="fromSalaryStr"/>
+        <result column="submit_form_flag" property="submitFormFlag"/>
+        <result column="demand_job_id" property="demandJobId"/>
+    </resultMap>
+
+    <resultMap id="PmTransferRequestResultMap" type="com.sunten.hrms.pm.domain.PmTransferRequest" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="pmEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="swmEmployee"
+                     javaType="com.sunten.hrms.swm.domain.SwmEmployee"
+                     resultMap="com.sunten.hrms.swm.dao.SwmEmployeeDao.SwmEmployeeResultMap"
+                     columnPrefix="se_" />
+        <association property="pmTransferComment"
+                     javaType="com.sunten.hrms.pm.domain.PmTransferComment"
+                     resultMap="com.sunten.hrms.pm.dao.PmTransferCommentDao.PmTransferCommentResultMap"
+                     columnPrefix="ptc_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ptr.id,ptr.transfer_code, ptr.pm_employee_id, ptr.from_salary, ptr.to_dept_name, ptr.to_office_name,
+            ptr.to_dept_id, ptr.to_job_name, ptr.to_job_id, ptr.internship_salary, ptr.formal_salary,
+            ptr.reason, ptr.self_idea, ptr.idea_date, ptr.approval_result, ptr.oa_order, ptr.approval_date,
+            ptr.enabled_flag, ptr.approval_node, ptr.approval_employee, ptr.submit_flag, ptr.demand_code,
+            ptr.reason_other_describes, ptr.begin_date, ptr.end_date, ptr.from_dept_name, ptr.from_office_name,
+            ptr.from_dept_id, ptr.from_job_name, ptr.from_job_id, ptr.transfer_type, ptr.medical_type,
+            ptr.medical_result, ptr.attribute3, ptr.attribute4, ptr.attribute1, ptr.attribute5,ptr.swm_change_flag,
+            ptr.teacher_contract_flag,ptr.attribute2,
+            ptr.medical_date, ptr.inface_begin_date, ptr.to_team_name, ptr.from_team_name, ptr.authentication_flag,
+            ptr.transfer_flag,ptr.salary_change,
+            ptr.create_time, ptr.create_by, ptr.update_time, ptr.update_by, ptr.from_salary_str,
+            ptr.need_authentication_flag,ptr.certification_job,ptr.transfer_date,
+            ptr.duty_lump_sum_wage,ptr.duty_base_pay,ptr.duty_post_skill_salary,ptr.duty_target_performance_pay,
+            ptr.duty_service_department,ptr.duty_squad_leader_allowance,ptr.duty_post_subsidy,ptr.duty_seniority_allowance,ptr.duty_transportation_allowance,
+            ptr.pra_lump_sum_wage,ptr.pra_base_pay,ptr.pra_post_skill_salary,ptr.pra_target_performance_pay,
+            ptr.pra_service_department,ptr.pra_squad_leader_allowance,ptr.pra_post_subsidy,ptr.pra_seniority_allowance,ptr.pra_transportation_allowance,ptr.submit_form_flag,ptr.demand_job_id
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.transfer_code as ${tAlias}_transfer_code,
+            ${tAlias}.pm_employee_id as ${tAlias}_pm_employee_id,
+            ${tAlias}.from_salary as ${tAlias}_from_salary, ${tAlias}.to_dept_name as ${tAlias}_to_dept_name,
+            ${tAlias}.to_office_name as ${tAlias}_to_office_name, ${tAlias}.to_dept_id as ${tAlias}_to_dept_id,
+            ${tAlias}.to_job_name as ${tAlias}_to_job_name, ${tAlias}.to_job_id as ${tAlias}_to_job_id,
+            ${tAlias}.internship_salary as ${tAlias}_internship_salary,
+            ${tAlias}.formal_salary as ${tAlias}_formal_salary, ${tAlias}.reason as ${tAlias}_reason,
+            ${tAlias}.self_idea as ${tAlias}_self_idea, ${tAlias}.idea_date as ${tAlias}_idea_date,
+            ${tAlias}.approval_result as ${tAlias}_approval_result, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.approval_date as ${tAlias}_approval_date,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.approval_node as ${tAlias}_approval_node,
+            ${tAlias}.approval_employee as ${tAlias}_approval_employee,
+            ${tAlias}.submit_flag as ${tAlias}_submit_flag, ${tAlias}.demand_code as ${tAlias}_demand_code,
+            ${tAlias}.reason_other_describes as ${tAlias}_reason_other_describes,
+            ${tAlias}.begin_date as ${tAlias}_begin_date, ${tAlias}.end_date as ${tAlias}_end_date,
+            ${tAlias}.from_dept_name as ${tAlias}_from_dept_name,
+            ${tAlias}.from_office_name as ${tAlias}_from_office_name,
+            ${tAlias}.from_dept_id as ${tAlias}_from_dept_id,
+            ${tAlias}.from_job_name as ${tAlias}_from_job_name, ${tAlias}.from_job_id as ${tAlias}_from_job_id,
+            ${tAlias}.transfer_type as ${tAlias}_transfer_type,
+            ${tAlias}.medical_type as ${tAlias}_medical_type,
+            ${tAlias}.medical_result as ${tAlias}_medical_result, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.swm_change_flag as ${tAlias}_swm_change_flag, ${tAlias}.teacher_contract_flag as ${tAlias}_teacher_contract_flag,
+            ${tAlias}.medical_date as ${tAlias}_medical_date, ${tAlias}.inface_begin_date as ${tAlias}_inface_begin_date,
+            ${tAlias}.to_team_name as ${tAlias}_to_team_name, ${tAlias}.from_team_name as ${tAlias}_from_team_name,
+            ${tAlias}.authentication_flag as ${tAlias}_authentication_flag,
+            ${tAlias}.salary_change as ${tAlias}_salary_change,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,  ${tAlias}.from_salary_str as ${tAlias}_from_salary_str,
+            ${tAlias}.submit_form_flag as ${tAlias}_submit_form_flag,
+            ${tAlias}.demand_job_id as ${tAlias}_demand_job_id
+            ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'ptc'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmTransferCommentDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_pee'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEducationDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_peen'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEntryDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_pett'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeTeleDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'se'"/>
+        <include refid="com.sunten.hrms.swm.dao.SwmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_transfer_request ptr
+                join pm_employee pe on ptr.pm_employee_id = pe.id and pe.enabled_flag = 1
+                left join swm_employee se on se.employee_id=pe.id and se.work_flag= 1
+                left join pm_transfer_comment ptc on ptr.id = ptc.transfer_id
+                left join pm_employee_education pe_pee on pe.id = pe_pee.employee_id and pe_pee.enabled_flag = 1 and pe_pee.new_education_flag = 1
+                left join pm_employee_entry pe_peen on pe.id = pe_peen.employee_id and pe_peen.enabled_flag = 1
+                outer apply
+               (SELECT TOP(1) pett_ap.*
+                      FROM pm_employee_tele pett_ap
+                     WHERE pett_ap.employee_id = pe.id
+                       AND pett_ap.enabled_flag = 1
+                       order by id desc
+                ) pe_pett
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.id
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                <![CDATA[ ) ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and pe.id = #{criteria.employeeId, jdbcType = BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.submitFlag != null">
+                <![CDATA[
+                    and ptr.submit_flag = #{criteria.submitFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.transferType != null">
+                <![CDATA[
+                    and ptr.transfer_type = #{criteria.transferType,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.value != null">
+                <choose>
+                    <when test="criteria.column == 'name' or criteria.column == 'work_card'">
+                        <![CDATA[
+                          and pe.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                          and pta.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_transfer_request (transfer_code, pm_employee_id,
+                                             from_salary, to_dept_name,
+                                             to_office_name, to_dept_id,
+                                             to_job_name, to_job_id,
+                                             internship_salary, formal_salary,
+                                             reason, self_idea, idea_date,
+                                             approval_result, oa_order,
+                                             approval_date, enabled_flag,
+                                             approval_node, approval_employee,
+                                             submit_flag, demand_code,
+                                             reason_other_describes, begin_date,
+                                             end_date, from_dept_name,
+                                             from_office_name, from_dept_id,
+                                             from_job_name, from_job_id,
+                                             transfer_type, medical_type,
+                                             medical_result, attribute3,
+                                             attribute4, attribute1,
+                                             attribute5, attribute2, swm_change_flag,teacher_contract_flag,
+                                             medical_date, inface_begin_date,
+                                             to_team_name, from_team_name, authentication_flag,transfer_flag,
+                                             create_time, create_by,
+                                             update_time, update_by, from_salary_str,
+                                             need_authentication_flag,certification_job,transfer_date,submit_form_flag,demand_job_id)
+            values (#{transferCode,jdbcType=VARCHAR}, #{pmEmployee.id,jdbcType=BIGINT},
+                    #{fromSalary,jdbcType=DECIMAL}, #{toDeptName,jdbcType=VARCHAR},
+                    #{toOfficeName,jdbcType=VARCHAR}, #{toDeptId,jdbcType=BIGINT},
+                    #{toJobName,jdbcType=VARCHAR}, #{toJobId,jdbcType=BIGINT},
+                    #{internshipSalary,jdbcType=DECIMAL}, #{formalSalary,jdbcType=DECIMAL},
+                    #{reason,jdbcType=VARCHAR}, #{selfIdea,jdbcType=VARCHAR}, #{ideaDate,jdbcType=DATE},
+                    #{approvalResult,jdbcType=VARCHAR}, #{oaOrder,jdbcType=VARCHAR},
+                    #{approvalDate,jdbcType=TIMESTAMP}, #{enabledFlag,jdbcType=BIT},
+                    #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                    #{submitFlag,jdbcType=BIT}, #{demandCode,jdbcType=VARCHAR},
+                    #{reasonOtherDescribes,jdbcType=VARCHAR}, #{beginDate,jdbcType=DATE},
+                    #{endDate,jdbcType=DATE}, #{fromDeptName,jdbcType=VARCHAR},
+                    #{fromOfficeName,jdbcType=VARCHAR}, #{fromDeptId,jdbcType=BIGINT},
+                    #{fromJobName,jdbcType=VARCHAR}, #{fromJobId,jdbcType=BIGINT},
+                    #{transferType,jdbcType=VARCHAR}, #{medicalType,jdbcType=VARCHAR},
+                    #{medicalResult,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{attribute2,jdbcType=BIGINT}, #{swmChangeFlag,jdbcType=VARCHAR},
+                    #{teacherContractFlag,jdbcType=VARCHAR},
+                    #{medicalDate,jdbcType=TIMESTAMP}, #{infaceBeginDate,jdbcType=TIMESTAMP},
+                    #{toTeamName,jdbcType=VARCHAR}, #{fromTeamName,jdbcType=VARCHAR},
+                    #{authenticationFlag,jdbcType=BIT},
+                    #{transferFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{fromSalaryStr,jdbcType=VARCHAR},
+                    #{needAuthenticationFlag,jdbcType=BIT},#{certificationJob,jdbcType=VARCHAR},#{transferDate,jdbcType=DATE},0,#{demandJobId,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_transfer_request
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest">
+        <![CDATA[
+            update pm_transfer_request
+               set transfer_code          = #{transferCode,jdbcType=VARCHAR},
+                   pm_employee_id         = #{pmEmployee.id,jdbcType=BIGINT},
+                   from_salary            = #{fromSalary,jdbcType=DECIMAL},
+                   to_dept_name           = #{toDeptName,jdbcType=VARCHAR},
+                   to_office_name         = #{toOfficeName,jdbcType=VARCHAR},
+                   to_dept_id             = #{toDeptId,jdbcType=BIGINT},
+                   to_job_name            = #{toJobName,jdbcType=VARCHAR},
+                   to_job_id              = #{toJobId,jdbcType=BIGINT},
+                   internship_salary      = #{internshipSalary,jdbcType=DECIMAL},
+                   formal_salary          = #{formalSalary,jdbcType=DECIMAL},
+                   reason                 = #{reason,jdbcType=VARCHAR},
+                   self_idea              = #{selfIdea,jdbcType=VARCHAR},
+                   idea_date              = #{ideaDate,jdbcType=DATE},
+                   approval_result        = #{approvalResult,jdbcType=VARCHAR},
+                   oa_order               = #{oaOrder,jdbcType=VARCHAR},
+                   approval_date          = #{approvalDate,jdbcType=TIMESTAMP},
+                   enabled_flag           = #{enabledFlag,jdbcType=BIT},
+                   approval_node          = #{approvalNode,jdbcType=VARCHAR},
+                   approval_employee      = #{approvalEmployee,jdbcType=VARCHAR},
+                   submit_flag            = #{submitFlag,jdbcType=BIT},
+                   demand_code            = #{demandCode,jdbcType=VARCHAR},
+                   reason_other_describes = #{reasonOtherDescribes,jdbcType=VARCHAR},
+                   begin_date             = #{beginDate,jdbcType=DATE},
+                   end_date               = #{endDate,jdbcType=DATE},
+                   from_dept_name         = #{fromDeptName,jdbcType=VARCHAR},
+                   from_office_name       = #{fromOfficeName,jdbcType=VARCHAR},
+                   from_dept_id           = #{fromDeptId,jdbcType=BIGINT},
+                   from_job_name          = #{fromJobName,jdbcType=VARCHAR},
+                   from_job_id            = #{fromJobId,jdbcType=BIGINT},
+                   transfer_type          = #{transferType,jdbcType=VARCHAR},
+                   medical_type           = #{medicalType,jdbcType=VARCHAR},
+                   medical_result         = #{medicalResult,jdbcType=VARCHAR},
+                   attribute3             = #{attribute3,jdbcType=VARCHAR},
+                   attribute4             = #{attribute4,jdbcType=VARCHAR},
+                   attribute1             = #{attribute1,jdbcType=VARCHAR},
+                   attribute5             = #{attribute5,jdbcType=VARCHAR},
+                   swm_change_flag        = #{swmChangeFlag,jdbcType=VARCHAR},
+                   teacher_contract_flag  = #{teacherContractFlag,jdbcType=VARCHAR},
+                   attribute2             = #{attribute2,jdbcType=BIGINT},
+                   medical_date           = #{medicalDate,jdbcType=TIMESTAMP},
+                   inface_begin_date      = #{infaceBeginDate,jdbcType=TIMESTAMP},
+                   to_team_name           = #{toTeamName,jdbcType=VARCHAR},
+                   from_team_name         = #{fromTeamName,jdbcType=VARCHAR},
+                   authentication_flag    = #{authenticationFlag,jdbcType=BIT},
+                   transfer_flag    = #{transferFlag,jdbcType=BIT},
+                   salary_change    = #{salaryChange,jdbcType=VARCHAR},
+                   update_time            = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by              = #{updateBy,jdbcType=BIGINT},
+                   from_salary_str        = #{fromSalaryStr, jdbcType = VARCHAR},
+                   need_authentication_flag  = #{needAuthenticationFlag,jdbcType=BIT},
+                   certification_job  =  #{certificationJob,jdbcType=VARCHAR},transfer_date = #{transferDate,jdbcType=DATE},
+                   demand_job_id  =  #{demandJobId,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmTransferRequestResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ptr.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmTransferRequestResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmTransferRequestResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByReqCode" resultMap="PmTransferRequestResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ptr.oa_order  = #{reqCode,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <update id="updateBySelfVerify" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest">
+        <![CDATA[
+        update pm_transfer_request
+        set self_idea              = #{selfIdea,jdbcType=VARCHAR},
+            idea_date              = #{updateTime,jdbcType=DATE},
+            update_time            = #{updateTime,jdbcType=TIMESTAMP},
+            update_by              = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByTransferCode" resultMap="PmTransferRequestResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ptr.transfer_code  = #{transferCode,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <update id="updateByApprovalEnd" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest">
+        update pm_transfer_request
+        set approval_date              = #{updateTime,jdbcType=TIMESTAMP},
+            approval_result            = #{approvalResult,jdbcType=VARCHAR},
+            <if test="medicalResult != null and medicalResult != ''">
+                  medical_result        = #{medicalResult,jdbcType=VARCHAR},
+                  medical_date          = #{updateTime,jdbcType=DATE},
+            </if>
+            <if test="transferDate != null">
+                   <![CDATA[
+                        transfer_date    = #{transferDate,jdbcType=DATE},
+                   ]]>
+            </if>
+            <if test="infaceBeginDate != null">
+                   <![CDATA[
+                        inface_begin_date    = #{infaceBeginDate,jdbcType=DATE},
+                   ]]>
+            </if>
+            update_time                = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                  = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByApprovalUnderwar" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest">
+        <![CDATA[
+        update pm_transfer_request
+          set ]]>
+        <if test="medicalType != null and medicalType != ''">
+            <![CDATA[  medical_type          = #{medicalType,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="salaryChange != null and salaryChange != ''">
+            <![CDATA[ salary_change            = #{salaryChange,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="internshipSalary != null and internshipSalary != ''">
+            <![CDATA[ internship_salary      = #{internshipSalary,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="formalSalary != null and formalSalary != ''">
+            <![CDATA[ formal_salary          = #{formalSalary,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="medicalResult != null and medicalResult != ''">
+            <![CDATA[  medical_result        = #{medicalResult,jdbcType=VARCHAR},
+                       medical_date          = #{updateTime,jdbcType=DATE},]]>
+        </if>
+        <!-- 人资经理提交实习薪酬 -->
+        <if test="praLumpSumWage != null">
+        <![CDATA[ pra_lump_sum_wage          = #{praLumpSumWage,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="praBasePay != null ">
+            <![CDATA[ pra_base_pay          = #{praBasePay,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="praPostSkillSalary != null">
+            <![CDATA[ pra_post_skill_salary          = #{praPostSkillSalary,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="praTargetPerformancePay != null">
+            <![CDATA[ pra_target_performance_pay          = #{praTargetPerformancePay,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="praServiceDepartment != null">
+            <![CDATA[ pra_service_department          = #{praServiceDepartment,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="praSquadLeaderAllowance != null">
+            <![CDATA[ pra_squad_leader_allowance          = #{praSquadLeaderAllowance,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="praPostSubsidy != null">
+            <![CDATA[ pra_post_subsidy          = #{praPostSubsidy,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="praSeniorityAllowance != null">
+            <![CDATA[ pra_seniority_allowance          = #{praSeniorityAllowance,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="praTransportationAllowance != null">
+            <![CDATA[ pra_transportation_allowance          = #{praTransportationAllowance,jdbcType=DECIMAL},]]>
+        </if>
+        <!-- 人资经理提交上岗薪酬 -->
+        <if test="dutyLumpSumWage != null">
+            <![CDATA[ duty_lump_sum_wage          = #{dutyLumpSumWage,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="dutyBasePay != null">
+            <![CDATA[ duty_base_pay          = #{dutyBasePay,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="dutyPostSkillSalary != null">
+            <![CDATA[ duty_post_skill_salary          = #{dutyPostSkillSalary,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="dutyTargetPerformancePay != null">
+            <![CDATA[ duty_target_performance_pay          = #{dutyTargetPerformancePay,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="dutyServiceDepartment != null">
+            <![CDATA[ duty_service_department          = #{dutyServiceDepartment,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="dutySquadLeaderAllowance != null">
+            <![CDATA[ duty_squad_leader_allowance          = #{dutySquadLeaderAllowance,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="dutyPostSubsidy != null">
+            <![CDATA[ duty_post_subsidy          = #{dutyPostSubsidy,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="dutySeniorityAllowance != null">
+            <![CDATA[ duty_seniority_allowance          = #{dutySeniorityAllowance,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="dutyTransportationAllowance != null">
+            <![CDATA[ duty_transportation_allowance          = #{dutyTransportationAllowance,jdbcType=DECIMAL},]]>
+        </if>
+        <![CDATA[
+            approval_node              = #{approvalNode,jdbcType=VARCHAR},
+            approval_employee          = #{approvalEmployee,jdbcType=VARCHAR},
+            update_time                = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                  = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAttribute5" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobTransfer">
+        <![CDATA[
+            update pm_transfer_request
+               set attribute5             = #{attribute5,jdbcType=VARCHAR}
+             where id = #{pmTransferRequestId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateSwmChangeFlag" parameterType="com.sunten.hrms.swm.domain.SwmEmployee">
+        <![CDATA[
+            update pm_transfer_request
+               set swm_change_flag         = #{swmChangeFlag,jdbcType=VARCHAR}
+             where id = #{pmTransferRequestId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+
+    <update id="updateTeacherContractFlag" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest">
+        <![CDATA[
+            update pm_transfer_request
+               set teacher_contract_flag   = #{teacherContractFlag,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateSubmitFlag" parameterType="com.sunten.hrms.pm.domain.PmTransferRequest">
+        <![CDATA[
+            update pm_transfer_request
+               set submit_form_flag = 1
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByPmEmployeeId" resultMap="PmTransferRequestResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ptr.pm_employee_id  = #{pmEmployeeId,jdbcType=BIGINT} and ptr.end_date > CAST(GETDATE() AS DATE) and ptr.submit_flag=1 and approval_result !='notPass'
+        ]]>
+    </select>
+
+</mapper>

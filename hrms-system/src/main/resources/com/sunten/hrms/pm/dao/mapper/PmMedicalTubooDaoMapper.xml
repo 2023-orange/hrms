@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmMedicalTubooDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmMedicalTuboo">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="job_tuboo" property="jobTuboo" />
+        <result column="remarks" property="remarks" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="medical_time" property="medicalTime" />
+        <result column="medical_type" property="medicalType" />
+    </resultMap>
+
+    <resultMap id="PmMedicalTubooResultMap" type="com.sunten.hrms.pm.domain.PmMedicalTuboo" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="pmEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+        columnPrefix="pe_" />
+
+
+
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pmt.id, pmt.employee_id, pmt.job_tuboo, pmt.remarks, pmt.create_time, pmt.create_by,
+            pmt.update_time, pmt.update_by, pmt.medical_time,pmt.medical_type
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.job_tuboo as ${tAlias}_job_tuboo, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.medical_time as ${tAlias}_medical_time, ${tAlias}.medical_type as ${tAlias}_medical_type
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,fdev.ext_dept_name AS pe_dept_name,
+                   fdev.ext_department_name AS pe_department,
+                   fdev.ext_team_name AS pe_team,
+        ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_medical_tuboo pmt
+              left join pm_employee pe on pmt.employee_id=pe.id and pe.enabled_flag=1
+              left join pm_employee_job pe_pej on pe_pej.employee_id=pmt.employee_id and pe_pej.job_main_flag=1 and pe_pej.enabled_flag=1
+              left join fnd_dept_ext_v fdev on fdev.id=pe_pej.dept_id
+]]>
+
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+<!--            <if test="criteria.workCard != null">-->
+<!--                and pe.work_card = #{workCard,jdbcType=VARCHAR} and pe_pej.enabled_flag=1-->
+<!--            </if>-->
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmMedicalTuboo" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_medical_tuboo (employee_id, job_tuboo, remarks,
+                                          create_time, create_by,
+                                          update_time, update_by,medical_type,medical_time)
+
+
+
+
+
+
+            values (#{employeeId,jdbcType=BIGINT}, #{jobTuboo,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+                    GETDATE(), #{updateBy,jdbcType=BIGINT},
+                    GETDATE(), #{updateBy,jdbcType=BIGINT},
+                    #{medicalType,jdbcType=VARCHAR},#{medicalTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_medical_tuboo
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmMedicalTuboo">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmMedicalTuboo">
+        <![CDATA[
+            update pm_medical_tuboo
+               set job_tuboo   = #{jobTuboo,jdbcType=VARCHAR},
+                   remarks     = #{remarks,jdbcType=VARCHAR},
+                   update_time = GETDATE(),
+                   update_by   = #{updateBy,jdbcType=BIGINT},
+                   medical_type= #{medicalType,jdbcType=VARCHAR},
+                   medical_time= #{medicalTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmMedicalTubooResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pmt.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmMedicalTubooResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmMedicalTubooResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getPmMedicalTubooSub" resultMap="PmMedicalTubooResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+             and pe.work_card = #{workCard,jdbcType=VARCHAR} and pe_pej.enabled_flag=1
+        ]]>
+    </select>
+</mapper>

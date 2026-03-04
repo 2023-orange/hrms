@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeePoliticalTempDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeePoliticalTemp">
+        <id column="id" property="id" />
+        <result column="header_id" property="headerId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="political" property="political" />
+        <result column="joining_time" property="joiningTime" />
+        <result column="nature" property="nature" />
+        <result column="formal_time" property="formalTime" />
+        <result column="post" property="post" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="instructions_flag" property="instructionsFlag" />
+        <result column="check_flag" property="checkFlag" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeePoliticalTempResultMap" type="com.sunten.hrms.pm.domain.PmEmployeePoliticalTemp" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employeePolitical"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeePolitical"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeePoliticalDao.PmEmployeePoliticalResultMap"
+                     columnPrefix="pep_" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pept.header_id as pep_id, pept.employee_id as pe_id, pept.political, pept.joining_time, pept.nature, pept.formal_time,
+            pept.post, pept.start_time, pept.end_time, pept.instructions_flag, pept.check_flag,pept.attribute1,
+            pept.enabled_flag, pept.id, pept.create_time, pept.update_time, pept.create_by, pept.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.header_id as ${tAlias}_pep_id, ${tAlias}.employee_id as ${tAlias}_pe_id,
+            ${tAlias}.political as ${tAlias}_political, ${tAlias}.joining_time as ${tAlias}_joining_time,
+            ${tAlias}.nature as ${tAlias}_nature, ${tAlias}.formal_time as ${tAlias}_formal_time,
+            ${tAlias}.post as ${tAlias}_post, ${tAlias}.start_time as ${tAlias}_start_time,
+            ${tAlias}.end_time as ${tAlias}_end_time,
+            ${tAlias}.instructions_flag as ${tAlias}_instructions_flag,
+            ${tAlias}.check_flag as ${tAlias}_check_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_political_temp pept
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.headerId != null">
+                <![CDATA[
+               and pept.header_id = #{criteria.headerId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and pept.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.instructionsFlag != null">
+                <![CDATA[
+               and pept.instructions_flag = #{criteria.instructionsFlag,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.checkFlag != null">
+                <![CDATA[
+               and pept.check_flag = #{criteria.checkFlag,jdbcType=CHAR}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and pept.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeePoliticalTemp" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_political_temp (header_id, employee_id, political,
+                                                    joining_time, nature, formal_time,
+                                                    post, start_time, end_time,
+                                                    instructions_flag, check_flag, attribute1,
+                                                    enabled_flag,
+                                                    create_time, update_time,
+                                                    create_by, update_by)
+            values (#{employeePolitical.id,jdbcType=BIGINT}, #{employee.id,jdbcType=BIGINT}, #{political,jdbcType=VARCHAR},
+                    #{joiningTime,jdbcType=DATE}, #{nature,jdbcType=VARCHAR}, #{formalTime,jdbcType=DATE},
+                    #{post,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE},
+                    #{instructionsFlag,jdbcType=CHAR}, #{checkFlag,jdbcType=CHAR},
+                    #{attribute1,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_political_temp
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeePoliticalTemp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeePoliticalTemp">
+        <![CDATA[
+            update pm_employee_political_temp
+               set header_id         = #{employeePolitical.id,jdbcType=BIGINT},
+                   employee_id       = #{employee.id,jdbcType=BIGINT},
+                   political         = #{political,jdbcType=VARCHAR},
+                   joining_time      = #{joiningTime,jdbcType=DATE},
+                   nature            = #{nature,jdbcType=VARCHAR},
+                   formal_time       = #{formalTime,jdbcType=DATE},
+                   post              = #{post,jdbcType=VARCHAR},
+                   start_time        = #{startTime,jdbcType=DATE},
+                   end_time          = #{endTime,jdbcType=DATE},
+                   instructions_flag = #{instructionsFlag,jdbcType=CHAR},
+                   check_flag        = #{checkFlag,jdbcType=CHAR},
+                   attribute1        = #{attribute1,jdbcType=VARCHAR},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeePoliticalTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pept.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeePoliticalTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeePoliticalTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeePoliticalTemp">
+        <![CDATA[
+        update pm_employee_political_temp
+        set enabled_flag         = #{enabledFlag,jdbcType=BIT},
+            update_by            = #{updateBy,jdbcType=BIGINT},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateCheckFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeePoliticalTemp">
+        <![CDATA[
+        update pm_employee_political_temp
+        set check_flag           = #{checkFlag,jdbcType=CHAR},
+            update_by            = #{updateBy,jdbcType=BIGINT},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcEmpDeptsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcEmpDepts">
+        <id column="id" property="id" />
+        <result column="role_id" property="roleId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="dept_id" property="deptId" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="acUsePmEmployeeResultMap" type="com.sunten.hrms.pm.domain.PmEmployee">
+        <result column="id" property="id" />
+        <result column="data_type" property="dataType"/>
+        <result column="work_card" property="workCard"/>
+        <result column="name" property="name"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="department" property="department"/>
+        <result column="team" property="team"/>
+        <association property="mainJob"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeJob"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeJobDao.PmEmployeeJobResultMap"
+                     columnPrefix="pej_" />
+    </resultMap>
+
+    <resultMap id="groupByEmployeeIdResultMap" type="com.sunten.hrms.ac.domain.AcEmpDepts">
+        <id column="id" property="id" />
+        <result column="role_id" property="roleId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="email" property="email"/>
+        <collection property="deptList" ofType="java.lang.Long">
+            <id column="dept_id" property="id" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="AcEmpDeptsResultMap" type="com.sunten.hrms.ac.domain.AcEmpDepts" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aed.role_id, aed.employee_id, aed.dept_id, aed.enabled_flag, aed.id, aed.create_time, aed.create_by,
+            aed.update_time, aed.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.role_id as ${tAlias}_role_id, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.dept_id as ${tAlias}_dept_id, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        ,(select fd.dept_name from  fnd_dept fd where fd.id = aed.dept_id) as dept_name,
+        (select fd.parent_id from fnd_dept fd where fd.id = aed.dept_id) as parent_id,
+        (select top 1 fu.email from fnd_user fu where fu.employee_id = aed.employee_id and fu.enabled_flag = 1 ) as email
+              from ac_emp_depts aed
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and aed.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and aed.enabled_flag = #{criteria.enabledFlag,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.roleId != null">
+                <![CDATA[
+                    and aed.role_id = #{criteria.roleId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataType != null">
+                <![CDATA[
+                    and aed.data_type = #{criteria.dataType, jdbcType = VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcEmpDepts" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_emp_depts (role_id, employee_id, dept_id,
+                                      enabled_flag, create_time, create_by,
+                                      update_time, update_by, data_type)
+            values (#{roleId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT}, #{deptId,jdbcType=BIGINT},
+                    #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{dataType, jdbcType = VARCHAR})
+        ]]>
+    </insert>
+
+    <insert id="insertAllColumnTemp" parameterType="com.sunten.hrms.ac.domain.AcEmpDepts" useGeneratedKeys="true" keyProperty="id">
+              <![CDATA[
+            insert into ac_emp_depts_temp (role_id, employee_id, dept_id,
+                                      enabled_flag, create_time, create_by,
+                                      update_time, update_by)
+            values (#{roleId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT}, #{deptId,jdbcType=BIGINT},
+                    #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_emp_depts
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="removeRelationByid">
+        update ac_emp_depts set enabled_flag = 0 where
+        employee_id = #{employeeId, jdbcType = BIGINT}
+        and data_type = #{dataType, jdbcType = VARCHAR}
+        and enabled_flag = 1
+    </update>
+
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcEmpDepts">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteByEnabled" parameterType="com.sunten.hrms.ac.domain.AcEmpDepts">
+        <![CDATA[
+            update ac_emp_depts
+               set
+                   enabled_flag = 0,
+                   update_time  = getdate(),
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where
+             employee_id  = #{employeeId,jdbcType=BIGINT}
+             and dept_id  = #{deptId,jdbcType=BIGINT}
+             and data_type = #{dataType, jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcEmpDepts">
+        <![CDATA[
+            update ac_emp_depts
+               set role_id         = #{roleId,jdbcType=BIGINT},
+                   employee_id  = #{employeeId,jdbcType=BIGINT},
+                   dept_id      = #{deptId,jdbcType=BIGINT},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcEmpDeptsResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aed.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcEmpDeptsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by aed.dept_id
+        ]]>
+    </select>
+
+    <select id="listAllByGroup" resultMap="groupByEmployeeIdResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and aed.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and aed.enabled_flag = #{criteria.enabledFlag,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.roleId != null">
+                <![CDATA[
+                    and aed.role_id = #{criteria.roleId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataType != null">
+                <![CDATA[
+                    and aed.data_type = #{criteria.dataType, jdbcType = VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcEmpDeptsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getDeptsByRolePermission" resultType="java.lang.Long">
+        <![CDATA[
+            select dept_id
+            from ac_emp_depts aed where
+            aed.enabled_flag = 1
+            and aed.employee_id = #{employeeId, jdbcType = BIGINT}
+            and aed.data_type = #{dataType, jdbcType = VARCHAR}
+            order by aed.dept_id
+        ]]>
+    </select>
+
+    <select id="checkDocPermission" resultType="java.lang.Boolean" parameterType="java.lang.Long">
+        <![CDATA[
+            select case when exists (
+                select 1 from ac_emp_depts aed where aed.data_type = 'documenter'
+                and aed.enabled_flag = 1 and aed.employee_id = #{employeeId, jdbcType = BIGINT}
+            ) then 1 else 0 end
+        ]]>
+    </select>
+
+    <select id="countRoleEmp" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1)
+             FROM
+                pm_employee pe
+                LEFT OUTER JOIN pm_employee_job pej ON pe.id = pej.employee_id
+            AND pej.job_main_flag = 1
+            AND pej.enabled_flag = 1
+                LEFT OUTER JOIN fnd_dept_ext_v fdev ON pej.dept_id = fdev.id
+            AND fdev.enabled_flag = 1
+            AND fdev.deleted_flag = 0
+            WHERE
+            1 = 1
+            AND pe.enabled_flag = 1
+            AND pe.leave_flag = 0
+            and EXISTS (select 1  from ac_emp_depts aed where aed.employee_id = pe.id
+                and aed.enabled_flag = 1
+                ]]>
+                <if test="criteria != null">
+                    <if test="criteria.dataType != null">
+                        <![CDATA[
+                            and aed.data_type = #{criteria.dataType, jdbcType = VARCHAR}
+                        ]]>
+                    </if>
+                </if>
+        <![CDATA[
+            )
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.name != null">
+                <![CDATA[ and  pe.name like #{criteria.name,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.workCard != null">
+                <![CDATA[ and  pe.work_card like #{criteria.workCard,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.ID
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                and  pe.id = #{criteria.employeeId, jdbcType = BIGINT}
+            </if>
+        </if>
+    </select>
+
+
+    <select id="getRoleEmpListByPage" resultMap="acUsePmEmployeeResultMap">
+        <![CDATA[
+            SELECT
+            pe.id,
+            pe.work_card,
+            pe.name,
+            fdev.ext_dept_name AS dept_name,
+            fdev.ext_department_name AS department,
+            fdev.ext_team_name AS team,
+            pej.job_name AS pej_fj_job_name,
+			temp.data_type as data_type
+            FROM
+                pm_employee pe
+                LEFT OUTER JOIN pm_employee_job pej ON pe.id = pej.employee_id
+            AND pej.job_main_flag = 1
+            AND pej.enabled_flag = 1
+                LEFT OUTER JOIN fnd_dept_ext_v fdev ON pej.dept_id = fdev.id
+            AND fdev.enabled_flag = 1
+            AND fdev.deleted_flag = 0
+            join
+            (select DISTINCT aed.data_type as data_type,aed.employee_id as employee_id from ac_emp_depts aed where aed.enabled_flag = 1 ) as temp
+            on temp.employee_id  = pe.id
+            WHERE
+            1 = 1
+            AND pe.enabled_flag = 1
+            AND pe.leave_flag = 0
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.ID
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                and  pe.id = #{criteria.employeeId, jdbcType = BIGINT}
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+
+    </select>
+
+    <select id="listTempByCriteria" resultMap="AcEmpDeptsResultMap">
+        <![CDATA[
+            select
+                        aedt.role_id, aedt.employee_id, aedt.dept_id, aedt.enabled_flag, aedt.id, aedt.create_time, aedt.create_by,
+            aedt.update_time, aedt.update_by     from ac_emp_depts_temp aedt
+            where   aedt.employee_id != -1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.employeeId != null">
+            <![CDATA[
+                    and aedt.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+        </if>
+        <if test="criteria.enabledFlag != null">
+            <![CDATA[
+                    and aedt.enabled_flag = #{criteria.enabledFlag,jdbcType=BIGINT}
+                ]]>
+        </if>
+        <if test="criteria.roleId != null">
+            <![CDATA[
+                    and aedt.role_id = #{criteria.roleId,jdbcType=BIGINT}
+                ]]>
+        </if>
+            order by employee_id
+    </if>
+
+    </select>
+
+    <insert id="insertByOvertimeReview" parameterType="com.sunten.hrms.ac.domain.AcOvertimeReview">
+        <![CDATA[
+            insert into ac_emp_depts_temp(role_id, employee_id, dept_id,
+                                      enabled_flag, create_time, create_by,
+                                      update_time, update_by, department, administrative_office)
+            select 17, (select ISNULL(
+            (select pe.id from  pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)
+            and pe.enabled_flag = 1
+            ),-1)
+            ),
+            -1,
+            1, getDate(), -1, getDATE(), -1,
+                        #{department, jdbcType= VARCHAR},
+            #{administrativeOffice, jdbcType = VARCHAR}
+        ]]>
+    </insert>
+
+    <select id="getTeamEmailByDeptId" parameterType="java.lang.Long" resultType="java.lang.String">
+        <![CDATA[ 		select top 1 isnull(pe.email_inside, fu.email) from  ac_emp_depts aed join fnd_user fu on aed.employee_id = fu.employee_id
+		join pm_employee pe on pe.id = fu.employee_id
+		where fu.enabled_flag = 1 and aed.enabled_flag  = 1 and pe.enabled_flag = 1
+		and aed.data_type = 'team'
+		and aed.dept_id = #{deptId, jdbcType=BIGINT}
+		     ]]>
+    </select>
+
+    <insert id="insertRoleByAcEmpDept">
+           <![CDATA[
+        insert into fnd_users_roles (user_id, role_id, create_time,
+                                         create_by, update_time, update_by)
+        values(#{userId, jdbcType = BIGINT}
+        ,(select fr.id from fnd_role fr where fr.permission = #{permission, jdbcType = VARCHAR}),
+        GETDATE(), #{createBy, jdbcType = BIGINT}, getdate(), #{createBy, jdbcType = BIGINT})
+    ]]>
+    </insert>
+</mapper>

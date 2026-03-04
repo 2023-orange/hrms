@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao">
+    <sql id="dynamic_query_template_sql">
+        <if test="criteria.dynamicQueryCriteria != null and criteria.dynamicQueryCriteria.size > 0">
+            <![CDATA[ AND ]]>
+            <foreach collection="criteria.dynamicQueryCriteria" item="item" index="index">
+                <if test="item.field != null and item.field != '' and item.operator != '' and item.value != null and item.value != ''">
+                    <![CDATA[ ${item.prefix} ]]>
+                    <choose>
+                        <when test="item.specialSql != null and item.specialSql != ''">
+                            <![CDATA[ ${item.specialSql} ${item.suffix}]]>
+                        </when>
+                        <otherwise>
+                            <if test="item.queryTable != null and item.queryTable != ''">
+                                <![CDATA[ ${item.queryTable}.]]>
+                            </if>
+                            <![CDATA[${item.field} ${item.operator} #{item.valueWithDataType, jdbcType=${item.jdbcType}} ${item.suffix}]]>
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </if>
+    </sql>
+
+</mapper>

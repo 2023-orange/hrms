@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcVacateDao">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcVacate">
+        <id column="id" property="id" />
+        <result column="NickName" property="nickName" />
+        <result column="UserName" property="userName" />
+        <result column="RequisitionCode" property="requisitionCode" />
+        <result column="State" property="state" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="StartTime" property="startTime" />
+        <result column="EndTime" property="endTime" />
+        <result column="Reason" property="reason" />
+        <result column="LeaveType" property="leaveType" />
+        <result column="CreateTime" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+        id, NickName, RIGHT(LPAD(trim(UserName), 6 , '0'), 6 ) UserName,RequisitionCode, State,
+        str_to_date(StartTime, '%Y-%m-%d %H:%i:%s') StartTime, str_to_date(EndTime, '%Y-%m-%d %H:%i:%s') EndTime,
+        Reason, LeaveType,CreateTime
+        ]]>
+    </sql>
+
+    <select id="getAcVacateByRequisitionCode" resultMap="BaseResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+          from v_req_hrleave_not_cancel
+          where RequisitionCode = #{reqCode, jdbcType=VARCHAR}
+          and TIMESTAMPDIFF(MONTH,now(), CreateTime ) <= 3
+           LIMIT 1
+        ]]>
+    </select>
+
+    <select id="getList" resultMap="BaseResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+          from v_req_hrleave_not_cancel
+          where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.reqCode != null">
+                <![CDATA[
+                  and trim(RequisitionCode) = #{criteria.reqCode, jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </select>
+
+    <select id="getVacateByReqCodeAndDate" resultMap="BaseResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+          from v_req_hrleave_not_cancel
+          where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.reqCode != null">
+                <![CDATA[
+                  and trim(RequisitionCode) = #{criteria.reqCode, jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.exceptionDate != null">
+                <![CDATA[
+                   and #{criteria.exceptionDate,jdbcType=DATE} BETWEEN DATE_FORMAT(StartTime,'%Y-%m-%d') and DATE_FORMAT(EndTime,'%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="criteria.workCard != null">
+                <![CDATA[
+                  and RIGHT(LPAD(trim(UserName), 6 , '0'), 6 )  = #{criteria.workCard, jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+        <![CDATA[
+          and TIMESTAMPDIFF(MONTH,now(), CreateTime ) <= 3
+          LIMIT 1
+        ]]>
+
+    </select>
+</mapper>

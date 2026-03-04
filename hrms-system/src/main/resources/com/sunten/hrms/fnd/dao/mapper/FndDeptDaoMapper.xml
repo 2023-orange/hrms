@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndDeptDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndDept">
+        <id column="id" property="id" />
+        <result column="dept_name" property="deptName" />
+        <result column="parent_id" property="parentId" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="dept_code" property="deptCode" />
+        <result column="dept_level" property="deptLevel" />
+        <result column="dept_sequence" property="deptSequence" />
+        <result column="deleted_flag" property="deletedFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="ext_dept_id" property="extDeptId" />
+        <result column="ext_department_id" property="extDepartmentId" />
+        <result column="ext_team_id" property="extTeamId" />
+        <result column="ext_dept_name" property="extDeptName" />
+        <result column="ext_department_name" property="extDepartmentName" />
+        <result column="ext_team_name" property="extTeamName" />
+    </resultMap>
+
+    <resultMap id="FndDeptResultMap" type="com.sunten.hrms.fnd.domain.FndDept" autoMapping="true">
+        <id column="id" property="id" />
+        <result column="ext_dept_name" property="extDeptName" />
+        <result column="ext_department_name" property="extDepartmentName" />
+        <result column="ext_team_name" property="extTeamName" />
+        <result column="admin_job_id" property="adminJobId" />
+    </resultMap>
+
+    <resultMap id="PieVoResultMap" type="com.sunten.hrms.fnd.vo.PieVo">
+        <result column="name" property="name" />
+        <result column="value" property="value" />
+    </resultMap>
+
+    <resultMap id="FndDeptEmpResultMap" type="com.sunten.hrms.fnd.vo.DeptEmp" autoMapping="true">
+        <association
+                property="fndDept"
+                javaType="com.sunten.hrms.fnd.domain.FndDept"
+                resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                columnPrefix="fd_"
+        ></association>
+        <association
+                property="employee"
+                javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                columnPrefix="pe_"
+        ></association>
+        <association
+                property="fndUser"
+                javaType="com.sunten.hrms.fnd.domain.FndUser"
+                resultMap="com.sunten.hrms.fnd.dao.FndUserDao.FndUserResultMap"
+                columnPrefix="fu_"
+        ></association>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fd.id, fd.dept_name, fd.parent_id, fd.enabled_flag, fd.dept_code, fd.dept_level, fd.dept_sequence,
+            fd.deleted_flag, fd.create_time, fd.create_by, fd.update_time, fd.update_by, fd.ext_dept_id,
+            fd.ext_department_id, fd.ext_team_id, fd.admin_job_id
+            , (select dept_name from fnd_dept fdcopy1 where fdcopy1.id = fd.ext_dept_id) ext_dept_name
+            , (select dept_name from fnd_dept fdcopy2 where fdcopy2.id = fd.ext_department_id) ext_department_name
+            , (select dept_name from fnd_dept fdcopy3 where fdcopy3.id = fd.ext_team_id) ext_team_name
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.dept_name as ${tAlias}_dept_name,
+            ${tAlias}.parent_id as ${tAlias}_parent_id, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.dept_code as ${tAlias}_dept_code, ${tAlias}.dept_level as ${tAlias}_dept_level,
+            ${tAlias}.dept_sequence as ${tAlias}_dept_sequence,${tAlias}.deleted_flag as ${tAlias}_deleted_flag,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.ext_dept_id as ${tAlias}_ext_dept_id, ${tAlias}.ext_department_id as ${tAlias}_ext_department_id,
+            ${tAlias}.ext_team_id as ${tAlias}_ext_team_id, ${tAlias}.admin_job_id as ${tAlias}_admin_job_id
+            , (select dept_name from fnd_dept fdcopy1 where fdcopy1.id = fd.ext_dept_id) fd_ext_dept_name
+            , (select dept_name from fnd_dept fdcopy2 where fdcopy2.id = fd.ext_department_id) fd_ext_department_name
+            , (select dept_name from fnd_dept fdcopy3 where fdcopy3.id = fd.ext_team_id) fd_ext_team_name
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_dept fd
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.ids != null">
+                <foreach collection="criteria.ids" item="item" index="index" open=" and fd.id IN (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+            </if>
+            <if test="criteria.adminJobId != null">
+                <![CDATA[
+               and fd.admin_job_id = #{criteria.adminJobId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.nullAdminJobId != null">
+            <![CDATA[
+                and   fd.admin_job_id is null
+            ]]>
+            </if>
+            <if test="criteria.name != null">
+                <![CDATA[
+               and fd.dept_name like #{criteria.name,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and fd.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.deleted != null">
+                <![CDATA[
+               and fd.deleted_flag = #{criteria.deleted,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.pid != null">
+                <![CDATA[
+               and fd.parent_id = #{criteria.pid,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and fd.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and fd.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.deptCode != null">
+                <![CDATA[
+               and fd.dept_code like #{criteria.deptCode,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.noUser == true">
+                and not exists  (select 1 from pm_employee_job pej join pm_employee pe on pej.employee_id = pe.id and pe.enabled_flag = 1 and pe.leave_flag = 0 and  pej.enabled_flag = 1
+                 and fd.admin_job_id = pej.job_id
+                 )
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndDept" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_dept (dept_name, parent_id, enabled_flag,
+                                  dept_code, dept_level, dept_sequence,
+                                  deleted_flag, create_time, create_by,
+                                  update_time, update_by, ext_dept_id,
+                                  ext_department_id, ext_team_id,admin_job_id
+                                  )
+            values (#{deptName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{enabledFlag,jdbcType=BIT},
+                    #{deptCode,jdbcType=VARCHAR}, #{deptLevel,jdbcType=VARCHAR}, #{deptSequence,jdbcType=INTEGER},
+                    #{deletedFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{extDeptId,jdbcType=VARCHAR},
+                    #{extDepartmentId,jdbcType=VARCHAR}, #{extTeamId,jdbcType=VARCHAR}, #{adminJobId,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_dept
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndDept">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndDept">
+        <![CDATA[
+            update fnd_dept
+               set dept_name         = #{deptName,jdbcType=VARCHAR},
+                   parent_id         = #{parentId,jdbcType=INTEGER},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   dept_code         = #{deptCode,jdbcType=VARCHAR},
+                   dept_level        = #{deptLevel,jdbcType=VARCHAR},
+                   dept_sequence     = #{deptSequence,jdbcType=INTEGER},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT},
+                   ext_dept_id       = #{extDeptId,jdbcType=VARCHAR},
+                   ext_department_id = #{extDepartmentId,jdbcType=VARCHAR},
+                   ext_team_id       = #{extTeamId,jdbcType=VARCHAR},
+                   admin_job_id       = #{adminJobId,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndDeptResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fd.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndDeptResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+			 order by fd.dept_sequence
+		]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndDeptResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getDeptListByIds" resultMap="FndDeptResultMap" parameterType="java.util.ArrayList">
+         <![CDATA[
+        select
+            fd.id,
+            case when exists  (
+
+            select DISTINCT dept_name from fnd_dept where enabled_flag = 1 and deleted_flag = 0
+             and dept_name = fd.dept_name
+             GROUP BY dept_name having count(1) > 1
+            ) then
+            (select dept_name from fnd_dept where enabled_flag = 1 and deleted_flag = 0 and id = fd.parent_id) + '.' + fd.dept_name
+            else fd.dept_name  end as dept_name,
+            fd.parent_id, fd.enabled_flag, fd.dept_code, fd.dept_level, fd.dept_sequence,
+            fd.deleted_flag, fd.create_time, fd.create_by, fd.update_time, fd.update_by, fd.ext_dept_id,
+            fd.ext_department_id, fd.ext_team_id, fd.admin_job_id
+            , (select dept_name from fnd_dept fdcopy1 where fdcopy1.id = fd.ext_dept_id) ext_dept_name
+            , (select dept_name from fnd_dept fdcopy2 where fdcopy2.id = fd.ext_department_id) ext_department_name
+            , (select dept_name from fnd_dept fdcopy3 where fdcopy3.id = fd.ext_team_id) ext_team_name
+             from fnd_dept fd
+
+                where exists (select 1 from fnd_dept fdt WHERE fdt.id = fd.id and  fdt.id in
+        ]]>
+        <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+            <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+        </foreach>
+        <![CDATA[
+               ) order by fd.id
+        ]]>
+    </select>
+
+    <select id="getNameById" resultType="java.lang.String">
+        <![CDATA[
+		    select fd.dept_name
+              from fnd_dept fd
+             where fd.id = #{id,jdbcType=BIGINT}
+		]]>
+    </select>
+
+    <select id="listByPid" resultMap="FndDeptResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+			 where fd.parent_id = #{parentId,jdbcType=INTEGER} and fd.deleted_flag = 0
+			order by fd.dept_sequence
+		]]>
+    </select>
+
+    <select id="listAllChildrenByPid" resultMap="FndDeptResultMap">
+        <![CDATA[
+            WITH cte AS
+             (SELECT ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+                FROM fnd_dept fd
+               WHERE fd.Id = #{id,jdbcType=BIGINT} --查询当前部门
+                 AND fd.deleted_flag = 0
+              UNION ALL
+              SELECT ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+                FROM fnd_dept fd
+               INNER JOIN cte cte_pa
+                  ON fd.parent_id = cte_pa.id
+                 AND fd.deleted_flag = 0)
+            SELECT * FROM cte
+		]]>
+    </select>
+
+    <select id="listByRoleId" resultMap="FndDeptResultMap">
+        <![CDATA[
+		    select
+		]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+			  from fnd_dept fd
+			  left outer join fnd_roles_depts frd
+			    on fd.id = frd.dept_id
+			  left outer join fnd_role fr
+			    on frd.role_id = fr.id
+			 where fr.id = #{id,jdbcType=BIGINT}
+			 order by fd.id
+		]]>
+    </select>
+
+    <update id="updateDeletedFlag" parameterType="com.sunten.hrms.fnd.domain.FndDept">
+        <![CDATA[
+            update fnd_dept
+               set deleted_flag = #{deletedFlag,jdbcType=BIT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateSort" parameterType="com.sunten.hrms.fnd.domain.FndDept">
+        <![CDATA[
+            update fnd_dept
+               set dept_sequence = #{deptSequence,jdbcType=INTEGER},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by     = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getPieEducation" parameterType="java.util.List" resultMap="PieVoResultMap">
+           <![CDATA[
+               select
+                isnull(education, '无') as name ,count(isnull(education, '无')) as value
+                 from
+                (select
+                pe.id  as id
+                from  pm_employee pe, pm_employee_job pej
+                where pe.leave_flag = 0
+                and pe.enabled_flag = 1
+                and pej.enabled_flag = 1
+                and pej.job_main_flag = 1
+                and pej.employee_id = pe.id
+                and pej.dept_id in
+                  ]]>
+                <foreach collection="deptIds" index="index" item="item" separator="," open="(" close=")">
+                   #{item, jdbcType = BIGINT}
+                </foreach>
+        <![CDATA[
+                 ) temp
+                left join pm_employee_education pee
+                 on temp.id = pee.employee_id
+                 and pee.new_education_flag = 1
+                and pee.enabled_flag = 1
+                GROUP BY education
+        ]]>
+    </select>
+
+    <select id="getPieAge" parameterType="java.util.List" resultType="java.lang.Double">
+           <![CDATA[
+                select
+
+                DATEDIFF(YEAR, pe.birthday , getdate() )
+                from pm_employee pe,
+                pm_employee_job pej
+                where
+                pe.leave_flag = 0
+                and pe.enabled_flag = 1
+                and pej.enabled_flag = 1
+                and pej.job_main_flag = 1
+                and pej.employee_id = pe.id and pej.dept_id in
+
+                  ]]>
+        <foreach collection="deptIds" index="index" item="item" separator="," open="(" close=")">
+            #{item, jdbcType = BIGINT}
+        </foreach>
+        <![CDATA[
+                order by 1
+        ]]>
+    </select>
+
+    <select id="getPieWorkAge" parameterType="java.util.List" resultType="java.lang.Double">
+           <![CDATA[
+            select
+             ISNULL(pe.company_age, 0)
+            from pm_employee pe,pm_employee_job pej where
+            pe.leave_flag = 0
+            and pe.enabled_flag = 1
+            and pej.enabled_flag = 1
+            and pej.job_main_flag = 1
+            and pej.employee_id = pe.id and pej.dept_id in
+
+                              ]]>
+        <foreach collection="deptIds" index="index" item="item" separator="," open="(" close=")">
+            #{item, jdbcType = BIGINT}
+        </foreach>
+        <![CDATA[
+            order by 1
+
+        ]]>
+    </select>
+
+    <select id="getPieOccupationCategory" parameterType="java.util.List" resultMap="PieVoResultMap">
+           <![CDATA[
+            select
+            isNull(pe.occupation_category, '无') as name ,
+            count(pe.occupation_category) as value
+            from pm_employee pe, pm_employee_job pej
+
+            where
+
+             pe.leave_flag = 0
+            and pe.enabled_flag = 1
+            and pej.enabled_flag = 1
+            and pej.job_main_flag = 1
+            and pej.employee_id = pe.id and pej.dept_id in
+                              ]]>
+        <foreach collection="deptIds" index="index" item="item" separator="," open="(" close=")">
+            #{item, jdbcType = BIGINT}
+        </foreach>
+        <![CDATA[
+            group by
+            pe.occupation_category
+        ]]>
+    </select>
+
+
+    <select id="getPieVocationalLevel" parameterType="java.util.List" resultMap="PieVoResultMap">
+           <![CDATA[
+            select
+            isnull(vocational_level, '无') as name ,count(isnull(vocational_level, '无')) as value
+             from
+            (select
+            pe.id  as id
+            from  pm_employee pe, pm_employee_job pej
+            where
+            pe.leave_flag = 0
+            and pe.enabled_flag = 1
+            and pej.enabled_flag = 1
+            and pej.job_main_flag = 1
+
+            and pej.employee_id = pe.id and pej.dept_id in
+                              ]]>
+        <foreach collection="deptIds" index="index" item="item" separator="," open="(" close=")">
+            #{item, jdbcType = BIGINT}
+        </foreach>
+        <![CDATA[
+
+
+            ) temp
+            left join
+
+             pm_employee_vocational pev
+             on
+             temp.id = pev.employee_id
+             and
+             pev.enabled_flag = 1
+            and pev.new_vocational_flag = 1
+            GROUP BY vocational_level
+        ]]>
+    </select>
+    <select id="getPieOccupationType" parameterType="java.util.List" resultMap="PieVoResultMap">
+           <![CDATA[
+
+            select
+            isNull(pe.occupation_type, '无') as name ,
+            count(isNull(pe.occupation_type, '无')) as value
+            from pm_employee pe, pm_employee_job pej
+
+            where
+
+             pe.leave_flag = 0
+            and pe.enabled_flag = 1
+            and pej.enabled_flag = 1
+            and pej.job_main_flag = 1
+            and pej.employee_id = pe.id and pej.dept_id in
+               ]]>
+        <foreach collection="deptIds" index="index" item="item" separator="," open="(" close=")">
+            #{item, jdbcType = BIGINT}
+        </foreach>
+        <![CDATA[
+            group by
+            pe.occupation_type
+
+        ]]>
+    </select>
+
+    <update id="updateDeptExtend" >
+        <![CDATA[
+            WITH cte AS
+             (SELECT fd.*
+                FROM fnd_dept fd
+               WHERE fd.Id = #{id,jdbcType=BIGINT} --查询当前部门
+                 AND fd.deleted_flag = 0
+              UNION ALL
+              SELECT fd.*
+                FROM fnd_dept fd
+               INNER JOIN cte cte_pa
+                  ON fd.parent_id = cte_pa.id
+                 AND fd.deleted_flag = 0)
+            UPDATE fd
+               SET fd.ext_dept_id       = ISNULL (fd_dept.id, -1),
+                   fd.ext_department_id = ISNULL (fd_department.id, -1),
+                   fd.ext_team_id       = ISNULL (fd_team.id, -1)
+              FROM fnd_dept fd
+              JOIN cte ON fd.id = cte.id
+              OUTER apply f_get_dept_parent_by_level(fd.id, '部', '部门', '-') fd_dept
+              OUTER apply f_get_dept_parent_by_level(fd.id, '科室', '-', '-') fd_department
+              OUTER apply f_get_dept_parent_by_level(fd.id, '班组', '-', '-') fd_team
+             WHERE fd.ext_dept_id       != ISNULL (fd_dept.id, -1)
+                OR fd.ext_department_id != ISNULL (fd_department.id, -1)
+                OR fd.ext_team_id       != ISNULL (fd_team.id, -1)
+        ]]>
+    </update>
+
+
+    <select id="listByJobId" resultMap="FndDeptResultMap">
+        <![CDATA[
+		    select
+		]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+			  from fnd_dept fd
+			  left outer join fnd_job_dept fjd
+			    on fd.id = fjd.dept_id
+			  left outer join fnd_job fj
+			    on fjd.job_id = fj.id
+			 where fj.id = #{id,jdbcType=BIGINT}
+			 order by fd.id
+		]]>
+    </select>
+
+    <select id="getMaxDeptSequence" resultType="Long">
+        <![CDATA[
+        select max(dept_sequence) maxSequence
+          from fnd_dept
+        where deleted_flag = 0
+          and parent_id = #{pId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <update id="thanAutoIncrement">
+        <![CDATA[
+        update fnd_dept
+        set dept_sequence = dept_sequence + 1
+        where deleted_flag = 0
+          and dept_sequence >= #{sequence,jdbcType=BIGINT}
+          and parent_id = #{pId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="inAutoIncrement">
+        <![CDATA[
+        update fnd_dept
+        set dept_sequence = dept_sequence + 1
+        where deleted_flag = 0
+          and dept_sequence >= #{minSequence,jdbcType=BIGINT}
+          and dept_sequence < #{maxSequence,jdbcType=BIGINT}
+          and parent_id = #{pId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="inLessen">
+        <![CDATA[
+        update fnd_dept
+        set dept_sequence = dept_sequence - 1
+        where deleted_flag = 0
+          and dept_sequence > #{minSequence,jdbcType=BIGINT}
+          and dept_sequence <= #{maxSequence,jdbcType=BIGINT}
+          and parent_id = #{pId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="lessenDeptSequence">
+        <![CDATA[
+        update fnd_dept
+        set dept_sequence = dept_sequence - 1
+        where deleted_flag = 0
+          and dept_sequence > #{sequence,jdbcType=BIGINT}
+          and parent_id = #{pId,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getDeptByLeader" resultMap="BaseResultMap">
+        <![CDATA[
+		    select top 1
+		]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+			  from fnd_dept fd
+			 where fd.deleted_flag = 0
+			   and fd.enabled_flag = 1
+			   and fd.dept_name = '公司领导'
+			 order by fd.id
+		]]>
+    </select>
+
+    <select id="getDeptByEmpAndAdminJob" resultMap="FndDeptResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+			  select fd.*
+			  from pm_employee_job pej join fnd_dept fd on  pej.job_id = fd.admin_job_id and  pej.enabled_flag = 1
+			  and fd.enabled_flag = 1 and fd.deleted_flag = 0 and pej.employee_id = #{employeeId, jdbcType = BIGINT}
+              order by fd.id
+		]]>
+    </select>
+
+
+    <select id="getPmByAdminJobId" resultMap="FndDeptEmpResultMap">
+        <![CDATA[
+        select
+         ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[
+        ,
+         ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+        ,
+         ]]>
+        <bind name="tAlias" value="'fu'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndUserDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+        from
+        fnd_dept fd left join  pm_employee_job pej on    fd.admin_job_id = pej.job_id and pej.enabled_flag  = 1
+        left join pm_employee pe on pe.id = pej.employee_id   left join fnd_user fu on fu.employee_id = pe.id  and fu.username = pe.work_card
+         where  fd.id = #{deptId, jdbcType = BIGINT}
+         and pe.enabled_flag  =1
+         and pe.leave_flag = 0
+         and fu.enabled_flag = 1
+         	and fd.enabled_flag =1
+	and fd.deleted_flag = 0
+ ]]>
+    </select>
+
+
+    <select id="getDeptByCriteria" resultMap="FndDeptResultMap">
+          <include refid="Base_Column_Query_Sql"/>
+         where 1 =1
+        <if test="criteria != null">
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                    and fd.id = #{criteria.deptId, jdbcType = BIGINT}
+                 ]]>
+            </if>
+        </if>
+    </select>
+
+    <select id="getDeptByAdminBy" resultMap="FndDeptResultMap">
+        <![CDATA[
+            select fd.id, fd.dept_name, fd.parent_id, fd.enabled_flag, fd.dept_code, fd.dept_level, fd.dept_sequence,
+                   fd.deleted_flag, fd.create_time, fd.create_by, fd.update_time, fd.update_by, fd.ext_dept_id,
+                   fd.ext_department_id, fd.ext_team_id,
+                   (case isnull(pej.employee_id,-1)
+                   when -1 then -1 else fd.admin_job_id end) admin_job_id
+            from fnd_dept fd
+            left join  pm_employee_job pej
+              on  pej.job_id = fd.admin_job_id
+             and  pej.enabled_flag = 1
+           where fd.enabled_flag = 1
+             and fd.deleted_flag = 0
+            order by fd.id
+        ]]>
+    </select>
+
+    <select id="getDeptByEmployeeId" resultMap="FndDeptEmpResultMap">
+        <![CDATA[
+        with dept_admin_t as(  select pejv.job_id,
+          ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[  from
+        pm_employee_job pejv
+        join pm_employee pe on pejv.employee_id = pe.id and pe.enabled_flag = 1 and pe.leave_flag = 0
+        where  pejv.enabled_flag = 1)
+        select
+        ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[, dept_admin_t.*
+          from fnd_dept fd
+          join pm_employee_job pej
+          on fd.id = pej.dept_id and  pej.enabled_flag = 1 and pej.job_main_flag = 1
+          left join dept_admin_t on fd.admin_job_id = dept_admin_t.job_id
+          where fd.enabled_flag = 1
+          and fd.deleted_flag = 0
+          and pej.employee_id = #{employeeId,jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="getDeptAndEmployeeById" resultMap="FndDeptEmpResultMap">
+        <![CDATA[
+        select
+        ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[, ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+          from fnd_dept fd
+          left join pm_employee_job pej
+          on fd.id = pej.dept_id and  pej.enabled_flag = 1 and pej.job_main_flag = 1 and fd.admin_job_id = pej.job_id
+          left join pm_employee pe on pej.employee_id = pe.id and pe.enabled_flag = 1 and pe.leave_flag = 0
+          where fd.enabled_flag = 1
+          and fd.deleted_flag = 0
+          and fd.id = #{deptId,jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="getDeptAndAdminEmployee" resultMap="FndDeptEmpResultMap">
+        <![CDATA[
+        select
+        ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[, ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+          from fnd_dept fd
+          left join pm_employee_job pej on fd.admin_job_id = pej.job_id and  pej.enabled_flag = 1
+          left join pm_employee pe on pej.employee_id = pe.id and pe.enabled_flag = 1 and pe.leave_flag = 0
+          where fd.enabled_flag = 1
+          and pe.leave_flag = 0
+          and fd.deleted_flag = 0
+        ]]>
+    </select>
+
+    <insert id="createTempSnap">
+        <![CDATA[
+            WITH cte AS (
+                    SELECT fd.*
+                    FROM fnd_dept fd
+                    WHERE fd.Id = #{id,jdbcType=BIGINT} --查询当前部门
+                        AND fd.deleted_flag = 0
+                    UNION ALL
+                    SELECT fd.*
+                    FROM fnd_dept fd
+                        INNER JOIN cte cte_pa
+                        ON fd.parent_id = cte_pa.id
+                            AND fd.deleted_flag = 0
+                )
+            SELECT cte.*, ext_dept.dept_name AS ext_dept_name, ext_department.dept_name AS ext_department_name, ext_team.dept_name AS ext_team_name
+            INTO fnd_dept_temp_${timestamp}
+            FROM cte
+                LEFT JOIN fnd_dept ext_dept
+                ON cte.ext_dept_id = ext_dept.id
+                    AND ext_dept.enabled_flag = 1
+                LEFT JOIN fnd_dept ext_department
+                ON cte.ext_department_id = ext_department.id
+                    AND ext_department.enabled_flag = 1
+                LEFT JOIN fnd_dept ext_team
+                ON cte.ext_team_id = ext_team.id
+                    AND ext_team.enabled_flag = 1
+        ]]>
+    </insert>
+
+    <delete id="deleteTempSnap">
+        <![CDATA[
+            drop table fnd_dept_temp_${timestamp}
+        ]]>
+    </delete>
+
+
+    <insert id="insertOrgAdjJobTransfer">
+        <![CDATA[
+            INSERT INTO pm_employee_job_transfer
+                (group_id, employee_id, old_job_id, old_job_name, old_dept_id,
+                old_dept_name, new_job_id, new_job_name, new_dept_id, new_dept_name, remarks,
+                start_time, transfer_reason, transfer_state, enabled_flag, create_time,
+                create_by, update_time, update_by,
+                transfer_type, old_ext_dept_name , old_ext_department_name, old_ext_team_name,
+                new_ext_dept_name, new_ext_department_name, new_ext_team_name)
+            SELECT pej.group_id, pej.employee_id, pej.job_id, pej.job_name, fdt.id,
+                fdt.dept_name, pej.job_id, pej.job_name, fd.id, fd.dept_name, #{remarks,jdbcType=VARCHAR},
+                #{updateTime,jdbcType=TIMESTAMP}, '机构调整', 'FINISHED', 1 , #{updateTime,jdbcType=TIMESTAMP},
+                #{updateBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                '机构调整', fdt.ext_dept_name, fdt.ext_department_name, fdt.ext_team_name,
+                ext_dept.dept_name , ext_department.dept_name, ext_team.dept_name
+            FROM fnd_dept fd
+                JOIN fnd_dept_temp_${timestamp} fdt ON fd.id = fdt.id
+                JOIN pm_employee_job pej
+                ON fd.id = pej.dept_id
+                    AND pej.enabled_flag = 1
+                join pm_employee pe
+                on pe.id = pej.employee_id and pe.enabled_flag = 1 and pe.leave_flag = 0
+                LEFT JOIN fnd_dept ext_dept
+                ON fd.ext_dept_id = ext_dept.id
+                    AND ext_dept.enabled_flag = 1
+                LEFT JOIN fnd_dept ext_department
+                ON fd.ext_department_id = ext_department.id
+                    AND ext_department.enabled_flag = 1
+                LEFT JOIN fnd_dept ext_team
+                ON fd.ext_team_id = ext_team.id
+                    AND ext_team.enabled_flag = 1
+            WHERE isnull(ext_dept.dept_name, '---') != Isnull(fdt.ext_dept_name, '---')
+                OR isnull(ext_department.dept_name, '---') != Isnull(fdt.ext_department_name, '---')
+                OR isnull(ext_team.dept_name, '---') != Isnull(fdt.ext_team_name, '---')
+        ]]>
+    </insert>
+</mapper>

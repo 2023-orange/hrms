@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeHobbyTempDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeHobbyTemp">
+        <id column="id" property="id" />
+        <result column="header_id" property="headerId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="hobby" property="hobby" />
+        <result column="level_myself" property="levelMyself" />
+        <result column="level_mechanism" property="levelMechanism" />
+        <result column="remarks" property="remarks" />
+        <result column="instructions_flag" property="instructionsFlag" />
+        <result column="check_flag" property="checkFlag" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeHobbyTempResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeHobbyTemp" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employeeHobby"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeHobby"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeHobbyDao.PmEmployeeHobbyResultMap"
+                     columnPrefix="peb_" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            peht.header_id as peb_id, peht.employee_id as pe_id, peht.hobby, peht.level_myself, peht.level_mechanism,
+            peht.remarks, peht.instructions_flag, peht.check_flag, peht.id, peht.enabled_flag, peht.create_by,
+            peht.update_time, peht.update_by, peht.create_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.header_id as ${tAlias}_peb_id, ${tAlias}.employee_id as ${tAlias}_pe_id,
+            ${tAlias}.hobby as ${tAlias}_hobby, ${tAlias}.level_myself as ${tAlias}_level_myself,
+            ${tAlias}.level_mechanism as ${tAlias}_level_mechanism, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.instructions_flag as ${tAlias}_instructions_flag,
+            ${tAlias}.check_flag as ${tAlias}_check_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_time as ${tAlias}_create_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_hobby_temp peht
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.headerId != null">
+                <![CDATA[
+               and peht.header_id = #{criteria.headerId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and peht.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.instructionsFlag != null">
+                <![CDATA[
+               and peht.instructions_flag = #{criteria.instructionsFlag,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.checkFlag != null">
+                <![CDATA[
+               and peht.check_flag = #{criteria.checkFlag,jdbcType=CHAR}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and peht.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeHobbyTemp" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_hobby_temp (header_id, employee_id, hobby,
+                                                level_myself, level_mechanism,
+                                                remarks, instructions_flag, check_flag,
+                                                enabled_flag, create_by, update_time,
+                                                update_by, create_time)
+            values (#{employeeHobby.id,jdbcType=BIGINT}, #{employee.id,jdbcType=BIGINT}, #{hobby,jdbcType=VARCHAR},
+                    #{levelMyself,jdbcType=VARCHAR}, #{levelMechanism,jdbcType=VARCHAR},
+                    #{remarks,jdbcType=VARCHAR}, #{instructionsFlag,jdbcType=CHAR}, #{checkFlag,jdbcType=CHAR},
+                    #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+                    #{updateBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_hobby_temp
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeHobbyTemp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeHobbyTemp">
+        <![CDATA[
+            update pm_employee_hobby_temp
+               set header_id         = #{employeeHobby.id,jdbcType=BIGINT},
+                   employee_id       = #{employee.id,jdbcType=BIGINT},
+                   hobby             = #{hobby,jdbcType=VARCHAR},
+                   level_myself      = #{levelMyself,jdbcType=VARCHAR},
+                   level_mechanism   = #{levelMechanism,jdbcType=VARCHAR},
+                   remarks           = #{remarks,jdbcType=VARCHAR},
+                   instructions_flag = #{instructionsFlag,jdbcType=CHAR},
+                   check_flag        = #{checkFlag,jdbcType=CHAR},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeHobbyTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where peht.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeHobbyTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeHobbyTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeHobbyTemp">
+        <![CDATA[
+        update pm_employee_hobby_temp
+        set enabled_flag         = #{enabledFlag,jdbcType=BIT},
+            update_by            = #{updateBy,jdbcType=BIGINT},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateCheckFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployeeHobbyTemp">
+        <![CDATA[
+        update pm_employee_hobby_temp
+        set check_flag           = #{checkFlag,jdbcType=CHAR},
+            update_by            = #{updateBy,jdbcType=BIGINT},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

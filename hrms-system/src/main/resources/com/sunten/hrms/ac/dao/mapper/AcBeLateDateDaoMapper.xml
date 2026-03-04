@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcBeLateDateDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcBeLateDate">
+        <id column="id" property="id" />
+        <result column="be_late_date" property="beLateDate" />
+        <result column="be_late_time" property="beLateTime" />
+        <result column="be_late_year" property="beLateYear" />
+        <result column="be_late_month" property="beLateMonth" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="late_flag" property="lateFlag"/>
+    </resultMap>
+
+    <resultMap id="AcBeLateDateResultMap" type="com.sunten.hrms.ac.domain.AcBeLateDate" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            abld.be_late_date, abld.be_late_time, abld.be_late_year, abld.be_late_month, abld.attribute1,
+            abld.attribute2, abld.attribute3, abld.id, abld.create_time, abld.update_by, abld.update_time,
+            abld.create_by,abld.enabled_flag, abld.late_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.be_late_date as ${tAlias}_be_late_date, ${tAlias}.be_late_time as ${tAlias}_be_late_time,
+            ${tAlias}.be_late_year as ${tAlias}_be_late_year,
+            ${tAlias}.be_late_month as ${tAlias}_be_late_month, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.late_flag as ${tAlias}_late_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_be_late_date abld
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.lateFlag != null">
+                <![CDATA[
+                    and abld.late_flag = #{criteria.lateFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and abld.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.year != null">
+                <![CDATA[
+                    and abld.be_late_year = #{criteria.year,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.month != null">
+                <![CDATA[
+                    and abld.be_late_month = #{criteria.month,jdbcType=INTEGER}
+                ]]>
+            </if>
+            <if test="criteria.beginDate != null and criteria.endDate != null">
+                <![CDATA[
+                    and abld.be_late_date between #{criteria.beginDate,jdbcType=DATE}
+                    and #{criteria.endDate,jdbcType=DATE}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcBeLateDate" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_be_late_date (be_late_date, be_late_time, be_late_year,
+                                         be_late_month, attribute1,
+                                         attribute2, attribute3,enabled_flag,
+                                         create_time, update_by,
+                                         update_time, create_by)
+            values (#{beLateDate,jdbcType=DATE}, #{beLateTime,jdbcType=TIME}, #{beLateYear,jdbcType=VARCHAR},
+                    #{beLateMonth,jdbcType=INTEGER}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_be_late_date
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcBeLateDate">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcBeLateDate">
+        <![CDATA[
+            update ac_be_late_date
+               set be_late_date  = #{beLateDate,jdbcType=DATE},
+                   be_late_time  = #{beLateTime,jdbcType=TIME},
+                   be_late_year  = #{beLateYear,jdbcType=VARCHAR},
+                   be_late_month = #{beLateMonth,jdbcType=INTEGER},
+                   attribute1    = #{attribute1,jdbcType=VARCHAR},
+                   attribute2    = #{attribute2,jdbcType=VARCHAR},
+                   attribute3    = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag    = #{enabledFlag,jdbcType=BIT},
+                   update_by     = #{updateBy,jdbcType=BIGINT},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcBeLateDateResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where abld.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getByDay" resultMap="AcBeLateDateResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where enabled_flag = 1
+               and abld.be_late_date = #{lateDate,jdbcType=DATE}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcBeLateDateResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcBeLateDateResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnableByKey" parameterType="com.sunten.hrms.ac.domain.AcBeLateDate">
+        <![CDATA[
+        update ac_be_late_date
+        set enabled_flag    = #{enabledFlag,jdbcType=BIT},
+            update_by     = #{updateBy,jdbcType=BIGINT},
+            update_time   = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

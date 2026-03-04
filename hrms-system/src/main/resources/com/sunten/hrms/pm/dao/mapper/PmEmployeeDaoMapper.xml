@@ -1,0 +1,1615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployee">
+        <id column="id" property="id" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="name_abbreviation" property="nameAbbreviation" />
+        <result column="gender" property="gender" />
+        <result column="id_number" property="idNumber" />
+        <result column="birthday" property="birthday" />
+        <result column="height" property="height" />
+        <result column="weight" property="weight" />
+        <result column="calendar" property="calendar" />
+        <result column="nation" property="nation" />
+        <result column="marital_status" property="maritalStatus" />
+        <result column="household_character" property="householdCharacter" />
+        <result column="address" property="address" />
+        <result column="zipcode" property="zipcode" />
+        <result column="household_address" property="householdAddress" />
+        <result column="household_zipcode" property="householdZipcode" />
+        <result column="collective_household_flag" property="collectiveHouseholdFlag" />
+        <result column="collective_address" property="collectiveAddress" />
+        <result column="native_place" property="nativePlace" />
+        <result column="work_attendance_flag" property="workAttendanceFlag" />
+        <result column="workshop_attendance_flag" property="workshopAttendanceFlag" />
+        <result column="employee_type" property="employeeType" />
+        <result column="leave_flag" property="leaveFlag" />
+        <result column="occupation_category" property="occupationCategory" />
+        <result column="occupation_type" property="occupationType" />
+        <result column="email_inside" property="emailInside" />
+        <result column="administration_category" property="administrationCategory" />
+        <result column="remarks" property="remarks" />
+        <result column="company_age" property="companyAge" />
+        <result column="worked_years" property="workedYears" />
+        <result column="photo_id" property="photoId" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="registered_residence" property="registeredResidence" />
+        <result column="change_time" property="changeTime" />
+        <result column="change_type" property="changeType" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="job_name" property="jobName"/>
+        <result column="job_quantity" property="jobQuantity"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="department" property="department"/>
+        <result column="ten_year_date" property="tenYearDate"/>
+        <result column="twenty_year_date" property="twentyYearDate"/>
+        <result column="paid_annual_leave" property="paidAnnualLeave"/>
+        <result column="teleoffice" property="teleoffice"/>
+        <result column="telefamily" property="telefamily"/>
+        <result column="se_cost_center" property="seCostCenter"/>
+        <result column="se_cost_center_num" property="seCostCenterNum"/>
+    </resultMap>
+    <resultMap id="CheckPmEmployeeResultMap" type="com.sunten.hrms.pm.vo.CheckPmEmployeeVo" autoMapping="true"/>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PmEmployeeResultMap" type="com.sunten.hrms.pm.domain.PmEmployee" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="betterEducation"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeEducation"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeEducationDao.PmEmployeeEducationResultMap"
+                     columnPrefix="pee_" />
+        <association property="betterTitle"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeTitle"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeTitleDao.PmEmployeeTitleResultMap"
+                     columnPrefix="pet_" />
+        <association property="employeeEntry"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeEntry"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeEntryDao.PmEmployeeEntryResultMap"
+                     columnPrefix="peen_" />
+        <association property="betterVocational"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeVocational"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeVocationalDao.PmEmployeeVocationalResultMap"
+                     columnPrefix="pev_" />
+        <association property="employeePhoto"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeePhoto"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeePhotoDao.PmEmployeePhotoResultMap"
+                     columnPrefix="pep_" />
+        <association property="employeeLeaveoffice"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeLeaveoffice"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeLeaveofficeDao.PmEmployeeLeaveofficeResultMap"
+                     columnPrefix="pel_" />
+        <association property="mainJob"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeJob"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeJobDao.PmEmployeeJobResultMap"
+                     columnPrefix="pej_" />
+        <association property="employeeTele"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeTele"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeTeleDao.PmEmployeeTeleResultMap"
+                     columnPrefix="pett_" />
+        <association property="employeeEmergencie"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployeeEmergency"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeEmergencyDao.PmEmployeeEmergencyResultMap"
+                     columnPrefix="peee_" />
+    </resultMap>
+
+    <resultMap id="PmMsgResultMap" type="com.sunten.hrms.pm.vo.PmMsgVo" autoMapping="true"/>
+    <resultMap id="PmManagerResultMap" type="com.sunten.hrms.pm.vo.PmManagerVo" autoMapping="true"/>
+    <resultMap id="CurrentManagerAndSuperiorResultMap" type="com.sunten.hrms.pm.vo.PmLeaderVo" autoMapping="true"/>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pe.work_card, pe.name, pe.name_abbreviation, pe.gender, pe.id_number, pe.birthday, pe.height,
+            pe.weight, pe.calendar, pe.nation, pe.marital_status, pe.household_character, pe.address,
+            pe.zipcode, pe.household_address, pe.household_zipcode, pe.collective_household_flag,
+            pe.collective_address, pe.native_place, pe.work_attendance_flag, pe.workshop_attendance_flag,
+            pe.employee_type, pe.leave_flag, pe.occupation_category, pe.occupation_type,
+            pe.email_inside, pe.administration_category, pe.remarks, pe.attribute1, pe.attribute2,
+            pe.attribute3, pe.attribute4, pe.attribute5, pe.enabled_flag, pe.id, pe.registered_residence,
+            pe.create_time, pe.create_by, pe.update_time, pe.update_by, pe.photo_id as pep_id,pe.company_age,pe.worked_years,
+            pe.photo_id,pe.ten_year_date, pe.twenty_year_date, pe.paid_annual_leave,
+            (select count(id) from pm_employee_job pejj where pejj.employee_id = pe.id and pejj.enabled_flag = 1 and pejj.job_main_flag = 0) job_quantity,
+            case when pe.occupation_type like '%市场销售%' then 1 else 0 end as sales_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.name as ${tAlias}_name,
+            ${tAlias}.name_abbreviation as ${tAlias}_name_abbreviation, ${tAlias}.gender as ${tAlias}_gender,
+            ${tAlias}.id_number as ${tAlias}_id_number, ${tAlias}.birthday as ${tAlias}_birthday,
+            ${tAlias}.height as ${tAlias}_height, ${tAlias}.weight as ${tAlias}_weight,
+            ${tAlias}.calendar as ${tAlias}_calendar, ${tAlias}.nation as ${tAlias}_nation,
+            ${tAlias}.marital_status as ${tAlias}_marital_status,
+            ${tAlias}.household_character as ${tAlias}_household_character,
+            ${tAlias}.address as ${tAlias}_address, ${tAlias}.zipcode as ${tAlias}_zipcode,
+            ${tAlias}.household_address as ${tAlias}_household_address,
+            ${tAlias}.household_zipcode as ${tAlias}_household_zipcode,
+            ${tAlias}.collective_household_flag as ${tAlias}_collective_household_flag,
+            ${tAlias}.collective_address as ${tAlias}_collective_address,
+            ${tAlias}.native_place as ${tAlias}_native_place,
+            ${tAlias}.work_attendance_flag as ${tAlias}_work_attendance_flag,
+            ${tAlias}.workshop_attendance_flag as ${tAlias}_workshop_attendance_flag,
+            ${tAlias}.employee_type as ${tAlias}_employee_type,
+            ${tAlias}.leave_flag as ${tAlias}_leave_flag,
+            ${tAlias}.occupation_category as ${tAlias}_occupation_category,
+            ${tAlias}.occupation_type as ${tAlias}_occupation_type,
+            ${tAlias}.email_inside as ${tAlias}_email_inside,
+            ${tAlias}.administration_category as ${tAlias}_administration_category,
+            ${tAlias}.remarks as ${tAlias}_remarks, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.registered_residence as ${tAlias}_registered_residence,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.photo_id as ${tAlias}_pep_id,
+            ${tAlias}.company_age as ${tAlias}_company_age,
+            ${tAlias}.worked_years as ${tAlias}_worked_years,
+            ${tAlias}.ten_year_date as ${tAlias}_ten_year_date,
+            ${tAlias}.twenty_year_date as ${tAlias}_twenty_year_date,
+            ${tAlias}.paid_annual_leave as ${tAlias}_paid_annual_leave,
+            (select count(id) from pm_employee_job pejj where pejj.employee_id = pe.id and pejj.enabled_flag = 1 and pejj.job_main_flag = 0) ${tAlias}_job_quantity
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,0 as set_check, datediff(year, pe.birthday, GETDATE()) -
+                                    (case WHEN month(GETDATE()) < month(pe.birthday) THEN 1 ELSE
+                                         (case WHEN month(GETDATE()) = month(pe.birthday) AND day(GETDATE()) < day(pe.birthday) THEN 1 ELSE 0 END)
+                                     END) AS age,
+                   fdev.ext_dept_name AS dept_name,
+                   fdev.ext_department_name AS department,
+                   fdev.ext_team_name AS team,
+                   se.cost_center as se_cost_center,se.cost_center_num as se_cost_center_num,
+                   (CASE WHEN EXISTS (select 1 from employee_temp_check_v cv where cv.employee_id = pe.id) THEN 1 ELSE 0 END) need_check,
+
+                (select top 1 isnull(pet.name, '') from fnd_user fu join pm_employee pet on pet.id = fu.employee_id and pet.enabled_flag = 1  where fu.id = pe.update_by and fu.enabled_flag = 1 ) as update_by_str,
+                (case when exists (select 1 from pm_employee_job_transfer pejt_t where pejt_t.employee_id = pe.id and pejt_t.transfer_type != '初始化' and pejt_t.enabled_flag = 1 ) then 1 else 0 end) as job_transfer_flag,
+                                     ]]>
+        <bind name="tAlias" value="'pep'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeePhotoDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pel'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeLeaveofficeDao.Base_Column_With_Param_List"/>
+        <![CDATA[, fj.job_class as pej_fj_job_class, ]]>
+        <bind name="tAlias" value="'pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(peen.id, -1) peen_id,]]>
+        <bind name="tAlias" value="'peen'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEntryDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(pee.id, -1) pee_id,]]>
+        <bind name="tAlias" value="'pee'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEducationDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(pet.id, -1) pet_id,]]>
+        <bind name="tAlias" value="'pet'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeTitleDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(pev.id, -1) pev_id,]]>
+        <bind name="tAlias" value="'pev'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeVocationalDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(pett.id, -1) pett_id,]]>
+        <bind name="tAlias" value="'pett'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeTeleDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(peee.id, -1) peee_id,]]>
+        <bind name="tAlias" value="'peee'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEmergencyDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee pe
+              left join pm_employee_photo pep
+              on pe.photo_id = pep.id
+              left join pm_employee_leaveoffice pel
+              on pe.id = pel.employee_id
+              left outer join pm_employee_job pej
+              on pe.id = pej.employee_id
+              and pej.job_main_flag = 1
+              and pej.enabled_flag = 1
+              left outer join fnd_job fj
+              on pej.job_id = fj.id
+              left outer join swm_employee se on pe.id=se.employee_id
+              and se.work_flag=1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+               outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = pe.id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+               outer apply (
+               select top(1) pee_ap.* from pm_employee_education pee_ap
+               where pee_ap.employee_id = pe.id
+                       AND pee_ap.enabled_flag = 1
+                       AND pee_ap.new_education_flag = 1
+               ) pee
+               outer apply (
+               select top(1) pet_ap.* from pm_employee_title pet_ap
+               where pet_ap.employee_id = pe.id
+                       AND pet_ap.enabled_flag = 1
+                       AND pet_ap.new_title_flag = 1
+               ) pet
+               outer apply
+               (SELECT TOP(1) pev_ap.*
+                      FROM pm_employee_vocational pev_ap
+                     WHERE pev_ap.employee_id = pe.id
+                       AND pev_ap.enabled_flag = 1
+                       AND pev_ap.new_vocational_flag = 1
+                ) pev
+                outer apply
+               (SELECT TOP(1) pett_ap.*
+                      FROM pm_employee_tele pett_ap
+                     WHERE pett_ap.employee_id = pe.id
+                       AND pett_ap.enabled_flag = 1
+                       AND pett_ap.tele_type = 2
+                       order by id desc
+                ) pett
+                outer apply
+               (SELECT TOP(1) peee_ap.*
+                      FROM pm_employee_emergency peee_ap
+                     WHERE peee_ap.employee_id = pe.id
+                       AND peee_ap.enabled_flag = 1
+                       order by id desc
+                ) peee
+        ]]>
+    </sql>
+
+    <sql id="Base_download_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,0 as set_check, datediff(year, pe.birthday, GETDATE()) -
+                                    (case WHEN month(GETDATE()) < month(pe.birthday) THEN 1 ELSE
+                                         (case WHEN month(GETDATE()) = month(pe.birthday) AND day(GETDATE()) < day(pe.birthday) THEN 1 ELSE 0 END)
+                                     END) AS age,
+                   fdev.ext_dept_name AS dept_name,
+                   fdev.ext_department_name AS department,
+                   fdev.ext_team_name AS team,
+                   (CASE WHEN EXISTS (select 1 from employee_temp_check_v cv where cv.employee_id = pe.id) THEN 1 ELSE 0 END) need_check,
+
+                (select top 1 isnull(pet.name, '') from fnd_user fu join pm_employee pet on pet.id = fu.employee_id and pet.enabled_flag = 1  where fu.id = pe.update_by and fu.enabled_flag = 1 ) as update_by_str,
+                (case when exists (select 1 from pm_employee_job_transfer pejt_t where pejt_t.employee_id = pe.id and pejt_t.transfer_type != '初始化' and pejt_t.enabled_flag = 1 ) then 1 else 0 end) as job_transfer_flag,
+                                     ]]>
+        <bind name="tAlias" value="'pep'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeePhotoDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pel'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeLeaveofficeDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(peen.id, -1) peen_id,]]>
+        <bind name="tAlias" value="'peen'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEntryDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(pee.id, -1) pee_id,]]>
+        <bind name="tAlias" value="'pee'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEducationDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(pet.id, -1) pet_id,]]>
+        <bind name="tAlias" value="'pet'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeTitleDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(pev.id, -1) pev_id,]]>
+        <bind name="tAlias" value="'pev'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeVocationalDao.Base_Column_With_Param_List"/>
+        <![CDATA[, -1 pett_id, pett.tele pett_tele]]>
+        <![CDATA[, ISNULL(peee.id, -1) peee_id,]]>
+        <bind name="tAlias" value="'peee'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEmergencyDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee pe
+              left join pm_employee_photo pep
+              on pe.photo_id = pep.id
+              left join pm_employee_leaveoffice pel
+              on pe.id = pel.employee_id
+              left outer join pm_employee_job pej
+              on pe.id = pej.employee_id
+              and pej.job_main_flag = 1
+              and pej.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+               outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = pe.id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+               outer apply (
+               select top(1) pee_ap.* from pm_employee_education pee_ap
+               where pee_ap.employee_id = pe.id
+                       AND pee_ap.enabled_flag = 1
+                       AND pee_ap.new_education_flag = 1
+               ) pee
+               outer apply (
+               select top(1) pet_ap.* from pm_employee_title pet_ap
+               where pet_ap.employee_id = pe.id
+                       AND pet_ap.enabled_flag = 1
+                       AND pet_ap.new_title_flag = 1
+               ) pet
+               outer apply
+               (SELECT TOP(1) pev_ap.*
+                      FROM pm_employee_vocational pev_ap
+                     WHERE pev_ap.employee_id = pe.id
+                       AND pev_ap.enabled_flag = 1
+                       AND pev_ap.new_vocational_flag = 1
+                ) pev
+                outer apply
+               (select left(aa.tele_ap, len(aa.tele_ap) -1) as tele
+                  from (select (SELECT  pett_ap.tele + '/'
+                                     FROM pm_employee_tele pett_ap
+                                    WHERE pett_ap.employee_id = pe.id
+                                      and  pett_ap.enabled_flag = 1
+                                      AND pett_ap.tele_type = 2
+                                      for xml path('')) tele_ap) aa
+                ) pett
+                outer apply
+               (SELECT TOP(1) peee_ap.*
+                      FROM pm_employee_emergency peee_ap
+                     WHERE peee_ap.employee_id = pe.id
+                       AND peee_ap.enabled_flag = 1
+                       order by id desc
+                ) peee
+        ]]>
+    </sql>
+
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+              where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[ and  pe.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.nameAndWork != null">
+                <![CDATA[ and  (pe.name like #{criteria.nameAndWork,jdbcType=VARCHAR}
+                           or pe.work_card like #{criteria.nameAndWork,jdbcType=VARCHAR})
+                ]]>
+            </if>
+            <if test="criteria.leaveFlag != null">
+                <![CDATA[ and  pe.leave_flag = #{criteria.leaveFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.workAttendanceFlag != null">
+                <![CDATA[ and  pe.work_attendance_flag = #{criteria.workAttendanceFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.workshopAttendanceFlag != null">
+                <![CDATA[ and  pe.workshop_attendance_flag = #{criteria.workshopAttendanceFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[ and  pe.id = #{criteria.employeeId,jdbcType=BIGINT}]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.ID
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.name != null">
+                <![CDATA[ and  pe.name like #{criteria.name,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.workCard != null">
+                <![CDATA[ and  pe.work_card like #{criteria.workCard,jdbcType=VARCHAR}]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <sql id="Select_download_Criteria_Sql">
+        <include refid="Base_download_Query_Sql"/>
+        <![CDATA[
+              where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[ and  pe.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.nameAndWork != null">
+                <![CDATA[ and  (pe.name like #{criteria.nameAndWork,jdbcType=VARCHAR}
+                           or pe.work_card like #{criteria.nameAndWork,jdbcType=VARCHAR})
+                ]]>
+            </if>
+            <if test="criteria.leaveFlag != null">
+                <![CDATA[ and  pe.leave_flag = #{criteria.leaveFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.workAttendanceFlag != null">
+                <![CDATA[ and  pe.work_attendance_flag = #{criteria.workAttendanceFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.workshopAttendanceFlag != null">
+                <![CDATA[ and  pe.workshop_attendance_flag = #{criteria.workshopAttendanceFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[ and  pe.id = #{criteria.employeeId,jdbcType=BIGINT}]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.ID
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.name != null">
+                <![CDATA[ and  pe.name like #{criteria.name,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.workCard != null">
+                <![CDATA[ and  pe.work_card like #{criteria.workCard,jdbcType=VARCHAR}]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployee" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee (work_card, name,
+                                     name_abbreviation, gender,
+                                     id_number, birthday, height,
+                                     weight, calendar, nation,
+                                     marital_status, household_character,
+                                     address, zipcode,
+                                     household_address, household_zipcode,
+                                     collective_household_flag, collective_address,
+                                     native_place, work_attendance_flag,
+                                     workshop_attendance_flag, employee_type, leave_flag,
+                                     occupation_category, occupation_type,
+                                     email_inside, administration_category,
+                                     remarks, attribute1, attribute2,
+                                     attribute3, attribute4,
+                                     attribute5, enabled_flag,registered_residence,photo_id,company_age,worked_years,
+                                     create_time, create_by,
+                                     update_time, update_by,
+                                     ten_year_date, twenty_year_date, paid_annual_leave
+                                     )
+            values (#{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                    #{nameAbbreviation,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
+                    #{idNumber,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{height,jdbcType=NUMERIC},
+                    #{weight,jdbcType=DECIMAL}, #{calendar,jdbcType=VARCHAR}, #{nation,jdbcType=VARCHAR},
+                    #{maritalStatus,jdbcType=VARCHAR}, #{householdCharacter,jdbcType=VARCHAR},
+                    #{address,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR},
+                    #{householdAddress,jdbcType=VARCHAR}, #{householdZipcode,jdbcType=VARCHAR},
+                    #{collectiveHouseholdFlag,jdbcType=BIT}, #{collectiveAddress,jdbcType=VARCHAR},
+                    #{nativePlace,jdbcType=VARCHAR}, #{workAttendanceFlag,jdbcType=BIT},
+                    #{workshopAttendanceFlag,jdbcType=BIT}, #{employeeType,jdbcType=VARCHAR}, #{leaveFlag,jdbcType=BIT},
+                    #{occupationCategory,jdbcType=VARCHAR}, #{occupationType,jdbcType=VARCHAR},
+                    #{emailInside,jdbcType=VARCHAR}, #{administrationCategory,jdbcType=VARCHAR},
+                    #{remarks,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},#{registeredResidence,jdbcType=VARCHAR},
+                    #{employeePhoto.id,jdbcType=BIGINT},#{companyAge,jdbcType=BIGINT},#{workedYears,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{tenYearDate,jdbcType=DATE},#{twentyYearDate,jdbcType=DATE},#{paidAnnualLeave,jdbcType=DECIMAL}
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateEnableFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+            update pm_employee
+               set enabled_flag              = #{enabledFlag,jdbcType=BIT},
+                   update_time               = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                 = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+        update pm_employee
+        set work_card                 = #{workCard,jdbcType=VARCHAR},
+            name                      = #{name,jdbcType=VARCHAR},
+            name_abbreviation         = #{nameAbbreviation,jdbcType=VARCHAR},
+            gender                    = #{gender,jdbcType=VARCHAR},
+            id_number                 = #{idNumber,jdbcType=VARCHAR},
+            birthday                  = #{birthday,jdbcType=DATE},
+            height                    = #{height,jdbcType=NUMERIC},
+            weight                    = #{weight,jdbcType=DECIMAL},
+            calendar                  = #{calendar,jdbcType=VARCHAR},
+            nation                    = #{nation,jdbcType=VARCHAR},
+            marital_status            = #{maritalStatus,jdbcType=VARCHAR},
+            household_character       = #{householdCharacter,jdbcType=VARCHAR},
+            address                   = #{address,jdbcType=VARCHAR},
+            zipcode                   = #{zipcode,jdbcType=VARCHAR},
+            household_address         = #{householdAddress,jdbcType=VARCHAR},
+            household_zipcode         = #{householdZipcode,jdbcType=VARCHAR},
+            collective_household_flag = #{collectiveHouseholdFlag,jdbcType=BIT},
+            collective_address        = #{collectiveAddress,jdbcType=VARCHAR},
+            native_place              = #{nativePlace,jdbcType=VARCHAR},
+            work_attendance_flag      = #{workAttendanceFlag,jdbcType=BIT},
+            workshop_attendance_flag  = #{workshopAttendanceFlag,jdbcType=BIT},
+            employee_type             = #{employeeType,jdbcType=VARCHAR},
+            leave_flag                = #{leaveFlag,jdbcType=BIT},
+            occupation_category       = #{occupationCategory,jdbcType=VARCHAR},
+            occupation_type           = #{occupationType,jdbcType=VARCHAR},
+            email_inside              = #{emailInside,jdbcType=VARCHAR},
+            administration_category   = #{administrationCategory,jdbcType=VARCHAR},
+            remarks                   = #{remarks,jdbcType=VARCHAR},
+            attribute1                = #{attribute1,jdbcType=VARCHAR},
+            attribute2                = #{attribute2,jdbcType=VARCHAR},
+            attribute3                = #{attribute3,jdbcType=VARCHAR},
+            attribute4                = #{attribute4,jdbcType=VARCHAR},
+            attribute5                = #{attribute5,jdbcType=VARCHAR},
+            enabled_flag              = #{enabledFlag,jdbcType=BIT},
+            registered_residence      = #{registeredResidence,jdbcType=VARCHAR},
+            company_age               = #{companyAge,jdbcType=BIGINT},
+            worked_years               = #{workedYears,jdbcType=BIGINT},
+            update_time               = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                 = #{updateBy,jdbcType=BIGINT},
+            ten_year_date             = #{tenYearDate, jdbcType = DATE},
+            twenty_year_date          = #{twentyYearDate,jdbcType=DATE},
+            paid_annual_leave         = #{paidAnnualLeave,jdbcType=DECIMAL}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+
+    <select id="getByKey" resultMap="PmEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pe.id = #{id,jdbcType=BIGINT}
+        ]]>
+        <if test="deptIdsInDataScope != null and deptIdsInDataScope.size > 0">
+            <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.id
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+            <foreach collection="deptIdsInDataScope" item="item" index="index" open=" (" separator="," close=")">
+                <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+            </foreach>
+            <![CDATA[ )]]>
+        </if>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listEmployeeByWorkCardOrName" resultMap="PmEmployeeResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee pe
+            left join pm_employee_entry pee
+              on pe.id = pee.employee_id and pee.enabled_flag = 1
+             where pe.enabled_flag = 1
+               and  pe.id_number in (
+                  select pe1.id_number
+                    from pm_employee pe1
+                   where pe1.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.identityNmae != null">
+                <![CDATA[ and  (pe1.name like #{criteria.identityNmae,jdbcType=VARCHAR}
+                            or pe1.work_card like #{criteria.identityNmae,jdbcType=VARCHAR}
+                   )]]>
+            </if>
+        </if>
+        <![CDATA[ ) ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[ and  pe.id = #{criteria.employeeId,jdbcType=BIGINT}]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.id
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+        </if>
+        <![CDATA[ order by pe.id_number ASC,pe.leave_flag asc,pee.entry_time DESC,pe.id desc ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listDownloadByCriteriaPage" resultMap="PmEmployeeResultMap">
+        <include refid="Select_download_Criteria_Sql"/>
+    </select>
+
+    <update id="updateLeaveFlag" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+        update pm_employee
+        set leave_flag              = #{leaveFlag,jdbcType=BIT},
+            update_time               = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                 = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateColumnByCheck" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+        update pm_employee
+        set height                    = #{height,jdbcType=NUMERIC},
+            weight                    = #{weight,jdbcType=DECIMAL},
+            marital_status            = #{maritalStatus,jdbcType=VARCHAR},
+            household_character       = #{householdCharacter,jdbcType=VARCHAR},
+            address                   = #{address,jdbcType=VARCHAR},
+            zipcode                   = #{zipcode,jdbcType=VARCHAR},
+            household_address         = #{householdAddress,jdbcType=VARCHAR},
+            household_zipcode         = #{householdZipcode,jdbcType=VARCHAR},
+            collective_household_flag = #{collectiveHouseholdFlag,jdbcType=BIT},
+            collective_address        = #{collectiveAddress,jdbcType=VARCHAR},
+            native_place              = #{nativePlace,jdbcType=VARCHAR},
+            update_time               = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                 = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listCheckByPage" resultMap="PmEmployeeResultMap">
+        <!--<include refid="Base_Column_Query_Sql"/>-->
+        <![CDATA[ select ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+          ,etcv.create_time change_time,etcv.change_type
+          from pm_employee pe
+          join employee_temp_check_v etcv
+          on pe.id = etcv.employee_id and pe.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[ and pe.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}]]>
+            </if>
+        </if>
+    </select>
+
+    <select id="queryEmployeeIsChang" resultType="Long">
+        <![CDATA[
+            select top(1) employee_id
+              from employee_temp_check_v
+             where employee_id = #{employeeId,jdbcType=BIT}
+        ]]>
+    </select>
+
+    <update id="updatePhotoPath" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+        update pm_employee
+        set photo_id                  = #{employeePhoto.id,jdbcType=BIGINT},
+            update_time               = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                 = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listForIdNumberOrWorkCardExist" resultMap="PmEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[ where 1 = 1 ]]>
+        <if test="criteria != null">
+            <if test="criteria.workCard != null">
+                <![CDATA[ and pe.work_card = #{criteria.workCard,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.leaveFlag != null">
+                <![CDATA[ and pe.leave_flag = #{criteria.leaveFlag,jdbcType=BIT}]]>
+            </if>
+            <if test="criteria.idNumber != null">
+                <![CDATA[ and pe.id_number = #{criteria.idNumber,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[ and pe.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}]]>
+            </if>
+        </if>
+    </select>
+
+    <select id="otherNoLeaveofficeEmpInfo" resultMap="PmEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pe.leave_flag = 0
+               and pe.id_number = #{idNumber,jdbcType=BIGINT}
+               and pe.id != #{employeeId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="selectByEmpIdList" resultMap="BaseResultMap">
+        <![CDATA[
+            select pe.id, pe.name, pe.work_card
+              from pm_employee pe
+             where 1 = 1
+        ]]>
+    <if test="idList != null and idList.size > 0">
+        <![CDATA[
+               and pe.id in
+        ]]>
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </if>
+    </select>
+
+    <update id="batchUpdateCompanyAge">
+        <![CDATA[
+            UPDATE PE
+               SET PE.company_age = datediff(month, pee.entry_time, GETDATE()) -
+                                    (case
+                                       WHEN day(GETDATE()) < day(pee.entry_time) THEN
+                                        1
+                                       ELSE
+                                        0
+                                     END)
+              FROM PM_EMPLOYEE PE
+              JOIN pm_employee_entry PEE
+                ON PE.ID = PEE.employee_id
+             WHERE datediff(month, pee.entry_time, GETDATE()) -
+                   (case
+                      WHEN day(GETDATE()) < day(pee.entry_time) THEN
+                       1
+                      ELSE
+                       0
+                    END) != ISNULL(pe.company_age, -999)
+               AND PE.leave_flag = 0
+               AND PE.enabled_flag = 1
+               AND PEE.entry_time IS NOT NULL
+               and pee.entry_time < GETDATE()
+        ]]>
+    </update>
+
+    <select id="listForAttendanceSet" resultMap="BaseResultMap">
+        <![CDATA[ select ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        , pej.job_name as job_name
+        ,(select tempd.dept_name from fnd_dept tempd where tempd.id = fd.ext_dept_id and tempd.deleted_flag = 0 and tempd.enabled_flag = 1) as dept_name,
+        (select tempd.dept_name from fnd_dept tempd where tempd.id = fd.ext_department_id and tempd.deleted_flag = 0 and tempd.enabled_flag = 1) as department,
+        (select tempd.dept_name from fnd_dept tempd where tempd.id = fd.ext_team_id and tempd.deleted_flag = 0 and tempd.enabled_flag = 1) as team
+
+          from pm_employee pe, pm_employee_job pej,fnd_dept fd
+          where pe.leave_flag = 0
+            and pe.enabled_flag = 1
+            and pej.employee_id = pe.id  and pej.enabled_flag = 1
+                                              and pej.job_main_flag = 1
+                                              and fd.id = pej.dept_id
+                                              and fd.enabled_flag = 1
+                                              and fd.deleted_flag = 0
+         ]]>
+        <if test="criteria != null">
+            <if test="criteria.workCard != null">
+                <![CDATA[ and pe.work_card like #{criteria.workCard,jdbcType=VARCHAR}]]>
+            </if>
+            <if test="criteria.workAttendanceFlag != null">
+                <![CDATA[ and pe.work_attendance_flag = #{criteria.workAttendanceFlag,jdbcType=BIGINT}]]>
+            </if>
+            <if test="criteria.workshopAttendanceFlag != null">
+                <![CDATA[ and pe.workshop_attendance_flag = #{criteria.workshopAttendanceFlag,jdbcType=BIGINT}]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and exists ( select 1 from pm_employee_job pej
+                                             where pe.id = pej.employee_id
+                                              and pej.enabled_flag = 1
+                                              and pej.job_main_flag = 1
+                                              and pej.dept_id in ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                <![CDATA[ ) ]]>
+            </if>
+        </if>
+    </select>
+
+    <update id="updateEmployeeForAttendanceSet" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+        update pm_employee
+        set work_attendance_flag                  = #{workAttendanceFlag,jdbcType=BIGINT},
+            workshop_attendance_flag              = #{workshopAttendanceFlag,jdbcType=BIGINT},
+            update_time               = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                 = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listForSwmEmpUse" resultMap="PmEmployeeResultMap" parameterType="java.lang.String">
+        <![CDATA[
+                select   pe.id,pe.work_card,pe.name,
+					(select fd1.dept_name from fnd_dept fd, pm_employee_job pej,fnd_dept fd1 where pe.id = pej.employee_id and pej.dept_id = fd.id and fd.ext_dept_id = fd1.id AND pej.enabled_flag =1 ) as dept_name,
+
+ (select fd1.dept_name from fnd_dept fd, pm_employee_job pej,fnd_dept fd1 where pe.id = pej.employee_id and pej.dept_id = fd.id and fd.ext_department_id = fd1.id AND pej.enabled_flag =1 ) as department,
+
+ (select fd1.dept_name from fnd_dept fd, pm_employee_job pej,fnd_dept fd1 where pe.id = pej.employee_id and pej.dept_id = fd.id and fd.ext_team_id = fd1.id AND pej.enabled_flag =1 ) as team,
+					 peen.entry_time as peen_entry_time,
+            pee.education as pee_education,pet.title_name as pet_title_name,
+						fj.job_name as job_name
+
+            from pm_employee pe
+                outer apply (
+                select top(1) peen_ap.* from pm_employee_entry peen_ap
+                where peen_ap.employee_id = pe.id
+                   AND peen_ap.enabled_flag = 1
+                ) peen
+                outer apply (
+               select top(1) pee_ap.* from pm_employee_education pee_ap
+               where pee_ap.employee_id = pe.id
+                       AND pee_ap.enabled_flag = 1
+                       AND pee_ap.new_education_flag = 1
+               ) pee
+               outer apply (
+               select top(1) pet_ap.* from pm_employee_title pet_ap
+               where pet_ap.employee_id = pe.id
+                       AND pet_ap.enabled_flag = 1
+                       AND pet_ap.new_title_flag = 1
+               ) pet
+							 left outer join pm_employee_job pej
+              on pe.id = pej.employee_id
+              and pej.job_main_flag = 1
+              and pej.enabled_flag = 1
+							left outer join fnd_job fj on fj.id = pej.job_id and fj.enabled_flag = 1
+
+               where pe.enabled_flag = 1
+							 and (pe.work_card like #{nameOrWorkCard, jdbcType = VARCHAR}
+							 or pe.name like  #{nameOrWorkCard, jdbcType = VARCHAR}
+							 )
+               and  not exists (
+               select se.work_card from swm_employee se where se.work_flag = 1 and
+                right(cast('000000'+rtrim(se.work_card) as varchar),6) = right(cast('000000'+rtrim(pe.work_card) as varchar),6)
+
+               )
+        ]]>
+    </select>
+
+    <select id="otherLeaveEmpInfoByIdNumber" resultMap="PmEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pe.leave_flag = 1
+               and pe.enabled_flag = 1
+               and pe.id_number = #{idNumber,jdbcType=VARCHAR}
+               and pe.id != #{employeeId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="newLeaveofficeEmployeeInfo" resultMap="PmEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where  pe.id = (select top 1 id
+                              from pm_employee
+                              where leave_flag = 1
+                                and enabled_flag = 1
+                                and id_number = #{idNumber,jdbcType=VARCHAR}
+                                order by id desc)
+        ]]>
+    </select>
+
+    <select id="getPmTelList" resultMap="PmEmployeeResultMap">
+        <![CDATA[
+        select pe.id,pe.name, pe.work_card, pe.email_inside, fdev.ext_dept_name AS dept_name,
+                   fdev.ext_department_name AS department,
+                   fdev.ext_team_name AS team,
+                   pej.job_name as pej_fj_job_name,
+                   0 as need_check,petto.tele as teleoffice,pettf.tele as telefamily
+        ]]>
+        <![CDATA[, ISNULL(pett.id, -1) pett_id,]]>
+        <bind name="tAlias" value="'pett'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeTeleDao.Base_Column_With_Param_List"/>
+        <![CDATA[, ISNULL(peee.id, -1) peee_id,]]>
+        <bind name="tAlias" value="'peee'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEmergencyDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+        from pm_employee pe
+                left outer join pm_employee_job pej
+        on pe.id = pej.employee_id
+        and pej.job_main_flag = 1
+        and pej.enabled_flag = 1
+        left outer join fnd_dept_ext_v fdev
+        on pej.dept_id = fdev.id
+        and fdev.enabled_flag = 1
+        and fdev.deleted_flag = 0
+        outer apply
+            (SELECT TOP(1) pett_ap.*
+                  FROM V_pm_tele_sumList pett_ap
+                 WHERE pett_ap.employee_id = pe.id
+                   AND pett_ap.enabled_flag = 1
+                   AND pett_ap.tele_type = 2
+            ) pett
+        outer apply
+            (SELECT TOP(1) peee_ap.*
+                  FROM pm_employee_emergency peee_ap
+                 WHERE peee_ap.employee_id = pe.id
+                   AND peee_ap.enabled_flag = 1
+            ) peee
+        outer apply
+			(SELECT TOP(1) petto_ap.*
+					FROM V_pm_tele_sumList petto_ap
+					WHERE petto_ap.employee_id = pe.id
+					AND petto_ap.enabled_flag = 1
+					AND petto_ap.tele_type = 1
+			) petto
+		outer apply
+			(SELECT TOP(1) petto_ap.*
+					FROM V_pm_tele_sumList petto_ap
+					WHERE petto_ap.employee_id = pe.id
+					AND petto_ap.enabled_flag = 1
+					AND petto_ap.tele_type = 3
+			) pettf
+        where 1 = 1
+    ]]>
+        <if test="criteria.leaveFlag != null">
+            <![CDATA[ and pe.leave_flag = #{criteria.leaveFlag,jdbcType=BIT}]]>
+        </if>
+        <if test="criteria.enabledFlag != null">
+            <![CDATA[ and pe.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}]]>
+        </if>
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </select>
+
+    <select id="getPmEmailList" resultMap="PmEmployeeResultMap">
+    <![CDATA[
+        select pe.id,pe.name, pe.work_card, pe.email_inside, fdev.ext_dept_name AS dept_name,
+                   fdev.ext_department_name AS department,
+                   fdev.ext_team_name AS team,
+                   pej.job_name as pej_fj_job_name,
+                   0 as need_check
+        from pm_employee pe
+                left outer join pm_employee_job pej
+        on pe.id = pej.employee_id
+        and pej.job_main_flag = 1
+        and pej.enabled_flag = 1
+        left outer join fnd_dept_ext_v fdev
+        on pej.dept_id = fdev.id
+        and fdev.enabled_flag = 1
+        and fdev.deleted_flag = 0
+         where pe.enabled_flag = 1 and pe.leave_flag = 0
+    ]]>
+        <if test="criteria != null">
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </select>
+
+    <update id="savePmEmail" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+            update pm_employee set email_inside = #{emailInside, jdbcType = VARCHAR}
+            where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <select id="executeCopyEmployeeChildrenProcedure" statementType="CALLABLE">
+        <![CDATA[
+        { call msp_copy_employee_childrens(#{oldEmployeeId,jdbcType=BIGINT}, #{nowEmployeeId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}) }
+        ]]>
+    </select>
+
+    <update id="executeDisabledEmployeeChildrenProcedure" statementType="CALLABLE">
+        <![CDATA[
+        { call msp_disabled_employee_childrens(#{employeeId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}) }
+        ]]>
+    </update>
+
+    <select id="listLeaderEmployee" resultMap="BaseResultMap">
+        <![CDATA[
+            select DISTINCT pe.id,pe.name,pe.work_card
+          from pm_employee pe,
+               pm_employee_job pej,
+               fnd_dept fd
+          where fd.admin_job_id = pej.job_id
+            and pej.employee_id = pe.id
+            and fd.enabled_flag = 1
+            and fd.admin_job_id is not null
+            and pej.enabled_flag = 1
+            and pej.job_main_flag = 1
+            and pe.leave_flag = 0
+            and pe.enabled_flag = 1
+        ]]>
+    </select>
+
+    <select id="listEmployeesBaseInfoList" resultMap="BaseResultMap">
+        <![CDATA[
+        select DISTINCT pe.id,pe.name,pe.work_card
+        from pm_employee pe
+        where pe.leave_flag = 0
+          and pe.enabled_flag = 1
+        ]]>
+        <if test="criteria.nameAndWork != null">
+            <![CDATA[ and (pe.name like #{criteria.nameAndWork,jdbcType=VARCHAR}
+                            or pe.work_card like #{criteria.nameAndWork,jdbcType=VARCHAR})
+            ]]>
+        </if>
+    </select>
+
+    <select id="getPmMsgByUserId" resultMap="PmMsgResultMap">
+        <![CDATA[
+            select
+            pe.id as employee_id
+            ,tpee.entry_time as entry_time
+            ,tpec.start_time as contract_start_time
+            ,tpec.end_time as contract_end_time
+            ,fdev.ext_dept_name AS dept_name
+            ,fdev.ext_department_name AS department
+            ,fdev.ext_team_name AS team
+            ,pej.job_name as job_name
+            ,pe.name as name
+            ,pe.work_card as work_card
+            ,pe.id_number as id_number
+            , pett.tele as tele,
+            pej.dept_id as dept_id
+              from fnd_user fu  join pm_employee_job pej
+              on fu.employee_id  = pej.employee_id and fu.enabled_flag = 1 and  pej.enabled_flag = 1 and pej.job_main_flag = 1
+              join pm_employee pe on pe.id = fu.employee_id and pe.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+            outer apply (select top(1) pee.* from pm_employee_entry pee
+            where pee.employee_id = fu.employee_id
+            AND pee.enabled_flag = 1) tpee
+            outer apply (select top(1)  pec.*   from pm_employee_contract pec where pec.employee_id = fu.employee_id
+            and pec.enabled_flag = 1 and new_contract_flag = 1) tpec
+              outer apply
+            (SELECT TOP(1) pett_ap.*
+            FROM pm_employee_tele pett_ap
+            WHERE pett_ap.employee_id = pe.id
+            AND pett_ap.enabled_flag = 1
+            order by id desc
+            ) pett
+            where fu.id = #{userId, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="getManagerAndSuperiorByDeptId" parameterType="java.lang.Long" resultMap="CurrentManagerAndSuperiorResultMap">
+        <![CDATA[
+select
+        (select top 1 pe.work_card from   pm_employee_job pej join fnd_job fj on fj.enabled_flag = 1 and pej.job_id = fj.id and fj.deleted_flag = 0
+
+        join fnd_dept fd on fd.enabled_flag = 1 and fd.id = tempd.dept_id and fd.admin_job_id = fj.id
+
+        join pm_employee pe on pe.enabled_flag = 1 and pe.id = pej.employee_id and pe.leave_flag = 0
+
+        where pej.enabled_flag = 1 and pej.job_main_flag = 1
+
+        ) as current_manager,
+        case when tempd.depart_id is null then null else
+        (select top 1  pe.work_card from   pm_employee_job pej join fnd_job fj on fj.enabled_flag = 1 and pej.job_id = fj.id and fj.deleted_flag = 0
+
+        join fnd_dept fd on fd.enabled_flag = 1 and fd.id = tempd.depart_id and fd.admin_job_id = fj.id
+
+        join pm_employee pe on pe.enabled_flag = 1 and pe.id = pej.employee_id and pe.leave_flag = 0
+
+        where pej.enabled_flag = 1 and pej.job_main_flag = 1
+
+        ) end as current_supervisor
+        from
+
+				(select
+					 (select temp.id from fnd_dept temp where fd.ext_dept_id = temp.id) as dept_id,
+        (select temp.id from fnd_dept temp where fd.ext_department_id = temp.id) as depart_id,
+        (select temp.id from fnd_dept temp where fd.ext_team_id = temp.id) as team_id
+				from fnd_dept fd where fd.enabled_flag = 1 and fd.deleted_flag = 0 and fd.id = #{deptId, jdbcType = BIGINT}
+				) tempd
+        ]]>
+    </select>
+
+
+    <select id="getCurrentManagerAndSuperior" resultMap="CurrentManagerAndSuperiorResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+        select
+        (select top 1 pe.work_card from   pm_employee_job pej join fnd_job fj on fj.enabled_flag = 1 and pej.job_id = fj.id and fj.deleted_flag = 0
+
+        join fnd_dept fd on fd.enabled_flag = 1 and fd.id = tempd.dept_id and fd.admin_job_id = fj.id
+
+        join pm_employee pe on pe.enabled_flag = 1 and pe.id = pej.employee_id and pe.leave_flag = 0
+
+        where pej.enabled_flag = 1 and pe.id != (select employee_id from fnd_user where id = #{userId, jdbcType = BIGINT})
+
+        ) as current_manager,
+        case when tempd.depart_id is null then null else
+        (select top 1  pe.work_card from   pm_employee_job pej join fnd_job fj on fj.enabled_flag = 1 and pej.job_id = fj.id and fj.deleted_flag = 0
+
+        join fnd_dept fd on fd.enabled_flag = 1 and fd.id = tempd.depart_id and fd.admin_job_id = fj.id
+
+        join pm_employee pe on pe.enabled_flag = 1 and pe.id = pej.employee_id and pe.leave_flag = 0
+
+        where pej.enabled_flag = 1 and pej.job_main_flag = 1 and pe.id != (select employee_id from fnd_user where id = #{userId, jdbcType = BIGINT})
+
+        ) end as current_supervisor,
+        (select case when EXISTS (select 1 from fnd_dept fdt where fdt.admin_job_id = tempd.job_id ) then 1 else 0 end)  as leader_flag
+        from
+        (select
+        pe.work_card, pe.name,
+        (select temp.id from fnd_dept temp where fd.ext_dept_id = temp.id) as dept_id,
+        (select temp.id from fnd_dept temp where fd.ext_department_id = temp.id) as depart_id,
+        (select temp.id from fnd_dept temp where fd.ext_team_id = temp.id) as team_id,
+        (select fj.job_name from   fnd_job fj where fj.id = pej.job_id  and  fj.enabled_flag = 1 and fj.deleted_flag = 0 ) as job_name,
+        (select fj.id from  fnd_job fj where fj.id = pej.job_id  and  fj.enabled_flag = 1 and fj.deleted_flag = 0 ) as job_id
+        from
+        fnd_user fu join
+        pm_employee pe
+        on fu.employee_id = pe.id
+        and pe.enabled_flag = 1 and fu.enabled_flag = 1
+        join pm_employee_job pej
+        on pe.id = pej.employee_id
+        left join fnd_dept fd
+        on pej.dept_id = fd.id
+        where
+        pe.enabled_flag =1
+        and pej.job_main_flag = 1
+        and pej.enabled_flag = 1
+        and fd.enabled_flag = 1
+        and fd.deleted_flag = 0
+        and fu.id = #{userId, jdbcType = BIGINT}
+        ) tempd
+         ]]>
+    </select>
+    <select id="getWorkListByRolePermission" resultType="java.lang.String" parameterType="java.lang.String">
+          <![CDATA[
+                select
+                pe.work_card
+                from
+                fnd_user fu join fnd_users_roles fur
+                on fu.id =  fur.user_id
+                and fu.enabled_flag =1
+
+                join fnd_role fr on  fur.role_id =  fr.id and fr.permission = #{permission, jdbcType = VARCHAR}
+                join pm_employee pe on pe.id = fu.employee_id and pe.enabled_flag = 1
+ ]]>
+    </select>
+
+    <select id="getEmailListByRolePermission" resultType="java.lang.String" parameterType="java.lang.String">
+          <![CDATA[
+                select
+               isnull(pe.email_inside, fu.email) as email
+                from
+                fnd_user fu join fnd_users_roles fur
+                on fu.id =  fur.user_id
+                and fu.enabled_flag =1
+
+                join fnd_role fr on  fur.role_id =  fr.id and fr.permission = #{permission, jdbcType = VARCHAR}
+                join pm_employee pe on pe.id = fu.employee_id and pe.enabled_flag = 1
+ ]]>
+    </select>
+
+    <select id="getEmailByDeptId" resultType="java.lang.String" parameterType="java.lang.Long">
+        <![CDATA[
+            select
+					pej.employee_id, isnull(pe.email_inside, fu.email) as email
+				from fnd_dept fd left join  pm_employee_job pej  on pej.dept_id = fd.id
+				and fd.admin_job_id = pej.job_id
+				and pej.enabled_flag = 1 and fd.enabled_flag = 1
+				left join fnd_user fu on fu.employee_id = pej.employee_id
+				left join pm_employee pe on fu.employee_id = pe.id and pe.enabled_flag =1
+		where  fd.id = #{deptId, jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <sql id="Leader_Column_Query_Sql">
+        <![CDATA[
+SELECT
+	pe.id AS employee_id,
+	pe.work_card AS work_card,
+	pej.job_name AS job_name,
+	pe.NAME AS NAME,
+	fdev.ext_dept_name AS dept_name,
+	fdev.ext_department_name AS department,
+	fdev.ext_team_name AS team
+FROM
+	pm_employee pe
+	LEFT OUTER JOIN pm_employee_job pej ON pe.id = pej.employee_id
+	LEFT OUTER JOIN fnd_dept_ext_v fdev ON pej.dept_id = fdev.id
+	AND fdev.enabled_flag = 1
+	AND fdev.deleted_flag = 0
+WHERE
+	pej.job_main_flag  =1
+		AND pej.enabled_flag = 1
+	AND pe.enabled_flag = 1
+	AND pe.leave_flag = 0
+
+                      ]]>
+    </sql>
+
+    <select id="getEmailByDeptParentId" resultType="java.lang.String" parameterType="java.lang.Long">
+        <![CDATA[
+                select
+					pej.employee_id, isnull(pe.email_inside, fu.email) as email
+
+				from
+
+				fnd_dept fd left join  pm_employee_job pej  on pej.dept_id = fd.id
+				and fd.admin_job_id = pej.job_id
+				and pej.enabled_flag = 1 and fd.enabled_flag = 1
+				and pej.job_main_flag =  1
+				left join fnd_user fu on fu.employee_id = pej.employee_id
+				left join fnd_dept fdt on fd.id = fdt.parent_id and fdt.enabled_flag = 1
+				left join pm_employee pe on fu.employee_id = pe.id and pe.enabled_flag =1
+		where  fdt.id = #{deptId, jdbcType=BIGINT}
+
+        ]]>
+    </select>
+
+
+    <select id="getTeamByDeptNameAndDepartmentNameAndTeamName" resultMap="PmManagerResultMap" parameterType="java.util.Map">
+        <include refid="Leader_Column_Query_Sql"/>
+        <![CDATA[
+
+        AND (pej.job_name LIKE '%班长' or pej.job_name LIKE '%组长' or pej.job_name LIKE '%站长')
+        ]]>
+        <if test="map.deptName != null">
+        <![CDATA[
+        and fdev.ext_dept_name = #{map.deptName, jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <if test="map.departmentName != null">
+        <![CDATA[
+        and   fdev.ext_department_name = #{map.departmentName, jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <if test="map.teamName != null">
+        <![CDATA[
+        and fdev.ext_team_name = #{map.teamName, jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <if test="map.workCard !=  null">
+        <![CDATA[
+        and  pe.work_card = #{map.workCard,jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <![CDATA[
+         order by   fdev.ext_dept_name , pej.job_name desc
+        ]]>
+    </select>
+
+    <select id="getSuperiorByDeptNameAndDepartmentName" resultMap="PmManagerResultMap" parameterType="java.util.Map">
+        <include refid="Leader_Column_Query_Sql"/>
+        <![CDATA[
+
+               and pej.job_name='主管'
+        ]]>
+        <if test="map.deptName != null">
+            <![CDATA[
+        and fdev.ext_dept_name = #{map.deptName, jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <if test="map.departmentName != null">
+            <![CDATA[
+       and   fdev.ext_department_name = #{map.departmentName, jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <if test="map.workCard !=  null">
+            <![CDATA[
+            and  pe.work_card = #{map.workCard,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <![CDATA[
+                 order by   fdev.ext_dept_name , pej.job_name desc
+                                  ]]>
+    </select>
+
+    <select id="getManagerByDeptName" resultMap="PmManagerResultMap" parameterType="java.util.Map">
+        <include refid="Leader_Column_Query_Sql"/>
+        <![CDATA[
+
+
+               and (pej.job_name='经理' or pej.job_name='事业部总经理')
+        ]]>
+        <if test="map.workCard !=  null">
+            <![CDATA[
+          and  pe.work_card = #{map.workCard,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="map.deptName != null">
+            <![CDATA[
+       and fdev.ext_dept_name = #{map.deptName, jdbcType=VARCHAR}
+        ]]>
+        </if>
+        <![CDATA[
+                 order by   fdev.ext_dept_name , pej.job_name desc
+                                  ]]>
+    </select>
+
+    <select id="getLeader" resultMap="PmManagerResultMap">
+        <include refid="Leader_Column_Query_Sql"/>
+        <![CDATA[
+	and
+(
+	fdev.ext_dept_name = '公司领导'
+	OR pej.job_name LIKE '%总监'
+	OR pej.job_name LIKE '%高级经理'
+	OR pe.work_card = '000146'
+	OR pe.work_card = '000256'
+	OR pe.work_card = '000193' )
+ORDER BY
+	pe.work_card ASC
+                                  ]]>
+    </select>
+
+    <select id="getLeaderByDeptId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <![CDATA[
+        select pe.* from fnd_dept fd  left outer join fnd_job fj on fd.admin_job_id = fj.id
+left outer join pm_employee_job pej on pej.job_id = fj.id left outer join pm_employee pe on pej.employee_id = pe.id
+where fd.id = #{deptId, jdbcType = BIGINT} and fd.enabled_flag = 1 and fd.deleted_flag = 0 and fj.enabled_flag = 1 and fj.deleted_flag = 0 and pej.job_main_flag = 1 and pej.enabled_flag = 1 and pe.enabled_flag = 1 and pe.leave_flag = 0
+                ]]>
+    </select>
+
+    <select id="superQuery" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <![CDATA[
+            select pe.id,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.work_card) > 0 then pe.work_card else null end as work_card,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.name) > 0 then pe.name else null end as name,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.name_abbreviation) > 0 then pe.name_abbreviation else null end as name_abbreviation,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.gender) > 0 then pe.gender else null end as gender,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.id_number) > 0 then pe.id_number else null end as id_number,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.calendar) > 0 then pe.calendar else null end as calendar,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.nation) > 0 then pe.nation else null end as nation,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.marital_status) > 0 then pe.marital_status else null end as marital_status,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.household_character) > 0 then pe.household_character else null end as household_character,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.address) > 0 then pe.address else null end as address,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.zipcode) > 0 then pe.zipcode else null end as zipcode,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.household_address) > 0 then pe.household_address else null end as household_address,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.household_zipcode) > 0 then pe.household_zipcode else null end as household_zipcode,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.collective_address) > 0 then pe.collective_address else null end as collective_address,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.native_place) > 0 then pe.native_place else null end as native_place,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.registered_residence) > 0 then pe.registered_residence else null end as registered_residence,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.employee_type) > 0 then pe.employee_type else null end as employee_type,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.occupation_category) > 0 then pe.occupation_category else null end as occupation_category,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.email_inside) > 0 then pe.email_inside else null end as email_inside,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.administration_category) > 0 then pe.administration_category else null end as administration_category,
+            case when CHARINDEX(#{queryValue, jdbcType = VARCHAR}, pe.remarks) > 0 then pe.remarks else null end as remarks
+            from pm_employee pe where pe.enabled_flag = 1 and concat(
+            pe.work_card,pe.name,pe.name_abbreviation,pe.gender,pe.id_number,pe.calendar,pe.nation,pe.marital_status,pe.household_character,
+            pe.address,pe.zipcode,pe.household_address,pe.household_zipcode,pe.collective_address,pe.native_place,pe.registered_residence,
+            pe.employee_type,pe.occupation_category,pe.occupation_type,pe.email_inside,pe.administration_category,pe.remarks
+            )  like '%' + #{queryValue, jdbcType = VARCHAR} + '%'
+        ]]>
+    </select>
+
+    <update id="updatePaidAnnualLeaveEveryDay">
+-- 每日的在职人员带薪年假更新任务
+        <![CDATA[
+            update pe
+            set  paid_annual_leave =
+                case when (pe.ten_year_date is not null and pe.supplement_social_security_date >= dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') and getdate() >= pe.twenty_year_date) and getdate() >= dateadd(yyyy, 1, peen.entry_time)
+                then
+                    -- 入职下一年年末后补满20年证明
+                    case when SUBSTRING(convert(varchar(20), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.twenty_year_date))  then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.twenty_year_date, -20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5),
+                    CHARINDEX('.', convert(varchar(20), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.twenty_year_date)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.twenty_year_date, -20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5)) + 1, 1
+                    )  >= 5
+                    then convert(int, (convert(decimal(10,3), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.twenty_year_date)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.twenty_year_date, -20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 10))) + convert(float, 0.5)
+                    else convert(int, (convert(decimal(10,3), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.twenty_year_date)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.twenty_year_date, -20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 10)))
+                    end
+                    -- 入职下一年年末后补满20年证明结束
+                else
+                    case when (pe.ten_year_date is null and getdate() >= dateadd(yyyy, 20, peen.entry_time)) and getdate() >= dateadd(yyyy, 1, peen.entry_time)
+                    then
+                        -- 没有社保证明，在公司工作满20年
+                        case when SUBSTRING(convert(varchar(20), ((case when year(getdate()) > year(dateadd(yyyy, 20 , peen.entry_time))  then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5),
+                        CHARINDEX('.', convert(varchar(20), ((case when year(getdate()) > year(dateadd(yyyy, 20 , peen.entry_time)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5)) + 1, 1
+                        )  >= 5
+                        then convert(int, (convert(decimal(10,3), ((case when year(getdate()) > year(dateadd(yyyy, 20 , peen.entry_time)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 10))) + convert(float, 0.5)
+                        else convert(int, (convert(decimal(10,3), ((case when year(getdate()) > year(dateadd(yyyy, 20 , peen.entry_time)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 20, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 10)))
+                        end
+                        -- 没有社保证明，在公司工作满20年结束
+                    else
+                        case when (pe.ten_year_date is not null and pe.supplement_social_security_date >= dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') and getdate() >= pe.ten_year_date) and getdate() >= dateadd(yyyy, 1, peen.entry_time)
+                        then
+                            -- 入职下一年年末后补满10年证明
+                            case when SUBSTRING(convert(varchar(20), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.ten_year_date)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.ten_year_date, -10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5),
+                            CHARINDEX('.', convert(varchar(20), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.ten_year_date)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.ten_year_date, -10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5)) + 1, 1
+                            )  >= 5
+                            then convert(int, (convert(decimal(10,3), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.ten_year_date)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.ten_year_date, -10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 5))) + convert(float, 0.5)
+                            else convert(int, (convert(decimal(10,3), ((case when year(getdate()) >= year(dateadd(yyyy, 1 , pe.ten_year_date)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(pe.ten_year_date, -10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 5)))
+                            end
+                            -- 入职下一年年末后补满10年证明结束
+                        else
+                            case when (pe.ten_year_date is null and getdate() >= dateadd(yyyy, 10, peen.entry_time))  and getdate() >= dateadd(yyyy, 1, peen.entry_time)
+                            then
+                                -- 没有社保证明，在公司工作满10年
+                                case when SUBSTRING(convert(varchar(20), ((case when year(getdate()) > year(dateadd(yyyy, 10 , peen.entry_time)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5),
+                                CHARINDEX('.', convert(varchar(20), ((case when year(getdate()) > year(dateadd(yyyy, 10 , peen.entry_time)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5)) + 1, 1
+                                )  >= 5
+                                then convert(int, (convert(decimal(10,3), ((case when year(getdate()) > year(dateadd(yyyy, 10 , peen.entry_time)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 5))) + convert(float, 0.5)
+                                else convert(int, (convert(decimal(10,3), ((case when year(getdate()) > year(dateadd(yyyy, 10 , peen.entry_time)) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 10, #{dayNum, jdbcType = INTEGER}) end)  / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5) + 5)))
+                                end
+                                -- 没有社保证明，在公司工作满10年结束
+                            else
+                                case when pe.supplement_social_security_date < dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') and getdate() >= pe.twenty_year_date and getdate() >= dateadd(yyyy, 1, peen.entry_time)
+                                then
+                                    -- 入职未满入职下年年末就有提20年证明
+                                    case when SUBSTRING(convert(varchar(20), ((case when dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 15),
+                                    CHARINDEX('.', convert(varchar(20), ((case when dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 15)) + 1, 1
+                                    )  >= 5
+                                    then convert(int, (convert(decimal(10,3), ((case when  dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 15)))) + convert(float, 0.5)
+                                    else convert(int, (convert(decimal(10,3), ((case when  dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 15))))
+                                    end
+                                    -- 结束入职未满两年就有提20年证明结束
+                                else
+                                    case when pe.supplement_social_security_date < dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') and getdate() >= pe.ten_year_date and getdate() >= dateadd(yyyy, 1, peen.entry_time)
+                                    then
+                                        -- 入职未满入职下年年末就有提10证明
+                                        case when SUBSTRING(convert(varchar(20), ((case when dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,4),#{dayNum, jdbcType = INTEGER})) * 10),
+                                        CHARINDEX('.', convert(varchar(20), ((case when dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,4),#{dayNum, jdbcType = INTEGER})) * 10)) + 1, 1
+                                        )  >= 5
+                                        then convert(int, (convert(decimal(10,4), ((case when dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,4),#{dayNum, jdbcType = INTEGER}) * 10)))) + convert(float, 0.5)
+                                        else convert(int, (convert(decimal(10,3), ((case when dateadd(dd, -1, convert(varchar(4),dateadd(yyyy, 2, peen.entry_time)) + '-01-01') < getdate()  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end) / convert(decimal(10,4),#{dayNum, jdbcType = INTEGER}) * 10))))
+                                        end
+                                        -- 入职未满入职下年年末就有提10证明结束
+                                    else
+                                        case when (getdate() >= dateadd(yyyy, 1, peen.entry_time ) and pe.ten_year_date is null) or (getdate() < pe.ten_year_date and pe.ten_year_date is not null and getdate() >= dateadd(yyyy, 1, peen.entry_time))
+                                        then
+                                            -- 入司满1年，工龄未满10年
+                                            case when SUBSTRING(convert(varchar(20), ((case when  year(dateadd(yyyy, 1, peen.entry_time)) < year(getdate())  then #{dayNum, jdbcType = INTEGER}  else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end)   / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5),
+                                            CHARINDEX('.', convert(varchar(20), ((case when  year(dateadd(yyyy, 1, peen.entry_time)) < year(getdate()) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end)   / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER})) * 5)) + 1, 1
+                                            )  >= 5
+                                            then convert(int, (convert(decimal(10,3), ((case when  year(dateadd(yyyy, 1, peen.entry_time)) < year(getdate()) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end)   / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5)))) + convert(float, 0.5)
+                                            else convert(int, (convert(decimal(10,3), ((case when  year(dateadd(yyyy, 1, peen.entry_time)) < year(getdate()) then #{dayNum, jdbcType = INTEGER} else dbo.get_remaining_day(peen.entry_time, 1, #{dayNum, jdbcType = INTEGER}) end)   / convert(decimal(10,3),#{dayNum, jdbcType = INTEGER}) * 5))))
+                                            end
+                                            -- 入司满1年，工龄未满10年结束
+                                        else
+                                            -- 其它赋0
+                                            0
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            from pm_employee pe
+			outer apply (
+                   select top(1) peen_ap.* from pm_employee_entry peen_ap
+                   where peen_ap.employee_id = pe.id
+                           AND peen_ap.enabled_flag = 1
+                   ) peen
+             where pe.enabled_flag = 1
+             and pe.leave_flag = 0
+             and pe.employee_type <> '临时员工'
+        ]]>
+        <if test="workCard != null">
+            <![CDATA[
+                and pe.work_card = #{workCard, jdbcType = VARCHAR}
+            ]]>
+        </if>
+    </update>
+
+    <update id="updatePaidAnnualLeaveForWillLeaveEveryDay">
+        <![CDATA[
+            -- 将要离职的在职人员的带薪年假每日更新任务， 此sql必须在updatePaidAnnualLeaveEveryDay执行完毕后执行，不然参考值越来越小，导致年假越来越少
+            update pe
+            set  paid_annual_leave =
+            case when SUBSTRING(convert(varchar(20), ((datediff(dd, convert(varchar(4), year(getdate())) + '-01-01', pla.approve_leave_date) + 1) / convert(decimal(10,3),365)) * pe.paid_annual_leave),
+            CHARINDEX('.', convert(varchar(20), ((datediff(dd, convert(varchar(4), year(getdate())) + '-01-01', pla.approve_leave_date) + 1) / convert(decimal(10,3),365)) * pe.paid_annual_leave)) + 1, 1
+            )  >= 5
+            then convert(int, (convert(decimal(10,3), ((datediff(dd, convert(varchar(4), year(getdate())) + '-01-01', pla.approve_leave_date) + 1) / convert(decimal(10,3),365) * pe.paid_annual_leave)))) + convert(float, 0.5)
+            else convert(int, (convert(decimal(10,3), ((datediff(dd, convert(varchar(4), year(getdate())) + '-01-01', pla.approve_leave_date) + 1) / convert(decimal(10,3),365) * pe.paid_annual_leave)))) end
+            from pm_employee pe join pm_leave_approval pla on pe.id = pla.employee_id and pla.enabled_flag = 1 and pe.enabled_flag = 1 and pe.leave_flag = 0 and  pla.approve_leave_date is not null
+            and year(pla.approve_leave_date) = year(getdate()) and (pla.approval_status = 'inApproval' or pla.approval_status = 'pass') and pe.paid_annual_leave != 0 and
+            pe.paid_annual_leave is not null
+            outer apply (
+            select top(1) peen_ap.* from pm_employee_entry peen_ap
+            where peen_ap.employee_id = pe.id
+                   AND peen_ap.enabled_flag = 1
+            ) peen
+            where 1 = 1
+            and pe.employee_type <> '临时员工'
+        ]]>
+        <if test="workCard != null">
+            <![CDATA[
+                and pe.work_card = #{workCard, jdbcType = VARCHAR}
+            ]]>
+        </if>
+    </update>
+
+    <select id="checkPmEmployeeBeforeUpdate" resultMap="CheckPmEmployeeResultMap">
+        <![CDATA[
+            SELECT
+            CASE
+            WHEN EXISTS (select 1  FROM
+            pm_employee pe
+            WHERE
+            pe.enabled_flag = 1
+            AND pe.id <> #{id, jdbcType = BIGINT} and pe.work_card = #{workCard, jdbcType = VARCHAR} )
+            THEN
+            1 ELSE 0
+            END AS have_same_work_card_flag,
+            CASE
+            WHEN EXISTS (select 1 FROM
+            pm_employee pe
+            WHERE
+            pe.enabled_flag = 1 and pe.leave_flag = 0 and  pe.id_number = #{idNumber, jdbcType = VARCHAR} AND pe.id <> #{id, jdbcType = BIGINT}) THEN
+                1 ELSE 0
+            END AS have_same_id_number_flag
+        ]]>
+    </select>
+
+<!--
+             worked_years = datediff(month, dateadd(yyyy, -10,  #{tenYearDate, jdbcType=DATE}), getdate()) -
+            (case when day(getdate()) < day(dateadd(yyyy, -10,  #{tenYearDate, jdbcType=DATE})) then 1 else 0 end)
+ -->
+    <update id="updateTenYearDate" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+        <![CDATA[
+            update PE set ten_year_date =  #{tenYearDate, jdbcType=DATE},
+            twenty_year_date = #{twentyYearDate, jdbcType=DATE},
+            supplement_social_security_date = getdate()
+             FROM PM_EMPLOYEE PE
+             where
+             PE.leave_flag = 0
+               AND PE.enabled_flag = 1
+                and pe.name = #{name, jdbcType = VARCHAR}
+                and pe.work_card = #{workCard, jdbcType = VARCHAR}
+        ]]>
+    </update>
+    <update id="updateTenYearDateSetNull" parameterType="com.sunten.hrms.pm.domain.PmEmployee">
+                <![CDATA[
+            update PE set ten_year_date = null,
+            twenty_year_date = null,
+            supplement_social_security_date = null
+             FROM PM_EMPLOYEE PE
+             where
+             PE.leave_flag = 0
+               AND PE.enabled_flag = 1
+                and pe.name = #{name, jdbcType = VARCHAR}
+                and pe.work_card = #{workCard, jdbcType = VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getPmEmployeeByWorkCard" resultType="com.sunten.hrms.pm.domain.PmEmployee">
+                <![CDATA[
+            select * from pm_employee where work_card = #{workCard, jdbcType = VARCHAR}
+        ]]>
+    </select>
+
+    <select id="getPmInfoToSSO" resultType="com.sunten.hrms.pm.domain.PmEmployee">
+                <![CDATA[
+            select id,
+             work_card,
+             name,
+             id_number,
+             from pm_employee
+        ]]>
+    </select>
+
+</mapper>

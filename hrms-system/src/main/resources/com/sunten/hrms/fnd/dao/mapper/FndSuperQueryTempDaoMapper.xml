@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndSuperQueryTempDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndSuperQueryTemp">
+        <id column="id" property="id" />
+        <result column="col_name_chn" property="colNameChn" />
+        <result column="col_name" property="colName" />
+        <result column="type" property="type" />
+        <result column="employee_id" property="employeeId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="search_user_id" property="searchUserId"/>
+    </resultMap>
+
+    <resultMap id="FndSuperQueryTempResultMap" type="com.sunten.hrms.fnd.domain.FndSuperQueryTemp" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fsqt.col_name_chn, fsqt.col_name, fsqt.type, fsqt.employee_id, fsqt.id, fsqt.create_time,
+            fsqt.create_by, fsqt.update_time, fsqt.update_by, fsqt.search_user_id
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.col_name_chn as ${tAlias}_col_name_chn, ${tAlias}.col_name as ${tAlias}_col_name,
+            ${tAlias}.type as ${tAlias}_type, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.search_user_id as ${tAlias}_search_user_id
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        , pe.name as name, pe.work_card as work_card
+              from fnd_super_query_temp fsqt join pm_employee pe on  pe.id = fsqt.employee_id and pe.enabled_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.searchUserId != null">
+                <![CDATA[
+                    and fsqt.search_user_id = #{criteria.searchUserId, jdbcType = BIGINT}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndSuperQueryTemp" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_super_query_temp (col_name_chn, col_name, type,
+                                              employee_id, create_time,
+                                              create_by, update_time, update_by, search_user_id)
+            values (#{colNameChn,jdbcType=VARCHAR}, #{colName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+                    #{employeeId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{searchUserId, jdbcType = BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_super_query_temp
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndSuperQueryTemp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndSuperQueryTemp">
+        <![CDATA[
+            update fnd_super_query_temp
+               set col_name_chn = #{colNameChn,jdbcType=VARCHAR},
+                   col_name     = #{colName,jdbcType=VARCHAR},
+                   type         = #{type,jdbcType=VARCHAR},
+                   employee_id  = #{employeeId,jdbcType=BIGINT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT},
+                   search_user_id = #{searchUserId, jdbcType = BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndSuperQueryTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fsqt.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndSuperQueryTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by fsqt.type, fsqt.col_name, pe.work_card
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndSuperQueryTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="insertCollection" parameterType="java.util.List">
+        <![CDATA[
+            insert into fnd_super_query_temp (col_name_chn, col_name, type,
+                                              employee_id, create_time,
+                                              create_by, update_time, update_by, search_user_id) values
+        ]]>
+        <foreach collection="list" item="item" index="index" separator=",">
+            <![CDATA[
+            (#{item.colNameChn,jdbcType=VARCHAR}, #{item.colName,jdbcType=VARCHAR}, #{item.type,jdbcType=VARCHAR},
+                    #{item.employeeId,jdbcType=BIGINT}, getdate(),
+                    -1, getdate(), -1, #{item.searchUserId, jdbcType = BIGINT})
+            ]]>
+        </foreach>
+    </insert>
+
+    <delete id="truncateTemp">
+        <![CDATA[
+            truncate table fnd_super_query_temp
+        ]]>
+    </delete>
+
+    <delete id="deleteTemp" parameterType="java.lang.Long">
+        <![CDATA[
+            delete from  fnd_super_query_temp where search_user_id = #{searchUserId, jdbcType =BIGINT}
+        ]]>
+    </delete>
+
+    <sql id="Select_Unpivot_Sql">
+        <foreach collection="group.tables" item="table" index="index" separator=" union all ">
+            <![CDATA[SELECT unpivot_t.table_name, unpivot_t.source_id, unpivot_t.column_name,
+                            unpivot_t.column_val
+                  FROM (SELECT '${table.tableName}' table_name, ]]>
+            <if test="table.selectArea != null and table.selectArea != ''">
+                <![CDATA[${table.selectArea}, ]]>
+            </if>
+            <foreach collection="table.columns" item="column" index="index" separator=",">
+                <![CDATA[convert(VARCHAR(MAX), ]]>
+                <choose>
+                    <when test="column.tableAbbreviation != null and column.tableAbbreviation != ''">
+                        <![CDATA[${column.tableAbbreviation}.${column.columnName}]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[${column.columnName}]]>
+                    </otherwise>
+                </choose>
+                <if test="column.convertStyle != null and column.convertStyle != ''">
+                    <![CDATA[, ${column.convertStyle}]]>
+                </if>
+                <![CDATA[) ]]>
+                <choose>
+                    <when test="column.alias != null and column.alias != ''">
+                        <![CDATA[AS ${column.alias}]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[AS ${column.columnName}]]>
+                    </otherwise>
+                </choose>
+            </foreach>
+            <![CDATA[ FROM ]]>
+            <choose>
+                <when test="table.tableArea != null and table.tableArea != ''">
+                    <![CDATA[${table.tableArea}]]>
+                </when>
+                <otherwise>
+                    <![CDATA[${table.tableName} ${table.tableAbbreviation}]]>
+                </otherwise>
+            </choose>
+            <![CDATA[
+                    WHERE 1 = 1
+            ]]>
+            <if test="table.whereArea != null and table.whereArea != ''">
+                <![CDATA[ AND ${table.whereArea} ]]>
+            </if>
+            <foreach collection="table.columns" item="column" index="index" open=" AND concat(" separator=","
+                     close=") ">
+                <choose>
+                    <when test="column.tableAbbreviation != null and column.tableAbbreviation != ''">
+                        <![CDATA[${column.tableAbbreviation}.${column.columnName}]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[${column.columnName}]]>
+                    </otherwise>
+                </choose>
+            </foreach>
+            <![CDATA[  LIKE #{criteria.queryValue, jdbcType = VARCHAR} ) a
+                        unpivot(column_val FOR column_name IN ]]>
+            <foreach collection="table.columns" item="column" index="index" open=" (" separator="," close=") ">
+                <choose>
+                    <when test="column.alias != null and column.alias != ''">
+                        <![CDATA[${column.alias}]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[${column.columnName}]]>
+                    </otherwise>
+                </choose>
+            </foreach>
+            <![CDATA[ ) unpivot_t ]]>
+        </foreach>
+    </sql>
+
+    <insert id="insertTempByUnpivot">
+        <![CDATA[
+            insert into fnd_super_query_temp (col_name_chn, col_name, type,
+                                              employee_id, create_time,
+                                              create_by, update_time, update_by, search_user_id)
+                select unpivot_all.column_val as col_name_chn, unpivot_all.column_name as col_name,
+                   unpivot_all.table_name as type, unpivot_all.source_id as employee_id,
+                   getdate() as create_time, -1 as create_by, getdate() as update_time,
+                   -1 as update_by, #{criteria.searchUserId, jdbcType = BIGINT} as search_user_id
+              from (]]>
+        <include refid="Select_Unpivot_Sql"/>
+        <![CDATA[ ) unpivot_all
+            where unpivot_all.column_val LIKE #{criteria.queryValue, jdbcType = VARCHAR}
+        ]]>
+    </insert>
+
+    <insert id="insertTempByCross">
+        <include refid="Select_Cross_Apply_With_Sql"/>
+        <![CDATA[
+            insert into fnd_super_query_temp (col_name_chn, col_name, type,
+                                              employee_id, create_time,
+                                              create_by, update_time, update_by, search_user_id)
+           select tp.column_val as col_name_chn, tp.column_description as col_name,
+                   tp.table_description as type, tp.source_id as employee_id,
+                   getdate() as create_time, -1 as create_by, getdate() as update_time,
+                   -1 as update_by, #{criteria.searchUserId, jdbcType = BIGINT} as search_user_id
+            from (
+        ]]>
+        <include refid="Select_Cross_Apply_Sql"/>
+        <![CDATA[ ) tp
+        WHERE tp.column_val IS NOT NULL AND tp.column_val LIKE #{criteria.queryValue, jdbcType = VARCHAR}
+        ]]>
+    </insert>
+
+    <sql id="Select_Cross_Apply_With_Sql">
+        <foreach collection="group.tables" item="table" index="index" open="WITH " separator=",">
+            <![CDATA[ ${table.tableAbbreviation}_tmp_${table.id} AS (SELECT '${table.tableName}' table_name, '${table.tableDescription}' table_description,]]>
+            <if test="table.selectArea != null and table.selectArea != ''">
+                <![CDATA[${table.selectArea}, ]]>
+            </if>
+            <foreach collection="table.columns" item="column" index="index" separator=",">
+                <![CDATA[convert(VARCHAR, ]]>
+                <choose>
+                    <when test="column.tableAbbreviation != null and column.tableAbbreviation != ''">
+                        <![CDATA[${column.tableAbbreviation}.${column.columnName}]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[${column.columnName}]]>
+                    </otherwise>
+                </choose>
+                <if test="column.convertStyle != null and column.convertStyle != ''">
+                    <![CDATA[, ${column.convertStyle}]]>
+                </if>
+                <![CDATA[) ]]>
+                <choose>
+                    <when test="column.alias != null and column.alias != ''">
+                        <![CDATA[AS ${column.alias}]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[AS ${column.columnName}]]>
+                    </otherwise>
+                </choose>
+            </foreach>
+            <![CDATA[ FROM ]]>
+            <choose>
+                <when test="table.tableArea != null and table.tableArea != ''">
+                    <![CDATA[${table.tableArea}]]>
+                </when>
+                <otherwise>
+                    <![CDATA[${table.tableName} ${table.tableAbbreviation}]]>
+                </otherwise>
+            </choose>
+            <![CDATA[
+                    WHERE 1 = 1
+            ]]>
+            <if test="table.whereArea != null and table.whereArea != ''">
+                <![CDATA[ AND ${table.whereArea} ]]>
+            </if>
+            <foreach collection="table.columns" item="column" index="index" open=" AND concat(" separator=","
+                     close=") ">
+                <choose>
+                    <when test="column.tableAbbreviation != null and column.tableAbbreviation != ''">
+                        <![CDATA[${column.tableAbbreviation}.${column.columnName}]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[${column.columnName}]]>
+                    </otherwise>
+                </choose>
+            </foreach>
+            <![CDATA[  LIKE #{criteria.queryValue, jdbcType = VARCHAR} )]]>
+        </foreach>
+    </sql>
+    <sql id="Select_Cross_Apply_Sql">
+        <foreach collection="group.tables" item="table" index="index" separator=" UNION ALL ">
+            <![CDATA[
+          SELECT data_tmp.table_name, data_tmp.table_description, data_tmp.source_id,
+                 cross_tmp.column_name, cross_tmp.column_id, cross_tmp.column_val,
+                 cross_tmp.column_description
+            FROM ${table.tableAbbreviation}_tmp_${table.id} AS data_tmp
+           CROSS apply (VALUES]]>
+            <foreach collection="table.columns" item="column" index="index" separator=",">
+                <choose>
+                    <when test="column.alias != null and column.alias != ''">
+                        <![CDATA[('${column.alias}', data_tmp.${column.alias},]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[('${column.columnName}', data_tmp.${column.columnName},]]>
+                    </otherwise>
+                </choose>
+                <![CDATA[ ${column.id}, '${column.columnDescription}')]]>
+            </foreach>
+            <![CDATA[) AS cross_tmp (column_name, column_val, column_id, column_description)]]>
+        </foreach>
+    </sql>
+
+</mapper>

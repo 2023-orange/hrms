@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmQuarterlyAssessmentDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmQuarterlyAssessment">
+        <id column="id" property="id" />
+        <result column="assessment_quarter" property="assessmentQuarter" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="assessment_level" property="assessmentLevel" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="se_id" property="seId"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="submission_identification_flag" property="submissionIdentificationFlag"/>
+        <result column="submitter" property="submitter"/>
+        <result column="submit_time" property="submitTime"/>
+        <result column="assessment_num" property="assessmentNum"/>
+    </resultMap>
+
+    <resultMap id="SwmQuarterlyAssessmentResultMap" type="com.sunten.hrms.swm.domain.SwmQuarterlyAssessment" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <parameterMap id="mspMap" type="java.util.Map">
+        <parameter property="period" mode="IN" jdbcType="VARCHAR"/>
+        <parameter property="userId" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="resultStr" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sqa.id, sqa.assessment_quarter, sqa.work_card, sqa.name, sqa.assessment_level, sqa.create_time,
+            sqa.create_by, sqa.update_time, sqa.update_by, sqa.se_id, sqa.enabled_flag,
+            sqa.submission_identification_flag, sqa.submitter, sqa.submit_time,sqa.assessment_num
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.assessment_quarter as ${tAlias}_assessment_quarter,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.name as ${tAlias}_name,
+            ${tAlias}.assessment_level as ${tAlias}_assessment_level,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+              ${tAlias}.se_id as ${tAlias}_se_id, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+              ${tAlias}.submission_identification_flag as ${tAlias}_submission_identification_flag,
+              ${tAlias}.submitter as ${tAlias}_submitter,
+              ${tAlias}.submit_time as ${tAlias}_submit_time,
+               ${tAlias}.assessment_num as ${tAlias}_assessment_num
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select isnull((select pe.name  from  pm_employee pe join fnd_user fu on fu.id = sqa.update_by and fu.employee_id = pe.id  ), '') as update_by_str,
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        ,se.department as department, se.administrative_office as administrative_office
+              from swm_quarterly_assessment sqa, swm_employee se
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and sqa.enabled_flag = 1 and  se.id = sqa.se_id
+             and se.employee_category = '05' and se.accessment_form = 'quarter'
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.period != null">
+                <![CDATA[
+                    and sqa.assessment_quarter =  #{criteria.period,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessment" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_quarterly_assessment (assessment_quarter, work_card,
+                                                  name, assessment_level,
+                                                  create_time, create_by,
+                                                  update_time, update_by, se_id, enabled_flag,
+                                                   submission_identification_flag, submitter, submit_time,
+                                                   assessment_num
+                                                  )
+            values (#{assessmentQuarter,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR},
+                    #{name,jdbcType=VARCHAR}, #{assessmentLevel,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{seId, jdbcType=BIGINT},#{enabledFlag, jdbcType = BIT},
+                    #{submissionIdentificationFlag, jdbcType = BIT},
+                    #{submitter, jdbcType = VARCHAR},
+                    #{submitTime, jdbcType = TIMESTAMP},
+                    #{assessmentNum, jdbcType = DECIMAL}
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_quarterly_assessment
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteQuarterByPeriod" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessment">
+        <![CDATA[
+            update  swm_quarterly_assessment set enabled_flag = 0,
+                  update_time  = getdate(),
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+            where assessment_quarter = #{assessmentQuarter, jdbcType = VARCHAR} and enabled_flag = 1
+        ]]>
+    </delete>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessment">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessment">
+        <![CDATA[
+            update swm_quarterly_assessment
+               set assessment_quarter = #{assessmentQuarter,jdbcType=VARCHAR},
+                   work_card          = #{workCard,jdbcType=VARCHAR},
+                   name               = #{name,jdbcType=VARCHAR},
+                   assessment_level   = #{assessmentLevel,jdbcType=VARCHAR},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT},
+                   se_id              = #{seId, jdbcType=BIGINT},
+                   enabled_flag       = #{enabledFlag, jdbcType=BIT},
+                    submission_identification_flag = #{submissionIdentificationFlag, jdbcType = BIT},
+                    submitter = #{submitter, jdbcType = VARCHAR},
+                    submit_time = #{submitTime, jdbcType = TIMESTAMP},
+                    assessment_num = #{assessmentNum, jdbcType = DECIMAL}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateQuarterAssessmentLevel" parameterType="com.sunten.hrms.swm.domain.SwmQuarterlyAssessment">
+        <![CDATA[
+        update swm_quarterly_assessment
+            set
+                submission_identification_flag = 1,
+                submitter = #{submitter, jdbcType = VARCHAR},
+                submit_time = #{submitTime, jdbcType = TIMESTAMP},
+                assessment_num = #{assessmentNum, jdbcType = DECIMAL}
+        where id = #{id,jdbcType=BIGINT}
+        and  enabled_flag  =  1
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmQuarterlyAssessmentResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where se.id = sqa.se_id
+             and sqa.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmQuarterlyAssessmentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmQuarterlyAssessmentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getTopQuarterPeriod" resultType="java.lang.String">
+        <![CDATA[
+            select top 1 sqa.assessment_quarter  from swm_quarterly_assessment sqa  where (left(sqa.assessment_quarter, 4) + RIGHT(sqa.assessment_quarter, 2))
+            = (select max((left(sqat.assessment_quarter, 4) + RIGHT(sqat.assessment_quarter, 2))) from swm_quarterly_assessment sqat where sqat.enabled_flag = 1 )
+            and sqa.enabled_flag = 1
+        ]]>
+    </select>
+
+    <select id="createQuarterlyAssessment" parameterMap="mspMap" statementType="CALLABLE">
+         <![CDATA[
+            {call msp_create_quarterly_assessment(?,?,?)}
+        ]]>
+    </select>
+
+    <select id="countByQuarter" parameterType="java.lang.String" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from swm_quarterly_assessment sqa where sqa.enabled_flag = 1  and
+            sqa.assessment_quarter = #{quarter, jdbcType = VARCHAR}
+        ]]>
+    </select>
+
+    <update id="interfaceToMain" parameterType="java.lang.Long">
+        <![CDATA[
+            update sqa set
+             update_time        = sqai.create_time,
+                   update_by          = sqai.update_by,
+                    submission_identification_flag = 1,
+                    submitter = (select top 1 pe.name from pm_employee pe join fnd_user fu on pe.id = fu.employee_id where pe.enabled_flag = 1 and fu.enabled_flag = 1
+                     and fu.id = sqai.update_by),
+                    submit_time = sqai.update_time,
+                    assessment_num = sqai.assessment_num
+                    from swm_quarterly_assessment sqa join swm_quarterly_assessment_interface sqai on
+                    sqa.se_id = sqai.se_id and sqa.enabled_flag = 1 and sqa.assessment_quarter = sqai.assessment_quarter
+                    and sqai.group_id = #{groupId, jdbcType = BIGINT}
+                   AND sqai.se_id != - 1
+                AND sqai.data_status = 'T'
+
+        ]]>
+    </update>
+
+
+
+</mapper>

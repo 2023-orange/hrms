@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.tool.dao.ToolEmailInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.tool.domain.ToolEmailInterface">
+        <id column="id" property="id" />
+        <result column="send_to" property="sendTo" />
+        <result column="mail_subject" property="mailSubject" />
+        <result column="planned_date" property="plannedDate" />
+        <result column="send_date" property="sendDate" />
+        <result column="status" property="status" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="server_id" property="serverId" />
+        <result column="mail_content" property="mailContent" />
+        <result column="error_message" property="errorMessage" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="ToolEmailInterfaceResultMap" type="com.sunten.hrms.tool.domain.ToolEmailInterface" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="emailServer"
+                     javaType="com.sunten.hrms.tool.domain.ToolEmailServer"
+                     resultMap="com.sunten.hrms.tool.dao.ToolEmailServerDao.ToolEmailServerResultMap"
+                     columnPrefix="tes_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tei.send_to, tei.mail_subject, tei.planned_date, tei.send_date, tei.status, tei.attribute1,
+            tei.attribute2, tei.attribute3, tei.attribute4, tei.attribute5, tei.server_id as tes_id, tei.mail_content,
+            tei.error_message, tei.id, tei.update_by, tei.create_time, tei.create_by, tei.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.send_to as ${tAlias}_send_to, ${tAlias}.mail_subject as ${tAlias}_mail_subject,
+            ${tAlias}.planned_date as ${tAlias}_planned_date, ${tAlias}.send_date as ${tAlias}_send_date,
+            ${tAlias}.status as ${tAlias}_status, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.server_id as ${tAlias}_tes_id, ${tAlias}.mail_content as ${tAlias}_mail_content,
+            ${tAlias}.error_message as ${tAlias}_error_message, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from tool_email_interface tei
+        ]]>
+    </sql>
+
+
+    <sql id="With_Out_Join_Query_Sql">
+        <![CDATA[
+		    select
+		]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'tes'"/>
+        <include refid="com.sunten.hrms.tool.dao.ToolEmailServerDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from tool_email_interface tei
+			  left outer join tool_email_server tes
+			    on tei.server_id = tes.id
+		]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="With_Out_Join_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.id != null">
+                <![CDATA[
+               and tei.id = #{criteria.id,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.blurry != null">
+                <![CDATA[
+               and (tei.mail_subject like #{criteria.blurry,jdbcType=VARCHAR}
+                    or tei.mail_content like #{criteria.blurry,jdbcType=VARCHAR}
+                   )
+                ]]>
+            </if>
+            <if test="criteria.status != null">
+                <![CDATA[
+               and tei.status = #{criteria.status,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.sendTo != null">
+                <![CDATA[
+               and tei.send_to like #{criteria.sendTo,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and tei.send_date >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and tei.send_date <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.planStartTime != null">
+                <![CDATA[
+               and tei.planned_date >= #{criteria.planStartTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.planEndTime != null">
+                <![CDATA[
+               and tei.planned_date <= #{criteria.planEndTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.tool.domain.ToolEmailInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into tool_email_interface (send_to, mail_subject,
+                                              planned_date, send_date,
+                                              status, attribute1, attribute2,
+                                              attribute3, attribute4,
+                                              attribute5, server_id,
+                                              mail_content, error_message,
+                                              update_by, create_time, create_by,
+                                              update_time)
+            values (#{sendTo,jdbcType=VARCHAR}, #{mailSubject,jdbcType=VARCHAR},
+                    #{plannedDate,jdbcType=TIMESTAMP}, #{sendDate,jdbcType=TIMESTAMP},
+                    #{status,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{emailServer.id,jdbcType=BIGINT},
+                    #{mailContent,jdbcType=VARCHAR}, #{errorMessage,jdbcType=VARCHAR},
+                    #{updateBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from tool_email_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.tool.domain.ToolEmailInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.tool.domain.ToolEmailInterface">
+        <![CDATA[
+            update tool_email_interface
+               set send_to       = #{sendTo,jdbcType=VARCHAR},
+                   mail_subject  = #{mailSubject,jdbcType=VARCHAR},
+                   planned_date  = #{plannedDate,jdbcType=TIMESTAMP},
+                   send_date     = #{sendDate,jdbcType=TIMESTAMP},
+                   status        = #{status,jdbcType=VARCHAR},
+                   attribute1    = #{attribute1,jdbcType=VARCHAR},
+                   attribute2    = #{attribute2,jdbcType=VARCHAR},
+                   attribute3    = #{attribute3,jdbcType=VARCHAR},
+                   attribute4    = #{attribute4,jdbcType=VARCHAR},
+                   attribute5    = #{attribute5,jdbcType=VARCHAR},
+                   server_id     = #{emailServer.id,jdbcType=BIGINT},
+                   mail_content  = #{mailContent,jdbcType=VARCHAR},
+                   error_message = #{errorMessage,jdbcType=VARCHAR},
+                   update_by     = #{updateBy,jdbcType=BIGINT},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateStatus" parameterType="com.sunten.hrms.tool.domain.ToolEmailInterface">
+        <![CDATA[
+            update tool_email_interface
+               set send_to       = #{sendTo,jdbcType=VARCHAR},
+                   mail_subject  = #{mailSubject,jdbcType=VARCHAR},
+                   planned_date  = #{plannedDate,jdbcType=TIMESTAMP},
+                   send_date     = #{sendDate,jdbcType=TIMESTAMP},
+                   status        = #{status,jdbcType=VARCHAR},
+                   attribute1    = #{attribute1,jdbcType=VARCHAR},
+                   attribute2    = #{attribute2,jdbcType=VARCHAR},
+                   attribute3    = #{attribute3,jdbcType=VARCHAR},
+                   attribute4    = #{attribute4,jdbcType=VARCHAR},
+                   attribute5    = #{attribute5,jdbcType=VARCHAR},
+                   server_id     = #{emailServer.id,jdbcType=BIGINT},
+                   mail_content  = #{mailContent,jdbcType=VARCHAR},
+                   error_message = #{errorMessage,jdbcType=VARCHAR},
+                   update_by     = #{updateBy,jdbcType=BIGINT},
+                   update_time   = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+               and status = #{oldStatus,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ToolEmailInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tei.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ToolEmailInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ToolEmailInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

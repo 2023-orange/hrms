@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcAbnormalClockRecordDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcAbnormalClockRecord">
+        <id column="id" property="id" />
+        <result column="date" property="date" />
+        <result column="ac_attendance_record_history_id" property="acAttendanceRecordHistoryId" />
+        <result column="clock_time" property="clockTime" />
+        <result column="dispose_by" property="disposeBy" />
+        <result column="dispose_time" property="disposeTime" />
+        <result column="dispose_flag" property="disposeFlag" />
+        <result column="check_flag" property="checkFlag" />
+        <result column="dispose_result" property="disposeResult" />
+        <result column="dispose_describes" property="disposeDescribes" />
+        <result column="check_result" property="checkResult" />
+        <result column="check_describes" property="checkDescribes" />
+        <result column="admin_result" property="adminResult" />
+        <result column="admin_describes" property="adminDescribes" />
+        <result column="req_code" property="reqCode" />
+        <result column="state" property="state" />
+        <result column="oa_remark" property="oaRemark" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="code_status" property="codeStatus"/>
+        <result column="leader_result" property="leaderResult"/>
+        <result column="commit_flag" property="commitFlag"/>
+        <result column="self_dispose_time" property="selfDisposeTime"/>
+        <result column="leader_dispose_by" property="leaderDisposeBy"/>
+        <result column="leader_dispose_time" property="leaderDisposeTime"/>
+        <result column="ac_admin_dispose_time" property="acAdminDisposeTime"/>
+    </resultMap>
+
+    <resultMap id="AcAbnormalClockRecordResultMap" type="com.sunten.hrms.ac.domain.AcAbnormalClockRecord" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aacr.date, aacr.ac_attendance_record_history_id, aacr.clock_time, aacr.card_machine_no,
+            aacr.attribute1, aacr.attribute2, aacr.attribute3, aacr.attribute4, aacr.attribute5, aacr.id,
+            aacr.update_time, aacr.update_by, aacr.create_time, aacr.create_by,aacr.dispose_by,aacr.dispose_time,
+            aacr.dispose_flag,aacr.check_flag,aacr.dispose_result,aacr.dispose_describes,aacr.req_code,aacr.state,
+            aacr.check_result,aacr.check_describes,aacr.admin_result,aacr.admin_describes,aacr.oa_remark,
+            aacr.code_status, aacr.leader_result, aacr.commit_flag, aacr.self_dispose_time, aacr.leader_dispose_by
+            , aacr.leader_dispose_time, aacr.ac_admin_dispose_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.date as ${tAlias}_date,
+            ${tAlias}.ac_attendance_record_history_id as ${tAlias}_ac_attendance_record_history_id,
+            ${tAlias}.clock_time as ${tAlias}_clock_time,
+            ${tAlias}.card_machine_no as ${tAlias}_card_machine_no,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.dispose_by as ${tAlias}_dispose_by,${tAlias}.dispose_time as ${tAlias}_dispose_time,
+            ${tAlias}.dispose_flag as ${tAlias}_dispose_flag,${tAlias}.check_flag as ${tAlias}_check_flag,
+            ${tAlias}.dispose_result as ${tAlias}_dispose_result,${tAlias}.dispose_describes as ${tAlias}_dispose_describes,
+            ${tAlias}.req_code as ${tAlias}_req_code,${tAlias}.state as ${tAlias}_state,
+            ${tAlias}.check_result as ${tAlias}_check_result,${tAlias}.check_describes as ${tAlias}_check_describes,
+            ${tAlias}.admin_result as ${tAlias}_admin_result,${tAlias}.admin_describes as ${tAlias}_admin_describes,
+            ${tAlias}.oa_remark as ${tAlias}_oa_remark,
+            ${tAlias}.code_status as ${tAlias}_code_status,
+            ${tAlias}.leader_result as ${tAlias}_leader_result,
+            ${tAlias}.commit_flag as ${tAlias}_commit_flag,
+            ${tAlias}.self_dispose_time as ${tAlias}_self_dispose_time,
+            ${tAlias}.leader_dispose_by as ${tAlias}_leader_dispose_by,
+            ${tAlias}.leader_dispose_time as ${tAlias}_leader_dispose_time,
+            ${tAlias}.ac_admin_dispose_time as ${tAlias}_ac_admin_dispose_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_abnormal_clock_record aacr
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.historyId != null">
+                <![CDATA[
+                    and aacr.ac_attendance_record_history_id = #{criteria.historyId,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcAbnormalClockRecord" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_abnormal_clock_record (date, ac_attendance_record_history_id,
+                                                  clock_time, card_machine_no,
+                                                  attribute1, attribute2,
+                                                  attribute3, attribute4,
+                                                  attribute5, update_time,
+                                                  update_by, create_time, create_by,
+                                                  dispose_by,dispose_time,dispose_flag,check_flag,
+                                                  dispose_result,dispose_describes,
+                                                  req_code,state,check_result,check_describes,
+                                                  admin_result,admin_describes,oa_remark, code_status, leader_result,
+                                                  commit_flag)
+            values (#{date,jdbcType=DATE}, #{acAttendanceRecordHistoryId,jdbcType=BIGINT},
+                    #{clockTime,jdbcType=TIME}, #{cardMachineNo,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+                    #{updateBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{disposeBy,jdbcType=BIGINT},#{disposeTime,jdbcType=TIMESTAMP},#{disposeFlag,jdbcType=BIGINT},
+                    #{checkFlag,jdbcType=BIGINT},#{disposeResult,jdbcType=VARCHAR},#{disposeDescribes,jdbcType=VARCHAR},
+                    #{reqCode,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},
+                    #{checkResult,jdbcType=VARCHAR},#{checkDescribes,jdbcType=VARCHAR},
+                    #{adminResult,jdbcType=VARCHAR},#{adminDescribes,jdbcType=VARCHAR},#{oaRemark,jdbcType=VARCHAR},
+                    #{codeStatus, jdbcType=VARCHAR}, #{leaderResult, jdbcType = VARCHAR},
+                    #{commitFlag, jdbcType = BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_abnormal_clock_record
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcAbnormalClockRecord">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcAbnormalClockRecord">
+        <![CDATA[
+            update ac_abnormal_clock_record
+               set date                            = #{date,jdbcType=DATE},
+                   ac_attendance_record_history_id = #{acAttendanceRecordHistoryId,jdbcType=BIGINT},
+                   clock_time                      = #{clockTime,jdbcType=TIME},
+                   card_machine_no                 = #{cardMachineNo,jdbcType=VARCHAR},
+                   attribute1                      = #{attribute1,jdbcType=VARCHAR},
+                   attribute2                      = #{attribute2,jdbcType=VARCHAR},
+                   attribute3                      = #{attribute3,jdbcType=VARCHAR},
+                   attribute4                      = #{attribute4,jdbcType=VARCHAR},
+                   attribute5                      = #{attribute5,jdbcType=VARCHAR},
+                   update_time                     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                       = #{updateBy,jdbcType=BIGINT},
+                   dispose_by = #{disposeBy,jdbcType=BIGINT},
+                   dispose_time = #{disposeTime,jdbcType=TIMESTAMP},
+                   dispose_flag = #{disposeFlag,jdbcType=BIGINT},
+                   check_flag = #{checkFlag,jdbcType=BIGINT},
+                   dispose_result = #{disposeResult,jdbcType=VARCHAR},
+                   dispose_describes = #{disposeDescribes,jdbcType=VARCHAR},
+                   check_result = #{checkResult,jdbcType=VARCHAR},
+                   check_describes = #{checkDescribes,jdbcType=VARCHAR},
+                   admin_result = #{adminResult,jdbcType=VARCHAR},
+                   admin_describes = #{adminDescribes,jdbcType=VARCHAR},
+                   req_code = #{reqCode,jdbcType=VARCHAR},
+                   state = #{state,jdbcType=VARCHAR},
+                   oa_remark = #{oaRemark,jdbcType=VARCHAR},
+                   code_status = #{codeStatus, jdbcType=VARCHAR},
+                   leader_result = #{leaderResult, jdbcType = VARCHAR},
+                   commit_flag = #{commitFlag, jdbcType = BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcAbnormalClockRecordResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aacr.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcAbnormalClockRecordResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcAbnormalClockRecordResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateDisposeColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcAbnormalClockRecord">
+        <![CDATA[
+        update ac_abnormal_clock_record
+        set
+        ]]>
+        <if test="disposeBy != null">
+        <![CDATA[   dispose_by              = #{disposeBy,jdbcType=BIGINT},   ]]>
+        </if>
+        <if test="disposeTime != null">
+            <![CDATA[   dispose_time            = #{disposeTime,jdbcType=TIMESTAMP}, ]]>
+        </if>
+        <if test="disposeFlag != null">
+            <![CDATA[   dispose_flag            = #{disposeFlag,jdbcType=BIGINT}, ]]>
+        </if>
+        <if test="checkFlag != null">
+            <![CDATA[   check_flag              = #{checkFlag,jdbcType=BIGINT}, ]]>
+        </if>
+        <if test="disposeResult != null">
+            <![CDATA[   dispose_result          = #{disposeResult,jdbcType=VARCHAR}, ]]>
+        </if>
+        <if test="disposeDescribes != null">
+            <![CDATA[  dispose_describes       = #{disposeDescribes,jdbcType=VARCHAR}, ]]>
+        </if>
+        <if test="checkResult != null">
+            <![CDATA[   check_result            = #{checkResult,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="checkDescribes != null">
+            <![CDATA[   check_describes         = #{checkDescribes,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="adminResult != null">
+            <![CDATA[   admin_result            = #{adminResult,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="adminDescribes != null">
+            <![CDATA[   admin_describes         = #{adminDescribes,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="reqCode != null">
+            <if test="reqCode == ''">
+                <![CDATA[   req_code               = null,]]>
+            </if>
+            <if test="reqCode != ''">
+                <![CDATA[   req_code                = #{reqCode,jdbcType=VARCHAR},]]>
+            </if>
+        </if>
+        <if test="state != null">
+            <![CDATA[      state                   = #{state,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="oaRemark != null">
+            <![CDATA[   oa_remark               = #{oaRemark,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="updateTime != null">
+            <![CDATA[    update_time             = #{updateTime,jdbcType=TIMESTAMP},]]>
+        </if>
+        <if test="updateBy != null">
+            <![CDATA[    update_by               = #{updateBy,jdbcType=BIGINT},]]>
+        </if>
+        <if test="codeStatus != null">
+            <![CDATA[        code_status = #{codeStatus, jdbcType=VARCHAR},]]>
+        </if>
+        <if test="leaderResult != null">
+            <![CDATA[      leader_result = #{leaderResult, jdbcType = VARCHAR},]]>
+        </if>
+        <if test="commitFlag != null">
+            <![CDATA[       commit_flag = #{commitFlag, jdbcType = BIT},]]>
+        </if>
+        <if test="selfDisposeTime != null">
+            <![CDATA[    self_dispose_time             = #{selfDisposeTime,jdbcType=TIMESTAMP},]]>
+        </if>
+        <if test="leaderDisposeBy != null">
+            <![CDATA[    leader_dispose_by               = #{leaderDisposeBy,jdbcType=BIGINT},]]>
+        </if>
+        <if test="leaderDisposeTime != null">
+            <![CDATA[    leader_dispose_time             = #{leaderDisposeTime,jdbcType=TIMESTAMP},]]>
+        </if>
+        <if test="acAdminDisposeTime != null">
+            <![CDATA[    ac_admin_dispose_time             = #{acAdminDisposeTime,jdbcType=TIMESTAMP},]]>
+        </if>
+        <![CDATA[
+       attribute5 = ''
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+</mapper>

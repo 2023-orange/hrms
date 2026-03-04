@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeRehireDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeRehire">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="job_id" property="jobId" />
+        <result column="job_name" property="jobName" />
+        <result column="dept_id" property="deptId" />
+        <result column="dept_name" property="deptName" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="remarks" property="remarks" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeRehireResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeRehire" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+        <association property="dept"
+                     javaType="com.sunten.hrms.fnd.domain.FndDept"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                     columnPrefix="fd_"/>
+        <association property="job"
+                     javaType="com.sunten.hrms.fnd.domain.FndJob"
+                     resultMap="com.sunten.hrms.fnd.dao.FndJobDao.FndJobResultMap"
+                     columnPrefix="fj_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            per.employee_id as pe_id, per.job_id as fj_id, per.job_name as fj_job_name,
+            per.dept_id as fd_id, per.dept_name as fd_dept_name, per.start_time,
+            per.end_time, per.remarks, per.attribute1, per.attribute2, per.attribute3, per.enabled_flag,
+            per.id, per.create_time, per.create_by, per.update_time, per.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.job_id as ${tAlias}_fj_id,
+            ${tAlias}.job_name as ${tAlias}_fj_job_name, ${tAlias}.dept_id as ${tAlias}_fd_id,
+            ${tAlias}.dept_name as ${tAlias}_fd_dept_name, ${tAlias}.start_time as ${tAlias}_start_time,
+            ${tAlias}.end_time as ${tAlias}_end_time, ${tAlias}.remarks as ${tAlias}_remarks,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_rehire per
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+               and per.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and per.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeRehire" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_rehire (employee_id, job_id, job_name,
+                                            dept_id, dept_name, start_time,
+                                            end_time, remarks, attribute1,
+                                            attribute2, attribute3, enabled_flag,
+                                            create_time, create_by,
+                                            update_time, update_by)
+            values (#{employee.id,jdbcType=BIGINT}, #{job.id,jdbcType=BIGINT}, #{job.jobName,jdbcType=VARCHAR},
+                    #{dept.id,jdbcType=BIGINT}, #{dept.deptName,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE},
+                    #{endTime,jdbcType=DATE}, #{remarks,jdbcType=VARCHAR}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_rehire
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeRehire">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeRehire">
+        <![CDATA[
+            update pm_employee_rehire
+               set employee_id  = #{employee.id,jdbcType=BIGINT},
+                   job_id       = #{job.id,jdbcType=BIGINT},
+                   job_name     = #{job.jobName,jdbcType=VARCHAR},
+                   dept_id      = #{dept.id,jdbcType=BIGINT},
+                   dept_name    = #{dept.deptName,jdbcType=VARCHAR},
+                   start_time   = #{startTime,jdbcType=DATE},
+                   end_time     = #{endTime,jdbcType=DATE},
+                   remarks      = #{remarks,jdbcType=VARCHAR},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeRehireResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where per.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeRehireResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeRehireResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

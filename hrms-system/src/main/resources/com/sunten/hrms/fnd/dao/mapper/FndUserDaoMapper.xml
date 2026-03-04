@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndUserDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndUser">
+        <id column="id" property="id"/>
+        <result column="avatar_id" property="avatarId"/>
+        <result column="username" property="username"/>
+        <result column="description" property="description"/>
+        <result column="salt" property="salt"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="last_password_reset_time" property="lastPasswordResetTime"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+    </resultMap>
+
+    <resultMap id="FndUserResultMap" type="com.sunten.hrms.fnd.domain.FndUser" autoMapping="true">
+        <id column="id" property="id"/>
+        <association property="userAvatar"
+                     javaType="com.sunten.hrms.fnd.domain.FndUserAvatar"
+                     resultMap="com.sunten.hrms.fnd.dao.FndUserAvatarDao.FndUserAvatarResultMap"
+                     columnPrefix="fua_"/>
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_"/>
+        <association property="dept"
+                     javaType="com.sunten.hrms.fnd.domain.FndDept"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                     columnPrefix="fd_" />
+        <association property="job"
+                     javaType="com.sunten.hrms.fnd.domain.FndJob"
+                     resultMap="com.sunten.hrms.fnd.dao.FndJobDao.FndJobResultMap"
+                     columnPrefix="fj_" />
+    </resultMap>
+
+    <resultMap id="DeptChargeEmailResultMap" type="com.sunten.hrms.fnd.vo.DeptChargeEmail" autoMapping="true"/>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fu.id, fu.avatar_id as fua_id, fu.username, fu.description, fu.salt, fu.email,
+            fu.password, fu.phone, fu.last_password_reset_time,  fu.enabled_flag,
+            fu.employee_id as pe_id, fu.create_time, fu.create_by,
+            fu.update_time, fu.update_by, fu.attribute1, fu.attribute2,
+            fu.attribute3, fu.attribute4, fu.attribute5
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.avatar_id as ${tAlias}_fua_id,
+            ${tAlias}.username as ${tAlias}_username, ${tAlias}.description as ${tAlias}_description,
+            ${tAlias}.salt as ${tAlias}_salt, ${tAlias}.email as ${tAlias}_email, ${tAlias}.password as ${tAlias}_password,
+            ${tAlias}.phone as ${tAlias}_phone, ${tAlias}.last_password_reset_time as ${tAlias}_last_password_reset_time,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.employee_id as ${tAlias}_pe_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_user fu
+        ]]>
+    </sql>
+
+    <sql id="With_Out_Join_Query_Sql">
+        <![CDATA[
+		    select
+		]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'fua'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndUserAvatarDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+                   , pe.id as pe_id, pe.work_card as pe_work_card,
+                   pe.name as pe_name, pe.id_number as pe_id_number,
+                   pej.dept_id as fd_id, pej.dept_name as fd_dept_name,
+                   pej.job_id as fj_id, pej.job_name as fj_job_name,
+                   fdev.ext_dept_name AS fd_ext_dept_name,
+                   fdev.ext_department_name AS fd_ext_department_name,
+                   fdev.ext_team_name AS fd_ext_team_name
+			  from fnd_user fu
+			  left outer join fnd_user_avatar fua
+			    on fu.avatar_id = fua.id
+			  left outer join pm_employee pe
+			    on pe.id = fu.employee_id
+			   and pe.enabled_flag = 1
+			  left outer join pm_employee_job pej
+                on pej.employee_id = fu.employee_id
+               and pej.job_main_flag = 1
+               and pej.enabled_flag = 1
+            left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+
+		]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="With_Out_Join_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.id != null">
+                <![CDATA[
+               and fu.id = #{criteria.id,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                and exists  (
+                    select 1 from pm_employee_job pej where pej.enabled_flag = 1 and pej.employee_id = fu.employee_id
+                    and pej.job_main_flag = 1 and pej.dept_id in
+                         ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open="("
+                         separator=","
+                         close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                    <![CDATA[
+                    )
+                    ]]>
+            </if>
+            <if test="criteria.blurry != null">
+                <![CDATA[
+               and (fu.username like #{criteria.blurry,jdbcType=VARCHAR}
+                    or fu.email like #{criteria.blurry,jdbcType=VARCHAR}
+                    or fu.description like #{criteria.blurry,jdbcType=VARCHAR}
+                   )
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and fu.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+<!--            <if test="criteria.deptId != null">-->
+<!--                <![CDATA[-->
+<!--               and fu.dept_id = #{criteria.deptId,jdbcType=BIGINT}-->
+<!--                ]]>-->
+<!--            </if>-->
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and fu.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and fu.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.employeeId">
+                <![CDATA[
+                and fu.employee_id = #{criteria.employeeId, jdbcType=BIGINT}
+                 ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndUser" useGeneratedKeys="true"
+            keyProperty="id">
+        <![CDATA[
+            insert into fnd_user (avatar_id, username, description,
+                                  salt, email, password, phone,
+                                  enabled_flag, employee_id, last_password_reset_time,
+                                  create_time, create_by, update_time,
+                                  update_by, attribute1, attribute2, attribute3,
+                                  attribute4, attribute5)
+            values (#{userAvatar.id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+                    #{salt,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT}, #{employee.id,jdbcType=BIGINT},  #{lastPasswordResetTime,jdbcType=TIMESTAMP},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+                    #{updateBy,jdbcType=BIGINT}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR},
+                    #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_user
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndUser">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndUser">
+        <![CDATA[
+            update fnd_user
+               set username     = #{username,jdbcType=VARCHAR},
+                   description  = #{description,jdbcType=VARCHAR},
+                   phone        = #{phone,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   employee_id  = #{employee.id,jdbcType=BIGINT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT},
+                   attribute1   = #{attribute1,jdbcType=VARCHAR},
+                   attribute2   = #{attribute2,jdbcType=VARCHAR},
+                   attribute3   = #{attribute3,jdbcType=VARCHAR},
+                   attribute4   = #{attribute4,jdbcType=VARCHAR},
+                   attribute5   = #{attribute5,jdbcType=VARCHAR},
+                   email = #{email, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndUserResultMap">
+        <include refid="With_Out_Join_Query_Sql"/>
+        <![CDATA[
+             where fu.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndUserResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+		    order by fu.id asc
+		]]>
+    </select>
+
+
+    <select id="listAllByCriteriaPage" resultMap="FndUserResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByUsername" resultMap="FndUserResultMap">
+        <include refid="With_Out_Join_Query_Sql"/>
+        <![CDATA[
+			 where fu.username like #{username,jdbcType=VARCHAR}
+		]]>
+    </select>
+    <select id="getByEmail" resultMap="FndUserResultMap">
+        <include refid="With_Out_Join_Query_Sql"/>
+        <![CDATA[
+			 where fu.email like #{email,jdbcType=VARCHAR}
+		]]>
+    </select>
+
+    <update id="updatePass">
+        <![CDATA[
+            update fnd_user
+               set password                 = #{pass,jdbcType=VARCHAR},
+                   last_password_reset_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_time              = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                = #{updateBy,jdbcType=BIGINT}
+             where username = #{username,jdbcType=VARCHAR}
+		]]>
+    </update>
+
+    <update id="updateEmail">
+        <![CDATA[
+            update fnd_user
+               set email       = #{email,jdbcType=VARCHAR},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+             where username = #{username,jdbcType=VARCHAR}
+		]]>
+    </update>
+
+    <update id="updateUserName" parameterType="com.sunten.hrms.fnd.domain.FndUser">
+        <![CDATA[
+            update fnd_user
+            set username = #{username, jdbcType = VARCHAR},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+            where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateDescription" parameterType="com.sunten.hrms.fnd.domain.FndUser">
+        <![CDATA[
+            update fnd_user
+            set
+                description = #{description, jdbcType = VARCHAR},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+            where id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAvatar" parameterType="com.sunten.hrms.fnd.domain.FndUser">
+        <![CDATA[
+            update fnd_user
+               set avatar_id   = #{userAvatar.id,jdbcType=BIGINT},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="checkManagerByUserId" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+        <![CDATA[
+        select case when EXISTS (select 1 from fnd_user fu join pm_employee_job pej on fu.employee_id = pej.employee_id and pej.job_id in (
+SELECT fj.id FROM fnd_job fj where EXISTS (select 1 from fnd_job fjt  where fjt.id in (select fd.admin_job_id from fnd_dept fd where fd.enabled_flag = 1 and fd.deleted_flag = 0)
+and fj.id = fjt.id
+) and fj.enabled_flag = 1
+) and  fu.id = #{userId, jdbcType = BIGINT}
+) then 1 else 0  end
+        ]]>
+    </select>
+
+    <select id="selectDeptChargeEmailList" resultMap="DeptChargeEmailResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+        WITH cte as
+        (
+
+        select
+        fd.id as dept_id, fd.parent_id as dept_parent_id, fd.dept_name, fd.admin_job_id, fd.dept_level as dept_level
+        from fnd_dept fd
+        where fd.enabled_flag = 1 and fd.deleted_flag = 0 and   fd.id = #{deptId, jdbcType=BIGINT}
+        union all
+
+        select
+        fd.id as dept_id, fd.parent_id as dept_parent_id, fd.dept_name, fd.admin_job_id, fd.dept_level as dept_level
+        from fnd_dept fd
+
+        INNER JOIN cte cte_pa
+        on fd.id = cte_pa.dept_parent_id
+        and fd.enabled_flag = 1
+        and fd.deleted_flag = 0
+        )
+        select temp.dept_name, temp.dept_level , fj.job_name
+        , isnull(fu.email,pe.email_inside) as email
+        from cte temp
+        left join fnd_job fj on temp.admin_job_id = fj.id
+        left join
+        pm_employee_job pej on pej.dept_id = temp.dept_id and pej.job_id = fj.id and pej.enabled_flag = 1 and pej.job_main_flag = 1
+        join pm_employee pe on pe.id = pej.employee_id and pe.enabled_flag  = 1 and pe.leave_flag = 0
+        join fnd_user fu on fu.employee_id = pe.id and fu.enabled_flag = 1
+        where fj.enabled_flag = 1
+        and isnull(pe.email_inside, fu.email) <> ''
+        and isnull(pe.email_inside, fu.email) is not null
+        and isnull(pe.email_inside, fu.email) <> '@in-sunten.com'
+            ]]>
+    </select>
+
+    <select id="selectEmailListByRole" resultType="java.lang.String" parameterType="java.lang.String">
+        <![CDATA[
+            select
+           isnull(pe.email_inside, fu.email) as email
+            from fnd_user fu join pm_employee pe on fu.employee_id = pe.id
+            and pe.enabled_flag = 1 and pe.leave_flag = 0
+            and fu.enabled_flag = 1
+            and exists (
+                select 1
+                from fnd_user fut join fnd_users_roles fur
+                on fut.id = fur.user_id
+                and fut.id = fu.id
+                join fnd_role fr on fur.role_id = fr.id
+                and fr.permission = #{permission, jdbcType = VARCHAR}
+            )
+           and isnull(pe.email_inside, fu.email) <> ''
+        and isnull(pe.email_inside, fu.email) is not null
+        and isnull(pe.email_inside, fu.email) <> '@in-sunten.com'
+        ]]>
+    </select>
+
+    <select id="getEmailByEmployeeId" resultType="java.lang.String" parameterType="java.lang.Long">
+        <![CDATA[
+            select isnull(pe.email_inside, fu.email) as email
+            from fnd_user fu join pm_employee pe on fu.employee_id = pe.id
+                and pe.enabled_flag = 1 and pe.leave_flag = 0
+                and fu.enabled_flag = 1
+                and isnull(pe.email_inside, fu.email) <> ''
+                and isnull(pe.email_inside, fu.email) is not null
+                and isnull(pe.email_inside, fu.email) <> '@in-sunten.com'
+                and pe.id = #{employeeId, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="getNameByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
+        <![CDATA[
+            select pe.name from pm_employee pe join fnd_user fu on fu.employee_id = pe.id and pe.enabled_flag = 1
+            and fu.id = #{id, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="getuserNameAndAttribute" resultMap="BaseResultMap">
+        <![CDATA[
+            SELECT fu.username, fu.attribute1 FROM [dbo].[fnd_user] fu where enabled_flag = 1  and fu.attribute1 is not null
+        ]]>
+    </select>
+
+    <select id="getuserByNameOrWorkCard" parameterType="java.lang.String" resultMap="FndUserResultMap">
+        <include refid="With_Out_Join_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="str != null and str != ''" >
+          <![CDATA[
+            and (pe.work_card like ('%' + #{str,jdbcType=VARCHAR} + '%') or pe.name like ('%' + #{str,jdbcType=VARCHAR} + '%'))
+          ]]>
+        </if>
+    </select>
+
+    <update id="updateUserEmail">
+      <![CDATA[
+        update fu
+        set email = #{email, jdbcType = VARCHAR}
+        from fnd_user fu where fu.enabled_flag = 1 and fu.employee_id = #{employeeId, jdbcType = BIGINT}
+      ]]>
+    </update>
+
+    <select id="checkUserHaveRole" resultType="java.lang.Boolean">
+        <![CDATA[
+         select case when
+        EXISTS (select 1 from fnd_user fu join fnd_users_roles fur on fu.id = fur.user_id and enabled_flag = 1 join fnd_role fr
+                                on fr.id = fur.role_id and fr.permission = #{permission, jdbcType = VARCHAR} where fu.employee_id
+                                = #{employeeId, jdbcType = BIGINT})
+                                then 1 else 0 end
+        ]]>
+    </select>
+
+    <select id="getDeptIdByWorkCard" resultType="java.lang.Long">
+        <![CDATA[
+         select ext_dept_id from  v_employee_job_dept
+         where work_card =#{workCard,jdbcType=VARCHAR}
+         and enabled_flag=1
+        ]]>
+    </select>
+
+    <select id="getDepartmentIdByWorkCard" resultType="java.lang.Long">
+        <![CDATA[
+         select ext_department_id from  v_employee_job_dept
+         where work_card =#{workCard,jdbcType=VARCHAR}
+         and enabled_flag=1
+        ]]>
+    </select>
+
+    <select id="getEmailByWorkCard" resultType="java.lang.String">
+        <![CDATA[
+            select
+				email
+			from
+			    fnd_user
+			where
+				username = #{workCard,jdbcType=VARCHAR}
+				and enabled_flag=1
+        ]]>
+    </select>
+
+    <select id="getByKeyEmployeeId" resultMap="FndUserResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fu.employee_id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+</mapper>

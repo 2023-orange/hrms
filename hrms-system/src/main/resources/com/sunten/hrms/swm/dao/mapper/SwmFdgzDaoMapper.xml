@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmFdgzDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmFdgz">
+        <result column="ID" property="id" />
+        <result column="SDQJ" property="sdqj" />
+        <result column="GPH" property="gph" />
+        <result column="XM" property="xm" />
+        <result column="SZBM" property="szbm" />
+        <result column="SZKS" property="szks" />
+        <result column="YHZH" property="yhzh" />
+        <result column="TPGZ" property="tpgz" />
+        <result column="XDDJ" property="xddj" />
+        <result column="TJBS" property="tjbs" />
+        <result column="JLKF_SQ" property="jlkfSq" />
+        <result column="JLKF_SH" property="jlkfSh" />
+        <result column="KC_SDS" property="kcSds" />
+        <result column="SFGZ" property="sfgz" />
+        <result column="YFGZ" property="yfgz" />
+        <result column="TPJZ" property="tpjz" />
+        <result column="BZMC" property="bzmc" />
+    </resultMap>
+
+    <resultMap id="SwmFdgzResultMap" type="com.sunten.hrms.swm.domain.SwmFdgz" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sf.ID, sf.SDQJ, sf.GPH, sf.XM, sf.SZBM, sf.SZKS, sf.YHZH, sf.TPGZ, sf.XDDJ, sf.TJBS, sf.JLKF_SQ, 
+            sf.JLKF_SH, sf.KC_SDS, sf.SFGZ, sf.YFGZ, sf.TPJZ, sf.BZMC 
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.ID as ${tAlias}_ID, ${tAlias}.SDQJ as ${tAlias}_SDQJ, ${tAlias}.GPH as ${tAlias}_GPH, 
+            ${tAlias}.XM as ${tAlias}_XM, ${tAlias}.SZBM as ${tAlias}_SZBM, ${tAlias}.SZKS as ${tAlias}_SZKS, 
+            ${tAlias}.YHZH as ${tAlias}_YHZH, ${tAlias}.TPGZ as ${tAlias}_TPGZ, 
+            ${tAlias}.XDDJ as ${tAlias}_XDDJ, ${tAlias}.TJBS as ${tAlias}_TJBS, 
+            ${tAlias}.JLKF_SQ as ${tAlias}_JLKF_SQ, ${tAlias}.JLKF_SH as ${tAlias}_JLKF_SH, 
+            ${tAlias}.KC_SDS as ${tAlias}_KC_SDS, ${tAlias}.SFGZ as ${tAlias}_SFGZ, 
+            ${tAlias}.YFGZ as ${tAlias}_YFGZ, ${tAlias}.TPJZ as ${tAlias}_TPJZ, 
+            ${tAlias}.BZMC as ${tAlias}_BZMC 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_fdgz sf
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and sf.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmFdgz">
+        <![CDATA[
+            insert into swm_fdgz (ID, SDQJ, GPH,
+                                  XM, SZBM, SZKS,
+                                  YHZH, TPGZ, XDDJ,
+                                  TJBS, JLKF_SQ, JLKF_SH,
+                                  KC_SDS, SFGZ, YFGZ,
+                                  TPJZ, BZMC)
+            values (#{id,jdbcType=INTEGER}, #{sdqj,jdbcType=VARCHAR}, #{gph,jdbcType=VARCHAR},
+                    #{xm,jdbcType=VARCHAR}, #{szbm,jdbcType=VARCHAR}, #{szks,jdbcType=VARCHAR},
+                    #{yhzh,jdbcType=VARCHAR}, #{tpgz,jdbcType=DECIMAL}, #{xddj,jdbcType=DECIMAL},
+                    #{tjbs,jdbcType=BIT}, #{jlkfSq,jdbcType=DECIMAL}, #{jlkfSh,jdbcType=DECIMAL},
+                    #{kcSds,jdbcType=DECIMAL}, #{sfgz,jdbcType=DECIMAL}, #{yfgz,jdbcType=DECIMAL},
+                    #{tpjz,jdbcType=DECIMAL}, #{bzmc,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_fdgz
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmFdgz">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmFdgz">
+        <![CDATA[
+            update swm_fdgz
+               set ID      = #{id,jdbcType=INTEGER},
+                   SDQJ    = #{sdqj,jdbcType=VARCHAR},
+                   GPH     = #{gph,jdbcType=VARCHAR},
+                   XM      = #{xm,jdbcType=VARCHAR},
+                   SZBM    = #{szbm,jdbcType=VARCHAR},
+                   SZKS    = #{szks,jdbcType=VARCHAR},
+                   YHZH    = #{yhzh,jdbcType=VARCHAR},
+                   TPGZ    = #{tpgz,jdbcType=DECIMAL},
+                   XDDJ    = #{xddj,jdbcType=DECIMAL},
+                   TJBS    = #{tjbs,jdbcType=BIT},
+                   JLKF_SQ = #{jlkfSq,jdbcType=DECIMAL},
+                   JLKF_SH = #{jlkfSh,jdbcType=DECIMAL},
+                   KC_SDS  = #{kcSds,jdbcType=DECIMAL},
+                   SFGZ    = #{sfgz,jdbcType=DECIMAL},
+                   YFGZ    = #{yfgz,jdbcType=DECIMAL},
+                   TPJZ    = #{tpjz,jdbcType=DECIMAL},
+                   BZMC    = #{bzmc,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmFdgzResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmFdgzResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmFdgzResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <select id="getOldFloatSalary" resultMap="SwmFdgzResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+             ,smqa.assessment_level
+             from swm_fdgz sf left join swm_monthly_quarterly_assessment smqa
+             on sf.SDQJ=smqa.assessment_month and sf.gph=smqa.work_card
+             where
+             RIGHT ( cast( '000000' + rtrim( sf.GPH ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+             and left(sf.SDQJ, 4) = #{year, jdbcType=VARCHAR}
+             ORDER BY sf.SDQJ
+        ]]>
+    </select>
+
+</mapper>

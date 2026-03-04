@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmMedicalLineDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmMedicalLine">
+        <id column="id" property="id" />
+        <result column="medical_id" property="medicalId" />
+        <result column="work_and_hazard" property="workAndHazard" />
+        <result column="job_name" property="jobName" />
+        <result column="job_id" property="jobId" />
+        <result column="employee_name" property="employeeName" />
+        <result column="work_card" property="workCard" />
+        <result column="quantity" property="quantity" />
+        <result column="medical_class" property="medicalClass" />
+        <result column="with_id" property="withId" />
+        <result column="medical_name" property="medicalName" />
+        <result column="medical_result" property="medicalResult" />
+        <result column="remake" property="remake" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="employee_id" property="employeeId" />
+        <result column="first_time" property="firstTime" />
+        <result column="dept_name" property="deptName"/>
+        <result column="department" property="department"/>
+        <result column="from_dept_name" property="fromDeptName"/>
+        <result column="from_department" property="fromDepartment"/>
+        <result column="from_team_name" property="fromTeamName"/>
+        <result column="to_dept_name" property="toDeptName"/>
+        <result column="to_department" property="toDepartment"/>
+        <result column="to_job_name" property="toJobName"/>
+        <result column="to_job_id" property="toJobId"/>
+        <result column="to_team_name" property="toTeamName"/>
+
+    </resultMap>
+
+    <resultMap id="pmMedicalLineResultMap" type="com.sunten.hrms.pm.domain.PmMedicalLine" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="medical"
+                     javaType="com.sunten.hrms.pm.domain.PmMedical"
+                     resultMap="com.sunten.hrms.pm.dao.PmMedicalDao.pmMedicalResultMap"
+                     columnPrefix="pm_" />
+        <association property="pmEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pml.medical_id,pml.work_and_hazard, pml.job_name, pml.job_id, pml.employee_name,pml.work_card,
+            pml.quantity, pml.medical_class,pml.with_id,
+            pml.medical_result, pml.remake, pml.enabled_flag, pml.id, pml.create_time, pml.employee_id, pml.first_time,
+            pml.create_by, pml.update_time, pml.update_by,pml.to_dept_name,pml.to_department,pml.to_team_name,
+            pml.to_job_name, pml.to_job_id,
+            pml.from_dept_name,pml.from_department,pml.from_team_name,
+            (select pmlr.project_name + '、' from pm_medical_line_relevance pmlr where pmlr.medical_line_id = pml.id
+            for xml Path('')) as medical_name
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.medical_id as ${tAlias}_medical_id,${tAlias}.work_and_hazard as ${tAlias}_work_and_hazard, ${tAlias}.job_name as ${tAlias}_job_name,
+            ${tAlias}.job_id as ${tAlias}_job_id, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.quantity as ${tAlias}_quantity, ${tAlias}.medical_class as ${tAlias}_medical_class, ${tAlias}.with_id as ${tAlias}_with_id,
+            ${tAlias}.medical_result as ${tAlias}_medical_result, ${tAlias}.remake as ${tAlias}_remake,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.first_time as ${tAlias}_first_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pm'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmMedicalDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[,fdev.ext_dept_name AS dept_name,
+                   fdev.ext_department_name AS department,
+                   fdev.ext_team_name AS team,
+                   fdev.cost_center as cost_center]]>
+        <![CDATA[
+              from pm_medical_line pml join pm_medical pm
+                    on pml.medical_id = pm.id
+                left join pm_employee pe
+                    on pe.id=pml.employee_id and pe.enabled_flag=1
+                left outer join pm_employee_job pej
+                    on pe.id = pej.employee_id
+                    and pej.job_main_flag = 1
+                    and pej.enabled_flag = 1
+                left outer join fnd_dept_ext_v fdev
+                      on pej.dept_id = fdev.id
+                      and fdev.enabled_flag = 1
+                      and fdev.deleted_flag = 0
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and pej.dept_id in ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and pe.id = #{criteria.employeeId, jdbcType = BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.medicalId != null">
+                <![CDATA[
+                    and pml.medical_id =  #{criteria.medicalId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.approvalFlag != null">
+                <![CDATA[
+                    and (pm.approval_result = '通过' or pm.approval_result = 'pass')
+                ]]>
+            </if>
+            <if test="criteria.value != null and criteria.value != ''">
+                <choose>
+                    <when test="criteria.column == 'dept_name'">
+                        and fdev.ext_dept_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </when>
+                    <when test="criteria.column == 'office_name'">
+                        and fdev.ext_department_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </when>
+                    <when test="criteria.column == 'oa_order'">
+                        and pm.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </when>
+                    <when test="criteria.column == 'create_time'">
+                        and CONVERT(varchar(100), pml.create_time, 23) = #{criteria.value}
+                    </when>
+                    <when test="criteria.column == 'medical_result'">
+                        and pml.${criteria.column} ${criteria.symbol} #{criteria.value}
+                    </when>
+                    <otherwise>
+                        and pml.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmMedicalLine" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_medical_line (medical_id,work_and_hazard, job_name, job_id,
+                                          employee_name, work_card,quantity,
+                                          medical_class,with_id,
+                                          medical_result, remake, enabled_flag,employee_id,
+                                          create_time, create_by,
+                                          update_time, update_by, first_time,
+                                          from_dept_name,from_department,to_team_name,from_team_name,
+                                          to_dept_name,to_department,to_job_name,to_job_id)
+            values (#{medicalId,jdbcType=BIGINT},#{workAndHazard,jdbcType=VARCHAR}, #{jobName,jdbcType=VARCHAR}, #{jobId,jdbcType=BIGINT},
+                    #{employeeName,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR} ,#{quantity,jdbcType=INTEGER},
+                    #{medicalClass,jdbcType=VARCHAR}, #{withId,jdbcType=BIGINT},
+                    #{medicalResult,jdbcType=VARCHAR}, #{remake,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{employeeId,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{firstTime,jdbcType=TIMESTAMP},#{fromDeptName,jdbcType=VARCHAR},#{fromDepartment,jdbcType=VARCHAR},
+                    #{toTeamName,jdbcType=VARCHAR},#{fromTeamName,jdbcType=VARCHAR},
+                    #{toDeptName,jdbcType=VARCHAR},#{toDepartment,jdbcType=VARCHAR},
+                    #{toJobName,jdbcType=VARCHAR},#{toJobId,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_medical_line
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByHeaderId">
+        <![CDATA[
+            delete
+            from pm_medical_line
+            where medical_id = #{medicalId,jdbcType=BIGINT}
+        ]]>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmMedicalLine">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmMedicalLine">
+        <![CDATA[
+            update pm_medical_line
+               set medical_id = #{medicalId,jdbcType=BIGINT},
+                   work_and_hazard = #{workAndHazard,jdbcType=VARCHAR},
+                   job_name        = #{jobName,jdbcType=VARCHAR},
+                   job_id          = #{jobId,jdbcType=BIGINT},
+                   employee_name   = #{employeeName,jdbcType=VARCHAR},
+                   work_card   = #{workCard,jdbcType=VARCHAR},
+                   employee_id    = #{employeeId,jdbcType=VARCHAR},
+                   quantity        = #{quantity,jdbcType=INTEGER},
+                   medical_class   = #{medicalClass,jdbcType=VARCHAR},
+                   with_id           = #{withId,jdbcType=BIGINT},
+                   medical_result  = #{medicalResult,jdbcType=VARCHAR},
+                   remake          = #{remake,jdbcType=VARCHAR},
+                   enabled_flag    = #{enabledFlag,jdbcType=BIT},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by       = #{updateBy,jdbcType=BIGINT},
+                   first_time      = #{firstTime,jdbcType=TIMESTAMP},
+                   from_dept_name   = #{fromDeptName,jdbcType=VARCHAR},
+                   from_department   = #{fromDepartment,jdbcType=VARCHAR},
+                   to_dept_name   = #{toDeptName,jdbcType=VARCHAR},
+                   to_department   = #{toDepartment,jdbcType=VARCHAR},
+                   to_job_name   = #{toJobName,jdbcType=VARCHAR},
+                   to_job_id   = #{toJobId,jdbcType=VARCHAR},
+                   from_team_name = #{fromTeamName,jdbcType=VARCHAR},
+                   to_team_name = #{toTeamName,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="pmMedicalLineResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pml.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="pmMedicalLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="pmMedicalLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+<!--    <update id="batchWriteMedicalResult">-->
+<!--        <![CDATA[-->
+<!--        update pm_medical_line-->
+<!--        set medical_result  = #{criteria.batchMedicalResult,jdbcType=VARCHAR},-->
+<!--            remake          = #{criteria.batchRemark,jdbcType=VARCHAR},-->
+<!--            update_time     = getdate(),-->
+<!--            update_by       = #{criteria.updateBy,jdbcType=BIGINT},-->
+<!--            first_time      = #{criteria.batchFirstTime,jdbcType=TIMESTAMP}-->
+<!--        where id in-->
+<!--        ]]>-->
+<!--        <foreach collection="criteria.ids" item="item" index="index" separator="," open="(" close=")">-->
+<!--            #{item}-->
+<!--        </foreach>-->
+<!--    </update>-->
+
+    <update id="batchWriteMedicalResult">
+        <![CDATA[
+        update pm_medical_line
+        set medical_result  = #{criteria.medicalResult,jdbcType=VARCHAR},
+            remake          = #{criteria.remake,jdbcType=VARCHAR},
+            update_time     = getdate(),
+            first_time      = #{criteria.firstTime,jdbcType=TIMESTAMP}
+        where id = #{criteria.id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnFromOa" parameterType="com.sunten.hrms.pm.domain.PmMedicalLine">
+        <![CDATA[
+            update pm_medical_line
+               set medical_result  = '${medicalResult}',
+                   update_time     = getdate(),
+                   first_time      = getdate()
+             where id = ${id}
+        ]]>
+    </update>
+
+    <select id="getByOA" resultMap="pmMedicalLineResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pml.employee_name = '${employeeName}' and
+                   pml.medical_class = '${medicalClass}' and
+                   (pml.medical_result is null or pml.medical_result = '') and
+                   pml.enabled_flag = 1
+             order by pml.update_by desc
+        ]]>
+    </select>
+
+    <select id="getMedicalLinesAuto" resultMap="pmMedicalLineResultMap">
+        <![CDATA[
+        select pe.name as employeeName,pej.job_name as jobName,pej.job_id as jobId,pe.work_card as workCard,pmj.harm_factory as work_and_hazard,
+        pej.employee_id as employeeId,pej.enabled_flag as enabledFlag
+	  from pm_employee pe
+            join pm_employee_job pej
+            on pe.id = pej.employee_id
+            and pej.enabled_flag = 1
+            and pej.job_main_flag = 1
+			left join pm_medical_job pmj
+			on pmj.job_id=pej.job_id and pmj.dept_id=pej.dept_id
+            where not exists (
+                select 1
+                from pm_medical pm
+                join pm_medical_line pml
+                on pm.id = pml.medical_id
+                where  (pml.medical_class in ('干部层年度体检','特殊工种年度体检','普通员工年度体检')
+                or ( pml.medical_class in ('调动体检','借调体检')
+            and DATEDIFF(month, pml.first_time, getdate()) <= 3
+            ))
+            and (pm.approval_result='pass' or pm.approval_result='通过' )
+            and (datepart(yy,pm.approval_date) =YEAR(GETDATE()))
+            and pml.employee_id = pe.id
+            )
+            order by pe.name
+        ]]>
+    </select>
+</mapper>

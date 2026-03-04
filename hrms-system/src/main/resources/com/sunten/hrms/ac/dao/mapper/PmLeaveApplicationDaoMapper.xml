@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.PmLeaveApplicationDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.PmLeaveApplication">
+        <id column="id" property="id" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="nick_name" property="nickName" />
+        <result column="user_name" property="userName" />
+        <result column="user_department" property="userDepartment" />
+        <result column="user_section" property="userSection" />
+        <result column="groups" property="groups" />
+        <result column="position" property="position" />
+        <result column="reason" property="reason" />
+        <result column="total_number" property="totalNumber" />
+        <result column="hr_total" property="hrTotal" />
+        <result column="modify_reason" property="modifyReason" />
+        <result column="version" property="version" />
+        <result column="to_be_uploaded_flag" property="toBeUploadedFlag" />
+        <result column="approval_node" property="approvalNode" />
+        <result column="approval_employee" property="approvalEmployee" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="PmLeaveApplicationResultMap" type="com.sunten.hrms.ac.domain.PmLeaveApplication" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pla.id, pla.oa_order, pla.nick_name, pla.user_name, pla.user_department, pla.user_section, 
+            pla.groups, pla.position, pla.reason, pla.total_number, pla.hr_total, pla.version,
+            pla.to_be_uploaded_flag, pla.approval_node, pla.approval_employee, pla.approval_result,
+            pla.enabled_flag, pla.attribute1, pla.attribute2, pla.attribute3, pla.attribute4, pla.attribute5, 
+            pla.create_by, pla.create_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.oa_order as ${tAlias}_oa_order, 
+            ${tAlias}.nick_name as ${tAlias}_nick_name, ${tAlias}.user_name as ${tAlias}_user_name, 
+            ${tAlias}.user_department as ${tAlias}_user_department, 
+            ${tAlias}.user_section as ${tAlias}_user_section, ${tAlias}.groups as ${tAlias}_groups, 
+            ${tAlias}.position as ${tAlias}_position, ${tAlias}.reason as ${tAlias}_reason, 
+            ${tAlias}.total_number as ${tAlias}_total_number, ${tAlias}.hr_total as ${tAlias}_hr_total, 
+            ${tAlias}.modify_reason as ${tAlias}_modify_reason, ${tAlias}.version as ${tAlias}_version,
+            ${tAlias}.to_be_uploaded_flag as ${tAlias}_to_be_uploaded_flag,
+            ${tAlias}.approval_node as ${tAlias}_approval_node, 
+            ${tAlias}.approval_employee as ${tAlias}_approval_employee, 
+            ${tAlias}.approval_result as ${tAlias}_approval_result, 
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1, 
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3, 
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5, 
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time 
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_leave_application pla
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.user_name != null">
+            <![CDATA[
+                and (pla.user_name = #{criteria.user_name,jdbcType=VARCHAR} or pla.create_by = #{criteria.user_name,jdbcType=VARCHAR})
+--                 <choose>
+--                 <when test="criteria.reqCode == 0">
+--                     and 1 = 1
+--                 </when>
+--                   <when test="criteria.reqCode == 1">
+--                     and pla.approval_result in ('pass', 'Cancel', 'notPass')
+--                 </when>
+--                    <when test="criteria.reqCode == 2">
+--                     and pla.approval_result IS NULL
+--                 </when>
+--                 </choose>
+            ]]>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.PmLeaveApplication" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_leave_application (oa_order, nick_name, user_name,
+                                              user_department, user_section,
+                                              groups, position, reason,
+                                              total_number, hr_total, modify_reason,
+                                              version, to_be_uploaded_flag,
+                                              approval_node, approval_employee,
+                                              approval_result, enabled_flag,
+                                              attribute1, attribute2,
+                                              attribute3, attribute4,
+                                              attribute5, create_by,
+                                              create_time)
+            values (#{oaOrder,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+                    #{userDepartment,jdbcType=VARCHAR}, #{userSection,jdbcType=VARCHAR},
+                    #{groups,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR},
+                    #{totalNumber,jdbcType=DOUBLE}, #{hrTotal,jdbcType=DOUBLE}, #{modify_reason,jdbcType=VARCHAR},
+                    #{version,jdbcType=INTEGER}, #{to_be_uploaded_flag,jdbcType=INTEGER},
+                    #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                    #{approvalResult,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=BIGINT},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_leave_application
+             where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.PmLeaveApplication">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.PmLeaveApplication">
+        <![CDATA[
+            update ac_leave_application
+               set oa_order          = #{oaOrder,jdbcType=VARCHAR},
+                   nick_name         = #{nickName,jdbcType=VARCHAR},
+                   user_name         = #{userName,jdbcType=VARCHAR},
+                   user_department   = #{userDepartment,jdbcType=VARCHAR},
+                   user_section      = #{userSection,jdbcType=VARCHAR},
+                   groups            = #{groups,jdbcType=VARCHAR},
+                   position          = #{position,jdbcType=VARCHAR},
+                   reason            = #{reason,jdbcType=VARCHAR},
+                   total_number      = #{totalNumber,jdbcType=DOUBLE},
+                   hr_total          = #{hrTotal,jdbcType=DOUBLE},
+                   modify_reason            = #{modify_reason,jdbcType=VARCHAR},
+                   version           = #{version,jdbcType=INTEGER},
+                   to_be_uploaded_flag  = #{to_be_uploaded_flag,jdbcType=INTEGER},
+                   approval_node     = #{approvalNode,jdbcType=VARCHAR},
+                   approval_employee = #{approvalEmployee,jdbcType=VARCHAR},
+                   approval_result   = #{approvalResult,jdbcType=VARCHAR},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   attribute1        = #{attribute1,jdbcType=VARCHAR},
+                   attribute2        = #{attribute2,jdbcType=BIGINT},
+                   attribute3        = #{attribute3,jdbcType=VARCHAR},
+                   attribute4        = #{attribute4,jdbcType=VARCHAR},
+                   attribute5        = #{attribute5,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=INTEGER}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmLeaveApplicationResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pla.id = #{id,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmLeaveApplicationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmLeaveApplicationResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

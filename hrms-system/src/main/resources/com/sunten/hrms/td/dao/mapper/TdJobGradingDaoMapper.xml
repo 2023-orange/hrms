@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdJobGradingDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdJobGrading">
+        <id column="id" property="id" />
+        <result column="dept_id" property="deptId" />
+        <result column="process" property="process" />
+        <result column="job_name" property="jobName" />
+        <result column="job_id" property="jobId" />
+        <result column="job_level" property="jobLevel" />
+        <result column="work_content" property="workContent" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="dept_name" property="deptName" />
+        <result column="team_name" property="teamName" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="certification_job" property="certificationJob" />
+
+    </resultMap>
+
+    <resultMap id="TdJobGradingResultMap" type="com.sunten.hrms.td.domain.TdJobGrading" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tjg.dept_id, tjg.process, tjg.job_name, tjg.job_id, tjg.job_level, tjg.work_content,
+            tjg.enabled_flag, tjg.dept_name, tjg.team_name, tjg.id, tjg.create_time, tjg.create_by,
+            tjg.update_time, tjg.update_by,certification_job
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.dept_id as ${tAlias}_dept_id, ${tAlias}.process as ${tAlias}_process,
+            ${tAlias}.job_name as ${tAlias}_job_name, ${tAlias}.job_id as ${tAlias}_job_id,
+            ${tAlias}.job_level as ${tAlias}_job_level, ${tAlias}.work_content as ${tAlias}_work_content,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.dept_name as ${tAlias}_dept_name,
+            ${tAlias}.team_name as ${tAlias}_team_name, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_job_grading tjg
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.value != null and criteria.value != ''">
+                <![CDATA[
+                    and tjg.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                    and tjg.dept_id = #{criteria.deptId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.process != null and criteria.process != ''">
+                <![CDATA[
+                    and tjg.process = #{criteria.process,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.jobName != null and criteria.jobName != ''">
+                <![CDATA[
+                    and tjg.job_name = #{criteria.jobName,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.certificationJob != null and criteria.certificationJob != ''">
+                <![CDATA[
+                    and tjg.certification_job = #{criteria.certificationJob,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and tjg.dept_id in
+                ]]>
+                <foreach collection="criteria.deptIds" item="item" separator="," open="(" close=")">
+                    #{item, jdbcType=BIGINT}
+                </foreach>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdJobGrading">
+        <![CDATA[
+            insert into td_job_grading (dept_id, process,
+                                        job_name, job_id, job_level,
+                                        work_content, enabled_flag, dept_name,
+                                        team_name, create_time, create_by,
+                                        update_time, update_by,certification_job)
+            values ( #{deptId,jdbcType=BIGINT}, #{process,jdbcType=VARCHAR},
+                    #{jobName,jdbcType=VARCHAR}, #{jobId,jdbcType=BIGINT}, #{jobLevel,jdbcType=VARCHAR},
+                    #{workContent,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{deptName,jdbcType=VARCHAR},
+                    #{teamName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},#{certificationJob,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_job_grading
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdJobGrading">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdJobGrading" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            update td_job_grading
+               set dept_id      = #{deptId,jdbcType=BIGINT},
+                   process      = #{process,jdbcType=VARCHAR},
+                   job_name     = #{jobName,jdbcType=VARCHAR},certification_job = #{certificationJob,jdbcType=VARCHAR},
+                   job_id       = #{jobId,jdbcType=BIGINT},
+                   job_level    = #{jobLevel,jdbcType=VARCHAR},
+                   work_content = #{workContent,jdbcType=VARCHAR},
+                   enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   dept_name    = #{deptName,jdbcType=VARCHAR},
+                   team_name    = #{teamName,jdbcType=VARCHAR},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdJobGradingResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tjg.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdJobGradingResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdJobGradingResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listForProcess" resultType="String">
+        <![CDATA[
+        select distinct process from td_job_grading tjg
+        where 1 = 1
+        ]]>
+        <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+            and tjg.dept_id in
+            <foreach collection="criteria.deptIds" item="item" separator="," open="(" close=")">
+                #{item, jdbcType=BIGINT}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="listForJob" resultMap="BaseResultMap">
+        <![CDATA[
+        select distinct job_name, job_level from td_job_grading tjg
+        where 1 = 1
+        ]]>
+        <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+            and tjg.dept_id in
+            <foreach collection="criteria.deptIds" item="item" separator="," open="(" close=")">
+                #{item, jdbcType=BIGINT}
+            </foreach>
+        </if>
+    </select>
+
+
+    <select id="getCertificationJobByProcess" resultMap="BaseResultMap">
+        <![CDATA[
+        select distinct certification_job  , job_level from td_job_grading tjg
+        where 1 = 1
+        ]]>
+        <if test="criteria != null  and  criteria.process != null ">
+            and  process  =   #{criteria.process,jdbcType=VARCHAR}
+        </if>
+        <if test="criteria != null  and  criteria.jobId != null ">
+            and  job_id  =   #{criteria.jobId,jdbcType=BIGINT}
+        </if>
+    </select>
+    <select id="checkInfo" resultType="java.lang.Integer">
+        select count(*)
+        from td_job_grading  where job_name = #{jobName} and certification_job = #{certificationJob} and dept_id = #{deptId}
+    </select>
+
+
+</mapper>

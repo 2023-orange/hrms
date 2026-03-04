@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmSalesApprovalRelationsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmSalesApprovalRelations">
+        <id column="id" property="id" />
+        <result column="dept_id" property="deptId" />
+        <result column="dept_name" property="deptName" />
+        <result column="market_department_emp_id" property="marketDepartmentEmpId" />
+        <result column="market_area_emp_id" property="marketAreaEmpId" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="PmSalesApprovalRelationsResultMap" type="com.sunten.hrms.pm.domain.PmSalesApprovalRelations" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            psar.id, psar.dept_id, psar.dept_name, psar.market_department_emp_id, psar.market_area_emp_id,
+            psar.enabled_flag, psar.create_time, psar.update_by, psar.create_by, psar.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.dept_name as ${tAlias}_dept_name,
+            ${tAlias}.market_department_emp_id as ${tAlias}_market_department_emp_id,
+            ${tAlias}.market_area_emp_id as ${tAlias}_market_area_emp_id,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_sales_approval_relations psar
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and psar.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmSalesApprovalRelations" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_sales_approval_relations (dept_id, dept_name,
+                                                     market_department_emp_id, market_area_emp_id,
+                                                     enabled_flag, create_time, update_by,
+                                                     create_by, update_time)
+            values (#{deptId,jdbcType=BIGINT}, #{deptName,jdbcType=VARCHAR},
+                    #{marketDepartmentEmpId,jdbcType=BIGINT}, #{marketAreaEmpId,jdbcType=BIGINT},
+                    #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_sales_approval_relations
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmSalesApprovalRelations">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmSalesApprovalRelations">
+        <![CDATA[
+            update pm_sales_approval_relations
+               set dept_id                  = #{deptId,jdbcType=BIGINT},
+                   dept_name                = #{deptName,jdbcType=VARCHAR},
+                   market_department_emp_id = #{marketDepartmentEmpId,jdbcType=BIGINT},
+                   market_area_emp_id       = #{marketAreaEmpId,jdbcType=BIGINT},
+                   enabled_flag             = #{enabledFlag,jdbcType=BIT},
+                   update_by                = #{updateBy,jdbcType=BIGINT},
+                   update_time              = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmSalesApprovalRelationsResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where psar.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmSalesApprovalRelationsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmSalesApprovalRelationsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReRecruitmentTempInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReRecruitmentTempInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="dept_name" property="deptName" />
+        <result column="job_name" property="jobName" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="height" property="height" />
+        <result column="weight" property="weight" />
+        <result column="birthday" property="birthday" />
+        <result column="native_place" property="nativePlace" />
+        <result column="nation" property="nation" />
+        <result column="marital_status" property="maritalStatus" />
+        <result column="political" property="political" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="email" property="email" />
+        <result column="address" property="address" />
+        <result column="id_number" property="idNumber" />
+        <result column="original_contract_flag" property="originalContractFlag" />
+        <result column="occupational_diseases_flag" property="occupationalDiseasesFlag" />
+        <result column="confidentiality_restrictions_flag" property="confidentialityRestrictionsFlag" />
+        <result column="health_flag" property="healthFlag" />
+        <result column="entry_time" property="entryTime" />
+        <result column="half_name" property="halfName" />
+        <result column="half_company" property="halfCompany" />
+        <result column="half_post" property="halfPost" />
+        <result column="half_tele" property="halfTele" />
+        <result column="father_name" property="fatherName" />
+        <result column="father_company" property="fatherCompany" />
+        <result column="father_post" property="fatherPost" />
+        <result column="father_tele" property="fatherTele" />
+        <result column="mother_name" property="motherName" />
+        <result column="mother_company" property="motherCompany" />
+        <result column="mother_post" property="motherPost" />
+        <result column="mother_tele" property="motherTele" />
+        <result column="first_child_name" property="firstChildName" />
+        <result column="first_child_sex" property="firstChildSex" />
+        <result column="first_child_birthday" property="firstChildBirthday" />
+        <result column="first_child_company" property="firstChildCompany" />
+        <result column="second_child_name" property="secondChildName" />
+        <result column="second_child_sex" property="secondChildSex" />
+        <result column="second_child_birthday" property="secondChildBirthday" />
+        <result column="second_child_company" property="secondChildCompany" />
+        <result column="relationship_flag" property="relationshipFlag" />
+        <result column="relationship_name" property="relationshipName" />
+        <result column="relationship_dept_name" property="relationshipDeptName" />
+        <result column="relationship" property="relationship" />
+        <result column="first_education" property="firstEducation" />
+        <result column="first_school" property="firstSchool" />
+        <result column="first_specialized_subject" property="firstSpecializedSubject" />
+        <result column="first_enrollment_time" property="firstEnrollmentTime" />
+        <result column="first_graduation_time" property="firstGraduationTime" />
+        <result column="first_enrollment" property="firstEnrollment" />
+        <result column="second_education" property="secondEducation" />
+        <result column="second_school" property="secondSchool" />
+        <result column="second_specialized_subject" property="secondSpecializedSubject" />
+        <result column="second_enrollment_time" property="secondEnrollmentTime" />
+        <result column="second_graduation_time" property="secondGraduationTime" />
+        <result column="second_enrollment" property="secondEnrollment" />
+        <result column="first_company" property="firstCompany" />
+        <result column="first_work_start_time" property="firstWorkStartTime" />
+        <result column="first_work_end_time" property="firstWorkEndTime" />
+        <result column="first_work_depart" property="firstWorkDepart" />
+        <result column="first_work_post" property="firstWorkPost" />
+        <result column="first_work_salary_old" property="firstWorkSalaryOld" />
+        <result column="first_work_reasons_leaving" property="firstWorkReasonsLeaving" />
+        <result column="first_work_witness" property="firstWorkWitness" />
+        <result column="first_work_tele" property="firstWorkTele" />
+        <result column="second_company" property="secondCompany" />
+        <result column="second_work_start_time" property="secondWorkStartTime" />
+        <result column="second_work_end_time" property="secondWorkEndTime" />
+        <result column="second_work_depart" property="secondWorkDepart" />
+        <result column="second_work_post" property="secondWorkPost" />
+        <result column="second_work_salary_old" property="secondWorkSalaryOld" />
+        <result column="second_work_reasons_leaving" property="secondWorkReasonsLeaving" />
+        <result column="second_work_witness" property="secondWorkWitness" />
+        <result column="second_work_tele" property="secondWorkTele" />
+        <result column="third_company" property="thirdCompany" />
+        <result column="third_work_start_time" property="thirdWorkStartTime" />
+        <result column="third_work_end_time" property="thirdWorkEndTime" />
+        <result column="third_work_depart" property="thirdWorkDepart" />
+        <result column="third_work_post" property="thirdWorkPost" />
+        <result column="third_work_salary_old" property="thirdWorkSalaryOld" />
+        <result column="third_work_reasons_leaving" property="thirdWorkReasonsLeaving" />
+        <result column="third_work_witness" property="thirdWorkWitness" />
+        <result column="third_work_tele" property="thirdWorkTele" />
+        <result column="fourth_company" property="fourthCompany" />
+        <result column="fourth_work_start_time" property="fourthWorkStartTime" />
+        <result column="fourth_work_end_time" property="fourthWorkEndTime" />
+        <result column="fourth_work_depart" property="fourthWorkDepart" />
+        <result column="fourth_work_post" property="fourthWorkPost" />
+        <result column="fourth_work_salary_old" property="fourthWorkSalaryOld" />
+        <result column="fourth_work_reasons_leaving" property="fourthWorkReasonsLeaving" />
+        <result column="fourth_work_witness" property="fourthWorkWitness" />
+        <result column="fourth_work_tele" property="fourthWorkTele" />
+        <result column="first_train" property="firstTrain" />
+        <result column="first_train_start_time" property="firstTrainStartTime" />
+        <result column="first_train_end_time" property="firstTrainEndTime" />
+        <result column="first_train_time" property="firstTrainTime" />
+        <result column="first_train_address" property="firstTrainAddress" />
+        <result column="first_train_company" property="firstTrainCompany" />
+        <result column="first_train_credential" property="firstTrainCredential" />
+        <result column="second_train" property="secondTrain" />
+        <result column="second_train_start_time" property="secondTrainStartTime" />
+        <result column="second_train_end_time" property="secondTrainEndTime" />
+        <result column="second_train_time" property="secondTrainTime" />
+        <result column="second_train_address" property="secondTrainAddress" />
+        <result column="second_train_company" property="secondTrainCompany" />
+        <result column="second_train_credential" property="secondTrainCredential" />
+        <result column="first_award" property="firstAward" />
+        <result column="first_award_time" property="firstAwardTime" />
+        <result column="first_award_dept" property="firstAwardDept" />
+        <result column="first_award_description" property="firstAwardDescription" />
+        <result column="second_award" property="secondAward" />
+        <result column="second_award_time" property="secondAwardTime" />
+        <result column="second_award_dept" property="secondAwardDept" />
+        <result column="second_award_description" property="secondAwardDescription" />
+        <result column="title_name" property="titleName" />
+        <result column="title_level" property="titleLevel" />
+        <result column="title_evaluation_time" property="titleEvaluationTime" />
+        <result column="first_level_self" property="firstLevelSelf" />
+        <result column="first_level_mechanism" property="firstLevelMechanism" />
+        <result column="second_hobby" property="secondHobby" />
+        <result column="second_level_self" property="secondLevelSelf" />
+        <result column="second_level_mechanism" property="secondLevelMechanism" />
+        <result column="third_level_self" property="thirdLevelSelf" />
+        <result column="fourth_hobby" property="fourthHobby" />
+        <result column="fifth_hobby" property="fifthHobby" />
+        <result column="sixth_hobby" property="sixthHobby" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="submit_question_time" property="submitQuestionTime" />
+        <result column="expected_salary" property="expectedSalary" />
+        <result column="emergency_contact_name" property="emergencyContactName" />
+        <result column="emergency_contact_phone" property="emergencyContactPhone" />
+        <result column="need_time" property="needTime" />
+        <result column="source" property="source" />
+        <result column="source_detail" property="sourceDetail" />
+        <result column="source_ip" property="sourceIp" />
+        <result column="first_enrollment_time_new" property="firstEnrollmentTimeNew" />
+        <result column="second_enrollment_time_new" property="secondEnrollmentTimeNew" />
+        <result column="first_work_time_new" property="firstWorkTimeNew" />
+        <result column="second_work_time_new" property="secondWorkTimeNew" />
+        <result column="third_work_time_new" property="thirdWorkTimeNew" />
+        <result column="fourth_work_time_new" property="fourthWorkTimeNew" />
+        <result column="first_train_time_new" property="firstTrainTimeNew" />
+        <result column="second_train_time_new" property="secondTrainTimeNew" />
+        <result column="re_id" property="reId" />
+        <result column="recruitment_flag" property="recruitmentFlag"/>
+        <result column="rr_enabled_flag" property="rrEnabledFlag" />
+    </resultMap>
+
+    <resultMap id="ReRecruitmentTempInterfaceResultMap" type="com.sunten.hrms.re.domain.ReRecruitmentTempInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            rrti.group_id, rrti.operation_code, rrti.error_msg, rrti.data_status, rrti.dept_name,
+            rrti.job_name, rrti.name, rrti.gender, rrti.height, rrti.weight, rrti.birthday, rrti.native_place,
+            rrti.nation, rrti.marital_status, rrti.political, rrti.mobile_phone, rrti.email, rrti.address,
+            rrti.id_number, rrti.original_contract_flag, rrti.occupational_diseases_flag,
+            rrti.confidentiality_restrictions_flag, rrti.health_flag, rrti.entry_time, rrti.half_name,
+            rrti.half_company, rrti.half_post, rrti.half_tele, rrti.father_name, rrti.father_company,
+            rrti.father_post, rrti.father_tele, rrti.mother_name, rrti.mother_company, rrti.mother_post,
+            rrti.mother_tele, rrti.first_child_name, rrti.first_child_sex, rrti.first_child_birthday,
+            rrti.first_child_company, rrti.second_child_name, rrti.second_child_sex,
+            rrti.second_child_birthday, rrti.second_child_company, rrti.relationship_flag,
+            rrti.relationship_name, rrti.relationship_dept_name, rrti.relationship, rrti.first_education,
+            rrti.first_school, rrti.first_specialized_subject, rrti.first_enrollment_time,
+            rrti.first_graduation_time, rrti.first_enrollment, rrti.second_education, rrti.second_school,
+            rrti.second_specialized_subject, rrti.second_enrollment_time, rrti.second_graduation_time,
+            rrti.second_enrollment, rrti.first_company, rrti.first_work_start_time, rrti.first_work_end_time,
+            rrti.first_work_depart, rrti.first_work_post, rrti.first_work_salary_old,
+            rrti.first_work_reasons_leaving, rrti.first_work_witness, rrti.first_work_tele,
+            rrti.second_company, rrti.second_work_start_time, rrti.second_work_end_time,
+            rrti.second_work_depart, rrti.second_work_post, rrti.second_work_salary_old,
+            rrti.second_work_reasons_leaving, rrti.second_work_witness, rrti.second_work_tele,
+            rrti.third_company, rrti.third_work_start_time, rrti.third_work_end_time, rrti.third_work_depart,
+            rrti.third_work_post, rrti.third_work_salary_old, rrti.third_work_reasons_leaving,
+            rrti.third_work_witness, rrti.third_work_tele, rrti.fourth_company, rrti.fourth_work_start_time,
+            rrti.fourth_work_end_time, rrti.fourth_work_depart, rrti.fourth_work_post,
+            rrti.fourth_work_salary_old, rrti.fourth_work_reasons_leaving, rrti.fourth_work_witness,
+            rrti.fourth_work_tele, rrti.first_train, rrti.first_train_start_time, rrti.first_train_end_time,
+            rrti.first_train_time, rrti.first_train_address, rrti.first_train_company,
+            rrti.first_train_credential, rrti.second_train, rrti.second_train_start_time,
+            rrti.second_train_end_time, rrti.second_train_time, rrti.second_train_address,
+            rrti.second_train_company, rrti.second_train_credential, rrti.first_award, rrti.first_award_time,
+            rrti.first_award_dept, rrti.first_award_description, rrti.second_award, rrti.second_award_time,
+            rrti.second_award_dept, rrti.second_award_description, rrti.title_name, rrti.title_level,
+            rrti.title_evaluation_time, rrti.first_level_self, rrti.first_level_mechanism, rrti.second_hobby,
+            rrti.second_level_self, rrti.second_level_mechanism, rrti.third_level_self, rrti.fourth_hobby,
+            rrti.fifth_hobby, rrti.sixth_hobby, rrti.id, rrti.create_time, rrti.create_by, rrti.update_time,
+            rrti.update_by,rrti.submit_question_time,rrti.expected_salary,rrti.emergency_contact_name,rrti.emergency_contact_phone,
+            rrti.need_time,rrti.source,rrti.source_detail,rrti.source_ip,rrti.first_enrollment_time_new,
+            rrti.second_enrollment_time_new,rrti.first_work_time_new,rrti.second_work_time_new,
+            rrti.third_work_time_new,rrti.fourth_work_time_new,rrti.first_train_time_new,rrti.second_train_time_new
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.group_id as ${tAlias}_group_id, ${tAlias}.operation_code as ${tAlias}_operation_code,
+            ${tAlias}.error_msg as ${tAlias}_error_msg, ${tAlias}.data_status as ${tAlias}_data_status,
+            ${tAlias}.dept_name as ${tAlias}_dept_name, ${tAlias}.job_name as ${tAlias}_job_name,
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.gender as ${tAlias}_gender,
+            ${tAlias}.height as ${tAlias}_height, ${tAlias}.weight as ${tAlias}_weight,
+            ${tAlias}.birthday as ${tAlias}_birthday, ${tAlias}.native_place as ${tAlias}_native_place,
+            ${tAlias}.nation as ${tAlias}_nation, ${tAlias}.marital_status as ${tAlias}_marital_status,
+            ${tAlias}.political as ${tAlias}_political, ${tAlias}.mobile_phone as ${tAlias}_mobile_phone,
+            ${tAlias}.email as ${tAlias}_email, ${tAlias}.address as ${tAlias}_address,
+            ${tAlias}.id_number as ${tAlias}_id_number,
+            ${tAlias}.original_contract_flag as ${tAlias}_original_contract_flag,
+            ${tAlias}.occupational_diseases_flag as ${tAlias}_occupational_diseases_flag,
+            ${tAlias}.confidentiality_restrictions_flag as ${tAlias}_confidentiality_restrictions_flag,
+            ${tAlias}.health_flag as ${tAlias}_health_flag, ${tAlias}.entry_time as ${tAlias}_entry_time,
+            ${tAlias}.half_name as ${tAlias}_half_name, ${tAlias}.half_company as ${tAlias}_half_company,
+            ${tAlias}.half_post as ${tAlias}_half_post, ${tAlias}.half_tele as ${tAlias}_half_tele,
+            ${tAlias}.father_name as ${tAlias}_father_name,
+            ${tAlias}.father_company as ${tAlias}_father_company,
+            ${tAlias}.father_post as ${tAlias}_father_post, ${tAlias}.father_tele as ${tAlias}_father_tele,
+            ${tAlias}.mother_name as ${tAlias}_mother_name,
+            ${tAlias}.mother_company as ${tAlias}_mother_company,
+            ${tAlias}.mother_post as ${tAlias}_mother_post, ${tAlias}.mother_tele as ${tAlias}_mother_tele,
+            ${tAlias}.first_child_name as ${tAlias}_first_child_name,
+            ${tAlias}.first_child_sex as ${tAlias}_first_child_sex,
+            ${tAlias}.first_child_birthday as ${tAlias}_first_child_birthday,
+            ${tAlias}.first_child_company as ${tAlias}_first_child_company,
+            ${tAlias}.second_child_name as ${tAlias}_second_child_name,
+            ${tAlias}.second_child_sex as ${tAlias}_second_child_sex,
+            ${tAlias}.second_child_birthday as ${tAlias}_second_child_birthday,
+            ${tAlias}.second_child_company as ${tAlias}_second_child_company,
+            ${tAlias}.relationship_flag as ${tAlias}_relationship_flag,
+            ${tAlias}.relationship_name as ${tAlias}_relationship_name,
+            ${tAlias}.relationship_dept_name as ${tAlias}_relationship_dept_name,
+            ${tAlias}.relationship as ${tAlias}_relationship,
+            ${tAlias}.first_education as ${tAlias}_first_education,
+            ${tAlias}.first_school as ${tAlias}_first_school,
+            ${tAlias}.first_specialized_subject as ${tAlias}_first_specialized_subject,
+            ${tAlias}.first_enrollment_time as ${tAlias}_first_enrollment_time,
+            ${tAlias}.first_graduation_time as ${tAlias}_first_graduation_time,
+            ${tAlias}.first_enrollment as ${tAlias}_first_enrollment,
+            ${tAlias}.second_education as ${tAlias}_second_education,
+            ${tAlias}.second_school as ${tAlias}_second_school,
+            ${tAlias}.second_specialized_subject as ${tAlias}_second_specialized_subject,
+            ${tAlias}.second_enrollment_time as ${tAlias}_second_enrollment_time,
+            ${tAlias}.second_graduation_time as ${tAlias}_second_graduation_time,
+            ${tAlias}.second_enrollment as ${tAlias}_second_enrollment,
+            ${tAlias}.first_company as ${tAlias}_first_company,
+            ${tAlias}.first_work_start_time as ${tAlias}_first_work_start_time,
+            ${tAlias}.first_work_end_time as ${tAlias}_first_work_end_time,
+            ${tAlias}.first_work_depart as ${tAlias}_first_work_depart,
+            ${tAlias}.first_work_post as ${tAlias}_first_work_post,
+            ${tAlias}.first_work_salary_old as ${tAlias}_first_work_salary_old,
+            ${tAlias}.first_work_reasons_leaving as ${tAlias}_first_work_reasons_leaving,
+            ${tAlias}.first_work_witness as ${tAlias}_first_work_witness,
+            ${tAlias}.first_work_tele as ${tAlias}_first_work_tele,
+            ${tAlias}.second_company as ${tAlias}_second_company,
+            ${tAlias}.second_work_start_time as ${tAlias}_second_work_start_time,
+            ${tAlias}.second_work_end_time as ${tAlias}_second_work_end_time,
+            ${tAlias}.second_work_depart as ${tAlias}_second_work_depart,
+            ${tAlias}.second_work_post as ${tAlias}_second_work_post,
+            ${tAlias}.second_work_salary_old as ${tAlias}_second_work_salary_old,
+            ${tAlias}.second_work_reasons_leaving as ${tAlias}_second_work_reasons_leaving,
+            ${tAlias}.second_work_witness as ${tAlias}_second_work_witness,
+            ${tAlias}.second_work_tele as ${tAlias}_second_work_tele,
+            ${tAlias}.third_company as ${tAlias}_third_company,
+            ${tAlias}.third_work_start_time as ${tAlias}_third_work_start_time,
+            ${tAlias}.third_work_end_time as ${tAlias}_third_work_end_time,
+            ${tAlias}.third_work_depart as ${tAlias}_third_work_depart,
+            ${tAlias}.third_work_post as ${tAlias}_third_work_post,
+            ${tAlias}.third_work_salary_old as ${tAlias}_third_work_salary_old,
+            ${tAlias}.third_work_reasons_leaving as ${tAlias}_third_work_reasons_leaving,
+            ${tAlias}.third_work_witness as ${tAlias}_third_work_witness,
+            ${tAlias}.third_work_tele as ${tAlias}_third_work_tele,
+            ${tAlias}.fourth_company as ${tAlias}_fourth_company,
+            ${tAlias}.fourth_work_start_time as ${tAlias}_fourth_work_start_time,
+            ${tAlias}.fourth_work_end_time as ${tAlias}_fourth_work_end_time,
+            ${tAlias}.fourth_work_depart as ${tAlias}_fourth_work_depart,
+            ${tAlias}.fourth_work_post as ${tAlias}_fourth_work_post,
+            ${tAlias}.fourth_work_salary_old as ${tAlias}_fourth_work_salary_old,
+            ${tAlias}.fourth_work_reasons_leaving as ${tAlias}_fourth_work_reasons_leaving,
+            ${tAlias}.fourth_work_witness as ${tAlias}_fourth_work_witness,
+            ${tAlias}.fourth_work_tele as ${tAlias}_fourth_work_tele,
+            ${tAlias}.first_train as ${tAlias}_first_train,
+            ${tAlias}.first_train_start_time as ${tAlias}_first_train_start_time,
+            ${tAlias}.first_train_end_time as ${tAlias}_first_train_end_time,
+            ${tAlias}.first_train_time as ${tAlias}_first_train_time,
+            ${tAlias}.first_train_address as ${tAlias}_first_train_address,
+            ${tAlias}.first_train_company as ${tAlias}_first_train_company,
+            ${tAlias}.first_train_credential as ${tAlias}_first_train_credential,
+            ${tAlias}.second_train as ${tAlias}_second_train,
+            ${tAlias}.second_train_start_time as ${tAlias}_second_train_start_time,
+            ${tAlias}.second_train_end_time as ${tAlias}_second_train_end_time,
+            ${tAlias}.second_train_time as ${tAlias}_second_train_time,
+            ${tAlias}.second_train_address as ${tAlias}_second_train_address,
+            ${tAlias}.second_train_company as ${tAlias}_second_train_company,
+            ${tAlias}.second_train_credential as ${tAlias}_second_train_credential,
+            ${tAlias}.first_award as ${tAlias}_first_award,
+            ${tAlias}.first_award_time as ${tAlias}_first_award_time,
+            ${tAlias}.first_award_dept as ${tAlias}_first_award_dept,
+            ${tAlias}.first_award_description as ${tAlias}_first_award_description,
+            ${tAlias}.second_award as ${tAlias}_second_award,
+            ${tAlias}.second_award_time as ${tAlias}_second_award_time,
+            ${tAlias}.second_award_dept as ${tAlias}_second_award_dept,
+            ${tAlias}.second_award_description as ${tAlias}_second_award_description,
+            ${tAlias}.title_name as ${tAlias}_title_name, ${tAlias}.title_level as ${tAlias}_title_level,
+            ${tAlias}.title_evaluation_time as ${tAlias}_title_evaluation_time,
+            ${tAlias}.first_level_self as ${tAlias}_first_level_self,
+            ${tAlias}.first_level_mechanism as ${tAlias}_first_level_mechanism,
+            ${tAlias}.second_hobby as ${tAlias}_second_hobby,
+            ${tAlias}.second_level_self as ${tAlias}_second_level_self,
+            ${tAlias}.second_level_mechanism as ${tAlias}_second_level_mechanism,
+            ${tAlias}.third_level_self as ${tAlias}_third_level_self,
+            ${tAlias}.fourth_hobby as ${tAlias}_fourth_hobby, ${tAlias}.fifth_hobby as ${tAlias}_fifth_hobby,
+            ${tAlias}.sixth_hobby as ${tAlias}_sixth_hobby, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.submit_question_time as ${tAlias}_submit_question_time, ${tAlias}.expected_salary as ${tAlias}_expected_salary,
+            ${tAlias}.emergency_contact_name as ${tAlias}_emergency_contact_name, ${tAlias}.emergency_contact_phone as ${tAlias}_emergency_contact_phone,
+            ${tAlias}.need_time as ${tAlias}_need_time, ${tAlias}.source as ${tAlias}_source,
+            ${tAlias}.source_detail as ${tAlias}_source_detail, ${tAlias}.source_ip as ${tAlias}_source_ip,
+            ${tAlias}.first_enrollment_time_new as ${tAlias}_first_enrollment_time_new, ${tAlias}.second_enrollment_time_new as ${tAlias}_second_enrollment_time_new,
+            ${tAlias}.first_work_time_new as ${tAlias}_first_work_time_new, ${tAlias}.second_work_time_new as ${tAlias}_second_work_time_new,
+            ${tAlias}.third_work_time_new as ${tAlias}_third_work_time_new, ${tAlias}.fourth_work_time_new as ${tAlias}_fourth_work_time_new,
+            ${tAlias}.first_train_time_new as ${tAlias}_first_train_time_new, ${tAlias}.second_train_time_new as ${tAlias}_second_train_time_new
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,rr.recruitment_flag as recruitment_flag,rr.enabled_flag as rr_enabled_flag,
+            (select rr.id from re_recruitment rr where convert(bigint, rr.attribute4) = rrti.id and convert(bigint, rr.attribute5) = rrti.group_id) as re_id,
+            convert(varchar(10), rrti.birthday, 120) as birthday_str,
+            convert(varchar(10), rrti.entry_time, 120) as entry_time_str,
+            case when rrti.first_child_birthday is null then '' else convert(varchar(10), rrti.first_child_birthday, 120) end as first_child_birthday_str,
+            case when rrti.second_child_birthday is null then '' else convert(varchar(10), rrti.second_child_birthday, 120) end as second_child_birthday_str,
+            case when rrti.first_enrollment_time is null then '' else convert(varchar(10), rrti.first_enrollment_time, 120) end as first_enrollment_time_str,
+            case when rrti.first_graduation_time is null then '' else convert(varchar(10), rrti.first_graduation_time, 120) end as first_graduation_time_str,
+            case when rrti.second_enrollment_time is null then '' else convert(varchar(10), rrti.second_enrollment_time, 120) end as second_enrollment_time_str,
+            case when rrti.second_graduation_time is null then '' else convert(varchar(10), rrti.second_graduation_time, 120) end as second_graduation_time_str,
+            case when rrti.first_work_start_time is null then '' else convert(varchar(10), rrti.first_work_start_time, 120) end as first_work_start_time_str,
+            case when rrti.first_work_end_time is null then '' else convert(varchar(10), rrti.first_work_end_time, 120) end as first_work_end_time_str,
+            case when rrti.second_work_start_time is null then '' else convert(varchar(10), rrti.second_work_start_time, 120) end as second_work_start_time_str,
+            case when rrti.second_work_end_time is null then '' else convert(varchar(10), rrti.second_work_end_time, 120) end as second_work_end_time_str,
+            case when rrti.third_work_start_time is null then '' else convert(varchar(10), rrti.third_work_start_time, 120) end as third_work_start_time_str,
+            case when rrti.third_work_end_time is null then '' else convert(varchar(10), rrti.third_work_end_time, 120) end as third_work_end_time_str,
+            case when rrti.fourth_work_start_time is null then '' else convert(varchar(10), rrti.fourth_work_start_time, 120) end as fourth_work_start_time_str,
+            case when rrti.fourth_work_end_time is null then '' else convert(varchar(10), rrti.fourth_work_end_time, 120) end as fourth_work_end_time_str,
+            case when rrti.first_train_start_time is null then '' else convert(varchar(10), rrti.first_train_start_time, 120) end as first_train_start_time_str,
+            case when rrti.first_train_end_time is null then '' else convert(varchar(10), rrti.first_train_end_time, 120) end as first_train_end_time_str,
+            case when rrti.second_work_end_time is null then '' else convert(varchar(10), rrti.second_work_end_time, 120) end as second_work_end_time_str,
+            case when rrti.second_train_start_time is null then '' else convert(varchar(10), rrti.second_train_start_time, 120) end as second_train_start_time_str,
+            case when rrti.second_train_end_time is null then '' else convert(varchar(10), rrti.second_train_end_time, 120) end as second_train_end_time_str,
+            case when rrti.first_award_time is null then '' else convert(varchar(10), rrti.first_award_time, 120) end as first_award_time_str,
+            case when rrti.second_award_time is null then '' else convert(varchar(10), rrti.second_award_time, 120) end as second_award_time_str,
+            case when rrti.title_evaluation_time is null then '' else convert(varchar(10), rrti.title_evaluation_time, 120) end as title_evaluation_time_str
+              from re_recruitment_temp_interface rrti
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        left join re_recruitment rr on
+        convert(bigint, rr.attribute4) = rrti.id AND
+        convert(bigint, rr.attribute5) = rrti.group_id
+        ]]>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and rrti.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and rrti.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.recruitmentQuery != null">
+                <![CDATA[
+                    and
+                    (
+                    rrti.job_name like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.dept_name like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.name like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.gender like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.height like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.weight like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.native_place like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.nation like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.marital_status like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.political like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.mobile_phone like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.email like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.address like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.id_number like #{criteria.recruitmentQuery,jdbcType=VARCHAR} or
+                    rrti.entry_time like #{criteria.recruitmentQuery,jdbcType=VARCHAR})
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReRecruitmentTempInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_recruitment_temp_interface (group_id, operation_code, error_msg,
+                                                       data_status, dept_name, job_name,
+                                                       name, gender, height,
+                                                       weight, birthday, native_place,
+                                                       nation, marital_status,
+                                                       political, mobile_phone, email,
+                                                       address, id_number,
+                                                       original_contract_flag, occupational_diseases_flag,
+                                                       confidentiality_restrictions_flag, health_flag,
+                                                       entry_time, half_name, half_company,
+                                                       half_post, half_tele, father_name,
+                                                       father_company, father_post,
+                                                       father_tele, mother_name,
+                                                       mother_company, mother_post,
+                                                       mother_tele, first_child_name,
+                                                       first_child_sex, first_child_birthday,
+                                                       first_child_company, second_child_name,
+                                                       second_child_sex, second_child_birthday,
+                                                       second_child_company, relationship_flag,
+                                                       relationship_name, relationship_dept_name,
+                                                       relationship, first_education,
+                                                       first_school, first_specialized_subject,
+                                                       first_enrollment_time, first_graduation_time,
+                                                       first_enrollment, second_education,
+                                                       second_school, second_specialized_subject,
+                                                       second_enrollment_time, second_graduation_time,
+                                                       second_enrollment, first_company,
+                                                       first_work_start_time, first_work_end_time,
+                                                       first_work_depart, first_work_post,
+                                                       first_work_salary_old, first_work_reasons_leaving,
+                                                       first_work_witness, first_work_tele,
+                                                       second_company, second_work_start_time,
+                                                       second_work_end_time, second_work_depart,
+                                                       second_work_post, second_work_salary_old,
+                                                       second_work_reasons_leaving, second_work_witness,
+                                                       second_work_tele, third_company,
+                                                       third_work_start_time, third_work_end_time,
+                                                       third_work_depart, third_work_post,
+                                                       third_work_salary_old, third_work_reasons_leaving,
+                                                       third_work_witness, third_work_tele,
+                                                       fourth_company, fourth_work_start_time,
+                                                       fourth_work_end_time, fourth_work_depart,
+                                                       fourth_work_post, fourth_work_salary_old,
+                                                       fourth_work_reasons_leaving, fourth_work_witness,
+                                                       fourth_work_tele, first_train,
+                                                       first_train_start_time, first_train_end_time,
+                                                       first_train_time, first_train_address,
+                                                       first_train_company, first_train_credential,
+                                                       second_train, second_train_start_time,
+                                                       second_train_end_time, second_train_time,
+                                                       second_train_address, second_train_company,
+                                                       second_train_credential, first_award,
+                                                       first_award_time, first_award_dept,
+                                                       first_award_description, second_award,
+                                                       second_award_time, second_award_dept,
+                                                       second_award_description, title_name,
+                                                       title_level, title_evaluation_time,
+                                                       first_level_self, first_level_mechanism,
+                                                       second_hobby, second_level_self,
+                                                       second_level_mechanism, third_level_self,
+                                                       fourth_hobby, fifth_hobby,
+                                                       sixth_hobby, create_time,
+                                                       create_by, update_time, update_by,
+                                                       submit_question_time,expected_salary,emergency_contact_name,emergency_contact_phone,need_time,
+                                                       source,source_detail,source_ip,first_enrollment_time_new,
+                                                       second_enrollment_time_new,first_work_time_new,second_work_time_new,
+                                                       third_work_time_new,fourth_work_time_new,first_train_time_new,second_train_time_new)
+            values (#{groupId,jdbcType=BIGINT}, #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR},
+                    #{dataStatus,jdbcType=CHAR}, #{deptName,jdbcType=VARCHAR}, #{jobName,jdbcType=VARCHAR},
+                    #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{height,jdbcType=DECIMAL},
+                    #{weight,jdbcType=DECIMAL}, #{birthday,jdbcType=DATE}, #{nativePlace,jdbcType=VARCHAR},
+                    #{nation,jdbcType=VARCHAR}, #{maritalStatus,jdbcType=VARCHAR},
+                    #{political,jdbcType=VARCHAR}, #{mobilePhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+                    #{address,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR},
+                    #{originalContractFlag,jdbcType=BIT}, #{occupationalDiseasesFlag,jdbcType=BIT},
+                    #{confidentialityRestrictionsFlag,jdbcType=BIT}, #{healthFlag,jdbcType=BIT},
+                    #{entryTime,jdbcType=DATE}, #{halfName,jdbcType=VARCHAR}, #{halfCompany,jdbcType=VARCHAR},
+                    #{halfPost,jdbcType=VARCHAR}, #{halfTele,jdbcType=VARCHAR}, #{fatherName,jdbcType=VARCHAR},
+                    #{fatherCompany,jdbcType=VARCHAR}, #{fatherPost,jdbcType=VARCHAR},
+                    #{fatherTele,jdbcType=VARCHAR}, #{motherName,jdbcType=VARCHAR},
+                    #{motherCompany,jdbcType=VARCHAR}, #{motherPost,jdbcType=VARCHAR},
+                    #{motherTele,jdbcType=VARCHAR}, #{firstChildName,jdbcType=VARCHAR},
+                    #{firstChildSex,jdbcType=VARCHAR}, #{firstChildBirthday,jdbcType=DATE},
+                    #{firstChildCompany,jdbcType=VARCHAR}, #{secondChildName,jdbcType=VARCHAR},
+                    #{secondChildSex,jdbcType=VARCHAR}, #{secondChildBirthday,jdbcType=DATE},
+                    #{secondChildCompany,jdbcType=VARCHAR}, #{relationshipFlag,jdbcType=BIT},
+                    #{relationshipName,jdbcType=VARCHAR}, #{relationshipDeptName,jdbcType=VARCHAR},
+                    #{relationship,jdbcType=VARCHAR}, #{firstEducation,jdbcType=VARCHAR},
+                    #{firstSchool,jdbcType=VARCHAR}, #{firstSpecializedSubject,jdbcType=VARCHAR},
+                    #{firstEnrollmentTime,jdbcType=DATE}, #{firstGraduationTime,jdbcType=DATE},
+                    #{firstEnrollment,jdbcType=VARCHAR}, #{secondEducation,jdbcType=VARCHAR},
+                    #{secondSchool,jdbcType=VARCHAR}, #{secondSpecializedSubject,jdbcType=VARCHAR},
+                    #{secondEnrollmentTime,jdbcType=DATE}, #{secondGraduationTime,jdbcType=DATE},
+                    #{secondEnrollment,jdbcType=VARCHAR}, #{firstCompany,jdbcType=VARCHAR},
+                    #{firstWorkStartTime,jdbcType=DATE}, #{firstWorkEndTime,jdbcType=DATE},
+                    #{firstWorkDepart,jdbcType=VARCHAR}, #{firstWorkPost,jdbcType=VARCHAR},
+                    #{firstWorkSalaryOld,jdbcType=DECIMAL}, #{firstWorkReasonsLeaving,jdbcType=VARCHAR},
+                    #{firstWorkWitness,jdbcType=VARCHAR}, #{firstWorkTele,jdbcType=VARCHAR},
+                    #{secondCompany,jdbcType=VARCHAR}, #{secondWorkStartTime,jdbcType=DATE},
+                    #{secondWorkEndTime,jdbcType=DATE}, #{secondWorkDepart,jdbcType=VARCHAR},
+                    #{secondWorkPost,jdbcType=VARCHAR}, #{secondWorkSalaryOld,jdbcType=DECIMAL},
+                    #{secondWorkReasonsLeaving,jdbcType=VARCHAR}, #{secondWorkWitness,jdbcType=VARCHAR},
+                    #{secondWorkTele,jdbcType=VARCHAR}, #{thirdCompany,jdbcType=VARCHAR},
+                    #{thirdWorkStartTime,jdbcType=DATE}, #{thirdWorkEndTime,jdbcType=DATE},
+                    #{thirdWorkDepart,jdbcType=VARCHAR}, #{thirdWorkPost,jdbcType=VARCHAR},
+                    #{thirdWorkSalaryOld,jdbcType=DECIMAL}, #{thirdWorkReasonsLeaving,jdbcType=VARCHAR},
+                    #{thirdWorkWitness,jdbcType=VARCHAR}, #{thirdWorkTele,jdbcType=VARCHAR},
+                    #{fourthCompany,jdbcType=VARCHAR}, #{fourthWorkStartTime,jdbcType=DATE},
+                    #{fourthWorkEndTime,jdbcType=DATE}, #{fourthWorkDepart,jdbcType=VARCHAR},
+                    #{fourthWorkPost,jdbcType=VARCHAR}, #{fourthWorkSalaryOld,jdbcType=DECIMAL},
+                    #{fourthWorkReasonsLeaving,jdbcType=VARCHAR}, #{fourthWorkWitness,jdbcType=VARCHAR},
+                    #{fourthWorkTele,jdbcType=VARCHAR}, #{firstTrain,jdbcType=VARCHAR},
+                    #{firstTrainStartTime,jdbcType=DATE}, #{firstTrainEndTime,jdbcType=DATE},
+                    #{firstTrainTime,jdbcType=VARCHAR}, #{firstTrainAddress,jdbcType=VARCHAR},
+                    #{firstTrainCompany,jdbcType=VARCHAR}, #{firstTrainCredential,jdbcType=VARCHAR},
+                    #{secondTrain,jdbcType=VARCHAR}, #{secondTrainStartTime,jdbcType=DATE},
+                    #{secondTrainEndTime,jdbcType=DATE}, #{secondTrainTime,jdbcType=VARCHAR},
+                    #{secondTrainAddress,jdbcType=VARCHAR}, #{secondTrainCompany,jdbcType=VARCHAR},
+                    #{secondTrainCredential,jdbcType=VARCHAR}, #{firstAward,jdbcType=VARCHAR},
+                    #{firstAwardTime,jdbcType=DATE}, #{firstAwardDept,jdbcType=VARCHAR},
+                    #{firstAwardDescription,jdbcType=VARCHAR}, #{secondAward,jdbcType=VARCHAR},
+                    #{secondAwardTime,jdbcType=DATE}, #{secondAwardDept,jdbcType=VARCHAR},
+                    #{secondAwardDescription,jdbcType=VARCHAR}, #{titleName,jdbcType=VARCHAR},
+                    #{titleLevel,jdbcType=VARCHAR}, #{titleEvaluationTime,jdbcType=DATE},
+                    #{firstLevelSelf,jdbcType=VARCHAR}, #{firstLevelMechanism,jdbcType=VARCHAR},
+                    #{secondHobby,jdbcType=VARCHAR}, #{secondLevelSelf,jdbcType=VARCHAR},
+                    #{secondLevelMechanism,jdbcType=VARCHAR}, #{thirdLevelSelf,jdbcType=VARCHAR},
+                    #{fourthHobby,jdbcType=VARCHAR}, #{fifthHobby,jdbcType=VARCHAR},
+                    #{sixthHobby,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{submitQuestionTime,jdbcType=VARCHAR}, #{expectedSalary,jdbcType=DECIMAL},
+                    #{emergencyContactName,jdbcType=VARCHAR},#{emergencyContactPhone,jdbcType=VARCHAR},
+                    #{needTime,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},
+                    #{sourceDetail,jdbcType=VARCHAR},#{sourceIp,jdbcType=VARCHAR},
+                    #{firstEnrollmentTimeNew,jdbcType=VARCHAR},#{secondEnrollmentTimeNew,jdbcType=VARCHAR},
+                    #{firstWorkTimeNew,jdbcType=VARCHAR},#{secondWorkTimeNew,jdbcType=VARCHAR},
+                    #{thirdWorkTimeNew,jdbcType=VARCHAR},#{fourthWorkTimeNew,jdbcType=VARCHAR},
+                    #{firstTrainTimeNew,jdbcType=VARCHAR},#{secondTrainTimeNew,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_recruitment_temp_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReRecruitmentTempInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReRecruitmentTempInterface">
+        <![CDATA[
+            update re_recruitment_temp_interface
+               set group_id                          = #{groupId,jdbcType=BIGINT},
+                   operation_code                    = #{operationCode,jdbcType=CHAR},
+                   error_msg                         = #{errorMsg,jdbcType=VARCHAR},
+                   data_status                       = #{dataStatus,jdbcType=CHAR},
+                   dept_name                         = #{deptName,jdbcType=VARCHAR},
+                   job_name                          = #{jobName,jdbcType=VARCHAR},
+                   name                              = #{name,jdbcType=VARCHAR},
+                   gender                            = #{gender,jdbcType=VARCHAR},
+                   height                            = #{height,jdbcType=DECIMAL},
+                   weight                            = #{weight,jdbcType=DECIMAL},
+                   birthday                          = #{birthday,jdbcType=DATE},
+                   native_place                      = #{nativePlace,jdbcType=VARCHAR},
+                   nation                            = #{nation,jdbcType=VARCHAR},
+                   marital_status                    = #{maritalStatus,jdbcType=VARCHAR},
+                   political                         = #{political,jdbcType=VARCHAR},
+                   mobile_phone                      = #{mobilePhone,jdbcType=VARCHAR},
+                   email                             = #{email,jdbcType=VARCHAR},
+                   address                           = #{address,jdbcType=VARCHAR},
+                   id_number                         = #{idNumber,jdbcType=VARCHAR},
+                   original_contract_flag            = #{originalContractFlag,jdbcType=BIT},
+                   occupational_diseases_flag        = #{occupationalDiseasesFlag,jdbcType=BIT},
+                   confidentiality_restrictions_flag = #{confidentialityRestrictionsFlag,jdbcType=BIT},
+                   health_flag                       = #{healthFlag,jdbcType=BIT},
+                   entry_time                        = #{entryTime,jdbcType=DATE},
+                   half_name                         = #{halfName,jdbcType=VARCHAR},
+                   half_company                      = #{halfCompany,jdbcType=VARCHAR},
+                   half_post                         = #{halfPost,jdbcType=VARCHAR},
+                   half_tele                         = #{halfTele,jdbcType=VARCHAR},
+                   father_name                       = #{fatherName,jdbcType=VARCHAR},
+                   father_company                    = #{fatherCompany,jdbcType=VARCHAR},
+                   father_post                       = #{fatherPost,jdbcType=VARCHAR},
+                   father_tele                       = #{fatherTele,jdbcType=VARCHAR},
+                   mother_name                       = #{motherName,jdbcType=VARCHAR},
+                   mother_company                    = #{motherCompany,jdbcType=VARCHAR},
+                   mother_post                       = #{motherPost,jdbcType=VARCHAR},
+                   mother_tele                       = #{motherTele,jdbcType=VARCHAR},
+                   first_child_name                  = #{firstChildName,jdbcType=VARCHAR},
+                   first_child_sex                   = #{firstChildSex,jdbcType=VARCHAR},
+                   first_child_birthday              = #{firstChildBirthday,jdbcType=DATE},
+                   first_child_company               = #{firstChildCompany,jdbcType=VARCHAR},
+                   second_child_name                 = #{secondChildName,jdbcType=VARCHAR},
+                   second_child_sex                  = #{secondChildSex,jdbcType=VARCHAR},
+                   second_child_birthday             = #{secondChildBirthday,jdbcType=DATE},
+                   second_child_company              = #{secondChildCompany,jdbcType=VARCHAR},
+                   relationship_flag                 = #{relationshipFlag,jdbcType=BIT},
+                   relationship_name                 = #{relationshipName,jdbcType=VARCHAR},
+                   relationship_dept_name            = #{relationshipDeptName,jdbcType=VARCHAR},
+                   relationship                      = #{relationship,jdbcType=VARCHAR},
+                   first_education                   = #{firstEducation,jdbcType=VARCHAR},
+                   first_school                      = #{firstSchool,jdbcType=VARCHAR},
+                   first_specialized_subject         = #{firstSpecializedSubject,jdbcType=VARCHAR},
+                   first_enrollment_time             = #{firstEnrollmentTime,jdbcType=DATE},
+                   first_graduation_time             = #{firstGraduationTime,jdbcType=DATE},
+                   first_enrollment                  = #{firstEnrollment,jdbcType=VARCHAR},
+                   second_education                  = #{secondEducation,jdbcType=VARCHAR},
+                   second_school                     = #{secondSchool,jdbcType=VARCHAR},
+                   second_specialized_subject        = #{secondSpecializedSubject,jdbcType=VARCHAR},
+                   second_enrollment_time            = #{secondEnrollmentTime,jdbcType=DATE},
+                   second_graduation_time            = #{secondGraduationTime,jdbcType=DATE},
+                   second_enrollment                 = #{secondEnrollment,jdbcType=VARCHAR},
+                   first_company                     = #{firstCompany,jdbcType=VARCHAR},
+                   first_work_start_time             = #{firstWorkStartTime,jdbcType=DATE},
+                   first_work_end_time               = #{firstWorkEndTime,jdbcType=DATE},
+                   first_work_depart                 = #{firstWorkDepart,jdbcType=VARCHAR},
+                   first_work_post                   = #{firstWorkPost,jdbcType=VARCHAR},
+                   first_work_salary_old             = #{firstWorkSalaryOld,jdbcType=DECIMAL},
+                   first_work_reasons_leaving        = #{firstWorkReasonsLeaving,jdbcType=VARCHAR},
+                   first_work_witness                = #{firstWorkWitness,jdbcType=VARCHAR},
+                   first_work_tele                   = #{firstWorkTele,jdbcType=VARCHAR},
+                   second_company                    = #{secondCompany,jdbcType=VARCHAR},
+                   second_work_start_time            = #{secondWorkStartTime,jdbcType=DATE},
+                   second_work_end_time              = #{secondWorkEndTime,jdbcType=DATE},
+                   second_work_depart                = #{secondWorkDepart,jdbcType=VARCHAR},
+                   second_work_post                  = #{secondWorkPost,jdbcType=VARCHAR},
+                   second_work_salary_old            = #{secondWorkSalaryOld,jdbcType=DECIMAL},
+                   second_work_reasons_leaving       = #{secondWorkReasonsLeaving,jdbcType=VARCHAR},
+                   second_work_witness               = #{secondWorkWitness,jdbcType=VARCHAR},
+                   second_work_tele                  = #{secondWorkTele,jdbcType=VARCHAR},
+                   third_company                     = #{thirdCompany,jdbcType=VARCHAR},
+                   third_work_start_time             = #{thirdWorkStartTime,jdbcType=DATE},
+                   third_work_end_time               = #{thirdWorkEndTime,jdbcType=DATE},
+                   third_work_depart                 = #{thirdWorkDepart,jdbcType=VARCHAR},
+                   third_work_post                   = #{thirdWorkPost,jdbcType=VARCHAR},
+                   third_work_salary_old             = #{thirdWorkSalaryOld,jdbcType=DECIMAL},
+                   third_work_reasons_leaving        = #{thirdWorkReasonsLeaving,jdbcType=VARCHAR},
+                   third_work_witness                = #{thirdWorkWitness,jdbcType=VARCHAR},
+                   third_work_tele                   = #{thirdWorkTele,jdbcType=VARCHAR},
+                   fourth_company                    = #{fourthCompany,jdbcType=VARCHAR},
+                   fourth_work_start_time            = #{fourthWorkStartTime,jdbcType=DATE},
+                   fourth_work_end_time              = #{fourthWorkEndTime,jdbcType=DATE},
+                   fourth_work_depart                = #{fourthWorkDepart,jdbcType=VARCHAR},
+                   fourth_work_post                  = #{fourthWorkPost,jdbcType=VARCHAR},
+                   fourth_work_salary_old            = #{fourthWorkSalaryOld,jdbcType=DECIMAL},
+                   fourth_work_reasons_leaving       = #{fourthWorkReasonsLeaving,jdbcType=VARCHAR},
+                   fourth_work_witness               = #{fourthWorkWitness,jdbcType=VARCHAR},
+                   fourth_work_tele                  = #{fourthWorkTele,jdbcType=VARCHAR},
+                   first_train                       = #{firstTrain,jdbcType=VARCHAR},
+                   first_train_start_time            = #{firstTrainStartTime,jdbcType=DATE},
+                   first_train_end_time              = #{firstTrainEndTime,jdbcType=DATE},
+                   first_train_time                  = #{firstTrainTime,jdbcType=VARCHAR},
+                   first_train_address               = #{firstTrainAddress,jdbcType=VARCHAR},
+                   first_train_company               = #{firstTrainCompany,jdbcType=VARCHAR},
+                   first_train_credential            = #{firstTrainCredential,jdbcType=VARCHAR},
+                   second_train                      = #{secondTrain,jdbcType=VARCHAR},
+                   second_train_start_time           = #{secondTrainStartTime,jdbcType=DATE},
+                   second_train_end_time             = #{secondTrainEndTime,jdbcType=DATE},
+                   second_train_time                 = #{secondTrainTime,jdbcType=VARCHAR},
+                   second_train_address              = #{secondTrainAddress,jdbcType=VARCHAR},
+                   second_train_company              = #{secondTrainCompany,jdbcType=VARCHAR},
+                   second_train_credential           = #{secondTrainCredential,jdbcType=VARCHAR},
+                   first_award                       = #{firstAward,jdbcType=VARCHAR},
+                   first_award_time                  = #{firstAwardTime,jdbcType=DATE},
+                   first_award_dept                  = #{firstAwardDept,jdbcType=VARCHAR},
+                   first_award_description           = #{firstAwardDescription,jdbcType=VARCHAR},
+                   second_award                      = #{secondAward,jdbcType=VARCHAR},
+                   second_award_time                 = #{secondAwardTime,jdbcType=DATE},
+                   second_award_dept                 = #{secondAwardDept,jdbcType=VARCHAR},
+                   second_award_description          = #{secondAwardDescription,jdbcType=VARCHAR},
+                   title_name                        = #{titleName,jdbcType=VARCHAR},
+                   title_level                       = #{titleLevel,jdbcType=VARCHAR},
+                   title_evaluation_time             = #{titleEvaluationTime,jdbcType=DATE},
+                   first_level_self                  = #{firstLevelSelf,jdbcType=VARCHAR},
+                   first_level_mechanism             = #{firstLevelMechanism,jdbcType=VARCHAR},
+                   second_hobby                      = #{secondHobby,jdbcType=VARCHAR},
+                   second_level_self                 = #{secondLevelSelf,jdbcType=VARCHAR},
+                   second_level_mechanism            = #{secondLevelMechanism,jdbcType=VARCHAR},
+                   third_level_self                  = #{thirdLevelSelf,jdbcType=VARCHAR},
+                   fourth_hobby                      = #{fourthHobby,jdbcType=VARCHAR},
+                   fifth_hobby                       = #{fifthHobby,jdbcType=VARCHAR},
+                   sixth_hobby                       = #{sixthHobby,jdbcType=VARCHAR},
+                   update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReRecruitmentTempInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rrti.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReRecruitmentTempInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReRecruitmentTempInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

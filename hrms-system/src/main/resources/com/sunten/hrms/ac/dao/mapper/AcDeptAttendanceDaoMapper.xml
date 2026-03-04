@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcDeptAttendanceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcDeptAttendance">
+        <id column="id" property="id" />
+        <result column="dept_id" property="deptId" />
+        <result column="regime_id" property="regimeId" />
+        <result column="calendar_header_id" property="calendarHeaderId" />
+        <result column="first_time_from" property="firstTimeFrom" />
+        <result column="first_time_to" property="firstTimeTo" />
+        <result column="extend1_time_flag" property="extend1TimeFlag" />
+        <result column="second_time_from" property="secondTimeFrom" />
+        <result column="second_time_to" property="secondTimeTo" />
+        <result column="extend2_time_flag" property="extend2TimeFlag" />
+        <result column="third_time_from" property="thirdTimeFrom" />
+        <result column="third_time_to" property="thirdTimeTo" />
+        <result column="extend3_time_flag" property="extend3TimeFlag" />
+        <result column="take_effect_date" property="takeEffectDate" />
+        <result column="invalid_date" property="invalidDate" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcDeptAttendanceResultMap" type="com.sunten.hrms.ac.domain.AcDeptAttendance" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="fndDept"
+                     javaType="com.sunten.hrms.fnd.domain.FndDept"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                     columnPrefix="fd_"
+        />
+        <association
+            property="fndDeptSnapshot"
+            javaType="com.sunten.hrms.fnd.domain.FndDeptSnapshot"
+            resultMap="com.sunten.hrms.fnd.dao.FndDeptSnapshotDao.FndDeptSnapshotResultMap"
+            columnPrefix="fds_"
+        ></association>
+    </resultMap>
+
+    <resultMap id="AcDeptAttendanceResultAllEntityResultMap" type="com.sunten.hrms.ac.domain.AcDeptAttendance">
+        <id column="ada_id" property="id" />
+        <result column="ada_dept_id" property="deptId" />
+        <result column="ada_regime_id" property="regimeId" />
+        <result column="ada_calendar_header_id" property="calendarHeaderId" />
+        <result column="ada_first_time_from" property="firstTimeFrom" />
+        <result column="ada_first_time_to" property="firstTimeTo" />
+        <result column="ada_extend1_time_flag" property="extend1TimeFlag" />
+        <result column="ada_second_time_from" property="secondTimeFrom" />
+        <result column="ada_second_time_to" property="secondTimeTo" />
+        <result column="ada_extend2_time_flag" property="extend2TimeFlag" />
+        <result column="ada_third_time_from" property="thirdTimeFrom" />
+        <result column="ada_third_time_to" property="thirdTimeTo" />
+        <result column="ada_extend3_time_flag" property="extend3TimeFlag" />
+        <result column="ada_take_effect_date" property="takeEffectDate" />
+        <result column="ada_invalid_date" property="invalidDate" />
+        <result column="ada_attribute1" property="attribute1" />
+        <result column="ada_attribute2" property="attribute2" />
+        <result column="ada_attribute3" property="attribute3" />
+        <result column="ada_enabled_flag" property="enabledFlag" />
+        <result column="ada_create_by" property="createBy" />
+        <result column="ada_create_time" property="createTime" />
+        <result column="ada_update_by" property="updateBy" />
+        <result column="ada_update_time" property="updateTime" />
+        <association property="fndDept"
+                     javaType="com.sunten.hrms.fnd.domain.FndDept"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                     columnPrefix="fd_"
+        />
+        <association property="acRegime"
+                     javaType="com.sunten.hrms.ac.domain.AcRegime"
+                     resultMap="com.sunten.hrms.ac.dao.AcRegimeDao.BaseResultMap"
+                     columnPrefix="ar_"
+        />
+        <association property="acCalendarHeader"
+                     javaType="com.sunten.hrms.ac.domain.AcCalendarHeader"
+                     resultMap="com.sunten.hrms.ac.dao.AcCalendarHeaderDao.AcCalendarHeaderResultMap"
+                     columnPrefix="ach_"
+        />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ada.id, ada.dept_id, ada.regime_id, ada.calendar_header_id, ada.first_time_from, ada.first_time_to,
+            ada.extend1_time_flag, ada.second_time_from, ada.second_time_to, ada.extend2_time_flag,
+            ada.third_time_from, ada.third_time_to, ada.extend3_time_flag, ada.take_effect_date,
+            ada.invalid_date, ada.attribute1, ada.attribute2, ada.attribute3, ada.enabled_flag, ada.create_by,
+            ada.create_time, ada.update_by, ada.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.regime_id as ${tAlias}_regime_id,
+            ${tAlias}.calendar_header_id as ${tAlias}_calendar_header_id,
+            ${tAlias}.first_time_from as ${tAlias}_first_time_from,
+            ${tAlias}.first_time_to as ${tAlias}_first_time_to,
+            ${tAlias}.extend1_time_flag as ${tAlias}_extend1_time_flag,
+            ${tAlias}.second_time_from as ${tAlias}_second_time_from,
+            ${tAlias}.second_time_to as ${tAlias}_second_time_to,
+            ${tAlias}.extend2_time_flag as ${tAlias}_extend2_time_flag,
+            ${tAlias}.third_time_from as ${tAlias}_third_time_from,
+            ${tAlias}.third_time_to as ${tAlias}_third_time_to,
+            ${tAlias}.extend3_time_flag as ${tAlias}_extend3_time_flag,
+            ${tAlias}.take_effect_date as ${tAlias}_take_effect_date,
+            ${tAlias}.invalid_date as ${tAlias}_invalid_date, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,
+        ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from ac_dept_attendance ada, fnd_dept fd
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and fd.id = ada.dept_id and fd.enabled_flag = 1 and fd.deleted_flag = 0
+             ]]>
+        <if test="criteria != null">
+            <if test="criteria.history != null">
+                <![CDATA[
+
+             	 AND CONVERT(VARCHAR(10),GETDATE(),110) >= ADA.take_effect_date
+	  AND CONVERT(VARCHAR(10),GETDATE(),110) <= ISNULL( ADA.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) ) )
+        ]]>
+            </if>
+            <if test="criteria.nowAndAfter != null">
+                <![CDATA[
+                         and (getdate() BETWEEN ada.take_effect_date and ISNULL( ada.invalid_date, dateadd ( d, 1, getdate ( ) ) )
+
+                    or
+                    ada.take_effect_date > getdate()
+                    )
+                ]]>
+            </if>
+            <if test="criteria.date != null">
+                <![CDATA[
+         	 AND CONVERT(VARCHAR(10),GETDATE(),110) >= ADA.take_effect_date
+	  AND CONVERT(VARCHAR(10),GETDATE(),110) <= ISNULL( ADA.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) ) )
+         ]]>
+            </if>
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                    and ada.dept_id = #{criteria.deptId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.regimeId != null">
+                <![CDATA[
+                    and ada.regime_id = #{criteria.regimeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.calendarHeaderId != null">
+                <![CDATA[
+                    and ada.calendar_header_id = #{criteria.calendarHeaderId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.id != null">
+                <![CDATA[
+                    and ada.id = #{criteria.id,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                    and ada.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcDeptAttendance" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_dept_attendance (dept_id, regime_id, calendar_header_id,
+                                            first_time_from, first_time_to,
+                                            extend1_time_flag, second_time_from,
+                                            second_time_to, extend2_time_flag,
+                                            third_time_from, third_time_to,
+                                            extend3_time_flag, take_effect_date,
+                                            invalid_date, attribute1,
+                                            attribute2, attribute3, enabled_flag,
+                                            create_by, create_time, update_by,
+                                            update_time)
+            values (#{deptId,jdbcType=BIGINT}, #{regimeId,jdbcType=BIGINT}, #{calendarHeaderId,jdbcType=BIGINT},
+                    #{firstTimeFrom,jdbcType=TIME}, #{firstTimeTo,jdbcType=TIME},
+                    #{extend1TimeFlag,jdbcType=BIT}, #{secondTimeFrom,jdbcType=TIME},
+                    #{secondTimeTo,jdbcType=TIME}, #{extend2TimeFlag,jdbcType=BIT},
+                    #{thirdTimeFrom,jdbcType=TIME}, #{thirdTimeTo,jdbcType=TIME},
+                    #{extend3TimeFlag,jdbcType=BIT}, #{takeEffectDate,jdbcType=DATE},
+                    #{invalidDate,jdbcType=DATE}, #{attribute1,jdbcType=VARCHAR},
+                    #{attribute2,jdbcType=VARCHAR}, #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+                    #{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_dept_attendance
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcDeptAttendance">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteByEnabled" parameterType="com.sunten.hrms.ac.domain.AcDeptAttendance">
+        <![CDATA[
+            update ac_dept_attendance set enabled_flag = 0,
+                            update_by        = #{updateBy,jdbcType=BIGINT},
+                            update_time      = #{updateTime,jdbcType=TIMESTAMP}
+                        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcDeptAttendance">
+        <![CDATA[
+            update ac_dept_attendance
+               set dept_id            = #{deptId,jdbcType=BIGINT},
+                   regime_id          = #{regimeId,jdbcType=BIGINT},
+                   calendar_header_id = #{calendarHeaderId,jdbcType=BIGINT},
+                   first_time_from    = #{firstTimeFrom,jdbcType=TIME},
+                   first_time_to      = #{firstTimeTo,jdbcType=TIME},
+                   extend1_time_flag  = #{extend1TimeFlag,jdbcType=BIT},
+                   second_time_from   = #{secondTimeFrom,jdbcType=TIME},
+                   second_time_to     = #{secondTimeTo,jdbcType=TIME},
+                   extend2_time_flag  = #{extend2TimeFlag,jdbcType=BIT},
+                   third_time_from    = #{thirdTimeFrom,jdbcType=TIME},
+                   third_time_to      = #{thirdTimeTo,jdbcType=TIME},
+                   extend3_time_flag  = #{extend3TimeFlag,jdbcType=BIT},
+                   take_effect_date   = #{takeEffectDate,jdbcType=DATE},
+                   invalid_date       = #{invalidDate,jdbcType=DATE},
+                   attribute1         = #{attribute1,jdbcType=VARCHAR},
+                   attribute2         = #{attribute2,jdbcType=VARCHAR},
+                   attribute3         = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag       = #{enabledFlag,jdbcType=BIT},
+                   update_by          = #{updateBy,jdbcType=BIGINT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcDeptAttendanceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where ada.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getByDeptId" resultMap="AcDeptAttendanceResultAllEntityResultMap">
+        <![CDATA[ select fd.*,temp.* from (select ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from fnd_dept fd where 1 = 1 and fd.enabled_flag = 1
+         and fd.id = #{deptId,jdbcType=BIGINT}
+         ]]>
+        <![CDATA[ ) as fd left join ( select ]]>
+        <bind name="tAlias" value="'ada'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ar'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcRegimeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ach'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcCalendarHeaderDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from  ac_dept_attendance ada,ac_regime ar,ac_calendar_header ach
+         where ada.enabled_flag = 1 and ada.regime_id = ar.id and ada.calendar_header_id = ach.id
+
+         	 AND CONVERT(VARCHAR(10),GETDATE(),110) >= ADA.take_effect_date
+	  AND CONVERT(VARCHAR(10),GETDATE(),110) <= ISNULL( ADA.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) ) )
+
+         )  AS temp ON fd.fd_id = temp.ada_dept_id
+         ORDER BY
+	fd.fd_id
+         ]]>
+    </select>
+
+    <select id="listForDeptHistory" resultMap="AcDeptAttendanceResultAllEntityResultMap">
+        <![CDATA[ select ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ada'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ar'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcRegimeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ach'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcCalendarHeaderDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from fnd_dept fd, ac_dept_attendance ada,ac_regime ar,ac_calendar_header ach
+        where   fd.enabled_flag = 1 and fd.deleted_flag = 0 and
+        ada.enabled_flag = 1 and ada.regime_id = ar.id and ada.calendar_header_id = ach.id
+        and ada.dept_id = fd.id
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                and fd.id = #{criteria.deptId,jdbcType=BIGINT}
+            ]]>
+            </if>
+        </if>
+        <![CDATA[
+        order by ada.take_effect_date
+         ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcDeptAttendanceResultAllEntityResultMap">
+        <![CDATA[ select fd.*,temp.* from (select ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from fnd_dept fd where 1 = 1 and fd.enabled_flag = 1 and fd.deleted_flag = 0 ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                and fd.id = #{criteria.deptId,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test = "criteria.deptName != null">
+                and fd.dept_name like #{criteria.deptName, jdbcType=VARCHAR}
+            </if>
+        </if>
+        <![CDATA[ ) as fd left join ( select ]]>
+        <bind name="tAlias" value="'ada'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ar'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcRegimeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ach'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcCalendarHeaderDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from  ac_dept_attendance ada,ac_regime ar,ac_calendar_header ach
+         where ada.enabled_flag = 1 and ada.regime_id = ar.id and ada.calendar_header_id = ach.id
+         ]]>
+        <if test="criteria != null">
+            <if test="criteria.history != null"><!-- false 查当前生效，null 全部 -->
+                <![CDATA[
+            	 AND CONVERT(VARCHAR(10),GETDATE(),110) >= ADA.take_effect_date
+	  AND CONVERT(VARCHAR(10),GETDATE(),110) <= ISNULL( ADA.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) ) )
+            ]]>
+            </if>
+            <if test="criteria.regimeId != null">
+                <![CDATA[
+                and ar.id = #{criteria.regimeId,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test="criteria.nowAndAfter != null">
+                <![CDATA[
+            and (CONVERT(VARCHAR(10),GETDATE(),110) BETWEEN ada.take_effect_date and ISNULL( ada.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) )  )
+
+                    or
+                    ada.take_effect_date > CONVERT(VARCHAR(10),GETDATE(),110)
+                    )
+              ]]>
+            </if>
+            <if test="criteria.date != null">
+                <![CDATA[
+         	 AND CONVERT(VARCHAR(10),GETDATE(),110) >= ADA.take_effect_date
+	  AND CONVERT(VARCHAR(10),GETDATE(),110) <= ISNULL( ADA.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) ) )
+         ]]>
+            </if>
+        </if>
+        <![CDATA[
+         )  AS temp ON fd.fd_id = temp.ada_dept_id
+         ORDER BY
+		fd.fd_id
+         ]]>
+<!--        <![CDATA[ select fnd_dept.*,ada_temp.* from (select ]]>-->
+<!--        <bind name="tAlias" value="'fd'"/>-->
+<!--        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[-->
+<!--         from fnd_dept fd  where 1 = 1-->
+<!--         ]]>-->
+<!--        <if test="criteria != null">-->
+<!--            <if test="criteria.deptId != null">-->
+<!--                <![CDATA[-->
+<!--                and fd.id = #{criteria.deptId,jdbcType=BIGINT}-->
+<!--            ]]>-->
+<!--            </if>-->
+<!--        </if>-->
+<!--        <![CDATA[-->
+<!--        ) as fnd_dept left join ( select-->
+<!--        ]]>-->
+<!--        <bind name="tAlias" value="'ada'"/>-->
+<!--        <include refid="Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[ , regime_temp.* from ac_dept_attendance ada, ( select ar_temp.*, temp.* from ( select ]]>-->
+<!--        <bind name="tAlias" value="'ar'"/>-->
+<!--        <include refid="com.sunten.hrms.ac.dao.AcRegimeDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[ from ac_regime ar   where 1 = 1-->
+<!--         ) as ar_temp left join ( select ]]>-->
+<!--        <bind name="tAlias" value="'art'"/>-->
+<!--        <include refid="com.sunten.hrms.ac.dao.AcRegimeTimeDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[,]]>-->
+<!--        <bind name="tAlias" value="'arr'"/>-->
+<!--        <include refid="com.sunten.hrms.ac.dao.AcRegimeRelationDao.Base_Column_With_Param_List"/>-->
+<!--        <![CDATA[-->
+<!--        from ac_regime_relation arr,ac_regime_time art where arr.regime_time_id = art.id and arr.enabled_flag = 1) as temp-->
+<!--         on temp.arr_regimea_id = ar_temp.ar_id ) as regime_temp-->
+<!--         where ada.regime_id = regime_temp.ar_id ) as ada_temp on fnd_dept.fd_id = ada_temp.ada_dept_id-->
+<!--         order by fnd_dept.fd_id-->
+<!--         ]]>-->
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcDeptAttendanceResultAllEntityResultMap">
+        <![CDATA[ select fd.*,temp.* from (select ]]>
+        <bind name="tAlias" value="'fd'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from fnd_dept fd where 1 = 1 and fd.enabled_flag = 1 and fd.deleted_flag = 0 ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                and fd.id = #{criteria.deptId,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test="criteria.deptName != null">
+                and fd.dept_name like #{criteria.deptName,jdbcType=VARCHAR}
+            </if>
+        </if>
+        <![CDATA[ ) as fd left join ( select ]]>
+        <bind name="tAlias" value="'ada'"/>
+        <include refid="Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ar'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcRegimeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'ach'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcCalendarHeaderDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from  ac_dept_attendance ada,ac_regime ar,ac_calendar_header ach
+         where ada.enabled_flag = 1 and ada.regime_id = ar.id and ada.calendar_header_id = ach.id
+         ]]>
+        <if test="criteria != null">
+
+            <if test="criteria.history != null"> <!-- null 全部。false 查当前 -->
+                <![CDATA[
+
+         	 AND CONVERT(VARCHAR(10),GETDATE(),110) >= ADA.take_effect_date
+	  AND CONVERT(VARCHAR(10),GETDATE(),110) <= ISNULL( ADA.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) ) )
+         ]]>
+            </if>
+            <if test="criteria.date != null">
+                <![CDATA[
+         	 AND CONVERT(VARCHAR(10),GETDATE(),110) >= ADA.take_effect_date
+	  AND CONVERT(VARCHAR(10),GETDATE(),110) <= ISNULL( ADA.invalid_date, dateadd( d, 1,  CONVERT(VARCHAR(10),GETDATE(),110) ) )
+         ]]>
+            </if>
+        </if>
+        <![CDATA[
+         )  AS temp ON fd.fd_id = temp.ada_dept_id
+         order by fd.id
+         ]]>
+    </select>
+
+    <select id="baseListByCriteria" resultMap="AcDeptAttendanceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[ order by id ]]>
+    </select>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndDynamicQueryOperatorGroupDetailDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndDynamicQueryOperatorGroupDetail">
+        <id column="id" property="id" />
+        <result column="operator_group_id" property="operatorGroupId" />
+        <result column="label" property="label" />
+        <result column="value" property="value" />
+        <result column="sort" property="sort" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="FndDynamicQueryOperatorGroupDetailResultMap" type="com.sunten.hrms.fnd.domain.FndDynamicQueryOperatorGroupDetail" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="dynamicQueryOperatorGroup"
+                     javaType="com.sunten.hrms.fnd.domain.FndDynamicQueryOperatorGroup"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDynamicQueryOperatorGroupDao.FndDynamicQueryOperatorGroupResultMap"
+                     columnPrefix="fdqog_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fdqogd.id, fdqogd.operator_group_id as fdqog_id, fdqogd.label, fdqogd.value, fdqogd.sort, fdqogd.enabled_flag,
+            fdqogd.create_time, fdqogd.create_by, fdqogd.update_time, fdqogd.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.operator_group_id as ${tAlias}_fdqog_id,
+            ${tAlias}.label as ${tAlias}_label, ${tAlias}.value as ${tAlias}_value,
+            ${tAlias}.sort as ${tAlias}_sort, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_dynamic_query_operator_group_detail fdqogd
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+               and fdqogd.operator_group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and fdqogd.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndDynamicQueryOperatorGroupDetail" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_dynamic_query_operator_group_detail (operator_group_id, label, value,
+                                                                 sort, enabled_flag, create_time,
+                                                                 create_by, update_time, update_by)
+            values (#{dynamicQueryOperatorGroup.id,jdbcType=BIGINT}, #{label,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR},
+                    #{sort,jdbcType=INTEGER}, #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_dynamic_query_operator_group_detail
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndDynamicQueryOperatorGroupDetail">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndDynamicQueryOperatorGroupDetail">
+        <![CDATA[
+            update fnd_dynamic_query_operator_group_detail
+               set operator_group_id = #{dynamicQueryOperatorGroup.id,jdbcType=BIGINT},
+                   label             = #{label,jdbcType=VARCHAR},
+                   value             = #{value,jdbcType=VARCHAR},
+                   sort              = #{sort,jdbcType=INTEGER},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndDynamicQueryOperatorGroupDetailResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fdqogd.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndDynamicQueryOperatorGroupDetailResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by sort
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndDynamicQueryOperatorGroupDetailResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

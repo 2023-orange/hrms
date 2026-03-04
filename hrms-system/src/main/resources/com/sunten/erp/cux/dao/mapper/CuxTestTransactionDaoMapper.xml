@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.erp.cux.dao.CuxTestTransactionDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.erp.cux.domain.CuxTestTransaction">
+        <id column="id" property="id" />
+        <result column="description" property="description" />
+        <result column="creation_date" property="creationDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            ctt.id, ctt.description, ctt.creation_date
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.description as ${tAlias}_description,
+            ${tAlias}.creation_date as ${tAlias}_creation_date
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from cux_test_transaction ctt
+        ]]>
+    </sql>
+
+
+    <insert id="insertAllColumn" parameterType="com.sunten.erp.cux.domain.CuxTestTransaction">
+        <![CDATA[
+            insert into cux_test_transaction (id, description, creation_date)
+            values (#{id,jdbcType=NUMERIC},
+                    #{description,jdbcType=VARCHAR},
+                    #{creationDate,jdbcType=TIMESTAMP} )
+        ]]>
+    </insert>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+			 order by ctt.id asc
+		]]>
+    </select>
+</mapper>

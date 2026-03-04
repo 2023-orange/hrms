@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReDemandJobDescribesDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReDemandJobDescribes">
+        <id column="id" property="id" />
+        <result column="demand_job_id" property="demandJobId" />
+        <result column="job_name" property="jobName" />
+        <result column="dept_name" property="deptName" />
+        <result column="directly_under" property="directlyUnder" />
+        <result column="job_describes" property="jobDescribes" />
+        <result column="job_content" property="jobContent" />
+        <result column="work_qualification" property="workQualification" />
+        <result column="check_flag" property="checkFlag" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="dept_id" property="deptId"/>
+        <result column="education" property="education"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="work_age" property="workAge"/>
+        <result column="work_experence_age" property="workExperenceAge"/>
+        <result column="necessary_certificates" property="necessaryCertificates"/>
+        <result column="other_skills_requirements" property="otherSkillsRequirements"/>
+        <result column="skills_requirements" property="skillsRequirements"/>
+    </resultMap>
+
+    <resultMap id="ReDemandJobDescribesResultMap" type="com.sunten.hrms.re.domain.ReDemandJobDescribes" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            rdjd.demand_job_id, rdjd.job_name, rdjd.dept_name, rdjd.directly_under, rdjd.job_describes,
+            rdjd.job_content, rdjd.work_qualification, rdjd.check_flag, rdjd.enabled_flag, rdjd.id,
+            rdjd.create_time, rdjd.create_by, rdjd.update_time, rdjd.update_by,rdjd.dept_id,
+            rdjd.education, rdjd.sex, rdjd.age, rdjd.work_age, rdjd.work_experence_age,
+            rdjd.necessary_certificates, rdjd.other_skills_requirements, rdjd.skills_requirements
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.demand_job_id as ${tAlias}_demand_job_id, ${tAlias}.job_name as ${tAlias}_job_name,
+            ${tAlias}.dept_name as ${tAlias}_dept_name, ${tAlias}.directly_under as ${tAlias}_directly_under,
+            ${tAlias}.job_describes as ${tAlias}_job_describes, ${tAlias}.job_content as ${tAlias}_job_content,
+            ${tAlias}.work_qualification as ${tAlias}_work_qualification,
+            ${tAlias}.check_flag as ${tAlias}_check_flag, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by,   ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.education as ${tAlias}_education,${tAlias}.sex as ${tAlias}_sex,
+            ${tAlias}.age as ${tAlias}_age,${tAlias}.work_age as ${tAlias}_work_age,
+            ${tAlias}.work_experence_age as ${tAlias}_work_experence_age,${tAlias}.necessary_certificates as ${tAlias}_necessary_certificates,
+            ${tAlias}.other_skills_requirements as ${tAlias}_other_skills_requirements,
+            ${tAlias}.skills_requirements as ${tAlias}_skills_requirements
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from re_demand_job_describes rdjd
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.demandJobId != null">
+                <![CDATA[
+                    and rdjd.demand_job_id = #{criteria.demandJobId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and rdjd.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReDemandJobDescribes" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_demand_job_describes (demand_job_id, job_name, dept_name,
+                                                 directly_under, job_describes,
+                                                 job_content, work_qualification,
+                                                 check_flag, enabled_flag, create_time,
+                                                 create_by, update_time, update_by, dept_id,
+                                                  education, sex, age, work_age,
+                                                  work_experence_age, necessary_certificates,
+                                                  other_skills_requirements, skills_requirements)
+            values (#{demandJobId,jdbcType=BIGINT}, #{jobName,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR},
+                    #{directlyUnder,jdbcType=VARCHAR}, #{jobDescribes,jdbcType=VARCHAR},
+                    #{jobContent,jdbcType=VARCHAR}, #{workQualification,jdbcType=VARCHAR},
+                    #{checkFlag,jdbcType=BIT}, #{enabledFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{deptId, jdbcType=BIGINT}, #{education, jdbcType = VARCHAR}, #{sex, jdbcType = VARCHAR}
+                    , #{age, jdbcType = VARCHAR}, #{workAge, jdbcType = VARCHAR}, #{workExperenceAge, jdbcType = VARCHAR},
+                    #{necessaryCertificates, jdbcType = VARCHAR}, #{otherSkillsRequirements, jdbcType = VARCHAR}, #{skillsRequirements, jdbcType = VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_demand_job_describes
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReDemandJobDescribes">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReDemandJobDescribes">
+        <![CDATA[
+            update re_demand_job_describes
+               set demand_job_id      = #{demandJobId,jdbcType=BIGINT},
+                   job_name           = #{jobName,jdbcType=VARCHAR},
+                   dept_name          = #{deptName,jdbcType=VARCHAR},
+                   directly_under     = #{directlyUnder,jdbcType=VARCHAR},
+                   job_describes      = #{jobDescribes,jdbcType=VARCHAR},
+                   job_content        = #{jobContent,jdbcType=VARCHAR},
+                   work_qualification = #{workQualification,jdbcType=VARCHAR},
+                   check_flag         = #{checkFlag,jdbcType=BIT},
+                   enabled_flag       = #{enabledFlag,jdbcType=BIT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT},
+                   dept_id            = #{deptId, jdbcType = BIGINT},
+                   education          = #{education, jdbcType = VARCHAR},
+                   sex                = #{sex, jdbcType = VARCHAR},
+                   age                = #{age, jdbcType = VARCHAR},
+                   work_age           = #{workAge, jdbcType = VARCHAR},
+                   work_experence_age = #{workExperenceAge, jdbcType = VARCHAR},
+                   necessary_certificates = #{necessaryCertificates, jdbcType = VARCHAR},
+                   other_skills_requirements = #{otherSkillsRequirements, jdbcType = VARCHAR},
+                   skills_requirements = #{skillsRequirements, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateColumnByValue" parameterType="com.sunten.hrms.re.domain.ReDemandJobDescribes">
+        <![CDATA[
+            update re_demand_job_describes set
+            update_time = getdate()
+        ]]>
+        <if test="jobName != null">
+            <![CDATA[
+                ,job_name = #{jobName,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="deptName != null">
+            <![CDATA[
+                ,dept_name = #{deptName,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="directlyUnder != null">
+            <![CDATA[
+                ,directly_under = #{directlyUnder,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="jobDescribes != null">
+            <![CDATA[
+                ,job_describes = #{jobDescribes,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="jobContent != null">
+            <![CDATA[
+                ,job_content = #{jobContent,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="workQualification != null">
+            <![CDATA[
+                ,work_qualification = #{workQualification,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="checkFlag != null">
+            <![CDATA[
+                ,check_flag = #{checkFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="enabledFlag != null">
+            <![CDATA[
+                ,enabled_flag = #{enabledFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="deptId != null">
+            <![CDATA[
+                ,dept_id = #{deptId,jdbcType=BIGINT}
+            ]]>
+        </if>
+        <if test="education != null">
+            <![CDATA[
+                ,education = #{education,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="sex != null">
+            <![CDATA[
+                ,sex = #{sex,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="age != null">
+            <![CDATA[
+                ,age = #{age,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="workAge != null">
+            <![CDATA[
+                ,work_age = #{workAge,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="workExperenceAge != null">
+            <![CDATA[
+                ,work_experence_age = #{workExperenceAge,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="necessaryCertificates != null">
+            <![CDATA[
+                ,necessary_certificates = #{necessaryCertificates,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="otherSkillsRequirements != null">
+            <![CDATA[
+                ,other_skills_requirements = #{otherSkillsRequirements,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <if test="skillsRequirements != null">
+            <![CDATA[
+                ,skills_requirements = #{skillsRequirements,jdbcType=VARCHAR}
+            ]]>
+        </if>
+        <![CDATA[
+                 where id = #{id,jdbcType=BIGINT}
+            ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReDemandJobDescribesResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rdjd.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReDemandJobDescribesResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReDemandJobDescribesResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="checkCheckFlagAfterUpdate" parameterType="java.util.List" resultType="java.lang.Integer">
+       <![CDATA[
+           select count(1) from re_demand_job_describes where enabled_flag = 1 and check_flag = 1 and demand_job_id in
+            ]]>
+              <foreach collection="jobIds" item="item" index="index" open=" (" separator="," close=")">
+                        <![CDATA[
+                            #{item, jdbcType=BIGINT}
+                        ]]>
+                    </foreach>
+    </select>
+
+</mapper>

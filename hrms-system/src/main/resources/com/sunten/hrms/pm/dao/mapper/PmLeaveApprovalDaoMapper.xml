@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmLeaveApprovalDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmLeaveApproval">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="employee_class" property="employeeClass" />
+        <result column="leave_reason" property="leaveReason" />
+        <result column="dept_address" property="deptAddress" />
+        <result column="photo_and_address" property="photoAndAddress" />
+        <result column="work_overtime" property="workOvertime" />
+        <result column="rest_overtime" property="restOvertime" />
+        <result column="off_hours" property="offHours" />
+        <result column="self_leave_date" property="selfLeaveDate" />
+        <result column="approve_leave_date" property="approveLeaveDate" />
+        <result column="card_flag" property="cardFlag" />
+        <result column="not_submit_reason" property="notSubmitReason" />
+        <result column="last_leave_date" property="lastLeaveDate" />
+        <result column="pm_admin" property="pmAdmin" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="approval_status" property="approvalStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="current_node" property="currentNode" />
+        <result column="current_person" property="currentPerson"/>
+        <result column="senior_manager_work_card" property="seniorManagerWorkCard"/>
+        <result column="team" property="team"/>
+        <result column="department" property="department"/>
+    </resultMap>
+
+    <resultMap id="PmLeaveApprovalResultMap" type="com.sunten.hrms.pm.domain.PmLeaveApproval" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pla.employee_id, pla.employee_class, pla.leave_reason, pla.dept_address, pla.photo_and_address,
+            pla.work_overtime, pla.rest_overtime, pla.off_hours, pla.self_leave_date, pla.approve_leave_date,
+            pla.card_flag, pla.not_submit_reason, pla.last_leave_date, pla.pm_admin, pla.approval_result,
+            pla.enabled_flag, pla.oa_order, pla.approval_date, pla.approval_status, pla.id, pla.create_time,
+            pla.create_by, pla.update_time, pla.update_by, pla.current_node, pla.current_person,
+            pla.senior_manager_work_card, 0 as delete_flag, pla.medicalType, pla.deduction
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.employee_class as ${tAlias}_employee_class,
+            ${tAlias}.leave_reason as ${tAlias}_leave_reason, ${tAlias}.dept_address as ${tAlias}_dept_address,
+            ${tAlias}.photo_and_address as ${tAlias}_photo_and_address,
+            ${tAlias}.work_overtime as ${tAlias}_work_overtime,
+            ${tAlias}.rest_overtime as ${tAlias}_rest_overtime, ${tAlias}.off_hours as ${tAlias}_off_hours,
+            ${tAlias}.self_leave_date as ${tAlias}_self_leave_date,
+            ${tAlias}.approve_leave_date as ${tAlias}_approve_leave_date,
+            ${tAlias}.card_flag as ${tAlias}_card_flag,
+            ${tAlias}.not_submit_reason as ${tAlias}_not_submit_reason,
+            ${tAlias}.last_leave_date as ${tAlias}_last_leave_date, ${tAlias}.pm_admin as ${tAlias}_pm_admin,
+            ${tAlias}.approval_result as ${tAlias}_approval_result,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.approval_date as ${tAlias}_approval_date,
+            ${tAlias}.approval_status as ${tAlias}_approval_status, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.current_node as ${tAlias}_current_node,  ${tAlias}.current_person as ${tAlias}_current_person,
+             ${tAlias}.senior_manager_work_card as ${tAlias}_senior_manager_work_card
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,tpee.entry_time as entry_time
+            ,tpec.start_time as contract_start_time
+            ,tpec.end_time as contract_end_time
+            ,fdev.ext_dept_name AS dept_name
+            ,fdev.ext_department_name AS department
+            ,fdev.ext_team_name AS team
+            ,pej.job_name as jobName
+            ,pej.dept_name as target_dept_name
+            ,pe.name as name
+            ,pe.work_card as work_card
+            ,pe.id_number as id_number
+            ,isnull(pett.tele, '') as emp_tele,
+            pej.dept_id as dept_id
+            ,pej.job_id as job_id
+        ]]>
+        <![CDATA[
+              from pm_leave_approval pla join pm_employee_job pej
+              on pej.employee_id = pla.employee_id and pej.enabled_flag = 1 and pej.job_main_flag = 1
+              join pm_employee pe on pe.id = pla.employee_id and pe.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+            outer apply (select top(1) pee.* from pm_employee_entry pee
+            where pee.employee_id = pla.employee_id
+            AND pee.enabled_flag = 1) tpee
+            outer apply (select top(1)  pec.*   from pm_employee_contract pec where pec.employee_id = pla.employee_id
+            and pec.enabled_flag = 1 and new_contract_flag = 1) tpec
+            outer apply
+            (SELECT TOP(1) pett_ap.*
+            FROM pm_employee_tele pett_ap
+            WHERE pett_ap.employee_id = pe.id
+            AND pett_ap.enabled_flag = 1
+            order by id desc
+            ) pett
+
+
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pla.employee_id
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                                    and pla.enabled_flag = 1
+                                ]]>
+            </if>
+            <if test="criteria.employeeId != null and criteria.createBy != null">
+                <![CDATA[
+                    and (pla.employee_id  =  #{criteria.employeeId, jdbcType = BIGINT} or pla.create_by = #{criteria.createBy, jdbcType=BIGINT})
+                                ]]>
+            </if>
+            <if test="criteria.employeeId != null and criteria.createBy == null">
+                <![CDATA[
+                    and pla.employee_id  =  #{criteria.employeeId, jdbcType = BIGINT}
+                                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmLeaveApproval" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_leave_approval (employee_id, employee_class,
+                                           leave_reason, dept_address,
+                                           photo_and_address, work_overtime,
+                                           rest_overtime, off_hours,
+                                           self_leave_date, approve_leave_date, card_flag,
+                                           not_submit_reason, last_leave_date,
+                                           pm_admin, approval_result,
+                                           enabled_flag, oa_order, approval_date,
+                                           approval_status, create_time,
+                                           create_by, update_time, update_by,
+                                           current_node, current_person, senior_manager_work_card
+                                           )
+            values (#{employeeId,jdbcType=BIGINT}, #{employeeClass,jdbcType=VARCHAR},
+                    #{leaveReason,jdbcType=VARCHAR}, #{deptAddress,jdbcType=VARCHAR},
+                    #{photoAndAddress,jdbcType=VARCHAR}, #{workOvertime,jdbcType=DECIMAL},
+                    #{restOvertime,jdbcType=DECIMAL}, #{offHours,jdbcType=DECIMAL},
+                    #{selfLeaveDate,jdbcType=DATE}, #{approveLeaveDate,jdbcType=DATE}, #{cardFlag,jdbcType=BIT},
+                    #{notSubmitReason,jdbcType=VARCHAR}, #{lastLeaveDate,jdbcType=DATE},
+                    #{pmAdmin,jdbcType=VARCHAR}, #{approvalResult,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT}, #{oaOrder,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE},
+                    #{approvalStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}
+                    , #{currentNode,jdbcType=VARCHAR}, #{currentPerson,jdbcType=VARCHAR},
+                    #{seniorManagerWorkCard, jdbcType=VARCHAR}
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_leave_approval
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmLeaveApproval">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="disabledById" parameterType="java.lang.Long">
+           <![CDATA[
+            update pm_leave_approval set enabled_flag = 0 where id = #{id, jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmLeaveApproval">
+        <![CDATA[
+            update pm_leave_approval
+            set
+                  update_time        = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by          = #{updateBy,jdbcType=BIGINT}
+             ]]>
+             <if test="employeeId != null">
+                <![CDATA[
+             ,employee_id        = #{employeeId,jdbcType=BIGINT}
+               ]]>
+             </if>
+        <if test="employeeClass != null">
+            <![CDATA[
+              ,employee_class     = #{employeeClass,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="leaveReason != null">
+            <![CDATA[
+              ,leave_reason       = #{leaveReason,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="deptAddress != null">
+            <![CDATA[
+              , dept_address       = #{deptAddress,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="photoAndAddress != null">
+            <![CDATA[
+            , photo_and_address  = #{photoAndAddress,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="workOvertime != null">
+            <![CDATA[
+            , work_overtime      = #{workOvertime,jdbcType=DECIMAL}
+               ]]>
+        </if>
+        <if test="restOvertime != null">
+            <![CDATA[
+            , rest_overtime      = #{restOvertime,jdbcType=DECIMAL}
+               ]]>
+        </if>
+        <if test="offHours != null">
+            <![CDATA[
+            , off_hours          = #{offHours,jdbcType=DECIMAL}
+               ]]>
+        </if>
+        <if test="selfLeaveDate != null">
+            <![CDATA[
+            , self_leave_date    = #{selfLeaveDate,jdbcType=DATE}
+               ]]>
+        </if>
+        <if test="approveLeaveDate != null">
+            <![CDATA[
+            , approve_leave_date = #{approveLeaveDate,jdbcType=DATE}
+               ]]>
+        </if>
+        <if test="cardFlag != null">
+            <![CDATA[
+            , card_flag          = #{cardFlag,jdbcType=BIT}
+               ]]>
+        </if>
+        <if test="notSubmitReason != null">
+            <![CDATA[
+            , not_submit_reason  = #{notSubmitReason,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="lastLeaveDate != null">
+            <![CDATA[
+            , last_leave_date    = #{lastLeaveDate,jdbcType=DATE}
+               ]]>
+        </if>
+        <if test="pmAdmin != null">
+            <![CDATA[
+            , pm_admin           = #{pmAdmin,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="approvalResult != null">
+            <![CDATA[
+            , approval_result    = #{approvalResult,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="enabledFlag != null">
+            <![CDATA[
+            , enabled_flag       = #{enabledFlag,jdbcType=BIT}
+               ]]>
+        </if>
+        <if test="oaOrder != null">
+            <![CDATA[
+            , oa_order           = #{oaOrder,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="approvalDate != null">
+            <![CDATA[
+            , approval_date      = #{approvalDate,jdbcType=DATE}
+               ]]>
+        </if>
+        <if test="approvalStatus != null">
+            <![CDATA[
+            , approval_status    = #{approvalStatus,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="currentNode != null">
+            <![CDATA[
+            , current_node    = #{currentNode,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="currentPerson != null">
+            <![CDATA[
+            , current_person    = #{currentPerson,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="seniorManagerWorkCard != null">
+            <![CDATA[
+            , senior_manager_work_card    = #{seniorManagerWorkCard,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="medicalType != null">
+            <![CDATA[
+            , medicalType    = #{medicalType,jdbcType=VARCHAR}
+               ]]>
+        </if>
+        <if test="deduction != null">
+            <![CDATA[
+            , deduction    = #{deduction,jdbcType=VARCHAR}
+               ]]>
+        </if>
+
+        <![CDATA[
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmLeaveApprovalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pla.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getByOaOrder" resultMap="PmLeaveApprovalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pla.oa_order = #{oaOrder,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmLeaveApprovalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmLeaveApprovalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getSalesAreaEtcByDeptId" resultType="com.sunten.hrms.pm.vo.SalesAreaEtcVo" parameterType="java.lang.Long">
+        <![CDATA[
+            select
+            (select pe.work_card from pm_employee pe where pe.enabled_flag = 1 and pe.leave_flag = 0 and pe.id = psar.market_department_emp_id)
+            as market_dept,
+            (select pe.work_card from pm_employee pe where pe.enabled_flag = 1 and pe.leave_flag = 0 and pe.id = psar.market_area_emp_id)
+            as sales_area
+            from pm_sales_approval_relations psar
+             where psar.enabled_flag = 1
+             and psar.dept_id = #{deptId, jdbcType = BIGINT}
+        ]]>
+    </select>
+
+    <select id="checkIsExistLeaveInApproval" resultType="java.lang.Boolean" parameterType="java.lang.Long">
+        <![CDATA[
+            select case when exists  (select 1 from pm_leave_approval where employee_id = #{employeeId, jdbcType = BIGINT} and enabled_flag = 1
+            and isnull(oa_order, '') != '' and approval_status != 'notPass') then 1 else 0 end
+        ]]>
+    </select>
+
+    <select id="listALLByStatus" resultType="com.sunten.hrms.pm.domain.PmLeaveApproval" >
+        <![CDATA[
+            select pe.name,pla.* from pm_leave_approval pla,pm_employee pe where pla.approval_status=#{approvalStatus,jdbcType=VARCHAR}
+            and pla.enabled_flag=1 and pla.employee_id=pe.id
+         ]]>
+    </select>
+
+    <select id="countLeaveApproval" resultType="java.lang.Integer" >
+        <![CDATA[
+            select count(*) from pm_leave_approval where approval_status=#{approvalStatus,jdbcType=VARCHAR}
+            and enabled_flag=1
+         ]]>
+    </select>
+
+</mapper>

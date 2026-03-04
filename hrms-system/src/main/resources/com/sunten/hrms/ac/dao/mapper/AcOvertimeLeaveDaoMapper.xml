@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOvertimeLeaveDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeLeave">
+        <id column="id" property="id" />
+        <result column="date" property="date" />
+        <result column="employee_id" property="employeeId" />
+        <result column="working_day_overtime" property="workingDayOvertime" />
+        <result column="rest_day_overtime" property="restDayOvertime" />
+        <result column="holiday_overtime" property="holidayOvertime"/>
+        <result column="off_hours" property="offHours" />
+        <result column="annual_leave" property="annualLeave" />
+        <result column="compassionate_leave" property="compassionateLeave" />
+        <result column="sick_leave" property="sickLeave" />
+        <result column="marriage_holiday" property="marriageHoliday" />
+        <result column="maternity_leave" property="maternityLeave" />
+        <result column="paternity_leave" property="paternityLeave" />
+        <result column="bereavement_leave" property="bereavementLeave" />
+        <result column="work_related_injury_leave" property="workRelatedInjuryLeave" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="working_hours" property="workingHours" />
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3"/>
+        <result column="total_working_hours" property="totalWorkingHours"/>
+        <result column="family_planning_leave" property="familyPlanningLeave"/>
+        <result column="public_holiday" property="publicHoliday"/>
+        <result column="total_over_time" property="totalOverTime"/>
+        <result column="hrms_flag" property="hrmsFlag"/>
+        <result column="attribute7" property="attribute7"/>
+    </resultMap>
+
+    <resultMap id="AcOvertimeLeaveResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeLeave" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aol.date, aol.employee_id, aol.working_day_overtime, aol.rest_day_overtime, aol.holiday_overtime, aol.off_hours,
+            aol.annual_leave, aol.compassionate_leave, aol.sick_leave, aol.marriage_holiday,
+            aol.maternity_leave, aol.paternity_leave, aol.bereavement_leave, aol.work_related_injury_leave,
+            aol.id, aol.create_time, aol.create_by, aol.update_time, aol.update_by,aol.working_hours,
+            aol.enabled_flag,
+            aol.attribute1,aol.attribute2,aol.attribute3,
+            aol.family_planning_leave, aol.public_holiday,
+            aol.hrms_flag,
+            aol.attribute7
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.date as ${tAlias}_date, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.working_day_overtime as ${tAlias}_working_day_overtime,
+            ${tAlias}.rest_day_overtime as ${tAlias}_rest_day_overtime, ${tAlias}.holiday_overtime as ${tAlias}_holiday_overtime,
+            ${tAlias}.off_hours as ${tAlias}_off_hours, ${tAlias}.annual_leave as ${tAlias}_annual_leave,
+            ${tAlias}.compassionate_leave as ${tAlias}_compassionate_leave,
+            ${tAlias}.sick_leave as ${tAlias}_sick_leave,
+            ${tAlias}.marriage_holiday as ${tAlias}_marriage_holiday,
+            ${tAlias}.maternity_leave as ${tAlias}_maternity_leave,
+            ${tAlias}.paternity_leave as ${tAlias}_paternity_leave,
+            ${tAlias}.bereavement_leave as ${tAlias}_bereavement_leave,
+            ${tAlias}.work_related_injury_leave as ${tAlias}_work_related_injury_leave,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.working_hours as ${tAlias}_working_hours,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute2 as ${tAlias}_attribute3,
+            ${tAlias}.family_planning_leave as ${tAlias}_family_planning_leave,
+            ${tAlias}.public_holiday as ${tAlias}_public_holiday,
+            ${tAlias}.hrms_flag as ${tAlias}_hrms_flag,
+            ${tAlias}.attribute7 as ${tAlias}_attribute7
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+    SELECT
+    ot.*
+    from v_over_time ot where 1 = 1
+	]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <if test="criteria != null">
+            <if test="criteria.value != null and criteria.colName != '' and criteria.symbol != ''">
+                <choose>
+                    <when test="criteria.colName == 'work_card'">
+                        <![CDATA[
+                          and ot.pe_work_card ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'name'">
+                        <![CDATA[
+                          and ot.pe_name ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'dept_name'">
+                        <![CDATA[
+                          and ot.pe_dept_name ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'department'">
+                        <![CDATA[
+                          and ot.pe_department ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'team'">
+                        <![CDATA[
+                          and ot.pe_team ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'job_name'">
+                        <![CDATA[
+                          and ot.pe_job_name ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.colName == 'leave_flag'">
+                        <![CDATA[
+                          and ot.pe_leave_flag ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                    </when>
+                </choose>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                and exists ( select 1 from pm_employee_job pej
+                                         where pej.enabled_flag = 1
+                                           and pej.job_main_flag = 1
+                                           and pej.employee_id = ot.pe_id
+                                           and pej.dept_id in (]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+                <![CDATA[  ) ) ]]>
+            </if>
+            <if test="criteria.date != null">
+                <![CDATA[
+                    and  DATEDIFF(mm, ot.date ,#{criteria.date, jdbcType = DATE}) = 0
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeave" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_overtime_leave (date, employee_id,
+                                           working_day_overtime, rest_day_overtime,
+                                           holiday_overtime,
+                                           off_hours, annual_leave,
+                                           compassionate_leave, sick_leave,
+                                           marriage_holiday, maternity_leave,
+                                           paternity_leave, bereavement_leave,
+                                           work_related_injury_leave, create_time,
+                                           create_by, update_time, update_by, working_hours,
+                                           enabled_flag, attribute1,attribute2,attribute3,
+                                           family_planning_leave,public_holiday, hrms_flag,attribute7
+
+                                           )
+            values (#{date,jdbcType=DATE}, #{employeeId,jdbcType=BIGINT},
+                    #{workingDayOvertime,jdbcType=DECIMAL}, #{restDayOvertime,jdbcType=DECIMAL},
+                    #{holidayOvertime, jdbcType = DECIMAL},
+                    #{offHours,jdbcType=DECIMAL}, #{annualLeave,jdbcType=DECIMAL},
+                    #{compassionateLeave,jdbcType=DECIMAL}, #{sickLeave,jdbcType=DECIMAL},
+                    #{marriageHoliday,jdbcType=DECIMAL}, #{maternityLeave,jdbcType=DECIMAL},
+                    #{paternityLeave,jdbcType=DECIMAL}, #{bereavementLeave,jdbcType=DECIMAL},
+                    #{workRelatedInjuryLeave,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{workingHours,jdbcType=DECIMAL}, #{enabledFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR},#{attribute2,jdbcType=VARCHAR},#{attribute3,jdbcType=VARCHAR},
+                    #{familyPlanningLeave, jdbcType = DECIMAL },
+                    #{publicHoliday, jdbcType = DECIMAL},
+                    #{hrmsFlag, jdbcType = BIT}, #{attribute7, jdbcType = VARCHAR}
+                    )
+        ]]>
+    </insert>
+
+
+<!--导入数据前，以防万一，生成一次漏了的员工 -->
+    <insert id="createBeforeinterface" parameterType="java.time.LocalDate">
+        <![CDATA[
+         insert into ac_overtime_leave(date, employee_id,
+                                           working_day_overtime, rest_day_overtime,
+                                           holiday_overtime,
+                                           off_hours, annual_leave,
+                                           compassionate_leave, sick_leave,
+                                           marriage_holiday, maternity_leave,
+                                           paternity_leave, bereavement_leave,
+                                           work_related_injury_leave, create_time,
+                                           create_by, update_time, update_by, working_hours,
+                                           enabled_flag, family_planning_leave,public_holiday, hrms_flag, attribute7, attribute8,
+                                           date_str
+                                           )
+        select (CONVERT(VARCHAR(7), #{date, jdbcType = DATE}, 120) + '-01'), pe.id, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, getdate(), -1 , getdate(), -1,
+        case when pel.quit_time is null then
+            case when convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7), peen.entry_time, 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and dateadd(dd, -1, convert(varchar(7), dateadd(mm, 1, #{date, jdbcType = DATE}), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                   (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7), #{date, jdbcType = DATE}, 120) + '-01') and dateadd(dd, -1, convert(varchar(7), dateadd(mm, 1, #{date, jdbcType = DATE}), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        else
+            case when convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7), peen.entry_time, 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7), #{date, jdbcType = DATE}, 120) + '-01') and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        end, 1, 0, 0, 1, '导入时生成',(case when
+pe.leave_flag = 1  then 'true' else 'false' end
+), case when month(#{date, jdbcType = DATE}) > 9 then convert(varchar(4), year(#{date, jdbcType = DATE})) + '.' + convert(varchar(2), month(#{date, jdbcType = DATE}))
+					 else  convert(varchar(4), year(#{date, jdbcType = DATE})) + '.0' + convert(varchar(1), month(#{date, jdbcType = DATE})) end
+    from pm_employee pe
+	left join pm_employee_leaveoffice pel on pe.id = pel.employee_id and pel.enabled_flag = 1
+   outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = pe.id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+							 where pe.enabled_flag = 1
+							 and convert(varchar(7), isnull(pel.quit_time, #{date, jdbcType = DATE}), 120) = convert(varchar(7), #{date, jdbcType = DATE},120)
+							 and pe.id not in (select aolt.employee_id from ac_overtime_leave aolt where DATEDIFF(mm, aolt.date, #{date, jdbcType = DATE}) = 0 and aolt.enabled_flag = 1 )
+							 and isnull(peen.entry_time,(CONVERT(VARCHAR(7), #{date, jdbcType = DATE}, 120) + '-01') ) <= dateadd(dd, -1, convert(varchar(7), dateadd(mm, 1, #{date, jdbcType = DATE}),120) + '-01')
+        ]]>
+    </insert>
+
+<!--  导入前更新应上班工时  -->
+    <update id="updateBeforeinterface" parameterType="java.time.LocalDate">
+        <![CDATA[
+        update acl set working_hours =
+          case when pel.quit_time is null then
+            case when convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7), peen.entry_time, 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and dateadd(dd, -1, convert(varchar(7), dateadd(mm, 1, #{date, jdbcType = DATE}), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                   (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7), #{date, jdbcType = DATE}, 120) + '-01') and dateadd(dd, -1, convert(varchar(7), dateadd(mm, 1, #{date, jdbcType = DATE}), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        else
+            case when convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7), peen.entry_time, 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7), #{date, jdbcType = DATE}, 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7),  #{date, jdbcType = DATE}, 120) + '-01') and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        end
+        from ac_overtime_leave acl left join pm_employee_leaveoffice pel on acl.employee_id = pel.employee_id and pel.enabled_flag = 1
+        outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = acl.employee_id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+               where acl.enabled_flag = 1
+               and convert(varchar(7), acl.date, 120) = convert(varchar(7), #{date, jdbcType = DATE}, 120)
+               and convert(varchar(7), isnull(pel.quit_time, #{date, jdbcType = DATE}), 120) = convert(varchar(7),  #{date, jdbcType = DATE},120)
+        ]]>
+    </update>
+
+    <insert id="autoCreateLastMonth">
+        <![CDATA[
+       insert into ac_overtime_leave(date, employee_id,
+                                           working_day_overtime, rest_day_overtime,
+                                           holiday_overtime,
+                                           off_hours, annual_leave,
+                                           compassionate_leave, sick_leave,
+                                           marriage_holiday, maternity_leave,
+                                           paternity_leave, bereavement_leave,
+                                           work_related_injury_leave, create_time,
+                                           create_by, update_time, update_by, working_hours,
+                                           enabled_flag, family_planning_leave,public_holiday, hrms_flag, attribute7, attribute8,
+                                           date_str
+                                           )
+        select (CONVERT(VARCHAR(7), DATEADD(mm, -1, getdate()), 120) + '-01'), pe.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, getdate(), -1 , getdate(), -1,
+        case when pel.quit_time is null then
+            case when convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) = convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and dateadd(dd, -1, convert(varchar(7), getdate(), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                   (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7), dateadd(mm, -1, getdate()), 120) + '-01') and dateadd(dd, -1, convert(varchar(7), getdate(), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        else
+            case when convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) = convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7), dateadd(mm, -1, getdate()), 120) + '-01') and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        end, 1, 0, 0, 1, '系统自动生成',(case when
+pe.leave_flag = 1  then 'true' else 'false' end
+), case when month(DATEADD(mm, -1, getdate())) > 9 then convert(varchar(4), year(DATEADD(mm, -1, getdate()))) + '.' + convert(varchar(2), month(DATEADD(mm, -1, getdate())))
+					 else  convert(varchar(4), year(DATEADD(mm, -1, getdate()))) + '.0' + convert(varchar(1), month(DATEADD(mm, -1, getdate()))) end
+    from pm_employee pe
+	left join pm_employee_leaveoffice pel on pe.id = pel.employee_id and pel.enabled_flag = 1
+   outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = pe.id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+							 where pe.enabled_flag = 1
+							 and convert(varchar(7), dateadd(mm, -1, isnull(pel.quit_time, getdate())), 120) = convert(varchar(7), dateadd(mm, -1, getdate()),120)
+							 and pe.id not in (select aolt.employee_id from ac_overtime_leave aolt where DATEDIFF(mm, aolt.date, DATEADD(mm, -1, getdate())) = 0 and aolt.enabled_flag = 1)
+
+							 and isnull(peen.entry_time, (CONVERT(VARCHAR(7), DATEADD(mm, -1, getdate()), 120) + '-01')) <= dateadd(dd, -1, convert(varchar(7), getdate(), 120) + '-01')
+        ]]>
+    </insert>
+
+    <update id="updateLastMonthWorkingHours">
+        update acl set working_hours =
+          case when pel.quit_time is null then
+            case when convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) = convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and dateadd(dd, -1, convert(varchar(7), getdate(), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                   (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7), dateadd(mm, -1, getdate()), 120) + '-01') and dateadd(dd, -1, convert(varchar(7), getdate(), 120) + '-01')) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        else
+            case when convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) = convert(varchar(7), dateadd(mm, -1, peen.entry_time), 120) then
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN peen.entry_time and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                else
+                    (select count(1)
+                    from ac_calendar_header ach join ac_calendar_line acl on
+                    ach.id = acl.calendar_header_id
+                    and ach.enabled_flag = 1
+                    and acl.enabled_flag = 1
+                    and ach.default_flag = 1
+                    and acl.day_off_flag = 0
+                    and convert(varchar(7),dateadd(mm, -1, getdate()), 120) = convert(varchar(7),acl.now_date, 120)
+                    and acl.now_date BETWEEN (convert(varchar(7), dateadd(mm, -1, getdate()), 120) + '-01') and pel.quit_time) * ( SELECT TOP 1 calculation FROM ac_set_up)
+                end
+        end
+        from ac_overtime_leave acl left join pm_employee_leaveoffice pel on acl.employee_id = pel.employee_id and pel.enabled_flag = 1
+        outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = acl.employee_id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+               where acl.enabled_flag = 1
+               and convert(varchar(7), acl.date, 120) = convert(varchar(7), dateadd(mm, -1, getdate()), 120)
+               and convert(varchar(7), dateadd(mm, -1, isnull(pel.quit_time, getdate())), 120) = convert(varchar(7), dateadd(mm, -1, getdate()),120)
+
+    </update>
+
+
+<!--
+        from pm_employee pe left join
+
+			on TEMP.pe_id = pe.id
+			 where pe.enabled_flag = 1
+			 and
+			 pe.id not in (select aolt.employee_id from ac_overtime_leave aolt where DATEDIFF(mm, aolt.date, DATEADD(mm, -1, getdate())) = 0)
+        (	select pe.id as pe_id,
+ISNULL(
+sum(ISNULL (DATEDIFF(mi, dbo.merge_date_time(aart.date,aart.first_time_from,0),dbo.merge_date_time(aart.date,aart.first_time_to,aart.extend1_time_flag)),0)
++
+ISNULL (DATEDIFF(mi, dbo.merge_date_time(aart.date,aart.second_time_from,0),dbo.merge_date_time(aart.date,aart.second_time_to,aart.extend2_time_flag)),0)
++
+ISNULL (DATEDIFF(mi, dbo.merge_date_time(aart.date,aart.third_time_from,0),dbo.merge_date_time(aart.date,aart.third_time_to,aart.extend3_time_flag)),0))/60, 0
+) AS time
+from pm_employee pe  left join ac_attendance_record_history aart  on aart.employee_id = pe.id
+and
+pe.enabled_flag = 1
+where
+ DATEDIFF(mm, DATEADD(mm, -1, getdate()),isnull(aart.date, DATEADD(mm, -1, getdate()))) = 0
+			group by pe.id ) AS TEMP
+			on TEMP.pe_id = pe.id
+
+-->
+
+
+<!--    <update id="updateByInterface" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeaveInterface">-->
+<!--        update ac_overtime_leave-->
+<!--        set working_day_overtime = #{workingDayOvertime,jdbcType=DECIMAL},-->
+<!--        rest_day_overtime = #{restDayOvertime,jdbcType=DECIMAL},-->
+<!--        off_hours = #{offHours,jdbcType=DECIMAL},-->
+<!--        annual_leave = #{annualLeave,jdbcType=DECIMAL},-->
+<!--        compassionate_leave = #{compassionateLeave,jdbcType=DECIMAL},-->
+<!--        sick_leave =  #{sickLeave,jdbcType=DECIMAL},-->
+<!--        marriage_holiday = #{marriageHoliday, jdbcType=DECIMAL},-->
+<!--        maternity_leave = #{maternityLeave,jdbcType=DECIMAL},-->
+<!--        paternity_leave = #{paternityLeave,jdbcType=DECIMAL},-->
+<!--        bereavement_leave =  #{bereavementLeave,jdbcType=DECIMAL},-->
+<!--        work_related_injury_leave = #{workRelatedInjuryLeave,jdbcType=DECIMAL},-->
+<!--        create_time = #{createTime,jdbcType=TIMESTAMP},-->
+<!--         create_by = #{createBy,jdbcType=BIGINT},-->
+<!--         update_time = #{updateTime,jdbcType=TIMESTAMP},-->
+<!--         update_by = #{updateBy,jdbcType=BIGINT},-->
+<!--         family_planning_leave = #{familyPlanningLeave, jdbcType = DECIMAL },-->
+<!--         public_holiday = #{publicHoliday, jdbcType = DECIMAL},-->
+<!--         attribute7 = 'Excel导入更新'-->
+<!--         from ac_overtime_leave aol-->
+<!--        where aol.employee_id = #{employeeId, jdbcType = BIGINT}-->
+<!--        and DATEDIFF(mm,#{date, jdbcType = DATE},aol.date) = 0-->
+<!--    </update>-->
+
+    <update id="updateByInterface" parameterType="java.lang.Long">
+        <![CDATA[
+              { call msp_overtime_interface_to_main(#{groupId,jdbcType=BIGINT}) }
+        ]]>
+    </update>
+
+    <insert id="insertByInterface">
+               <![CDATA[
+            insert into ac_overtime_leave (date, employee_id,
+                                           working_day_overtime, rest_day_overtime,
+                                           holiday_overtime,
+                                           off_hours, annual_leave,
+                                           compassionate_leave, sick_leave,
+                                           marriage_holiday, maternity_leave,
+                                           paternity_leave, bereavement_leave,
+                                           work_related_injury_leave, create_time,
+                                           create_by, update_time, update_by,
+                                           enabled_flag, family_planning_leave,public_holiday,
+                                           holiday_overtime
+                                           )
+            select
+              aoli.date, aoli.employee_id, aoli.working_day_overtime, aoli.rest_day_overtime,
+              aoli.holiday_overtime,
+            aoli.off_hours, aoli.annual_leave, aoli.compassionate_leave, aoli.sick_leave,
+            aoli.marriage_holiday, aoli.maternity_leave, aoli.paternity_leave, aoli.bereavement_leave,
+            aoli.work_related_injury_leave,aoli.create_time, aoli.create_by, aoli.update_time,
+            aoli.update_by, 1, aoli.family_planning_leave, aoli.public_holiday, aoli.holiday_overtime
+              from ac_overtime_leave_interface aoli
+              where aoli.group_id = #{groupId, jdbcType = BIGINT}
+              and aoli.data_status = 'T'
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_overtime_leave
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeave">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteAllByMonth" >
+        <![CDATA[
+            update ac_overtime_leave set enabled_flag = 0
+            where DATEDIFF(mm, date, #{month, jdbcType=DATE}) = 0
+        ]]>
+    </update>
+
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcOvertimeLeave">
+        <![CDATA[
+            update ac_overtime_leave
+               set date                      = #{date,jdbcType=DATE},
+                   employee_id               = #{employeeId,jdbcType=BIGINT},
+                   working_day_overtime      = #{workingDayOvertime,jdbcType=DECIMAL},
+                   rest_day_overtime         = #{restDayOvertime,jdbcType=DECIMAL},
+                   holiday_overtime          = #{holidayOvertime, jdbcType = DECIMAL},
+                   off_hours                 = #{offHours,jdbcType=DECIMAL},
+                   annual_leave              = #{annualLeave,jdbcType=DECIMAL},
+                   compassionate_leave       = #{compassionateLeave,jdbcType=DECIMAL},
+                   sick_leave                = #{sickLeave,jdbcType=DECIMAL},
+                   marriage_holiday          = #{marriageHoliday,jdbcType=DECIMAL},
+                   maternity_leave           = #{maternityLeave,jdbcType=DECIMAL},
+                   paternity_leave           = #{paternityLeave,jdbcType=DECIMAL},
+                   bereavement_leave         = #{bereavementLeave,jdbcType=DECIMAL},
+                   work_related_injury_leave = #{workRelatedInjuryLeave,jdbcType=DECIMAL},
+                   update_time               = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                 = #{updateBy,jdbcType=BIGINT},
+                   working_hours             = #{workingHours, jdbcType = DECIMAL},
+                   enabled_flag              = #{enabledFlag, jdbcType = BIT},
+                   family_planning_leave = #{familyPlanningLeave, jdbcType = DECIMAL},
+                   public_holiday = #{publicHoliday, jdbcType = DECIMAL}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcOvertimeLeaveResultMap">
+        <![CDATA[
+        select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        from ac_overtime_leave aol
+             where aol.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcOvertimeLeaveResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by ot.pe_work_card
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcOvertimeLeaveResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <sql id="sumAcOvertimeLeave">
+        <![CDATA[
+ select 	temp.*,
+pej.job_name AS pe_job_name,
+	peen.entry_time AS entry_time,
+	pel.quit_time AS quit_time,
+	fdev.ext_dept_name as pe_dept_name,
+	fdev.ext_department_name as pe_department,
+	fdev.ext_team_name as pe_team,
+	pe.leave_flag as pe_leave_flag
+ from
+ (
+ select
+    sum(isnull(ol.working_day_overtime, 0)) AS working_day_overtime,
+    sum(isnull(ol.rest_day_overtime, 0) ) AS rest_day_overtime,
+    sum(isnull(ol.holiday_overtime, 0)) as holiday_overtime,
+    sum( isnull(ol.off_hours, 0) ) AS off_hours,
+    sum( isnull(ol.annual_leave, 0) ) AS annual_leave,
+    sum( isnull(ol.compassionate_leave, 0) ) AS compassionate_leave,
+    sum( isnull(ol.sick_leave, 0) ) AS sick_leave,
+    sum( isnull(ol.marriage_holiday, 0) ) AS marriage_holiday,
+    sum( isnull(ol.maternity_leave, 0) ) AS maternity_leave,
+    sum( isnull(ol.paternity_leave, 0) ) AS paternity_leave,
+    sum( isnull(ol.bereavement_leave, 0) ) AS bereavement_leave,
+    sum( isnull(ol.work_related_injury_leave, 0) ) AS work_related_injury_leave,
+    sum( isnull(ol.working_hours, 0) ) AS working_hours,
+    sum( isnull(ol.family_planning_leave, 0) ) AS family_planning_leave,
+    sum( isnull(ol.public_holiday, 0) ) AS public_holiday,
+
+    sum( isnull(ol.total_working_hours, 0) ) AS total_working_hours,
+     sum( isnull(ol.total_over_time, 0) ) AS total_over_time,
+    ol.pe_work_card,
+    ol.pe_name
+
+        from v_over_time ol
+
+		where 	1 = 1
+		]]>
+        <if test="criteria != null">
+            <if test="criteria.dateFrom != null and criteria.dateTo != null">
+                <![CDATA[
+                    and ol.date BETWEEN  #{criteria.dateFrom, jdbcType = DATE} and #{criteria.dateTo, jdbcType = DATE}
+                ]]>
+            </if>
+        </if>
+        <![CDATA[
+                GROUP BY
+                ol.pe_work_card,
+                ol.pe_name
+				) as temp
+                    left join pm_employee pe
+                    on RIGHT ( cast( '000000' + rtrim( pe.work_card) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( temp.pe_work_card) AS VARCHAR ), 6 )
+                    and pe.enabled_flag = 1
+							]]>
+        <![CDATA[
+                LEFT JOIN pm_employee_job pej ON pej.employee_id = pe.id
+                AND pej.enabled_flag = 1
+                AND pej.job_main_flag = 1
+                LEFT JOIN pm_employee_leaveoffice pel ON pel.employee_id = pe.id
+                AND pel.enabled_flag = 1
+                left outer join fnd_dept_ext_v fdev
+                on pej.dept_id = fdev.id
+                and fdev.enabled_flag = 1
+                and fdev.deleted_flag = 0
+                outer apply (
+                select top(1) peen_ap.* from pm_employee_entry peen_ap
+                where peen_ap.employee_id = pe.id
+                       AND peen_ap.enabled_flag = 1
+                ) peen
+                where isnull(pel.quit_time, getdate()) >  #{criteria.dateFrom, jdbcType = DATE}
+	 ]]>
+        <if test="criteria != null">
+        <if test="criteria.value != null and criteria.colName != '' and criteria.symbol != ''">
+            <choose>
+                <when test="criteria.colName == 'work_card'">
+                    <![CDATA[
+                          and pe_work_card ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                </when>
+                <when test="criteria.colName == 'name'">
+                    <![CDATA[
+                          and pe_name ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                </when>
+                <when test="criteria.colName == 'dept_name'">
+                    <![CDATA[
+                          and fdev.ext_dept_name ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                </when>
+                <when test="criteria.colName == 'department'">
+                    <![CDATA[
+                          and fdev.ext_department_name ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                </when>
+                <when test="criteria.colName == 'team'">
+                    <![CDATA[
+                          and fdev.ext_team_name ${criteria.symbol} #{criteria.value, jdbcType = VARCHAR}
+                        ]]>
+                </when>
+            </choose>
+        </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                and exists ( select 1 from pm_employee_job pej
+                                         where pej.enabled_flag = 1
+                                           and pej.job_main_flag = 1
+                                           and pej.employee_id = pe.id
+                                           and pej.dept_id in (]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator=",">
+                    #{item}
+                </foreach>
+                <![CDATA[  ) ) ]]>
+            </if>
+        </if>
+
+    </sql>
+
+    <select id="sumAcOvertimeLeavePage" resultMap="AcOvertimeLeaveResultMap">
+        <include refid="sumAcOvertimeLeave"/>
+    </select>
+
+    <select id="sumAcOvertimeLeave" resultMap="AcOvertimeLeaveResultMap">
+        <include refid="sumAcOvertimeLeave"/>
+        <![CDATA[
+        order by temp.pe_work_card
+         ]]>
+    </select>
+
+    <select id="countDataByMonth" resultType="Integer">
+        <![CDATA[
+            select count(aol.*) from  ac_overtime_leave aol
+            where DATEDIFF(mm, aol.date, #{month, jdbcType=DATE}) = 0
+        ]]>
+    </select>
+
+    <select id="checkOvertimeEmailIsSendToday" resultType="java.lang.Boolean" parameterType="java.lang.String">
+        <![CDATA[
+            select case when exists (select 1 from tool_email_interface where CHARINDEX(#{str, jdbcType = VARCHAR}, mail_subject) > 0 and
+             convert(varchar(10), planned_date, 120) = convert(varchar(10), getdate(), 120)) then 1 else 0 end
+        ]]>
+    </select>
+
+</mapper>

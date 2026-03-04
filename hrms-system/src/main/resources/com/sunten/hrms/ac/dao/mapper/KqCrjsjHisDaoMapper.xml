@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.KqCrjsjHisDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.KqCrjsjHis">
+        <result column="mjkzqbh" property="mjkzqbh" />
+        <result column="time8" property="time8" />
+        <result column="acstosql" property="acstosql" />
+        <result column="crjqk" property="crjqk" />
+        <result column="mjjbh" property="mjjbh" />
+        <result column="kh" property="kh" />
+        <result column="id" property="id" />
+        <result column="date8" property="date8" />
+        <result column="syqk" property="syqk" />
+    </resultMap>
+
+    <resultMap id="KqCrjsjHisResultMap" type="com.sunten.hrms.ac.domain.KqCrjsjHis" autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            KCH.mjkzqbh, KCH.time8, KCH.acstosql, KCH.crjqk, KCH.mjjbh, KCH.kh, KCH.id, KCH.date8, KCH.syqk
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.mjkzqbh as ${tAlias}_mjkzqbh, ${tAlias}.time8 as ${tAlias}_time8,
+            ${tAlias}.acstosql as ${tAlias}_acstosql, ${tAlias}.crjqk as ${tAlias}_crjqk,
+            ${tAlias}.mjjbh as ${tAlias}_mjjbh, ${tAlias}.kh as ${tAlias}_kh, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.date8 as ${tAlias}_date8, ${tAlias}.syqk as ${tAlias}_syqk
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from KQ_CRJSJ_HIS KCH
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and KCH.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+<!--    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.KqCrjsjHis">-->
+<!--        <![CDATA[-->
+<!--            insert into KQ_CRJSJ_HIS (mjkzqbh, time8, acstosql,-->
+<!--                                      crjqk, mjjbh, kh,-->
+<!--                                      id, date8, syqk)-->
+<!--            values (#{mjkzqbh,jdbcType=VARCHAR}, #{time8,jdbcType=TIMESTAMP}, #{acstosql,jdbcType=BIT},-->
+<!--                    #{crjqk,jdbcType=VARCHAR}, #{mjjbh,jdbcType=INTEGER}, #{kh,jdbcType=VARCHAR},-->
+<!--                    #{id,jdbcType=INTEGER}, #{date8,jdbcType=TIMESTAMP}, #{syqk,jdbcType=VARCHAR})-->
+<!--        ]]>-->
+<!--    </insert>-->
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from KQ_CRJSJ_HIS
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.KqCrjsjHis">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.KqCrjsjHis">
+        <![CDATA[
+            update KQ_CRJSJ_HIS
+               set mjkzqbh  = #{mjkzqbh,jdbcType=VARCHAR},
+                   time8    = #{time8,jdbcType=TIMESTAMP},
+                   acstosql = #{acstosql,jdbcType=BIT},
+                   crjqk    = #{crjqk,jdbcType=VARCHAR},
+                   mjjbh    = #{mjjbh,jdbcType=INTEGER},
+                   kh       = #{kh,jdbcType=VARCHAR},
+                   id       = #{id,jdbcType=INTEGER},
+                   date8    = #{date8,jdbcType=TIMESTAMP},
+                   syqk     = #{syqk,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KqCrjsjHisResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KqCrjsjHisResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KqCrjsjHisResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

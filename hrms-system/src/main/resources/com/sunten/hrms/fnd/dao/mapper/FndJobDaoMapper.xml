@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndJobDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndJob">
+        <id column="id" property="id" />
+        <result column="job_name" property="jobName" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="job_sequence" property="jobSequence" />
+        <result column="authorized_strength" property="authorizedStrength" />
+        <result column="job_code" property="jobCode" />
+        <result column="job_class" property="jobClass" />
+        <result column="dept_id" property="deptId" />
+        <result column="job_describes" property="jobDescribes" />
+        <result column="data_scope" property="dataScope" />
+        <result column="deleted_flag" property="deletedFlag" />
+<!--        <result column="dept_id" property="deptId" />-->
+        <result column="row_id" property="rowId" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="FndJobAndDeptMap" type="com.sunten.hrms.fnd.domain.FndJobAndDept" autoMapping="true">
+        <id column="dept_name" property="deptName" />
+        <id column="job_name" property="jobName" />
+        <id column="job_class" property="jobClass" />
+    </resultMap>
+
+
+    <resultMap id="FndJobResultMap" type="com.sunten.hrms.fnd.domain.FndJob" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="dept"
+                     javaType="com.sunten.hrms.fnd.domain.FndDept"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptDao.FndDeptResultMap"
+                     columnPrefix="fd_" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fj.id, fj.job_name,fj.enabled_flag,fj.job_sequence,fj.authorized_strength,fj.job_code,fj.job_class,fj.dept_id,
+             fj.job_describes,fj.data_scope,fj.deleted_flag,fj.create_time, fj.create_by,
+            fj.update_time, fj.update_by, ROW_NUMBER()  Over (ORDER BY fj.id)  as row_id
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.job_name as ${tAlias}_job_name,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.job_sequence as ${tAlias}_job_sequence,
+            ${tAlias}.authorized_strength as ${tAlias}_authorized_strength, ${tAlias}.job_code as ${tAlias}_job_code,
+            ${tAlias}.job_class as ${tAlias}_job_class,${tAlias}.job_describes as ${tAlias}_job_describes,${tAlias}.data_scope as ${tAlias}_data_scope,
+            ${tAlias}.deleted_flag as ${tAlias}_deleted_flag,${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[, ]]>
+        <bind name="tAlias" value="'fd'" />
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from fnd_job fj
+              join fnd_dept fd
+		        on fj.dept_id = fd.id
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.name != null">
+                <![CDATA[
+               and fj.job_name like #{criteria.name,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.adminJobId != null">
+                <![CDATA[
+               and fj.id = #{criteria.adminJobId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and fj.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.deleted != null">
+                <![CDATA[
+               and fj.deleted_flag = #{criteria.deleted,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.deptId != null">
+                <![CDATA[
+               and fj.dept_id = #{criteria.deptId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null">
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" and fj.dept_id IN (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and fj.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and fj.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.jobCode != null">
+                <![CDATA[
+               and fj.job_code like #{criteria.jobCode,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+
+    <sql id="With_Out_Join_Query_Sql">
+        <![CDATA[
+		    select
+		]]>
+        <include refid="Base_Column_List"></include>
+        <![CDATA[, ]]>
+        <bind name="tAlias" value="'fd'" />
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptDao.Base_Column_With_Param_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'pe'" />
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+			  from fnd_job fj
+		      left outer join fnd_dept fd
+		        on fj.dept_id = fd.id
+		      left join pm_employee_job pej
+		        on fj.id = pej.job_id
+		       and pej.enabled_flag = 1
+		       left join pm_employee pe
+		        on pej.employee_id = pe.id
+		        and pe.enabled_flag = 1
+		        and pe.leave_flag = 0
+		]]>
+    </sql>
+
+    <sql id="Select_Out_Criteria_Sql">
+        <include refid="With_Out_Join_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and pe.leave_flag = 0
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.name != null">
+                <![CDATA[
+               and fj.job_name like #{criteria.name,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.employeeName != null">
+                <![CDATA[
+               and (pe.name like #{criteria.employeeName,jdbcType=VARCHAR} or fj.job_name like #{criteria.employeeName,jdbcType=VARCHAR})
+                ]]>
+            </if>
+            <if test="criteria.adminJobId != null">
+                <![CDATA[
+               and fj.id = #{criteria.adminJobId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.adminFlag != null">
+                <![CDATA[
+               and (fj.job_name like '%经理'
+                  or fj.job_name like '%主管'
+                  OR fj.job_name LIKE '%总监'
+	              OR pe.work_card = '000146'
+	              OR pe.work_card = '000256'
+	              OR pe.work_card = '000193'
+	              or fd.dept_name = '公司领导')
+                ]]>
+            </if>
+            <if test="criteria.enabled != null">
+                <![CDATA[
+               and fj.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.deleted != null">
+                <![CDATA[
+               and fj.deleted_flag = #{criteria.deleted,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.deptId != null">
+                <![CDATA[
+               and fj.dept_id = #{criteria.deptId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null">
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" and fj.dept_id IN (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and fj.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and fj.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.jobCode != null">
+                <![CDATA[
+               and fj.job_code like #{criteria.jobCode,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndJob" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_job (job_name, enabled_flag, job_sequence,
+                                 authorized_strength, job_code, job_class,
+                                 dept_id, job_describes, data_scope,
+                                 deleted_flag, create_time,
+                                 create_by, update_time, update_by)
+            values (#{jobName,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{jobSequence,jdbcType=BIGINT},
+                    #{authorizedStrength,jdbcType=INTEGER}, #{jobCode,jdbcType=VARCHAR}, #{jobClass,jdbcType=VARCHAR},
+                    #{dept.id,jdbcType=BIGINT}, #{jobDescribes,jdbcType=VARCHAR}, #{dataScope,jdbcType=VARCHAR},
+                    #{deletedFlag,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_job
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndJob">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndJob">
+        <![CDATA[
+            update fnd_job
+               set job_name             = #{jobName,jdbcType=VARCHAR},
+                   enabled_flag         = #{enabledFlag,jdbcType=BIT},
+                   job_sequence         = #{jobSequence,jdbcType=BIGINT},
+                   authorized_strength  = #{authorizedStrength,jdbcType=INTEGER},
+                   job_code             = #{jobCode,jdbcType=VARCHAR},
+                   job_class            = #{jobClass,jdbcType=VARCHAR},
+                   dept_id              = #{dept.id,jdbcType=BIGINT},
+                   job_describes        = #{jobDescribes,jdbcType=VARCHAR},
+                   data_scope           = #{dataScope,jdbcType=VARCHAR},
+                   update_time          = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by            = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndJobResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fj.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndJobResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+		    order by fd.ext_dept_id, fd.ext_department_id, fd.ext_team_id, fj.job_sequence
+		]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndJobResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+
+    <update id="updateDeletedFlag" parameterType="com.sunten.hrms.fnd.domain.FndJob">
+        <![CDATA[
+            update fnd_job
+               set deleted_flag         = #{deletedFlag,jdbcType=BIT},
+                   update_time          = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by            = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateSortJob" parameterType="com.sunten.hrms.fnd.domain.FndJob">
+        <![CDATA[
+            update fnd_job
+               set job_sequence = #{jobSequence,jdbcType=BIGINT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getMaxJobSequence" resultType="Long">
+        <![CDATA[
+            select max(job_sequence) maxSequence from fnd_job where deleted_flag = 0
+        ]]>
+    </select>
+
+    <update id="thanAutoIncrement">
+        <![CDATA[
+        update fnd_job
+        set job_sequence = job_sequence + 1
+        where deleted_flag = 0
+          and job_sequence >= #{sequence,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="inAutoIncrement">
+        <![CDATA[
+        update fnd_job
+        set job_sequence = job_sequence + 1
+        where deleted_flag = 0
+          and job_sequence >= #{minSequence,jdbcType=BIGINT}
+          and job_sequence < #{maxSequence,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="inLessen">
+        <![CDATA[
+        update fnd_job
+        set job_sequence = job_sequence - 1
+        where deleted_flag = 0
+          and job_sequence > #{minSequence,jdbcType=BIGINT}
+          and job_sequence <= #{maxSequence,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="lessenJobSequence">
+        <![CDATA[
+        update fnd_job
+        set job_sequence = job_sequence - 1
+        where deleted_flag = 0
+          and job_sequence > #{sequence,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listByAdminJob" resultMap="FndJobResultMap">
+        <include refid="Select_Out_Criteria_Sql"/>
+    </select>
+
+
+    <select id="listFndJobAndDept" resultMap="FndJobAndDeptMap">
+        select fj.job_name as job_name,fd.dept_name as dept_name,fj.job_class as job_class from fnd_job fj
+        left join fnd_dept fd on fj.dept_id=fd.id
+        where fj.create_time>getdate()-1
+        and fd.enabled_flag=1
+        and fd.deleted_flag=0
+
+    </select>
+    <select id="loadAllCertificationJobList" resultType="java.util.HashMap">
+        select
+            DISTINCT
+            TOP 350
+            certification_job, job_level, work_content,process
+        FROM td_job_grading
+        WHERE enabled_flag = 1 AND certification_job IS NOT NULL
+    </select>
+
+</mapper>

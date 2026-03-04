@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmPostSkillSalaryInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmPostSkillSalaryInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="income_period" property="incomePeriod" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="overtime_pay" property="overtimePay" />
+        <result column="holiday_overtime_pay" property="holidayOvertimePay" />
+        <result column="rest_overtime_pay" property="restOvertimePay" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="attribute6" property="attribute6" />
+        <result column="attribute7" property="attribute7" />
+        <result column="attribute8" property="attribute8" />
+        <result column="attribute9" property="attribute9" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="deduct_income_tax" property="deductIncomeTax"/>
+        <result column="safety_accumulation_award" property="safetyAccumulationAward"/>
+        <result column="high_temperature_subsidy" property="highTemperatureSubsidy"/>
+        <result column="allowance_deduction" property="allowanceDeduction"/>
+        <result column="deduct_other" property="deductOther"/>
+        <result column="overtime_pay_time" property="overtimePayTime"/>
+        <result column="holiday_overtime_pay_time" property="holidayOvertimePayTime"/>
+        <result column="rest_overtime_pay_time" property="restOvertimePayTime"/>
+        <result column="transportation_allowance" property="transportationAllowance"/>
+        <result column="deduct_hydropower_house" property="deductHydropowerHouse"/>
+    </resultMap>
+
+    <resultMap id="SwmPostSkillSalaryInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmPostSkillSalaryInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!--    <parameterMap id="insertMsgMap" type="Map">-->
+    <!--        <parameter property="uId" jdbcType="BIGINT" javaType="java.lang.Long" mode="IN"/>-->
+    <!--        <parameter property="swmPostSkillSalaryInterface" jdbcType="ARRAY" javaType="java.util.List" mode="IN"/>-->
+    <!--    </parameterMap>-->
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            spssi.id, spssi.group_id, spssi.employee_id, spssi.income_period, spssi.work_card,
+            spssi.employee_name, spssi.overtime_pay, spssi.holiday_overtime_pay, spssi.rest_overtime_pay,
+            spssi.operation_code, spssi.error_msg, spssi.data_status, spssi.attribute1, spssi.attribute2,
+            spssi.attribute3, spssi.attribute4, spssi.attribute5, spssi.attribute6, spssi.attribute7,
+            spssi.attribute8, spssi.attribute9, spssi.create_time, spssi.create_by, spssi.update_time,
+            spssi.update_by, spssi.deduct_income_tax,
+            round(spssi.safety_accumulation_award, 2) as safety_accumulation_award, round(spssi.high_temperature_subsidy, 2) as high_temperature_subsidy,
+            round(spssi.allowance_deduction, 2) as allowance_deduction,
+            round(spssi.deduct_other, 2) as deduct_other, spssi.overtime_pay_time, spssi.holiday_overtime_pay_time, spssi.rest_overtime_pay_time,
+            round(spssi.transportation_allowance, 2) as transportation_allowance, round(spssi.deduct_hydropower_house, 2)  as deduct_hydropower_house
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.income_period as ${tAlias}_income_period,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.overtime_pay as ${tAlias}_overtime_pay,
+            ${tAlias}.holiday_overtime_pay as ${tAlias}_holiday_overtime_pay,
+            ${tAlias}.rest_overtime_pay as ${tAlias}_rest_overtime_pay,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.attribute6 as ${tAlias}_attribute6, ${tAlias}.attribute7 as ${tAlias}_attribute7,
+            ${tAlias}.attribute8 as ${tAlias}_attribute8, ${tAlias}.attribute9 as ${tAlias}_attribute9,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.deduct_income_tax as ${tAlias}_deduct_income_tax,
+            ${tAlias}.safety_accumulation_award as ${tAlias}_safety_accumulation_award,
+            ${tAlias}.high_temperature_subsidy as ${tAlias}_high_temperature_subsidy,
+            ${tAlias}.allowance_deduction as ${tAlias}_allowance_deduction,
+            ${tAlias}.deduct_other as ${tAlias}_deduct_other,
+            ${tAlias}.overtime_pay_time as ${tAlias}_overtime_pay_time,
+            ${tAlias}.holiday_overtime_pay_time as ${tAlias}_holiday_overtime_pay_time,
+            ${tAlias}.rest_overtime_pay_time as ${tAlias}_rest_overtime_pay_time,
+            ${tAlias}.transportation_allowance as ${tAlias}_transportation_allowance,
+            ${tAlias}.deduct_hydropower_house as ${tAlias}_deduct_hydropower_house
+
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_post_skill_salary_interface spssi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and spssi.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and spssi.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+<!--  电网车间特殊的加班费  -->
+    <insert id="insertPayBySpecial" parameterType="com.sunten.hrms.swm.domain.SwmPostSkillSalaryInterface">
+         <![CDATA[
+        insert into swm_post_skill_salary_interface(
+            group_id, employee_id, income_period, work_card, employee_name, overtime_pay, holiday_overtime_pay, rest_overtime_pay, operation_code, error_msg, data_status, create_time, create_by, update_time, update_by,
+           deduct_income_tax,
+        safety_accumulation_award, high_temperature_subsidy, allowance_deduction, deduct_other, transportation_allowance, deduct_hydropower_house,
+        special_import_flag
+        ) select #{groupId, jdbcType= BIGINT},ISNULL(
+(
+SELECT
+	se.employee_id
+FROM
+	swm_employee se
+WHERE
+	RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+    and se.name = #{employeeName, jdbcType=VARCHAR}
+	AND se.work_flag = 1
+	),- 1
+	), 	#{incomePeriod, jdbcType=VARCHAR},
+	RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 ),
+	#{employeeName, jdbcType=VARCHAR}, #{overtimePay, jdbcType = DECIMAL}, #{holidayOvertimePay, jdbcType = DECIMAL},
+	#{restOvertimePay, jdbcType = DECIMAL}, 'C',
+CASE
+
+	WHEN (
+SELECT
+ISNULL(
+(
+SELECT
+se.employee_id
+FROM
+swm_employee se
+WHERE
+RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	and se.name = #{employeeName, jdbcType=VARCHAR}
+	AND se.work_flag = 1
+	),- 1
+	)
+	) = - 1 THEN
+		'工号匹配失败' ELSE
+		case when  not exists (select 1 from swm_post_skill_salary spss
+                where spss.enabled_flag = 1 and spss.income_period = #{incomePeriod, jdbcType=VARCHAR} and isnull(spss.frozen_flag, 0) = 0) then '所得期间已冻结或不存在'
+                else '' end
+	END,
+CASE
+
+		WHEN (
+		SELECT
+			ISNULL(
+				(
+				SELECT
+					se.employee_id
+				FROM
+					swm_employee se
+				WHERE
+					RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+					and se.name = #{employeeName, jdbcType=VARCHAR}
+					AND se.work_flag = 1
+				),- 1
+			)
+			) = - 1 THEN
+			'F' ELSE
+
+			case when  not exists (select 1 from swm_post_skill_salary spss
+                where spss.enabled_flag = 1 and spss.income_period = #{incomePeriod, jdbcType=VARCHAR} and isnull(spss.frozen_flag, 0) = 0) then 'F'
+                else 'T' end
+
+		END,
+		#{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=BIGINT},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateBy,jdbcType=BIGINT},
+		#{deductIncomeTax, jdbcType=DECIMAL},
+		#{safetyAccumulationAward, jdbcType = DECIMAL},
+		#{highTemperatureSubsidy, jdbcType = DECIMAL},
+		#{allowanceDeduction, jdbcType = DECIMAL},
+		#{deductOther, jdbcType = DECIMAL},
+		#{transportationAllowance, jdbcType = DECIMAL},
+		#{deductHydropowerHouse, jdbcType = DECIMAL},
+		1
+
+
+      ]]>
+    </insert>
+
+    <insert id="insertPay" parameterType="com.sunten.hrms.swm.domain.SwmPostSkillSalaryInterface">
+        <![CDATA[
+      INSERT INTO swm_post_skill_salary_interface ( group_id, employee_id, income_period, work_card, employee_name, overtime_pay, holiday_overtime_pay, rest_overtime_pay, operation_code, error_msg, data_status, create_time, create_by, update_time, update_by,
+       deduct_income_tax,
+    safety_accumulation_award, high_temperature_subsidy, allowance_deduction, deduct_other,
+    overtime_pay_time, holiday_overtime_pay_time, rest_overtime_pay_time, transportation_allowance, deduct_hydropower_house, special_import_flag
+       )
+      SELECT
+    #{groupId, jdbcType= BIGINT},
+ISNULL(
+(
+SELECT
+	se.employee_id
+FROM
+	swm_employee se
+WHERE
+	RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	and se.name = #{employeeName, jdbcType=VARCHAR}
+	AND se.work_flag = 1
+	),- 1
+	),
+	#{incomePeriod, jdbcType=VARCHAR},
+	RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 ),
+	#{employeeName, jdbcType=VARCHAR},
+	round(( select
+	case when #{overtimePayTime, jdbcType = DECIMAL} is null then null else case when se_t.employee_category <> '03' and se_t.station <> '驾驶员'
+	then
+    ( select isnull(se.lump_sum_wage,0) + isnull(se.base_pay,0) + isnull(se.post_skill_salary,0) + isnull(se.target_performance_pay, 0)
+	 + isnull(se.seniority_allowance, 0) from swm_employee se where se.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 ))
+	 / 21.75 / 8 * 1.5 * #{overtimePayTime, jdbcType = DECIMAL}
+	else
+	case when right(#{incomePeriod, jdbcType=VARCHAR}, 2) <> '01'
+	then
+	(select (sum(swsf.wages_payable_post) - sum(isnull(swsf.safety_accumulation_award, 0)) - sum(isnull(swsf.high_temperature_subsidy, 0))
+	- sum(isnull(swsf.transportation_allowance,0)) - sum(isnull(swsf.post_subsidy, 0)) - sum(isnull(swsf.overtime_pay, 0))) /
+	(select count(1) from swm_wage_summary_file swsf_t where left( swsf_t.income_period, 4) = left(#{incomePeriod, jdbcType=VARCHAR} ,4)
+	and swsf_t.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )) / 21.75 / 8 * 1.5 * #{overtimePayTime, jdbcType = DECIMAL}
+	from swm_wage_summary_file swsf where left(swsf.income_period, 4) = left(#{incomePeriod, jdbcType=VARCHAR} ,4) and
+	swsf.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	) else
+	(select (sum(swsf.wages_payable_post) - sum(isnull(swsf.safety_accumulation_award, 0)) - sum(isnull(swsf.high_temperature_subsidy, 0))
+	- sum(isnull(swsf.transportation_allowance,0)) - sum(isnull(swsf.post_subsidy, 0)) - sum(isnull(swsf.overtime_pay, 0))) /
+	(select count(1) from swm_wage_summary_file swsf_t where left( swsf_t.income_period, 4) = convert(varchar(4), (convert(int, left(#{incomePeriod, jdbcType=VARCHAR} ,4)) - 1))
+	and swsf_t.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )) / 21.75 / 8 * 1.5 * #{overtimePayTime, jdbcType = DECIMAL}
+	from swm_wage_summary_file swsf where left( swsf.income_period, 4) = convert(varchar(4), (convert(int, left(#{incomePeriod, jdbcType=VARCHAR} ,4)) - 1))
+	and swsf.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	)
+    end end end from swm_employee se_t where
+     RIGHT ( cast( '000000' + rtrim( se_t.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+      and se_t.name = #{employeeName, jdbcType=VARCHAR}
+	),2),
+    round((select
+    case when #{holidayOvertimePayTime, jdbcType = DECIMAL} is null then null else case when se_t.employee_category <> '03' and se_t.station <> '驾驶员'
+	then
+    ( select isnull(se.lump_sum_wage,0) + isnull(se.base_pay,0) + isnull(se.post_skill_salary,0) + isnull(se.target_performance_pay, 0)
+	 + isnull(se.seniority_allowance, 0) from swm_employee se where se.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 ))
+	 / 21.75 / 8 * 3 * #{holidayOvertimePayTime, jdbcType = DECIMAL}
+	else
+	case when right(#{incomePeriod, jdbcType=VARCHAR}, 2) <> '01'
+	then
+	(select (sum(swsf.wages_payable_post) - sum(isnull(swsf.safety_accumulation_award, 0)) - sum(isnull(swsf.high_temperature_subsidy, 0))
+	- sum(isnull(swsf.transportation_allowance,0)) - sum(isnull(swsf.post_subsidy, 0)) - sum(isnull(swsf.overtime_pay, 0))) /
+	(select count(1) from swm_wage_summary_file swsf_t where left( swsf_t.income_period, 4) = left(#{incomePeriod, jdbcType=VARCHAR} ,4)
+	and swsf_t.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )) / 21.75 / 8 * 3 * #{holidayOvertimePayTime, jdbcType = DECIMAL}
+	from swm_wage_summary_file swsf where left(swsf.income_period, 4) = left(#{incomePeriod, jdbcType=VARCHAR} ,4) and
+	swsf.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	) else
+	(select (sum(swsf.wages_payable_post) - sum(isnull(swsf.safety_accumulation_award, 0)) - sum(isnull(swsf.high_temperature_subsidy, 0))
+	- sum(isnull(swsf.transportation_allowance,0)) - sum(isnull(swsf.post_subsidy, 0)) - sum(isnull(swsf.overtime_pay, 0))) /
+	(select count(1) from swm_wage_summary_file swsf_t where left( swsf_t.income_period, 4) = convert(varchar(4), (convert(int, left(#{incomePeriod, jdbcType=VARCHAR} ,4)) - 1))
+	and swsf_t.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )) / 21.75 / 8 * 3 * #{holidayOvertimePayTime, jdbcType = DECIMAL}
+	from swm_wage_summary_file swsf where left( swsf.income_period, 4) = convert(varchar(4), (convert(int, left(#{incomePeriod, jdbcType=VARCHAR} ,4)) - 1))
+	and swsf.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	)
+    end end end from swm_employee se_t where
+     RIGHT ( cast( '000000' + rtrim( se_t.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+      and se_t.name = #{employeeName, jdbcType=VARCHAR}
+    ),2),
+
+    round((
+    select case when #{restOvertimePayTime, jdbcType = DECIMAL} is null then null else case when se_t.employee_category <> '03' and se_t.station <> '驾驶员'
+	then
+    ( select isnull(se.lump_sum_wage,0) + isnull(se.base_pay,0) + isnull(se.post_skill_salary,0) + isnull(se.target_performance_pay, 0)
+	 + isnull(se.seniority_allowance, 0) from swm_employee se where se.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 ))
+	 / 21.75 / 8 * 2 * #{restOvertimePayTime, jdbcType = DECIMAL}
+	else
+	case when right(#{incomePeriod, jdbcType=VARCHAR}, 2) <> '01'
+	then
+	(select (sum(swsf.wages_payable_post) - sum(isnull(swsf.safety_accumulation_award, 0)) - sum(isnull(swsf.high_temperature_subsidy, 0))
+	- sum(isnull(swsf.transportation_allowance,0)) - sum(isnull(swsf.post_subsidy, 0)) - sum(isnull(swsf.overtime_pay, 0))) /
+	(select count(1) from swm_wage_summary_file swsf_t where left( swsf_t.income_period, 4) = left(#{incomePeriod, jdbcType=VARCHAR} ,4)
+	and swsf_t.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )) / 21.75 / 8 * 2 * #{restOvertimePayTime, jdbcType = DECIMAL}
+	from swm_wage_summary_file swsf where left(swsf.income_period, 4) = left(#{incomePeriod, jdbcType=VARCHAR} ,4) and
+	swsf.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	) else
+	(select (sum(swsf.wages_payable_post) - sum(isnull(swsf.safety_accumulation_award, 0)) - sum(isnull(swsf.high_temperature_subsidy, 0))
+	- sum(isnull(swsf.transportation_allowance,0)) - sum(isnull(swsf.post_subsidy, 0)) - sum(isnull(swsf.overtime_pay, 0))) /
+	(select count(1) from swm_wage_summary_file swsf_t where left( swsf_t.income_period, 4) = convert(varchar(4), (convert(int, left(#{incomePeriod, jdbcType=VARCHAR} ,4)) - 1))
+	and swsf_t.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )) / 21.75 / 8 * 2 * #{restOvertimePayTime, jdbcType = DECIMAL}
+	from swm_wage_summary_file swsf where left( swsf.income_period, 4) = convert(varchar(4), (convert(int, left(#{incomePeriod, jdbcType=VARCHAR} ,4)) - 1))
+	and swsf.work_card = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+	)
+    end end end from swm_employee se_t where
+     RIGHT ( cast( '000000' + rtrim( se_t.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+      and se_t.name = #{employeeName, jdbcType=VARCHAR}
+    ), 2),
+	'C',
+CASE
+
+	WHEN (
+SELECT
+ISNULL(
+(
+SELECT
+se.employee_id
+FROM
+swm_employee se
+WHERE
+RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+    and se.name = #{employeeName, jdbcType=VARCHAR}
+	AND se.work_flag = 1
+	),- 1
+	)
+	) = - 1 THEN
+		'工号姓名匹配失败' ELSE case when  not exists (select 1 from swm_post_skill_salary spss
+                where spss.enabled_flag = 1 and spss.income_period = #{incomePeriod, jdbcType=VARCHAR} and isnull(spss.frozen_flag, 0) = 0) then '所得期间已冻结或不存在' else
+               ''
+	END end,
+CASE
+
+		WHEN (
+		SELECT
+			ISNULL(
+				(
+				SELECT
+					se.employee_id
+				FROM
+					swm_employee se
+				WHERE
+					RIGHT ( cast( '000000' + rtrim( se.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( #{workCard, jdbcType=VARCHAR} ) AS VARCHAR ), 6 )
+					and se.name = #{employeeName, jdbcType=VARCHAR}
+					AND se.work_flag = 1
+				),- 1
+			)
+			) = - 1 THEN
+			'F' ELSE case when  not exists (select 1 from swm_post_skill_salary spss
+                where spss.enabled_flag = 1 and spss.income_period = #{incomePeriod, jdbcType=VARCHAR} and isnull(spss.frozen_flag, 0) = 0) then 'F' else
+               'T'
+	END
+		END,
+		#{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=BIGINT},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateBy,jdbcType=BIGINT},
+		#{deductIncomeTax, jdbcType=DECIMAL},
+		#{safetyAccumulationAward, jdbcType = DECIMAL},
+		#{highTemperatureSubsidy, jdbcType = DECIMAL},
+		#{allowanceDeduction, jdbcType = DECIMAL},
+		#{deductOther, jdbcType = DECIMAL},
+		#{overtimePayTime, jdbcType = DECIMAL},
+		#{holidayOvertimePayTime, jdbcType = DECIMAL},
+		#{restOvertimePayTime, jdbcType = DECIMAL},
+		#{transportationAllowance, jdbcType = DECIMAL},
+		#{deductHydropowerHouse, jdbcType = DECIMAL},
+		0
+
+
+        ]]>
+    </insert>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmPostSkillSalaryInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_post_skill_salary_interface (group_id, employee_id, income_period,
+                                                         work_card, employee_name,
+                                                         overtime_pay, holiday_overtime_pay,
+                                                         rest_overtime_pay, operation_code,
+                                                         error_msg, data_status, attribute1,
+                                                         attribute2, attribute3,
+                                                         attribute4, attribute5,
+                                                         attribute6, attribute7,
+                                                         attribute8, attribute9,
+                                                         create_time, create_by,
+                                                         update_time, update_by, deduct_income_tax,
+                                                          safety_accumulation_award, high_temperature_subsidy, allowance_deduction, deduct_other,
+                                                          transportation_allowance,deduct_hydropower_house
+                                                         )
+            values (#{groupId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT}, #{incomePeriod,jdbcType=VARCHAR},
+                    #{workCard,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+                    #{overtimePay,jdbcType=DECIMAL}, #{holidayOvertimePay,jdbcType=DECIMAL},
+                    #{restOvertimePay,jdbcType=DECIMAL}, #{operationCode,jdbcType=CHAR},
+                    #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR}, #{attribute1,jdbcType=DECIMAL},
+                    #{attribute2,jdbcType=DECIMAL}, #{attribute3,jdbcType=DECIMAL},
+                    #{attribute4,jdbcType=DECIMAL}, #{attribute5,jdbcType=DECIMAL},
+                    #{attribute6,jdbcType=DECIMAL}, #{attribute7,jdbcType=DECIMAL},
+                    #{attribute8,jdbcType=DECIMAL}, #{attribute9,jdbcType=DECIMAL},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},#{deductIncomeTax, jdbcType=DECIMAL},
+                    #{safetyAccumulationAward, jdbcType = DECIMAL},
+                    #{highTemperatureSubsidy, jdbcType = DECIMAL},
+                    #{allowanceDeduction, jdbcType = DECIMAL},
+                    #{deductOther, jdbcType = DECIMAL},
+                    #{transportationAllowance, jdbcType = DECIMAL},
+                    	#{deductHydropowerHouse, jdbcType = DECIMAL}
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_post_skill_salary_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmPostSkillSalaryInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmPostSkillSalaryInterface">
+        <![CDATA[
+            update swm_post_skill_salary_interface
+               set group_id             = #{groupId,jdbcType=BIGINT},
+                   employee_id          = #{employeeId,jdbcType=BIGINT},
+                   income_period        = #{incomePeriod,jdbcType=VARCHAR},
+                   work_card            = #{workCard,jdbcType=VARCHAR},
+                   employee_name        = #{employeeName,jdbcType=VARCHAR},
+                   overtime_pay         = #{overtimePay,jdbcType=DECIMAL},
+                   holiday_overtime_pay = #{holidayOvertimePay,jdbcType=DECIMAL},
+                   rest_overtime_pay   = #{restOvertimePay,jdbcType=DECIMAL},
+                   operation_code       = #{operationCode,jdbcType=CHAR},
+                   error_msg            = #{errorMsg,jdbcType=VARCHAR},
+                   data_status          = #{dataStatus,jdbcType=CHAR},
+                   attribute1           = #{attribute1,jdbcType=DECIMAL},
+                   attribute2           = #{attribute2,jdbcType=DECIMAL},
+                   attribute3           = #{attribute3,jdbcType=DECIMAL},
+                   attribute4           = #{attribute4,jdbcType=DECIMAL},
+                   attribute5           = #{attribute5,jdbcType=DECIMAL},
+                   attribute6           = #{attribute6,jdbcType=DECIMAL},
+                   attribute7           = #{attribute7,jdbcType=DECIMAL},
+                   attribute8           = #{attribute8,jdbcType=DECIMAL},
+                   attribute9           = #{attribute9,jdbcType=DECIMAL},
+                   update_time          = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by            = #{updateBy,jdbcType=BIGINT},
+                   deduct_income_tax    = #{deductIncomeTax, jdbcType=DECIMAL},
+                safety_accumulation_award =  #{safetyAccumulationAward, jdbcType = DECIMAL}
+                high_temperature_subsidy = #{highTemperatureSubsidy, jdbcType = DECIMAL}
+                allowance_deduction = #{allowanceDeduction, jdbcType = DECIMAL}
+                deduct_other = #{deductOther, jdbcType = DECIMAL},
+                transportation_allowance = #{transportationAllowance, jdbcType = DECIMAL}
+                deduct_hydropower_house = 	#{deductHydropowerHouse, jdbcType = DECIMAL}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmPostSkillSalaryInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where spssi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmPostSkillSalaryInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmPostSkillSalaryInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getFixedSummaryByImportList" resultMap="SwmPostSkillSalaryInterfaceResultMap">
+         <![CDATA[
+            select #{incomePeriod, jdbcType = VARCHAR} as income_period,
+            sum(spssi.overtime_pay_time) as overtime_pay_time,
+            sum(spssi.holiday_overtime_pay_time) as holiday_overtime_pay_time,
+            sum(spssi.rest_overtime_pay_time) as rest_overtime_pay_time,
+            sum(spssi.overtime_pay) as overtime_pay,
+            sum(spssi.holiday_overtime_pay) as holiday_overtime_pay,
+            sum(spssi.rest_overtime_pay) as rest_overtime_pay,
+            sum(spssi.safety_accumulation_award) as safety_accumulation_award,
+            sum(spssi.high_temperature_subsidy) as high_temperature_subsidy,
+            sum(spssi.transportation_allowance) as transportation_allowance,
+            sum(spssi.deduct_hydropower_house) as deduct_hydropower_house,
+            sum(spssi.allowance_deduction) as allowance_deduction,
+            sum(spssi.deduct_other) as deduct_other,
+            sum(spssi.deduct_income_tax) as deduct_income_tax
+            from swm_post_skill_salary_interface spssi where spssi.income_period =
+            #{incomePeriod, jdbcType = VARCHAR} and spssi.data_status = 'T'
+        ]]>
+        <if test="workCards != null and workCards.size > 0">
+            <![CDATA[
+                and spssi.work_card in (]]>
+            <foreach collection="workCards" item="item" index="index" separator=",">
+                <![CDATA[
+                    right(replicate('0',6) + convert(varchar(6),#{item}),6)
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+        <if test="groupIds != null and groupIds.size > 0">
+            <![CDATA[
+                        and
+            spssi.group_id in (]]>
+            <foreach collection="groupIds" item="groupId" index="index" separator=",">
+                <![CDATA[
+                    #{groupId}
+                ]]>
+            </foreach>
+            <![CDATA[)]]>
+        </if>
+    </select>
+
+</mapper>

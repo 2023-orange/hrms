@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndAuthorizationDtsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndAuthorizationDts">
+        <id column="id" property="id" />
+        <result column="authorization_id" property="authorizationId" />
+        <result column="dept_id" property="deptId" />
+        <result column="enable_flag" property="enableFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="FndAuthorizationDtsResultMap" type="com.sunten.hrms.fnd.domain.FndAuthorizationDts" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="authorization"
+                     javaType="com.sunten.hrms.fnd.domain.FndAuthorization"
+                     resultMap="com.sunten.hrms.fnd.dao.FndAuthorizationDao.FndAuthorizationResultMap"
+                     columnPrefix="fa" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fad.authorization_id, fad.dept_id, fad.enable_flag, fad.id, fad.create_by, fad.create_time,
+            fad.update_by, fad.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.authorization_id as ${tAlias}_authorization_id, ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.enable_flag as ${tAlias}_enable_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_authorization_dts fad
+              join fnd_authorization fa
+                on fad.authorization_id = fa.id
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and fad.enable_flag = 1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.authorizationId != null">
+            <![CDATA[
+                and fad.authorization_id = #{criteria.authorization_id,jdbcType=BIGINT}
+            ]]>
+        </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndAuthorizationDts" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_authorization_dts (id, authorization_id, dept_id,
+                                               enable_flag, create_by,
+                                               create_time, update_by,
+                                               update_time)
+            values (#{id,jdbcType=BIGINT}, #{authorizationId,jdbcType=BIGINT}, #{deptId,jdbcType=BIGINT},
+                    #{enableFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_authorization_dts
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndAuthorizationDts">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndAuthorizationDts">
+        <![CDATA[
+            update fnd_authorization_dts
+               set authorization_id = #{authorizationId,jdbcType=BIGINT},
+                   dept_id          = #{deptId,jdbcType=BIGINT},
+                   enable_flag      = #{enableFlag,jdbcType=BIT},
+                   update_by        = #{updateBy,jdbcType=BIGINT},
+                   update_time      = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndAuthorizationDtsResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fad.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndAuthorizationDtsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndAuthorizationDtsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getAuthorizationDeptsByToEmployee" resultType="Long">
+        <![CDATA[
+        select fad.dept_id
+        from fnd_authorization_dts fad join
+             fnd_authorization fa
+        on fa.id = fad.authorization_id
+         where  getdate() between fa.begin_date and fa.end_date
+          and fa.authorization_to = #{toId,jdbcType=BIGINT}
+          and fa.enable_flag = 1
+          and fad.enable_flag = 1
+        ]]>
+    </select>
+
+    <insert id="batchInsertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndAuthorizationDts">
+        <![CDATA[
+        insert into fnd_authorization_dts (authorization_id, dept_id,
+                                           enable_flag, create_by,
+                                           create_time, update_by,
+                                           update_time)
+        values ]]>
+        <foreach collection="authorizationDts" item="item" index="index" separator=",">
+            <![CDATA[
+            ( #{item.authorizationId,jdbcType=BIGINT}, #{item.deptId,jdbcType=BIGINT},
+              #{item.enableFlag,jdbcType=BIT}, #{item.createBy,jdbcType=BIGINT},
+              #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=BIGINT},
+              #{item.updateTime,jdbcType=TIMESTAMP})
+            ]]>
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateEnalbleFlag" parameterType="com.sunten.hrms.fnd.domain.FndAuthorizationDts">
+        <![CDATA[
+        update fnd_authorization_dts
+        set enable_flag      = #{authorizationDts.enableFlag,jdbcType=BIT},
+            update_by        = #{authorizationDts.updateBy,jdbcType=BIGINT},
+            update_time      = #{authorizationDts.updateTime,jdbcType=TIMESTAMP}
+        where authorization_id = #{authorizationDts.authorizationId,jdbcType=BIGINT}
+          and dept_id in
+        ]]>
+        <foreach collection="authorizationDts.delList" item="item" index="index" separator="," open="(" close=")">
+            #{item, jdbcType=BIGINT}
+        </foreach>
+    </update>
+</mapper>

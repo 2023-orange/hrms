@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmMedicalDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmMedical">
+        <id column="id" property="id" />
+        <result column="medical_type" property="medicalType" />
+        <result column="dept_name" property="deptName" />
+        <result column="office_name" property="officeName" />
+        <result column="dept_id" property="deptId" />
+        <result column="request_date" property="requestDate" />
+        <result column="approval_by" property="approvalBy" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="approval_node" property="approvalNode" />
+        <result column="approval_employee" property="approvalEmployee" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="submit_flag" property="submitFlag" />
+    </resultMap>
+
+    <resultMap id="pmMedicalResultMap" type="com.sunten.hrms.pm.domain.PmMedical" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pm.medical_type, pm.dept_name, pm.office_name, pm.dept_id, pm.request_date,
+            pm.approval_by, pm.approval_result, pm.oa_order, pm.approval_date,
+            pm.enabled_flag, pm.approval_node, pm.approval_employee, pm.id, pm.create_time, pm.create_by,
+            pm.update_time, pm.update_by, pm.submit_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.medical_type as ${tAlias}_medical_type,
+            ${tAlias}.dept_name as ${tAlias}_dept_name, ${tAlias}.office_name as ${tAlias}_office_name,
+            ${tAlias}.dept_id as ${tAlias}_dept_id, ${tAlias}.request_date as ${tAlias}_request_date,
+            ${tAlias}.approval_by as ${tAlias}_approval_by,
+            ${tAlias}.approval_result as ${tAlias}_approval_result, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.approval_date as ${tAlias}_approval_date,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.approval_node as ${tAlias}_approval_node,
+            ${tAlias}.approval_employee as ${tAlias}_approval_employee, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.submit_flag as ${tAlias}_submit_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_medical pm join pm_employee pe
+              on pm.approval_by = pe.id
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+              where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and pm.dept_id in ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and pe.id = #{criteria.employeeId, jdbcType = BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.submitFlag != null">
+                and pm.submit_flag = #{criteria.submitFlag,jdbcType=BIT}
+            </if>
+            <if test="criteria.value != null and criteria.value != ''">
+                <choose>
+                    <when test="criteria.column == 'request_date' or criteria.column == 'approval_date'">
+                      and pm.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=TIMESTAMP}
+                    </when>
+                    <when test="criteria.column == 'approval_by'">
+                        and pe.name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </when>
+                    <otherwise>
+                        and pm.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+
+    <sql id="Criteria_Sql_Where">
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and pm.dept_id in ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and pe.id = #{criteria.employeeId, jdbcType = BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.submitFlag != null">
+                and pm.submit_flag = #{criteria.submitFlag,jdbcType=BIT}
+            </if>
+            <if test="criteria.value != null and criteria.value != ''">
+                <choose>
+                    <when test="criteria.column == 'request_date' or criteria.column == 'approval_date'">
+                        and pm.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=TIMESTAMP}
+                    </when>
+                    <when test="criteria.column == 'approval_by'">
+                        and pe.name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </when>
+                    <otherwise>
+                        and pm.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmMedical" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_medical (medical_type, dept_name,
+                                     office_name, dept_id, request_date,
+                                     approval_by, approval_result,
+                                     oa_order,
+                                     approval_date, enabled_flag,
+                                     approval_node, approval_employee,submit_flag,
+                                     create_time, create_by,
+                                     update_time, update_by)
+            values (#{medicalType,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR},
+                    #{officeName,jdbcType=VARCHAR}, #{deptId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{approvalBy,jdbcType=BIGINT}, #{approvalResult,jdbcType=VARCHAR},
+                    #{oaOrder,jdbcType=VARCHAR},
+                    #{approvalDate,jdbcType=TIMESTAMP}, #{enabledFlag,jdbcType=BIT},
+                    #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                    #{submitFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_medical
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmMedical">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmMedical">
+        <![CDATA[
+            update pm_medical
+               set medical_type      = #{medicalType,jdbcType=VARCHAR},
+                   dept_name         = #{deptName,jdbcType=VARCHAR},
+                   office_name       = #{officeName,jdbcType=VARCHAR},
+                   dept_id           = #{deptId,jdbcType=BIGINT},
+                   request_date      = #{requestDate,jdbcType=TIMESTAMP},
+                   approval_by       = #{approvalBy,jdbcType=BIGINT},
+                   approval_result   = #{approvalResult,jdbcType=VARCHAR},
+                   oa_order          = #{oaOrder,jdbcType=VARCHAR},
+                   approval_date     = #{approvalDate,jdbcType=TIMESTAMP},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   submit_flag       = #{submitFlag,jdbcType=BIT},
+                   approval_node     = #{approvalNode,jdbcType=VARCHAR},
+                   approval_employee = #{approvalEmployee,jdbcType=VARCHAR},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="pmMedicalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pm.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="pmMedicalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="pmMedicalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByReqCode" resultMap="pmMedicalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pm.oa_order = #{reqCode,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <update id="updateApprovalColumnByUnderwar" parameterType="com.sunten.hrms.pm.domain.PmMedical">
+        <![CDATA[
+        update pm_medical
+        set approval_node     = #{approvalNode,jdbcType=VARCHAR},
+            approval_employee = #{approvalEmployee,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateApprovalColumnByEnd" parameterType="com.sunten.hrms.pm.domain.PmMedical">
+        <![CDATA[
+        update pm_medical
+        set approval_result   = #{approvalResult,jdbcType=VARCHAR},
+            approval_date     = #{updateTime,jdbcType=TIMESTAMP},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getPmMedicalPass" resultType="java.lang.Integer">
+                <![CDATA[
+
+  select  case when
+    exists (
+    select 1 from pm_medical where medical_type='干部层年度体检' and (approval_result='pass' or approval_result='通过')
+    and (datepart(yy,approval_date) =YEAR(GETDATE()))
+     )
+    and
+     exists (
+     select 1 from pm_medical where medical_type='特殊工种年度体检' and (approval_result='pass' or approval_result='通过')
+     and (datepart(yy,approval_date) =YEAR(GETDATE()))
+     ) then 1 else 0 end
+        ]]>
+    </select>
+
+    <select id="countMedicalApproval" resultType="java.lang.Integer" >
+        <![CDATA[
+            select count(*) from pm_medical pm JOIN pm_employee pe ON pm.approval_by = pe.id
+         ]]>
+        <include refid="Criteria_Sql_Where"/>
+        <![CDATA[
+                 and pm.submit_flag=0
+                 and pm.enabled_flag=1
+             ]]>
+    </select>
+
+</mapper>

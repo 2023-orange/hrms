@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReTrialApprovalDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReTrialApproval">
+        <id column="id" property="id" />
+        <result column="demand_code" property="demandCode" />
+        <result column="re_employee_id" property="reEmployeeId" />
+        <result column="interview_by" property="interviewBy" />
+        <result column="current_status" property="currentStatus" />
+        <result column="appraise" property="appraise" />
+        <result column="interview_content" property="interviewContent" />
+        <result column="salary" property="salary" />
+        <result column="trial_time" property="trialTime" />
+        <result column="medical_class" property="medicalClass" />
+        <result column="repeal_flag" property="repealFlag" />
+        <result column="repeal_date" property="repealDate" />
+        <result column="repeal_reason" property="repealReason" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="trial_status" property="trialStatus" />
+        <result column="fail_describes" property="failDescribes" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="trial_entry_time" property="trialEntryTime" />
+        <result column="trial_fail_reason" property="trialFailReason" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="approval_employee" property="approvalEmployee" />
+        <result column="approval_node" property="approvalNode" />
+        <result column="demand_job_id" property="demandJobId" />
+        <result column="surplus_quantity" property="surplusQuantity" />
+    </resultMap>
+
+    <resultMap id="ReTrialApprovalResultMap" type="com.sunten.hrms.re.domain.ReTrialApproval" autoMapping="true">
+        <id column="id" property="id" />
+        <result column="surplus_quantity" property="surplusQuantity" />
+        <association property="trialEmployee"
+                     javaType="com.sunten.hrms.re.domain.ReRecruitment"
+                     resultMap="com.sunten.hrms.re.dao.ReRecruitmentDao.ReRecruitmentResultMap"
+                     columnPrefix="rr_"/>
+        <association property="demand"
+                     javaType="com.sunten.hrms.re.domain.ReDemand"
+                     resultMap="com.sunten.hrms.re.dao.ReDemandDao.ReDemandResultMap"
+                     columnPrefix="rd_"/>
+        <association property="demandJob"
+                     javaType="com.sunten.hrms.re.domain.ReDemandJob"
+                     resultMap="com.sunten.hrms.re.dao.ReDemandJobDao.ReDemandJobResultMap"
+                     columnPrefix="rdj_"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            rta.demand_code, rta.re_employee_id, rta.interview_by, rta.current_status,
+            rta.appraise, rta.interview_content, rta.salary, rta.trial_time, rta.medical_class,
+            rta.repeal_flag, rta.repeal_date, rta.repeal_reason,
+            rta.approval_result, rta.oa_order, rta.approval_date, rta.trial_status, rta.fail_describes,
+            rta.enabled_flag,rta.submit_flag, rta.trial_entry_time, rta.trial_fail_reason, rta.id, rta.create_time,
+            rta.create_by, rta.update_time, rta.update_by,rta.approval_employee,rta.approval_node,rta.demand_job_id,
+            rta.surplus_quantity
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.demand_code as ${tAlias}_demand_code, ${tAlias}.re_employee_id as ${tAlias}_re_employee_id,
+            ${tAlias}.interview_by as ${tAlias}_interview_by,
+            ${tAlias}.current_status as ${tAlias}_current_status, ${tAlias}.appraise as ${tAlias}_appraise,
+            ${tAlias}.interview_content as ${tAlias}_interview_content,
+            ${tAlias}.salary as ${tAlias}_salary, ${tAlias}.trial_time as ${tAlias}_trial_time,
+            ${tAlias}.medical_class as ${tAlias}_medical_class, ${tAlias}.repeal_flag as ${tAlias}_repeal_flag,
+            ${tAlias}.repeal_date as ${tAlias}_repeal_date, ${tAlias}.repeal_reason as ${tAlias}_repeal_reason,
+            ${tAlias}.approval_result as ${tAlias}_approval_result, ${tAlias}.oa_order as ${tAlias}_oa_order,
+            ${tAlias}.approval_date as ${tAlias}_approval_date,
+            ${tAlias}.trial_status as ${tAlias}_trial_status,
+            ${tAlias}.fail_describes as ${tAlias}_fail_describes,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.submit_flag as ${tAlias}_submit_flag,
+            ${tAlias}.trial_entry_time as ${tAlias}_trial_entry_time,
+            ${tAlias}.trial_fail_reason as ${tAlias}_trial_fail_reason, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.approval_employee as ${tAlias}_approval_employee,
+            ${tAlias}.approval_node as ${tAlias}_approval_node,
+            ${tAlias}.demand_job_id as ${tAlias}_demand_job_id
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'rr'"/>
+        <include refid="com.sunten.hrms.re.dao.ReRecruitmentDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+        , (datediff(year, rr.birthday, GETDATE()) -
+                                    (case WHEN month(GETDATE()) < month(rr.birthday) THEN 1 ELSE
+                                         (case WHEN month(GETDATE()) = month(rr.birthday) AND day(GETDATE()) < day(rr.birthday) THEN 1 ELSE 0 END)
+                                     END)) AS rr_age
+        , ISNULL(rr_re.id, -1) rr_re_id,
+        ]]>
+        <bind name="tAlias" value="'rr_re'"/>
+        <include refid="com.sunten.hrms.re.dao.ReEducationDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'rd'"/>
+        <include refid="com.sunten.hrms.re.dao.ReDemandDao.Base_Column_With_Param_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'rdj'"/>
+        <include refid="com.sunten.hrms.re.dao.ReDemandJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from
+                   (select *, (select (sum(isnull(rdj1.agree_num,0)) - sum(isnull(rdj1.pass_quantity,0))) from re_demand_job rdj1,re_demand rd1
+                                  where rdj1.demand_id = rd1.id and rd1.demand_code = re_trial_approval.demand_code) surplus_quantity
+                                  from re_trial_approval ) rta
+              join re_demand rd on rta.demand_code = rd.demand_code
+              join re_demand_job rdj on rta.demand_job_id = rdj.id
+              join re_recruitment rr
+              on rta.re_employee_id = rr.id
+              left join re_education rr_re
+              on rr.id = rr_re.re_id and rr_re.new_education_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and rd.dept_id in ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="criteria.submitFlag != null">
+                <![CDATA[
+                    and rta.submit_flag = #{criteria.submitFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.value != null">
+                <choose>
+                    <when test="criteria.column == 'age'">
+                        <![CDATA[
+                          and (year(getdate())-year(rr.birthday)) ${criteria.symbol} #{criteria.value}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'birthday'">
+                        <![CDATA[
+                          and rr.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=TIMESTAMP}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'approval_date'">
+                        <![CDATA[
+                          and rta.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=TIMESTAMP}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'graduation_time'">
+                        <![CDATA[
+                          and re.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=TIMESTAMP}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'name' or criteria.column == 'gender' or criteria.column == 'marital_status'">
+                        <![CDATA[
+                          and rr.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'school' or criteria.column == 'education' or criteria.column == 'specialized_subject'">
+                        <![CDATA[
+                          and re.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'dept_name' or criteria.column == 'office_name' or criteria.column == 'team'">
+                        <![CDATA[
+                          and rd.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'job_name'">
+                        <![CDATA[
+                          and rdj.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                          and rta.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReTrialApproval" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into re_trial_approval (demand_code, re_employee_id,
+                                           interview_by,
+                                           current_status, appraise,
+                                           interview_content,
+                                           salary, trial_time, medical_class,
+                                           repeal_flag, repeal_date,
+                                           repeal_reason, approval_result,
+                                           oa_order, approval_date,
+                                           trial_status, fail_describes,
+                                           enabled_flag, submit_flag,trial_entry_time,
+                                           trial_fail_reason, create_time,
+                                           create_by, update_time, update_by,approval_employee,approval_node,
+                                           demand_job_id)
+            values (#{demand.demandCode,jdbcType=VARCHAR}, #{trialEmployee.id,jdbcType=BIGINT},
+                    #{interviewBy,jdbcType=VARCHAR},
+                    #{currentStatus,jdbcType=VARCHAR}, #{appraise,jdbcType=VARCHAR},
+                    #{interviewContent,jdbcType=VARCHAR},
+                    #{salary,jdbcType=DECIMAL}, #{trialTime,jdbcType=INTEGER}, #{medicalClass,jdbcType=VARCHAR},
+                    #{repealFlag,jdbcType=BIT}, #{repealDate,jdbcType=TIMESTAMP},
+                    #{repealReason,jdbcType=VARCHAR}, #{approvalResult,jdbcType=VARCHAR},
+                    #{oaOrder,jdbcType=VARCHAR}, #{approvalDate,jdbcType=TIMESTAMP},
+                    #{trialStatus,jdbcType=VARCHAR}, #{failDescribes,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT},#{submitFlag,jdbcType=BIT}, #{trialEntryTime,jdbcType=DATE},
+                    #{trialFailReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{approvalEmployee,jdbcType=VARCHAR}, #{approvalNode,jdbcType=VARCHAR},
+                    #{demandJob.id,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from re_trial_approval
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReTrialApproval">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReTrialApproval">
+        <![CDATA[
+            update re_trial_approval
+               set demand_code       = #{demand.demandCode,jdbcType=VARCHAR},
+                   re_employee_id    = #{trialEmployee.id,jdbcType=BIGINT},
+                   interview_by      = #{interviewBy,jdbcType=VARCHAR},
+                   current_status    = #{currentStatus,jdbcType=VARCHAR},
+                   appraise          = #{appraise,jdbcType=VARCHAR},
+                   interview_content = #{interviewContent,jdbcType=VARCHAR},
+                   salary            = #{salary,jdbcType=DECIMAL},
+                   trial_time        = #{trialTime,jdbcType=INTEGER},
+                   medical_class     = #{medicalClass,jdbcType=VARCHAR},
+                   repeal_flag       = #{repealFlag,jdbcType=BIT},
+                   repeal_date       = #{repealDate,jdbcType=TIMESTAMP},
+                   repeal_reason     = #{repealReason,jdbcType=VARCHAR},
+                   approval_result   = #{approvalResult,jdbcType=VARCHAR},
+                   oa_order          = #{oaOrder,jdbcType=VARCHAR},
+                   approval_date     = #{approvalDate,jdbcType=TIMESTAMP},
+                   trial_status      = #{trialStatus,jdbcType=VARCHAR},
+                   fail_describes    = #{failDescribes,jdbcType=VARCHAR},
+                   enabled_flag      = #{enabledFlag,jdbcType=BIT},
+                   submit_flag      = #{submitFlag,jdbcType=BIT},
+                   trial_entry_time  = #{trialEntryTime,jdbcType=DATE},
+                   trial_fail_reason = #{trialFailReason,jdbcType=VARCHAR},
+                   update_time       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by         = #{updateBy,jdbcType=BIGINT},
+                   approval_employee         = #{approvalEmployee,jdbcType=VARCHAR},
+                   approval_node         = #{approvalNode,jdbcType=VARCHAR},
+                   demand_job_id         = #{demandJob.id,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="ReTrialApprovalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rta.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReTrialApprovalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReTrialApprovalResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByReqCode" resultMap="ReTrialApprovalResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rta.oa_order = #{reqCode,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <update id="updateByApprovalEnd" parameterType="com.sunten.hrms.re.domain.ReTrialApproval">
+        <![CDATA[
+        update re_trial_approval
+        set approval_result   = #{approvalResult,jdbcType=VARCHAR},
+            approval_date     = #{updateTime,jdbcType=TIMESTAMP},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByApprovalUnderwar" parameterType="com.sunten.hrms.re.domain.ReTrialApproval">
+        <![CDATA[
+        update re_trial_approval
+        set ]]>
+        <if test="currentStatus != null and currentStatus != ''">
+            <![CDATA[ current_status    = #{currentStatus,jdbcType=VARCHAR},]]>
+        </if>
+        <if test="salary != null and salary != ''">
+            <![CDATA[ salary            = #{salary,jdbcType=DECIMAL},]]>
+        </if>
+         <![CDATA[
+            approval_employee   = #{approvalEmployee,jdbcType=VARCHAR},
+            approval_node       = #{approvalNode,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByRepealOperation" parameterType="com.sunten.hrms.re.domain.ReTrialApproval">
+        <![CDATA[
+        update re_trial_approval
+        set repeal_flag       = #{repealFlag,jdbcType=BIT},
+            repeal_date       = #{updateTime,jdbcType=TIMESTAMP},
+            repeal_reason     = #{repealReason,jdbcType=VARCHAR},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            update_by         = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateTrialAfterPass" parameterType="com.sunten.hrms.re.domain.ReTrialApproval">
+        <![CDATA[
+            update re_trial_approval
+                set trial_fail_reason = #{trialFailReason, jdbcType = VARCHAR},
+                trial_entry_time = #{trialEntryTime, jdbcType = TIMESTAMP},
+                trial_status = #{trialStatus, jdbcType = VARCHAR},
+                fail_describes = #{failDescribes,jdbcType = VARCHAR},
+                update_time = getdate(),
+                update_by = #{updateBy, jdbcType = BIGINT}
+            where  id = #{id,jdbcType=BIGINT}
+            and enabled_flag = 1
+        ]]>
+    </update>
+
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcOvertimeReviewDao">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcOvertimeReview">
+        <id column="ID" property="id" />
+        <result column="BMMC" property="department" />
+        <result column="KSMC" property="administrativeOffice" />
+        <result column="XM" property="name" />
+        <result column="GPH" property="workCard" />
+        <result column="DEL" property="deleteFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+        ID, BMMC, KSMC, XM, GPH, DEL
+        ]]>
+    </sql>
+
+    <select id="getAcOvertimeReviewList" resultMap="BaseResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+          from overtimereview
+          where DEL = 0
+          order by GPH,id
+        ]]>
+    </select>
+
+</mapper>

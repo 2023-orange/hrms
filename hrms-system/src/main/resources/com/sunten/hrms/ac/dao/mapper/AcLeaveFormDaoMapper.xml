@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcLeaveFormDao">
+    <!-- 已审批通过的请假单查询 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcLeaveForm">
+        <id column="id" property="id" />
+        <result column="UserName" property="workCard" />
+        <result column="StartTime" property="startTime" />
+        <result column="EndTime" property="endTime" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+        id, UserName, StartTime, EndTime
+        ]]>
+    </sql>
+
+    <select id="getLeaveFormByDate" resultMap="BaseResultMap">
+        <![CDATA[
+            select hea.id, hea.UserName, hea.StartTime, hea.EndTime
+            from v_req_hrleave_all_end hea
+            where
+            ((
+            date_format(hea.StartTime,'%Y-%m-%d') between  #{dateFrom, jdbcType = DATE} and #{dateTo, jdbcType = DATE}
+            )
+            or (
+            date_format(hea.EndTime,'%Y-%m-%d') between #{dateFrom, jdbcType = DATE} and #{dateTo, jdbcType = DATE}
+            )
+	        or (date_format(hea.StartTime,'%Y-%m-%d') < #{dateFrom, jdbcType = DATE} and date_format(hea.EndTime,'%Y-%m-%d') > #{dateTo, jdbcType = DATE})
+            )
+        ]]>
+    </select>
+
+    <!-- 流程选择人员列表 -->
+    <resultMap id="AcReqParameterResultMap" type="com.sunten.hrms.ac.domain.AcReqParameter">
+        <id column="id" property="id" />
+        <result column="keyWord" property="keyWord" />
+        <result column="valueField" property="valueField" />
+        <result column="textField" property="textField" />
+        <result column="fatherId" property="fatherId" />
+        <result column="sequenceNumber" property="sequenceNumber" />
+        <result column="deleteFlag" property="deleteFlag" />
+        <result column="createBy" property="createBy" />
+        <result column="createTime" property="createTime" />
+        <result column="modifyBy" property="modifyBy" />
+        <result column="modifyTime" property="modifyTime" />
+    </resultMap>
+
+    <select id="getReqParameter" resultMap="AcReqParameterResultMap">
+        <![CDATA[
+            select * from req_parameter where deleteFlag=0 and valueField='${workcard}'
+        ]]>
+    </select>
+
+    <!-- 流程固定人员列表 -->
+    <resultMap id="AcReqFlowdataResultMap" type="com.sunten.hrms.ac.domain.AcReqFlowdata">
+        <id column="id" property="id" />
+        <result column="typeCode" property="typeCode" />
+        <result column="flowCode" property="flowCode" />
+        <result column="variableKey" property="variableKey" />
+        <result column="variableName" property="variableName" />
+        <result column="variable" property="variable" />
+        <result column="valueType" property="valueType" />
+        <result column="deleteFlag" property="deleteFlag" />
+        <result column="createBy" property="createBy" />
+        <result column="createTime" property="createTime" />
+        <result column="modifyBy" property="modifyBy" />
+        <result column="modifyTime" property="modifyTime" />
+        <result column="nodeFlag" property="nodeFlag" />
+    </resultMap>
+
+    <select id="getReqFlowdata" resultMap="AcReqFlowdataResultMap">
+        <![CDATA[
+            select * from req_flowdata where deleteFlag=0 and variable='${workcard}'
+        ]]>
+    </select>
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcClockRecordDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcClockRecord">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="date" property="date" />
+        <result column="clock_time" property="clockTime" />
+        <result column="card_machine_no" property="cardMachineNo" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="AcClockRecordResultMap" type="com.sunten.hrms.ac.domain.AcClockRecord" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="employee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <resultMap id="AcFakeRecordSettingResultMap" type="com.sunten.hrms.ac.domain.AcFakeRecordSetting">
+        <result column="user_name" property="userName"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+    </resultMap>
+
+    <resultMap id="tempEmployeeClockRecordResultMap" type="com.sunten.hrms.ac.vo.TempEmployeeClockRecordVo">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="work_card" property="workCard"/>
+        <result column="now_date" property="nowDate"/>
+        <result column="min_clock_time" property="minClockTime"/>
+        <result column="max_clock_time" property="maxClockTime"/>
+        <result column="work_flag" property="workFlag"/>
+        <result column="leave_flag" property="leaveFlag"/>
+        <result column="day_off_flag" property="dayOffFlag"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="team_name" property="teamName"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            acr.id,acr.employee_id as pe_id, acr.date, acr.clock_time, acr.card_machine_no, acr.attribute1,
+            acr.attribute2, acr.attribute3, acr.attribute4, acr.attribute5, acr.update_by, acr.create_by,
+            acr.update_time, acr.create_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.employee_id as ${tAlias}_pe_id,
+            ${tAlias}.date as ${tAlias}_date, ${tAlias}.clock_time as ${tAlias}_clock_time,
+            ${tAlias}.card_machine_no as ${tAlias}_card_machine_no,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.update_time as ${tAlias}_update_time,
+            ${tAlias}.create_time as ${tAlias}_create_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[,]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+                  ,fdev.ext_dept_name AS pe_dept_name,
+                   fdev.ext_department_name AS pe_department,
+                   fdev.ext_team_name AS pe_team
+              from
+              ]]>
+        <if test="criteria != null">
+            <if test="criteria.fakeFlag">
+                <![CDATA[ ac_fake_clock_record acr ]]>
+            </if>
+            <if test="!criteria.fakeFlag">
+                <![CDATA[ ac_clock_record acr ]]>
+            </if>
+        </if>
+        <![CDATA[
+               join
+                   pm_employee pe
+                on acr.employee_id = pe.id and pe.enabled_flag = 1
+                join pm_employee_job pej on pe.id = pej.employee_id and pej.job_main_flag = 1 and pej.enabled_flag = 1
+                left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+            where 1 = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <if test="criteria != null">
+            <if test="criteria.deptId != null">
+                <![CDATA[
+                    and pej.dept_id = #{criteria.deptId, jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.employeeName != null">
+                <![CDATA[
+                    and pe.name like #{criteria.employeeName,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and acr.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.beginDate != null and  criteria.endDate != null">
+                <![CDATA[
+                    and acr.date >= #{criteria.beginDate,jdbcType=DATE}
+                    and acr.date <= #{criteria.endDate,jdbcType=DATE}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0 ">
+                <![CDATA[
+                            and exists (SELECT 1
+                                          FROM pm_employee_job pej_t
+                                         WHERE pej_t.employee_id = pe.id
+                                           AND pej_t.enabled_flag = 1
+                                           AND pej_t.dept_id IN
+                        ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[
+                            )
+                        ]]>
+            </if>
+            <if test="criteria.employees != null and criteria.employees.size > 0">
+                <![CDATA[
+                    and acr.employee_id in
+                ]]>
+                <foreach collection="criteria.employees" index="index" item="item" separator="," open="(" close=")">
+                    #{item.id}
+                </foreach>
+            </if>
+        </if>
+        <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+    </sql>
+
+    <update id="updateEmployeeIdMonthly">
+        <![CDATA[
+            update
+            acr set
+            employee_id = pe.id
+            from [dbo].[ac_clock_record] acr join pm_employee pe on pe.work_card = acr.attribute1 and
+            pe.enabled_flag = 1 and acr.employee_id = -1 and isnull(acr.attribute1, '') <> ''
+        ]]>
+    </update>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcClockRecord">
+        <![CDATA[
+            insert into ac_clock_record (id, employee_id, date,
+                                         clock_time, card_machine_no,
+                                         attribute1, attribute2,
+                                         attribute3, attribute4,
+                                         attribute5, update_by, create_by,
+                                         update_time, create_time)
+            values (#{id,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT}, #{date,jdbcType=DATE},
+                    #{clockTime,jdbcType=TIME}, #{cardMachineNo,jdbcType=VARCHAR},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{updateBy,jdbcType=BIGINT}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_clock_record
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcClockRecord">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcClockRecord">
+        <![CDATA[
+            update ac_clock_record
+               set employee_id     = #{employeeId,jdbcType=BIGINT},
+                   date            = #{date,jdbcType=DATE},
+                   clock_time      = #{clockTime,jdbcType=TIME},
+                   card_machine_no = #{cardMachineNo,jdbcType=VARCHAR},
+                   attribute1      = #{attribute1,jdbcType=VARCHAR},
+                   attribute2      = #{attribute2,jdbcType=VARCHAR},
+                   attribute3      = #{attribute3,jdbcType=VARCHAR},
+                   attribute4      = #{attribute4,jdbcType=VARCHAR},
+                   attribute5      = #{attribute5,jdbcType=VARCHAR},
+                   update_by       = #{updateBy,jdbcType=BIGINT},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateClockForOutRest" parameterType="com.sunten.hrms.ac.domain.AcClockRecord">
+        <![CDATA[
+            update ac_clock_record
+               set
+                   date            = #{date,jdbcType=DATE},
+                   clock_time      = #{clockTime,jdbcType=TIME}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcClockRecordResultMap">
+        <![CDATA[
+           select
+        ]]>
+
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        from ac_clock_record acr
+             where acr.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getFakeRecordSetting" resultType="java.lang.Boolean">
+        <![CDATA[
+            select case when exists (select 1 from ac_fake_record_setting afrs where afrs.enabled_flag = 1
+            and afrs.user_name = #{userName, jdbcType= VARCHAR}) then 1 else 0 end
+
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcClockRecordResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by acr.date desc,acr.clock_time desc
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcClockRecordResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listTempEmployeeClockRecordList" resultMap="tempEmployeeClockRecordResultMap">
+        <![CDATA[
+            select pe.id,pe.name, pe.work_card,
+
+ fdev.ext_dept_name as dept_name, fdev.ext_department_name as department_name, fdev.ext_team_name as team_name,acl.now_date
+             , temp.min_clock_time, temp.max_clock_time,
+             case when exists (select 1 from pm_employee_leaveoffice pel where pel.employee_id = pe.id and dateadd(dd, 1, convert(varchar(10), pel.quit_time, 120)) < acl.now_date) then 1 else 0 end as leave_flag,
+             case when exists (select 1 from pm_employee_entry pee where pee.employee_id = pe.id and convert(varchar(10), pee.entry_time, 120) <= acl.now_date) then 1 else 0 end as  work_flag,
+             acl.day_off_flag as day_off_flag
+            from ac_calendar_header ach join ac_calendar_line acl on ach.id = acl.calendar_header_id and  ach.default_flag = 1 and acl.enabled_flag = 1
+            and acl.now_date between #{beginDate, jdbcType = DATE} and #{endDate, jdbcType = DATE}
+             join pm_employee pe on pe.enabled_flag = 1 and pe.employee_type = '临时员工'
+             join pm_employee_job pej on pe.id = pej.employee_id and pej.job_main_flag = 1 and pej.enabled_flag = 1
+						   left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+            left join
+            ( select t1.employee_id, t1.date, t1.min_clock_time, t2.max_clock_time from
+            (select employee_id, date, min(clock_time) as min_clock_time from ac_clock_record acr where acr.date BETWEEN #{beginDate, jdbcType = DATE} and #{endDate, jdbcType = DATE}
+            and EXISTS (select 1 from pm_employee pe where pe.enabled_flag = 1 and pe.id = acr.employee_id and pe.employee_type = '临时员工')
+            GROUP BY employee_id, date) t1
+            left outer join
+            (select employee_id, date, max(clock_time) as max_clock_time from ac_clock_record acr where acr.date BETWEEN #{beginDate, jdbcType = DATE} and #{endDate, jdbcType = DATE}
+            and EXISTS (select 1 from pm_employee pe where pe.enabled_flag = 1 and pe.id = acr.employee_id and pe.employee_type = '临时员工')
+            GROUP BY employee_id, date) t2
+            on t1.employee_id = t2.employee_id and t1.date = t2.date ) temp
+            on temp.employee_id = pe.id and temp.date = acl.now_date
+            where not EXISTS(select 1 from pm_employee_leaveoffice pel where pel.quit_time < #{beginDate, jdbcType = DATE} and pel.employee_id = pe.id and pel.enabled_flag = 1 )
+            and not exists (select 1 from pm_employee_entry pee where pee.entry_time > dateadd(dd, 1, #{endDate, jdbcType = DATE}) and pee.employee_id = pe.id and pee.enabled_flag = 1 )
+            order by pe.id, acl.now_date
+        ]]>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdJobAuthenticationInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdJobAuthenticationInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="employee_id" property="employeeId" />
+        <result column="process" property="process" />
+        <result column="job" property="job" />
+        <result column="authentication_level" property="authenticationLevel" />
+        <result column="level" property="level" />
+        <result column="surety" property="surety" />
+        <result column="first_general_grade" property="firstGeneralGrade" />
+        <result column="second_general_grade" property="secondGeneralGrade" />
+        <result column="three_general_grade" property="threeGeneralGrade" />
+        <result column="first_theory_grade" property="firstTheoryGrade" />
+        <result column="second_theory_grade" property="secondTheoryGrade" />
+        <result column="three_theory_grade" property="threeTheoryGrade" />
+        <result column="first_operation_grade" property="firstOperationGrade" />
+        <result column="second_operation_grade" property="secondOperationGrade" />
+        <result column="three_operation_grade" property="threeOperationGrade" />
+        <result column="credential_grant_date" property="credentialGrantDate" />
+        <result column="enabled_time" property="enabledTime" />
+        <result column="dept_name" property="deptName" />
+        <result column="department" property="department" />
+        <result column="team" property="team" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="TdJobAuthenticationInterfaceResultMap" type="com.sunten.hrms.td.domain.TdJobAuthenticationInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tjai.id, tjai.group_id, tjai.operation_code, tjai.error_msg, tjai.data_status, tjai.employee_id,
+            tjai.process, tjai.job, tjai.authentication_level, tjai.level, tjai.surety,
+            tjai.first_general_grade, tjai.second_general_grade, tjai.three_general_grade,
+            tjai.first_theory_grade, tjai.second_theory_grade, tjai.three_theory_grade,
+            tjai.first_operation_grade, tjai.second_operation_grade, tjai.three_operation_grade,
+            tjai.credential_grant_date, tjai.enabled_time, tjai.dept_name, tjai.department, tjai.team,
+            tjai.work_card, tjai.name, tjai.create_time, tjai.create_by, tjai.update_time, tjai.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.process as ${tAlias}_process, ${tAlias}.job as ${tAlias}_job,
+            ${tAlias}.authentication_level as ${tAlias}_authentication_level,
+            ${tAlias}.level as ${tAlias}_level, ${tAlias}.surety as ${tAlias}_surety,
+            ${tAlias}.first_general_grade as ${tAlias}_first_general_grade,
+            ${tAlias}.second_general_grade as ${tAlias}_second_general_grade,
+            ${tAlias}.three_general_grade as ${tAlias}_three_general_grade,
+            ${tAlias}.first_theory_grade as ${tAlias}_first_theory_grade,
+            ${tAlias}.second_theory_grade as ${tAlias}_second_theory_grade,
+            ${tAlias}.three_theory_grade as ${tAlias}_three_theory_grade,
+            ${tAlias}.first_operation_grade as ${tAlias}_first_operation_grade,
+            ${tAlias}.second_operation_grade as ${tAlias}_second_operation_grade,
+            ${tAlias}.three_operation_grade as ${tAlias}_three_operation_grade,
+            ${tAlias}.credential_grant_date as ${tAlias}_credential_grant_date,
+            ${tAlias}.enabled_time as ${tAlias}_enabled_time, ${tAlias}.dept_name as ${tAlias}_dept_name,
+            ${tAlias}.department as ${tAlias}_department, ${tAlias}.team as ${tAlias}_team,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.name as ${tAlias}_name,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_job_authentication_interface tjai
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and tjai.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdJobAuthenticationInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_job_authentication_interface (group_id, operation_code, error_msg,
+                                                         data_status, employee_id, process,
+                                                         job, authentication_level, level,
+                                                         surety, first_general_grade,
+                                                         second_general_grade, three_general_grade,
+                                                         first_theory_grade, second_theory_grade,
+                                                         three_theory_grade, first_operation_grade,
+                                                         second_operation_grade, three_operation_grade,
+                                                         credential_grant_date, enabled_time,
+                                                         dept_name, department, team,
+                                                         work_card, name, create_time,
+                                                         create_by, update_time, update_by)
+            values (#{groupId,jdbcType=BIGINT}, #{operationCode,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR},
+                    #{dataStatus,jdbcType=CHAR}, #{employeeId,jdbcType=BIGINT}, #{process,jdbcType=VARCHAR},
+                    #{job,jdbcType=VARCHAR}, #{authenticationLevel,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR},
+                    #{surety,jdbcType=VARCHAR}, #{firstGeneralGrade,jdbcType=DECIMAL},
+                    #{secondGeneralGrade,jdbcType=DECIMAL}, #{threeGeneralGrade,jdbcType=DECIMAL},
+                    #{firstTheoryGrade,jdbcType=DECIMAL}, #{secondTheoryGrade,jdbcType=DECIMAL},
+                    #{threeTheoryGrade,jdbcType=DECIMAL}, #{firstOperationGrade,jdbcType=DECIMAL},
+                    #{secondOperationGrade,jdbcType=DECIMAL}, #{threeOperationGrade,jdbcType=DECIMAL},
+                    #{credentialGrantDate,jdbcType=DATE}, #{enabledTime,jdbcType=DATE},
+                    #{deptName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{team,jdbcType=VARCHAR},
+                    #{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_job_authentication_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdJobAuthenticationInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdJobAuthenticationInterface">
+        <![CDATA[
+            update td_job_authentication_interface
+               set group_id               = #{groupId,jdbcType=BIGINT},
+                   operation_code         = #{operationCode,jdbcType=CHAR},
+                   error_msg              = #{errorMsg,jdbcType=VARCHAR},
+                   data_status            = #{dataStatus,jdbcType=CHAR},
+                   employee_id            = #{employeeId,jdbcType=BIGINT},
+                   process                = #{process,jdbcType=VARCHAR},
+                   job                    = #{job,jdbcType=VARCHAR},
+                   authentication_level   = #{authenticationLevel,jdbcType=VARCHAR},
+                   level                  = #{level,jdbcType=VARCHAR},
+                   surety                 = #{surety,jdbcType=VARCHAR},
+                   first_general_grade    = #{firstGeneralGrade,jdbcType=DECIMAL},
+                   second_general_grade   = #{secondGeneralGrade,jdbcType=DECIMAL},
+                   three_general_grade    = #{threeGeneralGrade,jdbcType=DECIMAL},
+                   first_theory_grade     = #{firstTheoryGrade,jdbcType=DECIMAL},
+                   second_theory_grade    = #{secondTheoryGrade,jdbcType=DECIMAL},
+                   three_theory_grade     = #{threeTheoryGrade,jdbcType=DECIMAL},
+                   first_operation_grade  = #{firstOperationGrade,jdbcType=DECIMAL},
+                   second_operation_grade = #{secondOperationGrade,jdbcType=DECIMAL},
+                   three_operation_grade  = #{threeOperationGrade,jdbcType=DECIMAL},
+                   credential_grant_date  = #{credentialGrantDate,jdbcType=DATE},
+                   enabled_time           = #{enabledTime,jdbcType=DATE},
+                   dept_name              = #{deptName,jdbcType=VARCHAR},
+                   department             = #{department,jdbcType=VARCHAR},
+                   team                   = #{team,jdbcType=VARCHAR},
+                   work_card              = #{workCard,jdbcType=VARCHAR},
+                   name                   = #{name,jdbcType=VARCHAR},
+                   update_time            = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by              = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdJobAuthenticationInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tjai.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdJobAuthenticationInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdJobAuthenticationInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="insertToInterface">
+        insert into td_job_authentication_interface (group_id, employee_id,work_card, name,
+                                                     operation_code, error_msg,
+                                                     data_status,  process,
+                                                     dept_name, department, team,
+                                                     job, authentication_level, level,
+                                                     surety, first_general_grade,
+                                                     second_general_grade, three_general_grade,
+                                                     first_theory_grade, second_theory_grade,
+                                                     three_theory_grade, first_operation_grade,
+                                                     second_operation_grade, three_operation_grade,
+                                                     credential_grant_date, enabled_time,
+                                                     create_time,create_by, update_time, update_by)
+        select #{groupId, jdbcType = BIGINT},
+               isnull((select pe.id from pm_employee pe where pe.enabled_flag = 1
+                                                          and pe.name = #{name, jdbcType = VARCHAR}
+                                                          and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+                   right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)), -1),
+
+               right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6),
+               #{name, jdbcType = VARCHAR},
+               'U',
+               case when  isnull((select pe.id from pm_employee pe where pe.enabled_flag = 1
+               and pe.name = #{name, jdbcType = VARCHAR}
+               and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+               right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)), -1) = -1
+               then '当前上岗认证数据中不存在该员工' else '' end,
+        case when isnull((select pe.id from pm_employee pe where pe.enabled_flag = 1
+        and pe.name = #{name, jdbcType = VARCHAR}
+        and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+        right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)), -1) = -1 then 'F' else 'T' end,
+        #{process,jdbcType=VARCHAR},
+        #{deptName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{team,jdbcType=VARCHAR},
+        #{job,jdbcType=VARCHAR}, #{authenticationLevel,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR},
+        #{surety,jdbcType=VARCHAR}, #{firstGeneralGrade,jdbcType=DECIMAL},#{secondGeneralGrade,jdbcType=DECIMAL},
+        #{threeGeneralGrade,jdbcType=DECIMAL},#{firstTheoryGrade,jdbcType=DECIMAL}, #{secondTheoryGrade,jdbcType=DECIMAL},
+        #{threeTheoryGrade,jdbcType=DECIMAL}, #{firstOperationGrade,jdbcType=DECIMAL},#{secondOperationGrade,jdbcType=DECIMAL},
+        #{threeOperationGrade,jdbcType=DECIMAL},#{credentialGrantDate,jdbcType=DATE}, #{enabledTime,jdbcType=DATE},
+        #{createTime,jdbcType=TIMESTAMP},#{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}
+    </insert>
+
+</mapper>

@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcAttendanceRecordTempDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcAttendanceRecordTemp">
+        <id column="id" property="id" />
+        <result column="abnromal_attendance_record_id" property="abnromalAttendanceRecordId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="date" property="date" />
+        <result column="last_paragraph_end_time" property="lastParagraphEndTime" />
+        <result column="first_time_from" property="firstTimeFrom" />
+        <result column="first_time_to" property="firstTimeTo" />
+        <result column="extend1_time_flag" property="extend1TimeFlag" />
+        <result column="second_time_from" property="secondTimeFrom" />
+        <result column="second_time_to" property="secondTimeTo" />
+        <result column="extend2_time_flag" property="extend2TimeFlag" />
+        <result column="third_time_from" property="thirdTimeFrom" />
+        <result column="third_time_to" property="thirdTimeTo" />
+        <result column="extend3_time_flag" property="extend3TimeFlag" />
+        <result column="next_period_start_time" property="nextPeriodStartTime" />
+        <result column="rest_flag" property="restFlag" />
+        <result column="no_scheduling" property="noScheduling" />
+        <result column="rest_day_clock" property="restDayClock" />
+        <result column="all_day_no_clock" property="allDayNoClock" />
+        <result column="office_time_clock" property="officeTimeClock" />
+        <result column="no_clock_in" property="noClockIn" />
+        <result column="abnormal_clock_in_time" property="abnormalClockInTime" />
+        <result column="no_clock_after_work" property="noClockAfterWork" />
+        <result column="alt_first_time_from" property="altFirstTimeFrom" />
+        <result column="alt_first_time_to" property="altFirstTimeTo" />
+        <result column="alt_extend1_time_flag" property="altExtend1TimeFlag" />
+        <result column="alt_second_time_from" property="altSecondTimeFrom" />
+        <result column="alt_second_time_to" property="altSecondTimeTo" />
+        <result column="alt_extend2_time_flag" property="altExtend2TimeFlag" />
+        <result column="alt_third_time_from" property="altThirdTimeFrom" />
+        <result column="alt_third_time_to" property="altThirdTimeTo" />
+        <result column="alt_extend3_time_flag" property="altExtend3TimeFlag" />
+        <result column="alt_rest_day_flag" property="altRestDayFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <resultMap id="AcAttendanceRecordTempResultMap" type="com.sunten.hrms.ac.domain.AcAttendanceRecordTemp" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            aart.abnromal_attendance_record_id, aart.employee_id, aart.date, aart.last_paragraph_end_time,
+            aart.first_time_from, aart.first_time_to, aart.extend1_time_flag, aart.second_time_from,
+            aart.second_time_to, aart.extend2_time_flag, aart.third_time_from, aart.third_time_to,
+            aart.extend3_time_flag, aart.next_period_start_time, aart.rest_flag, aart.no_scheduling,
+            aart.rest_day_clock, aart.all_day_no_clock, aart.office_time_clock, aart.no_clock_in,
+            aart.abnormal_clock_in_time, aart.no_clock_after_work, aart.alt_first_time_from,
+            aart.alt_first_time_to, aart.alt_extend1_time_flag, aart.alt_second_time_from,
+            aart.alt_second_time_to, aart.alt_extend2_time_flag, aart.alt_third_time_from,
+            aart.alt_third_time_to, aart.alt_extend3_time_flag, aart.alt_rest_day_flag, aart.attribute1,
+            aart.attribute2, aart.attribute3, aart.attribute4, aart.attribute5, aart.id, aart.update_time,
+            aart.update_by, aart.create_time, aart.create_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.abnromal_attendance_record_id as ${tAlias}_abnromal_attendance_record_id,
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.date as ${tAlias}_date,
+            ${tAlias}.last_paragraph_end_time as ${tAlias}_last_paragraph_end_time,
+            ${tAlias}.first_time_from as ${tAlias}_first_time_from,
+            ${tAlias}.first_time_to as ${tAlias}_first_time_to,
+            ${tAlias}.extend1_time_flag as ${tAlias}_extend1_time_flag,
+            ${tAlias}.second_time_from as ${tAlias}_second_time_from,
+            ${tAlias}.second_time_to as ${tAlias}_second_time_to,
+            ${tAlias}.extend2_time_flag as ${tAlias}_extend2_time_flag,
+            ${tAlias}.third_time_from as ${tAlias}_third_time_from,
+            ${tAlias}.third_time_to as ${tAlias}_third_time_to,
+            ${tAlias}.extend3_time_flag as ${tAlias}_extend3_time_flag,
+            ${tAlias}.next_period_start_time as ${tAlias}_next_period_start_time,
+            ${tAlias}.rest_flag as ${tAlias}_rest_flag, ${tAlias}.no_scheduling as ${tAlias}_no_scheduling,
+            ${tAlias}.rest_day_clock as ${tAlias}_rest_day_clock,
+            ${tAlias}.all_day_no_clock as ${tAlias}_all_day_no_clock,
+            ${tAlias}.office_time_clock as ${tAlias}_office_time_clock,
+            ${tAlias}.no_clock_in as ${tAlias}_no_clock_in,
+            ${tAlias}.abnormal_clock_in_time as ${tAlias}_abnormal_clock_in_time,
+            ${tAlias}.no_clock_after_work as ${tAlias}_no_clock_after_work,
+            ${tAlias}.alt_first_time_from as ${tAlias}_alt_first_time_from,
+            ${tAlias}.alt_first_time_to as ${tAlias}_alt_first_time_to,
+            ${tAlias}.alt_extend1_time_flag as ${tAlias}_alt_extend1_time_flag,
+            ${tAlias}.alt_second_time_from as ${tAlias}_alt_second_time_from,
+            ${tAlias}.alt_second_time_to as ${tAlias}_alt_second_time_to,
+            ${tAlias}.alt_extend2_time_flag as ${tAlias}_alt_extend2_time_flag,
+            ${tAlias}.alt_third_time_from as ${tAlias}_alt_third_time_from,
+            ${tAlias}.alt_third_time_to as ${tAlias}_alt_third_time_to,
+            ${tAlias}.alt_extend3_time_flag as ${tAlias}_alt_extend3_time_flag,
+            ${tAlias}.alt_rest_day_flag as ${tAlias}_alt_rest_day_flag,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_attendance_record_temp aart
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and aart.rest_flag = 0
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.parentId != null">
+                <![CDATA[
+                and aart.abnromal_attendance_record_id = #{criteria.parentId,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test="criteria.employeeId">
+                <![CDATA[
+                and aart.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.startDate != null and criteria.endDate != null">
+                <![CDATA[  and aart.date between #{criteria.startDate, jdbcType=DATE} AND
+                #{criteria.endDate, jdbcType=DATE}
+                ]]>
+            </if>
+            <if test="criteria.restFlag != null">
+                <![CDATA[
+                and aart.rest_flag = #{criteria.restFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.noSchedulingFlag != null">
+                <![CDATA[
+            and aart.no_scheduling = #{criteria.noSchedulingFlag,jdbcType=BIT}
+            ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordTemp" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_attendance_record_temp (abnromal_attendance_record_id, employee_id,
+                                                   date, last_paragraph_end_time,
+                                                   first_time_from, first_time_to,
+                                                   extend1_time_flag, second_time_from,
+                                                   second_time_to, extend2_time_flag,
+                                                   third_time_from, third_time_to,
+                                                   extend3_time_flag, next_period_start_time,
+                                                   rest_flag, no_scheduling, rest_day_clock,
+                                                   all_day_no_clock, office_time_clock, no_clock_in,
+                                                   abnormal_clock_in_time, no_clock_after_work,
+                                                   alt_first_time_from, alt_first_time_to,
+                                                   alt_extend1_time_flag, alt_second_time_from,
+                                                   alt_second_time_to, alt_extend2_time_flag,
+                                                   alt_third_time_from, alt_third_time_to,
+                                                   alt_extend3_time_flag, alt_rest_day_flag,
+                                                   attribute1, attribute2,
+                                                   attribute3, attribute4,
+                                                   attribute5, update_time,
+                                                   update_by, create_time, create_by)
+            values (#{abnromalAttendanceRecordId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT},
+                    #{date,jdbcType=DATE}, #{lastParagraphEndTime,jdbcType=TIMESTAMP},
+                    #{firstTimeFrom,jdbcType=TIME}, #{firstTimeTo,jdbcType=TIME},
+                    #{extend1TimeFlag,jdbcType=BIT}, #{secondTimeFrom,jdbcType=TIME},
+                    #{secondTimeTo,jdbcType=TIME}, #{extend2TimeFlag,jdbcType=BIT},
+                    #{thirdTimeFrom,jdbcType=TIME}, #{thirdTimeTo,jdbcType=TIME},
+                    #{extend3TimeFlag,jdbcType=BIT}, #{nextPeriodStartTime,jdbcType=TIMESTAMP},
+                    #{restFlag,jdbcType=BIT}, #{noScheduling,jdbcType=BIT}, #{restDayClock,jdbcType=BIT},
+                    #{allDayNoClock,jdbcType=BIT}, #{officeTimeClock,jdbcType=BIT}, #{noClockIn,jdbcType=BIT},
+                    #{abnormalClockInTime,jdbcType=BIT}, #{noClockAfterWork,jdbcType=BIT},
+                    #{altFirstTimeFrom,jdbcType=TIME}, #{altFirstTimeTo,jdbcType=TIME},
+                    #{altExtend1TimeFlag,jdbcType=BIT}, #{altSecondTimeFrom,jdbcType=TIME},
+                    #{altSecondTimeTo,jdbcType=TIME}, #{altExtend2TimeFlag,jdbcType=BIT},
+                    #{altThirdTimeFrom,jdbcType=TIME}, #{altThirdTimeTo,jdbcType=TIME},
+                    #{altExtend3TimeFlag,jdbcType=BIT}, #{altRestDayFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+                    #{updateBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <insert id="insertTempByDept" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordTemp"  useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+        insert into ac_attendance_record_temp (abnromal_attendance_record_id, employee_id,
+        date, last_paragraph_end_time,
+        first_time_from, first_time_to,
+        extend1_time_flag, second_time_from,
+        second_time_to, extend2_time_flag,
+        third_time_from, third_time_to,
+        extend3_time_flag, next_period_start_time,
+        rest_flag, no_scheduling, rest_day_clock,
+        all_day_no_clock, office_time_clock, no_clock_in,
+        abnormal_clock_in_time, no_clock_after_work,
+        alt_first_time_from, alt_first_time_to,
+        alt_extend1_time_flag, alt_second_time_from,
+        alt_second_time_to, alt_extend2_time_flag,
+        alt_third_time_from, alt_third_time_to,
+        alt_extend3_time_flag, alt_rest_day_flag,
+        update_time,
+        update_by, create_time, create_by)
+        select
+         #{recordId, jdbcType=BIGINT},temp.pejs_employee_id,temp.need_date
+         ,null,
+         temp.ada_first_time_from, temp.ada_first_time_to, temp.ada_extend1_time_flag,
+         temp.ada_second_time_from, temp.ada_second_time_to, temp.ada_extend2_time_flag,
+         temp.ada_third_time_from, temp.ada_third_time_to, temp.ada_extend3_time_flag,
+         null,
+         temp.rest_flag
+         , 0, 0, 0, 0, 0 ,0 ,0 , temp.ada_first_time_from, temp.ada_first_time_to, temp.ada_extend1_time_flag,
+         temp.ada_second_time_from, temp.ada_second_time_to, temp.ada_extend2_time_flag,
+         temp.ada_third_time_from, temp.ada_third_time_to, temp.ada_extend3_time_flag,
+            temp.rest_flag,
+         #{createTime,jdbcType=TIMESTAMP},#{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+         #{updateBy,jdbcType=BIGINT}
+         from (select
+         	pe.id as pejs_employee_id,
+            ]]>
+        <bind name="tAlias" value="'fds'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptSnapshotDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+           , ada.id AS ada_id,
+            ada.dept_id AS ada_dept_id,
+            ada.regime_id AS ada_regime_id,
+            ada.calendar_header_id AS ada_calendar_header_id,
+            case when acl.day_off_flag = 1 then null else
+            ada.first_time_from end AS ada_first_time_from,
+            case when acl.day_off_flag = 1 then null else
+            ada.first_time_to end AS ada_first_time_to,
+            case when acl.day_off_flag = 1 then null else
+            ada.extend1_time_flag end AS ada_extend1_time_flag,
+            case when acl.day_off_flag = 1 then null else
+            ada.second_time_from end AS ada_second_time_from,
+            case when acl.day_off_flag = 1 then null else
+            ada.second_time_to end AS ada_second_time_to,
+            case when acl.day_off_flag = 1 then null else
+            ada.extend2_time_flag end AS ada_extend2_time_flag,
+            case when acl.day_off_flag = 1 then null else
+            ada.third_time_from end AS ada_third_time_from,
+            case when acl.day_off_flag = 1 then null else
+            ada.third_time_to end AS ada_third_time_to,
+            case when acl.day_off_flag = 1 then null else
+            ada.extend3_time_flag end AS ada_extend3_time_flag,
+            ada.take_effect_date AS ada_take_effect_date,
+            ada.invalid_date AS ada_invalid_date,
+            ada.attribute1 AS ada_attribute1,
+            ada.attribute2 AS ada_attribute2,
+            ada.attribute3 AS ada_attribute3,
+            ada.enabled_flag AS ada_enabled_flag,
+            ada.create_by AS ada_create_by,
+            ada.create_time AS ada_create_time,
+            ada.update_by AS ada_update_by,
+            ada.update_time AS ada_update_time
+            ,acl.day_off_flag as rest_flag, acl.now_date as need_date
+        ]]>
+        <![CDATA[
+           from
+
+    pm_employee pe join pm_employee_job_snapshot pejs on pe.id = pejs.employee_id and pe.enabled_flag = 1  join fnd_dept_snapshot fds on pejs.dept_id = fds.dept_id
+    and pejs.date = fds.date join ac_dept_attendance ada on fds.attendance_id = ada.id join  ac_calendar_header ach on ada.calendar_header_id = ach.id
+    join ac_calendar_line acl on ach.id = acl.calendar_header_id and acl.now_date = pejs.date
+		where
+		acl.now_date BETWEEN #{startDate, jdbcType=DATE} and #{endDate, jdbcType=DATE}
+						       and pe.work_attendance_flag = 1
+              and pe.workshop_attendance_flag = 0
+              ) as temp
+        ]]>
+    </insert>
+
+    <insert id="insertTempByEmployee" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordTemp"  useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+        insert into ac_attendance_record_temp (abnromal_attendance_record_id, employee_id,
+        date, last_paragraph_end_time,
+        first_time_from, first_time_to,
+        extend1_time_flag, second_time_from,
+        second_time_to, extend2_time_flag,
+        third_time_from, third_time_to,
+        extend3_time_flag, next_period_start_time,
+        rest_flag, no_scheduling, rest_day_clock,
+        all_day_no_clock, office_time_clock, no_clock_in,
+        abnormal_clock_in_time, no_clock_after_work,
+        alt_first_time_from, alt_first_time_to,
+        alt_extend1_time_flag, alt_second_time_from,
+        alt_second_time_to, alt_extend2_time_flag,
+        alt_third_time_from, alt_third_time_to,
+        alt_extend3_time_flag, alt_rest_day_flag,
+        update_time,
+        update_by, create_time, create_by)
+        select
+        #{recordId, jdbcType=BIGINT}, temp.pej_employee_id, temp.fds_date,
+        null,
+        temp.aea_first_time_from,temp.aea_first_time_to,temp.aea_extend1_time_flag,
+        temp.aea_second_time_from,temp.aea_second_time_to,temp.aea_extend2_time_flag,
+        temp.aea_third_time_from,temp.aea_third_time_to,temp.aea_extend3_time_flag,
+        null,temp.aea_rest_day_flag, case when (temp.aea_id is null) THEN 1 ELSE 0 END, 0, 0, 0, 0 ,0 ,0, temp.aea_first_time_from,temp.aea_first_time_to,temp.aea_extend1_time_flag,
+        temp.aea_second_time_from,temp.aea_second_time_to,temp.aea_extend2_time_flag,
+        temp.aea_third_time_from,temp.aea_third_time_to,temp.aea_extend3_time_flag,temp.aea_rest_day_flag,
+        #{createTime,jdbcType=TIMESTAMP},#{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+         #{updateBy,jdbcType=BIGINT}
+        from (select
+        emp_temp.*,
+        ]]>
+        <bind name="tAlias" value="'aea'"/>
+        <include refid="com.sunten.hrms.ac.dao.AcEmployeeAttendanceDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+        from
+        (select
+        ]]>
+        <bind name="tAlias" value="'fds'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptSnapshotDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+        ,
+         pej.group_id as pej_group_id, pej.employee_id as pej_employee_id,
+            pej.job_id as pej_fj_id, pej.job_name as pej_fj_job_name,
+            pej.dept_id as pej_fd_id, pej.dept_name as pej_fd_dept_name,
+            pej.remarks as pej_remarks, pej.attribute1 as pej_attribute1,
+            pej.enabled_flag as pej_enabled_flag,
+            pej.job_main_flag as pej_job_main_flag
+        from
+        fnd_dept_snapshot fds join  pm_employee_job pej on fds.dept_id = pej.dept_id and pej.job_main_flag = 1 and pej.enabled_flag = 1
+        and fds.date between #{startDate, jdbcType=DATE} and #{endDate, jdbcType=DATE}
+ join pm_employee pe on pe.id = pej.employee_id and pe.enabled_flag = 1 and pe.work_attendance_flag = 1 and pe.workshop_attendance_flag = 1
+				join pm_employee_job_snapshot pejs on pejs.employee_id = pe.id and pejs.date = fds.date
+        ) as emp_temp
+        left join
+        ac_employee_attendance aea
+        on
+        aea.regimea_date = emp_temp.fds_date
+        and aea.regimea_date between #{startDate, jdbcType=DATE} and #{endDate, jdbcType=DATE}
+        and aea.employee_id = emp_temp.pej_employee_id
+        and aea.enabled_flag = 1
+        ) as temp
+            ]]>
+    </insert>
+
+
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_attendance_record_temp
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordTemp">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcAttendanceRecordTemp">
+        <![CDATA[
+            update ac_attendance_record_temp
+               set abnromal_attendance_record_id = #{abnromalAttendanceRecordId,jdbcType=BIGINT},
+                   employee_id                   = #{employeeId,jdbcType=BIGINT},
+                   date                          = #{date,jdbcType=DATE},
+                   last_paragraph_end_time       = #{lastParagraphEndTime,jdbcType=TIMESTAMP},
+                   first_time_from               = #{firstTimeFrom,jdbcType=TIME},
+                   first_time_to                 = #{firstTimeTo,jdbcType=TIME},
+                   extend1_time_flag             = #{extend1TimeFlag,jdbcType=BIT},
+                   second_time_from              = #{secondTimeFrom,jdbcType=TIME},
+                   second_time_to                = #{secondTimeTo,jdbcType=TIME},
+                   extend2_time_flag             = #{extend2TimeFlag,jdbcType=BIT},
+                   third_time_from               = #{thirdTimeFrom,jdbcType=TIME},
+                   third_time_to                 = #{thirdTimeTo,jdbcType=TIME},
+                   extend3_time_flag             = #{extend3TimeFlag,jdbcType=BIT},
+                   next_period_start_time        = #{nextPeriodStartTime,jdbcType=TIMESTAMP},
+                   rest_flag                     = #{restFlag,jdbcType=BIT},
+                   no_scheduling                 = #{noScheduling,jdbcType=BIT},
+                   rest_day_clock                = #{restDayClock,jdbcType=BIT},
+                   all_day_no_clock              = #{allDayNoClock,jdbcType=BIT},
+                   office_time_clock             = #{officeTimeClock,jdbcType=BIT},
+                   no_clock_in                   = #{noClockIn,jdbcType=BIT},
+                   abnormal_clock_in_time        = #{abnormalClockInTime,jdbcType=BIT},
+                   no_clock_after_work           = #{noClockAfterWork,jdbcType=BIT},
+                   alt_first_time_from           = #{altFirstTimeFrom,jdbcType=TIME},
+                   alt_first_time_to             = #{altFirstTimeTo,jdbcType=TIME},
+                   alt_extend1_time_flag         = #{altExtend1TimeFlag,jdbcType=BIT},
+                   alt_second_time_from          = #{altSecondTimeFrom,jdbcType=TIME},
+                   alt_second_time_to            = #{altSecondTimeTo,jdbcType=TIME},
+                   alt_extend2_time_flag         = #{altExtend2TimeFlag,jdbcType=BIT},
+                   alt_third_time_from           = #{altThirdTimeFrom,jdbcType=TIME},
+                   alt_third_time_to             = #{altThirdTimeTo,jdbcType=TIME},
+                   alt_extend3_time_flag         = #{altExtend3TimeFlag,jdbcType=BIT},
+                   alt_rest_day_flag           = #{altRestDayFlag,jdbcType=BIT},
+                   attribute1                    = #{attribute1,jdbcType=VARCHAR},
+                   attribute2                    = #{attribute2,jdbcType=VARCHAR},
+                   attribute3                    = #{attribute3,jdbcType=VARCHAR},
+                   attribute4                    = #{attribute4,jdbcType=VARCHAR},
+                   attribute5                    = #{attribute5,jdbcType=VARCHAR},
+                   update_time                   = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                     = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateLastEndAndNextStart">
+<![CDATA[
+     UPDATE aart
+   SET aart.last_paragraph_end_time =
+       (SELECT CASE
+                 WHEN (aa_e.time3 IS NOT NULL) THEN
+                  dbo.merge_date_time(aa_e.date, aa_e.time3, aa_e.extend3)
+                 ELSE
+                  CASE
+                    WHEN (aa_e.time2 IS NOT NULL) THEN
+                     dbo.merge_date_time(aa_e.date, aa_e.time2, aa_e.extend2)
+                    ELSE
+                     CASE
+                       WHEN (aa_e.time1 IS NOT NULL) THEN
+                        dbo.merge_date_time(aa_e.date, aa_e.time1, aa_e.extend1)
+                       ELSE
+                        NULL
+                     END
+                  END
+               END
+          FROM (SELECT aart_e.employee_id,
+                       aart_e.date,
+                       aart_e.alt_third_time_to     AS time3,
+                       aart_e.alt_extend3_time_flag AS extend3,
+                       aart_e.alt_second_time_to    AS time2,
+                       aart_e.alt_extend2_time_flag AS extend2,
+                       aart_e.alt_first_time_to     AS time1,
+                       aart_e.alt_extend1_time_flag AS extend1
+                  FROM ac_attendance_record_temp aart_e
+                 WHERE aart_e.alt_rest_day_flag = 0
+                   AND aart_e.no_scheduling = 0
+                UNION ALL
+                SELECT aarh_e.employee_id,
+                       aarh_e.date,
+                       aarh_e.alt_third_time_to     AS time3,
+                       aarh_e.alt_extend3_time_flag AS extend3,
+                       aarh_e.alt_second_time_to    AS time2,
+                       aarh_e.alt_extend2_time_flag AS extend2,
+                       aarh_e.alt_first_time_to     AS time1,
+                       aarh_e.alt_extend1_time_flag AS extend1
+                  FROM ac_attendance_record_history aarh_e
+                 WHERE aarh_e.alt_rest_day_flag = 0
+                   AND aarh_e.no_scheduling = 0) aa_e
+         WHERE aa_e.date = dateadd(DAY, -1, aart.date)
+           AND aa_e.employee_id = aart.employee_id),
+       aart.next_period_start_time =
+       (SELECT CASE
+                 WHEN (aa_e.time1 IS NOT NULL) THEN
+                  dbo.merge_date_time(aa_e.date, aa_e.time1, 0)
+                 ELSE
+                  CASE
+                    WHEN (aa_e.time2 IS NOT NULL) THEN
+                     dbo.merge_date_time(aa_e.date, aa_e.time2, 0)
+                    ELSE
+                     CASE
+                       WHEN (aa_e.time3 IS NOT NULL) THEN
+                        dbo.merge_date_time(aa_e.date, aa_e.time3, 0)
+                       ELSE
+                        NULL
+                     END
+                  END
+               END
+          FROM (SELECT aart_e.employee_id,
+                       aart_e.date,
+                       aart_e.alt_third_time_from  AS time3,
+                       aart_e.alt_second_time_from AS time2,
+                       aart_e.alt_first_time_from  AS time1
+                  FROM ac_attendance_record_temp aart_e
+                 WHERE aart_e.alt_rest_day_flag = 0
+                   AND aart_e.no_scheduling = 0
+                UNION ALL
+                SELECT aarh_e.employee_id,
+                       aarh_e.date,
+                       aarh_e.alt_third_time_from  AS time3,
+                       aarh_e.alt_second_time_from AS time2,
+                       aarh_e.alt_first_time_from  AS time1
+                  FROM ac_attendance_record_history aarh_e
+                 WHERE aarh_e.alt_rest_day_flag = 0
+                   AND aarh_e.no_scheduling = 0) aa_e
+         WHERE aa_e.date = dateadd(DAY, 1, aart.date)
+           AND aa_e.employee_id = aart.employee_id)
+  FROM ac_attendance_record_temp aart where aart.alt_rest_day_flag = 0
+  ]]>
+    </update>
+
+    <update id="updateRestDayClock">
+        <![CDATA[
+            UPDATE aart
+   SET aart.rest_day_clock = CASE
+                               WHEN EXISTS (SELECT 1
+                                       FROM ac_clock_record acr
+                                      WHERE acr.employee_id = aart.employee_id
+                                        AND acr.date = aart.date)
+                               THEN 1
+                               ELSE 0
+                             END
+  FROM ac_attendance_record_temp aart
+ WHERE aart.alt_rest_day_flag = 1
+   AND aart.no_scheduling = 0
+        ]]>
+    </update>
+
+    <update id="updateAllDayNoClock">
+            <![CDATA[
+UPDATE aart
+   SET aart.all_day_no_clock = CASE
+
+                                 WHEN NOT EXISTS (SELECT 1
+                                         FROM ac_clock_record acr
+                                        WHERE acr.employee_id = aart.employee_id
+                                          AND acr.date = aart.date)
+                                 THEN 1
+                                 ELSE 0
+                               END
+  FROM ac_attendance_record_temp aart
+ WHERE aart.alt_rest_day_flag = 0
+   AND aart.no_scheduling = 0
+        ]]>
+    </update>
+
+    <update id="updateOfficeTimeClock">
+<![CDATA[
+UPDATE aart
+   SET aart.office_time_clock = CASE
+                               /*   非休息日在上班时间内存在打卡 ，则异常    */
+                                  WHEN EXISTS (SELECT 1
+                                          FROM ac_clock_record acr
+                                         WHERE acr.employee_id = aart.employee_id
+										   AND acr.date BETWEEN dateadd(DAY, -1, aart.date) AND dateadd(DAY, 1, aart.date)
+                                           AND (
+                                             (dbo.merge_date_time(acr.date, acr.clock_time, 0)
+                                                 BETWEEN dbo.merge_date_time(aart.date, aart.alt_first_time_from, 0)
+                                                     AND dbo.merge_date_time(aart.date, aart.alt_first_time_to, aart.alt_extend1_time_flag)
+                                                 AND aart.alt_first_time_from IS NOT NULL
+                                                 AND aart.alt_first_time_to IS NOT NULL)
+                                              OR
+                                             (dbo.merge_date_time(acr.date, acr.clock_time, 0)
+                                                 BETWEEN dbo.merge_date_time(aart.date, aart.alt_second_time_from, 0)
+                                                     AND dbo.merge_date_time(aart.date, aart.alt_second_time_to, aart.alt_extend2_time_flag)
+                                                 AND aart.alt_second_time_from IS NOT NULL
+                                                 AND aart.alt_second_time_to IS NOT NULL)
+                                              OR
+                                             (dbo.merge_date_time(acr.date, acr.clock_time, 0)
+                                                 BETWEEN dbo.merge_date_time(aart.date, aart.alt_third_time_from, 0)
+                                                     AND dbo.merge_date_time(aart.date, aart.alt_third_time_to, aart.alt_extend3_time_flag)
+                                                 AND aart.alt_third_time_from IS NOT NULL
+                                                 AND aart.alt_third_time_to IS NOT NULL)
+                                               )
+                                              )
+                                  THEN 1
+                                  ELSE 0
+                                END
+  FROM ac_attendance_record_temp aart
+ WHERE aart.alt_rest_day_flag = 0
+   AND aart.no_scheduling = 0
+     ]]>
+    </update>
+
+    <update id="updateNoClockIn" parameterType="java.lang.Long">
+        <![CDATA[
+   UPDATE aart
+ SET aart.no_clock_in = CASE
+	WHEN NOT EXISTS (
+		SELECT 1
+		  FROM ac_clock_record acr
+		 WHERE acr.employee_id = aart.employee_id
+		   AND acr.date BETWEEN dateadd([day], -1, aart.date) AND dateadd([day], 1, aart.date)
+		   AND dbo.merge_date_time(acr.date, acr.clock_time, 0)
+			  BETWEEN ISNULL(aart.last_paragraph_end_time, CASE WHEN dateadd([hour], -(#{amendHours,jdbcType=BIGINT}), dbo.merge_date_time(aart.date, aart.alt_first_time_from, 0)) <= aart.date
+			                                                    THEN dateadd([hour], -(#{amendHours,jdbcType=BIGINT}), dbo.merge_date_time(aart.date, aart.alt_first_time_from, 0))
+				                                                ELSE aart.date
+															END)
+			      AND dbo.merge_date_time(aart.date, ISNULL(aart.alt_first_time_from, ISNULL(aart.alt_second_time_from, aart.alt_third_time_from)), 0)
+	) THEN 1
+	ELSE 0
+ END
+ FROM ac_attendance_record_temp aart
+WHERE aart.alt_rest_day_flag = 0
+  AND aart.no_scheduling = 0
+  AND aart.last_paragraph_end_time IS NULL
+        ]]>
+    </update>
+
+    <update id="updateAbnormalClockInTime">
+        <![CDATA[
+UPDATE aart
+   SET aart.abnormal_clock_in_time = CASE
+                                       /*   上一天非休息日，结束时间到第一次开工时间打卡次数 = 0 或 %2 = 1 ，则异常    */
+                                       WHEN aart.last_paragraph_end_time IS NOT NULL
+                                          AND (SELECT CASE clock_count WHEN 0 THEN 1 ELSE clock_count % 2 END
+                                               FROM (SELECT COUNT(1) AS clock_count
+                                                       FROM ac_clock_record acr
+                                                      WHERE acr.employee_id = aart.employee_id
+                                                        AND acr.date BETWEEN dateadd(DAY, -1, aart.date) AND dateadd(DAY, 1, aart.date)
+                                                        AND dbo.merge_date_time(acr.date, acr.clock_time, 0)
+														  BETWEEN ISNULL(aart.last_paragraph_end_time, aart.date)
+														      AND dbo.merge_date_time(aart.date, ISNULL(aart.alt_first_time_from, ISNULL(aart.alt_second_time_from, aart.alt_third_time_from)), 0)
+													) AS temp) = 1
+									   THEN 1
+                                       ELSE CASE
+                                       /*   第1段时间to、第2段时间from为非空，之间打卡次数 %2 = 1 ，则异常    */
+											  WHEN aart.alt_first_time_to IS NOT NULL
+												 AND aart.alt_second_time_from IS NOT NULL
+												 AND (SELECT COUNT(1) AS clock_count
+														FROM ac_clock_record acr
+													   WHERE acr.employee_id = aart.employee_id
+														  AND acr.date BETWEEN dateadd(DAY, -1, aart.date) AND dateadd(DAY, 1, aart.date)
+														  AND dbo.merge_date_time(acr.date, acr.clock_time, 0)
+															BETWEEN dbo.merge_date_time(aart.date, aart.alt_first_time_to, aart.alt_extend1_time_flag)
+																AND dbo.merge_date_time(aart.date, aart.alt_second_time_from, 0)) % 2 = 1
+											  THEN 1
+											  ELSE CASE
+                                       /*   第2段时间to、第3段时间from为非空，之间打卡次数 %2 = 1 ，则异常    */
+													 WHEN aart.alt_second_time_to IS NOT NULL
+														AND aart.alt_third_time_from IS NOT NULL
+														AND (SELECT COUNT(1) AS clock_count
+															   FROM ac_clock_record acr
+															  WHERE acr.employee_id = aart.employee_id
+																AND acr.date BETWEEN dateadd(DAY, -1, aart.date) AND dateadd(DAY, 1, aart.date)
+																AND dbo.merge_date_time(acr.date, acr.clock_time, 0)
+																  BETWEEN dbo.merge_date_time(aart.date, aart.alt_second_time_to, aart.alt_extend2_time_flag)
+																      AND dbo.merge_date_time(aart.date, aart.alt_third_time_from, 0)) % 2 = 1
+													 THEN 1
+													 ELSE 0
+												   END
+											END
+                                     END
+  FROM ac_attendance_record_temp aart
+ WHERE aart.alt_rest_day_flag = 0
+   AND aart.no_scheduling = 0
+        ]]>
+    </update>
+
+    <update id="updateNoClockAfterWork">
+         <![CDATA[
+   UPDATE aart_u
+SET aart_u.no_clock_after_work = (
+	SELECT CASE
+			WHEN aart.next_period_start_time IS NULL THEN
+				CASE clock_count
+					WHEN 0 THEN 1 ELSE 0
+				END
+			ELSE
+				CASE clock_count
+					WHEN 0 THEN 1 ELSE clock_count % 2
+				END
+		END
+	FROM (
+		SELECT COUNT(1) AS clock_count
+		FROM ac_clock_record acr
+		WHERE acr.employee_id = aart.employee_id
+			AND acr.date BETWEEN dateadd([day], -1, aart.date) AND dateadd([day], 1, aart.date)
+			AND dbo.merge_date_time(acr.date, acr.clock_time, 0)
+			  BETWEEN aart.off_time
+			      AND ISNULL(aart.next_period_start_time,
+			                 CASE WHEN dbo.merge_date_time(aart.date, '23:59:59', 0) >= dateadd([hour], #{amendHours,jdbcType=BIGINT}, aart.off_time)
+			                      THEN dbo.merge_date_time(aart.date, '23:59:59', 0)
+			                      ELSE dateadd([hour], #{amendHours,jdbcType=BIGINT}, aart.off_time)
+							         END
+			                )
+	) temp
+)
+FROM (
+	SELECT aart_d.*,
+		CASE
+			WHEN aart_d.alt_third_time_to IS NOT NULL
+			THEN dbo.merge_date_time(aart_d.date, aart_d.alt_third_time_to, aart_d.alt_extend3_time_flag)
+			ELSE
+				CASE
+					WHEN aart_d.alt_second_time_to IS NOT NULL
+					THEN dbo.merge_date_time(aart_d.date, aart_d.alt_second_time_to, aart_d.alt_extend2_time_flag)
+					ELSE
+						CASE
+							WHEN aart_d.alt_first_time_to IS NOT NULL
+							THEN dbo.merge_date_time(aart_d.date, aart_d.alt_first_time_to, aart_d.alt_extend1_time_flag)
+							ELSE aart_d.date
+						END
+				END
+		END AS off_time
+	FROM ac_attendance_record_temp aart_d
+) aart,
+ac_attendance_record_temp aart_u
+WHERE aart.id = aart_u.id
+  AND aart.alt_rest_day_flag = 0
+  AND aart.no_scheduling = 0
+        ]]>
+    </update>
+
+    <insert id="insertHistoryByTemp">
+        <![CDATA[
+            INSERT INTO ac_attendance_record_history
+  (abnromal_attendance_record_id,
+   employee_id,
+   date,
+   last_paragraph_end_time,
+   first_time_from,
+   first_time_to,
+   extend1_time_flag,
+   second_time_from,
+   second_time_to,
+   extend2_time_flag,
+   third_time_from,
+   third_time_to,
+   extend3_time_flag,
+   next_period_start_time,
+   rest_flag,
+   no_scheduling,
+   rest_day_clock,
+   all_day_no_clock,
+   office_time_clock,
+   no_clock_in,
+   abnormal_clock_in_time,
+   no_clock_after_work,
+   alt_first_time_from,
+   alt_first_time_to,
+   alt_extend1_time_flag,
+   alt_second_time_from,
+   alt_second_time_to,
+   alt_extend2_time_flag,
+   alt_third_time_from,
+   alt_third_time_to,
+   alt_extend3_time_flag,
+   alt_rest_day_flag,
+   create_time,
+   create_by,
+   update_time,
+   update_by,
+   attribute1,
+   attribute2,
+   attribute3,
+   attribute4,
+   attribute5,
+   commit_flag
+    )
+  SELECT aart.abnromal_attendance_record_id,
+         aart.employee_id,
+         aart.date,
+         aart.last_paragraph_end_time,
+         aart.first_time_from,
+         aart.first_time_to,
+         aart.extend1_time_flag,
+         aart.second_time_from,
+         aart.second_time_to,
+         aart.extend2_time_flag,
+         aart.third_time_from,
+         aart.third_time_to,
+         aart.extend3_time_flag,
+         aart.next_period_start_time,
+         aart.rest_flag,
+         aart.no_scheduling,
+         aart.rest_day_clock,
+         aart.all_day_no_clock,
+         aart.office_time_clock,
+         aart.no_clock_in,
+         aart.abnormal_clock_in_time,
+         aart.no_clock_after_work,
+         aart.alt_first_time_from,
+         aart.alt_first_time_to,
+         aart.alt_extend1_time_flag,
+         aart.alt_second_time_from,
+         aart.alt_second_time_to,
+         aart.alt_extend2_time_flag,
+         aart.alt_third_time_from,
+         aart.alt_third_time_to,
+         aart.alt_extend3_time_flag,
+         aart.alt_rest_day_flag,
+         aart.create_time,
+         aart.create_by,
+         aart.update_time,
+         aart.update_by,
+         aart.attribute1,
+         aart.attribute2,
+         aart.attribute3,
+         aart.attribute4,
+         aart.attribute5,
+         0
+    FROM ac_attendance_record_temp aart
+    join pm_employee_job pej on pej.employee_id = aart.employee_id
+    where pej.enabled_flag = 1
+    and pej.job_main_flag = 1
+        ]]>
+    </insert>
+<!--    ,-->
+<!--    isnull(-->
+<!--    STUFF((-->
+<!--    SELECT-->
+<!--    ',' +-->
+
+<!--    CONVERT(VARCHAR(10), acr.date,120) + ' ' + CONVERT(VARCHAR(8),acr.clock_time , 108)-->
+<!--    FROM-->
+<!--    ac_clock_record acr-->
+<!--    WHERE-->
+<!--    acr.employee_id = aart.employee_id-->
+<!--    and acr.date  = aart.date-->
+<!--    FOR XML PATH ( '' )),-->
+<!--    1,-->
+<!--    1,-->
+<!--    ''-->
+<!--    ), ''-->
+<!--    )-->
+
+    <delete id="clearTemp">
+        <![CDATA[
+             truncate table ac_attendance_record_temp
+        ]]>
+    </delete>
+
+    <insert id="insertAcAbnormalClockRecord">
+        <![CDATA[
+INSERT INTO ac_abnormal_clock_record
+		(date,
+		ac_attendance_record_history_id,
+		clock_time,
+		card_machine_no,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		attribute1,
+		attribute2,
+		attribute3,
+		attribute4,
+		attribute5)
+SELECT ISNULL (acr.date, aarh.date),
+	     aarh.ID,
+	     acr.clock_time,
+	     acr.card_machine_no,
+	     ISNULL (acr.create_time, GETDATE()),
+	     ISNULL (acr.create_by, -1),
+	     ISNULL (acr.update_time, GETDATE()),
+	     ISNULL (acr.update_by, -1),
+	     acr.attribute1,
+	     acr.attribute2,
+	     acr.attribute3,
+	     acr.attribute4,
+	     acr.attribute5
+FROM (
+	SELECT aarh_d.*,
+	  CASE
+			WHEN aarh_d.alt_third_time_to IS NOT NULL THEN dbo.merge_date_time(aarh_d.date, aarh_d.alt_third_time_to, aarh_d.alt_extend3_time_flag)
+			ELSE
+				CASE
+					WHEN aarh_d.alt_second_time_to IS NOT NULL THEN dbo.merge_date_time(aarh_d.date, aarh_d.alt_second_time_to, aarh_d.alt_extend2_time_flag)
+					ELSE
+						CASE
+							WHEN aarh_d.alt_first_time_to IS NOT NULL THEN dbo.merge_date_time(aarh_d.date, aarh_d.alt_first_time_to, aarh_d.alt_extend1_time_flag)
+							ELSE aarh_d.date
+						END
+				END
+		END AS off_time
+	FROM ac_attendance_record_history aarh_d
+) aarh
+	LEFT JOIN ac_clock_record acr
+	ON aarh.employee_id = acr.employee_id
+		AND acr.date BETWEEN dateadd([day], -1, aarh.date) AND dateadd([day], 1, aarh.date)
+		AND dbo.merge_date_time(acr.date, acr.clock_time, 0)
+		   BETWEEN ISNULL(aarh.last_paragraph_end_time,
+		                  CASE
+			                  WHEN dateadd([hour], -(#{amendHours,jdbcType=BIGINT}), dbo.merge_date_time(aarh.date, aarh.alt_first_time_from, 0)) <= aarh.date
+			                  THEN dateadd([hour], -(#{amendHours,jdbcType=BIGINT}), dbo.merge_date_time(aarh.date, aarh.alt_first_time_from, 0))
+			                  ELSE aarh.date
+		                  END)
+		       AND ISNULL(aarh.next_period_start_time,
+		       						CASE
+			       						WHEN dbo.merge_date_time(aarh.date, '23:59:59', 0) >= dateadd([hour], #{amendHours,jdbcType=BIGINT}, aarh.off_time)
+			       						THEN dbo.merge_date_time(aarh.date, '23:59:59', 0)
+			       						ELSE dateadd([hour], #{amendHours,jdbcType=BIGINT}, aarh.off_time)
+		       						END)
+WHERE (aarh.no_scheduling = 1
+		--OR aarh.rest_day_clock = 1
+		OR aarh.all_day_no_clock = 1
+		OR aarh.office_time_clock = 1
+		OR aarh.no_clock_in = 1
+		OR aarh.abnormal_clock_in_time = 1
+		OR aarh.no_clock_after_work = 1)
+	AND aarh.DATE >= #{dateFrom, jdbcType=DATE}
+	AND aarh.DATE <= #{dateTo, jdbcType=DATE}
+
+        ]]>
+    </insert>
+
+
+
+    <select id="getByKey" resultMap="AcAttendanceRecordTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where aart.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcAttendanceRecordTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcAttendanceRecordTempResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listEmployeWithAttendanceByCriteria" resultMap="AcAttendanceRecordTempResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_attendance_record_temp aart
+        ]]>
+    </select>
+
+    <update id="updateTimeFromByBeLate">
+        <![CDATA[
+            update aart
+            set
+            aart.alt_first_time_from = case when
+             (DATEDIFF(mi, aart.alt_first_time_from, (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) ) >= 0
+             and DATEDIFF(mi, aart.alt_first_time_to, (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) ) < 0)
+              then (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) else aart.alt_first_time_from end,
+            aart.alt_second_time_from = case when
+            (DATEDIFF(mi, aart.alt_second_time_from, (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) ) >= 0
+             and DATEDIFF(mi, aart.alt_second_time_to, (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) ) < 0)
+              then (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) else aart.alt_second_time_from end,
+            aart.alt_third_time_from = case when
+             (DATEDIFF(mi, aart.alt_third_time_from, (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) ) >= 0
+             and DATEDIFF(mi, aart.alt_third_time_to, (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) ) < 0)
+              then (select be_late_time from ac_be_late_date where id = #{lateId, jdbcType = BIGINT} ) else aart.alt_third_time_from end
+               from ac_attendance_record_temp aart where aart.date = #{date, jdbcType = DATE}
+               and
+               (
+                    convert(varchar(8),aart.alt_first_time_from, 114) = '08:15:00'
+                    or convert(varchar(8),aart.alt_second_time_from, 114) = '08:15:00'
+                    or convert(varchar(8),aart.alt_third_time_from, 114) = '08:15:00'
+               )
+        ]]>
+    </update>
+
+    <update id="updateTimeToByBeFore">
+         <![CDATA[
+              update aart
+            set
+            aart.alt_first_time_to = case when
+             (DATEDIFF(mi, aart.alt_first_time_from, (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) ) > 0
+             and DATEDIFF(mi, aart.alt_first_time_to, (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) ) <= 0)
+            then (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) else aart.alt_first_time_to end,
+            aart.alt_second_time_to = case when
+             (DATEDIFF(mi, aart.alt_second_time_from, (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) ) > 0
+             and DATEDIFF(mi, aart.alt_second_time_to, (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) ) <= 0)
+              then (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) else aart.alt_second_time_to end,
+            aart.alt_third_time_to =  case when
+             (DATEDIFF(mi, aart.alt_third_time_from, (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) ) > 0
+             and DATEDIFF(mi, aart.alt_third_time_to, (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) ) <= 0)
+              then (select be_late_time from ac_be_late_date where id = #{beforeId, jdbcType = BIGINT} ) else aart.alt_third_time_from end
+                 from ac_attendance_record_temp aart where aart.date = #{date, jdbcType = DATE}
+               and
+               (
+                    convert(varchar(8),aart.alt_first_time_to, 114) = '17:00:00'
+                    or convert(varchar(8),aart.alt_second_time_to, 114) = '17:00:00'
+                    or convert(varchar(8),aart.alt_third_time_to, 114) = '17:00:00'
+               )
+
+
+        ]]>
+    </update>
+
+    <update id="updateDateClockTime">
+        <![CDATA[
+            update aarh   set day_clock_time =
+             isnull(
+        STUFF((
+        SELECT
+        ',' +
+
+        CONVERT(VARCHAR(10), aacr.date,120) + ' ' + CONVERT(VARCHAR(8),aacr.clock_time , 108)
+        FROM
+        ac_abnormal_clock_record aacr
+        WHERE
+        aacr.ac_attendance_record_history_id = aarh.id order by aacr.date,aacr.clock_time
+        FOR XML PATH ( '' )),
+        1,
+        1,
+        ''
+        ), ''
+        )
+        from ac_attendance_record_history aarh  where aarh.date between #{beginDate, jdbcType=DATE} AND #{endDate, jdbcType= DATE}
+
+        ]]>
+    </update>
+
+    <insert id="attendanceTempToAttendanceTempArchive">
+        <![CDATA[
+            insert into ac_attendance_record_temp_archive(
+
+      [abnromal_attendance_record_id]
+      ,[employee_id]
+      ,[date]
+      ,[last_paragraph_end_time]
+      ,[first_time_from]
+      ,[first_time_to]
+      ,[extend1_time_flag]
+      ,[second_time_from]
+      ,[second_time_to]
+      ,[extend2_time_flag]
+      ,[third_time_from]
+      ,[third_time_to]
+      ,[extend3_time_flag]
+      ,[next_period_start_time]
+      ,[rest_flag]
+      ,[no_scheduling]
+      ,[rest_day_clock]
+      ,[all_day_no_clock]
+      ,[office_time_clock]
+      ,[no_clock_in]
+      ,[abnormal_clock_in_time]
+      ,[no_clock_after_work]
+      ,[alt_first_time_from]
+      ,[alt_first_time_to]
+      ,[alt_extend1_time_flag]
+      ,[alt_second_time_from]
+      ,[alt_second_time_to]
+      ,[alt_extend2_time_flag]
+      ,[alt_third_time_from]
+      ,[alt_third_time_to]
+      ,[alt_extend3_time_flag]
+      ,[alt_rest_day_flag]
+      ,[create_time]
+      ,[create_by]
+      ,[update_time]
+      ,[update_by]
+      ,[attribute1]
+      ,[attribute2]
+      ,[attribute3]
+      ,[attribute4]
+      ,[attribute5]
+            )
+            select
+            [abnromal_attendance_record_id]
+      ,[employee_id]
+      ,[date]
+      ,[last_paragraph_end_time]
+      ,[first_time_from]
+      ,[first_time_to]
+      ,[extend1_time_flag]
+      ,[second_time_from]
+      ,[second_time_to]
+      ,[extend2_time_flag]
+      ,[third_time_from]
+      ,[third_time_to]
+      ,[extend3_time_flag]
+      ,[next_period_start_time]
+      ,[rest_flag]
+      ,[no_scheduling]
+      ,[rest_day_clock]
+      ,[all_day_no_clock]
+      ,[office_time_clock]
+      ,[no_clock_in]
+      ,[abnormal_clock_in_time]
+      ,[no_clock_after_work]
+      ,[alt_first_time_from]
+      ,[alt_first_time_to]
+      ,[alt_extend1_time_flag]
+      ,[alt_second_time_from]
+      ,[alt_second_time_to]
+      ,[alt_extend2_time_flag]
+      ,[alt_third_time_from]
+      ,[alt_third_time_to]
+      ,[alt_extend3_time_flag]
+      ,[alt_rest_day_flag]
+      ,[create_time]
+      ,[create_by]
+      ,[update_time]
+      ,[update_by]
+      ,[attribute1]
+      ,[attribute2]
+      ,[attribute3]
+      ,[attribute4]
+      ,[attribute5]
+      from ac_attendance_record_temp
+        ]]>
+    </insert>
+
+
+    <update id="updateLeaveEmployee">
+        <![CDATA[
+            UPDATE ac_attendance_record_history
+            SET no_scheduling = 0,
+             rest_day_clock = 0,
+             all_day_no_clock = 0,
+             office_time_clock = 0,
+             no_clock_in = 0,
+             abnormal_clock_in_time = 0,
+             no_clock_after_work = 0
+            FROM
+                ac_attendance_record_history aarh
+            WHERE
+                aarh.date > isnull(
+                    (
+                        SELECT
+                            pel.quit_time
+                        FROM
+                            pm_employee pe
+                        LEFT JOIN pm_employee_leaveoffice pel ON pe.id = pel.employee_id
+                        AND pel.enabled_flag = 1
+                        WHERE
+                            pe.id = aarh.employee_id
+                        AND pe.leave_flag = 1
+                        AND pe.enabled_flag = 1
+                    ),
+                    getdate ()
+                )
+                and aarh.date between #{beginDate, jdbcType=DATE} AND #{endDate, jdbcType= DATE}
+        ]]>
+    </update>
+</mapper>

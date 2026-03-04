@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmWageSummaryFileDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmWageSummaryFile">
+        <id column="id" property="id" />
+        <result column="income_period" property="incomePeriod" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="employee_category" property="employeeCategory" />
+        <result column="division_contract_flag" property="divisionContractFlag" />
+        <result column="department" property="department" />
+        <result column="administrative_office" property="administrativeOffice" />
+        <result column="team" property="team" />
+        <result column="station" property="station" />
+        <result column="bank_account" property="bankAccount" />
+        <result column="bank_name" property="bankName" />
+        <result column="post_skill_salary" property="postSkillSalary" />
+        <result column="target_performance_pay" property="targetPerformancePay" />
+        <result column="allocate_performance_pay" property="allocatePerformancePay" />
+        <result column="wages_payable_post" property="wagesPayablePost" />
+        <result column="wages_payable_float" property="wagesPayableFloat" />
+        <result column="wages_payable" property="wagesPayable" />
+        <result column="overtime_pay" property="overtimePay" />
+        <result column="net_payment_post" property="netPaymentPost" />
+        <result column="net_payment_float" property="netPaymentFloat" />
+        <result column="deduction_amount" property="deductionAmount" />
+        <result column="net_payment" property="netPayment" />
+        <result column="one_child_subsidy" property="oneChildSubsidy" />
+        <result column="safety_accumulation_award" property="safetyAccumulationAward" />
+        <result column="seniority_allowance" property="seniorityAllowance" />
+        <result column="high_temperature_subsidy" property="highTemperatureSubsidy" />
+        <result column="transportation_allowance" property="transportationAllowance" />
+        <result column="post_subsidy" property="postSubsidy" />
+        <result column="allowance_deduction" property="allowanceDeduction" />
+        <result column="deduct_medical_costs" property="deductMedicalCosts" />
+        <result column="deduct_other" property="deductOther" />
+        <result column="type" property="type" />
+        <result column="cost_center" property="costCenter" />
+        <result column="cost_center_num" property="costCenterNum" />
+        <result column="production_factor" property="productionFactor" />
+        <result column="quality_factor" property="qualityFactor" />
+        <result column="assessment_coefficient" property="assessmentCoefficient" />
+        <result column="service_department" property="serviceDepartment" />
+        <result column="personal_deduct_accumulation_fund" property="personalDeductAccumulationFund" />
+        <result column="company_deduct_accumulation_fund" property="companyDeductAccumulationFund" />
+        <result column="deduct_hydropower_house" property="deductHydropowerHouse" />
+        <result column="deduct_income_tax" property="deductIncomeTax" />
+        <result column="personal_deductibles" property="personalDeductibles" />
+        <result column="company_deductibles" property="companyDeductibles" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="id_number" property="idNumber"/>
+        <result column="sub_base_pay" property="subBasePay"/>
+        <result column="sub_post_skill_salary" property="subPostSkillSalary"/>
+        <result column="sub_lump_sum_wage" property="subLumpSumWage"/>
+        <result column="deduct_other_before" property="deductOtherBefore"/>
+    </resultMap>
+
+    <resultMap id="SwmWageSummaryFileResultMap" type="com.sunten.hrms.swm.domain.SwmWageSummaryFile" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <resultMap id="CostCenterForSummaryResultMap" type="com.sunten.hrms.swm.vo.CostCenterForSummaryVo" autoMapping="true"/>
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            swsf.income_period, swsf.work_card, swsf.name, swsf.employee_category, swsf.division_contract_flag,
+            swsf.department, swsf.administrative_office, swsf.team, swsf.station, swsf.bank_account,
+            swsf.bank_name, swsf.post_skill_salary, swsf.target_performance_pay, swsf.allocate_performance_pay,
+            swsf.wages_payable_post, swsf.wages_payable_float, swsf.wages_payable, swsf.overtime_pay,
+            swsf.net_payment_post, swsf.net_payment_float, swsf.deduction_amount, swsf.net_payment,
+            swsf.one_child_subsidy, swsf.safety_accumulation_award, swsf.seniority_allowance,
+            swsf.high_temperature_subsidy, swsf.transportation_allowance, swsf.post_subsidy,
+            swsf.allowance_deduction, swsf.deduct_medical_costs, swsf.deduct_other, swsf.type,
+            swsf.cost_center, swsf.cost_center_num, swsf.production_factor, swsf.quality_factor,
+            swsf.assessment_coefficient, swsf.service_department, swsf.personal_deduct_accumulation_fund,
+            swsf.company_deduct_accumulation_fund, swsf.deduct_hydropower_house, swsf.deduct_income_tax,
+            swsf.personal_deductibles, swsf.company_deductibles, swsf.id, swsf.create_time, swsf.create_by,
+            swsf.update_time, swsf.update_by, swsf.id_number, swsf.sub_base_pay, swsf.sub_post_skill_salary, swsf.sub_lump_sum_wage,
+            swsf.deduct_other_before
+        ]]>
+    </sql>
+
+    <sql id="Special_Column_List">
+         <![CDATA[
+            swsf.income_period, swsf.work_card, swsf.name, swsf.employee_category, swsf.division_contract_flag,
+            swsf.department, swsf.administrative_office, swsf.team, swsf.station, swsf.bank_account,
+            swsf.bank_name, swsf.post_skill_salary, swsf.target_performance_pay, swsf.allocate_performance_pay,
+            swsf.wages_payable_post, swsf.wages_payable_float, swsf.wages_payable, swsf.overtime_pay,
+            swsf.net_payment_post, swsf.net_payment_float, swsf.deduction_amount, swsf.net_payment,
+            swsf.one_child_subsidy, swsf.safety_accumulation_award, swsf.seniority_allowance,
+            swsf.high_temperature_subsidy, swsf.transportation_allowance, swsf.post_subsidy,
+            swsf.allowance_deduction, swsf.deduct_medical_costs, swsf.deduct_other,
+            swsf.cost_center, swsf.cost_center_num, swsf.production_factor, swsf.quality_factor,
+            swsf.assessment_coefficient, swsf.service_department, swsf.personal_deduct_accumulation_fund,
+            swsf.company_deduct_accumulation_fund, swsf.deduct_hydropower_house, swsf.deduct_income_tax,
+            swsf.personal_deductibles, swsf.company_deductibles, swsf.id_number, swsf.sub_base_pay, swsf.sub_post_skill_salary, swsf.sub_lump_sum_wage,
+            swsf.deduct_other_before
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.income_period as ${tAlias}_income_period, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.employee_category as ${tAlias}_employee_category,
+            ${tAlias}.division_contract_flag as ${tAlias}_division_contract_flag,
+            ${tAlias}.department as ${tAlias}_department,
+            ${tAlias}.administrative_office as ${tAlias}_administrative_office,
+            ${tAlias}.team as ${tAlias}_team, ${tAlias}.station as ${tAlias}_station,
+            ${tAlias}.bank_account as ${tAlias}_bank_account, ${tAlias}.bank_name as ${tAlias}_bank_name,
+            ${tAlias}.post_skill_salary as ${tAlias}_post_skill_salary,
+            ${tAlias}.target_performance_pay as ${tAlias}_target_performance_pay,
+            ${tAlias}.allocate_performance_pay as ${tAlias}_allocate_performance_pay,
+            ${tAlias}.wages_payable_post as ${tAlias}_wages_payable_post,
+            ${tAlias}.wages_payable_float as ${tAlias}_wages_payable_float,
+            ${tAlias}.wages_payable as ${tAlias}_wages_payable, ${tAlias}.overtime_pay as ${tAlias}_overtime_pay,
+            ${tAlias}.net_payment_post as ${tAlias}_net_payment_post,
+            ${tAlias}.net_payment_float as ${tAlias}_net_payment_float,
+            ${tAlias}.deduction_amount as ${tAlias}_deduction_amount,
+            ${tAlias}.net_payment as ${tAlias}_net_payment,
+            ${tAlias}.one_child_subsidy as ${tAlias}_one_child_subsidy,
+            ${tAlias}.safety_accumulation_award as ${tAlias}_safety_accumulation_award,
+            ${tAlias}.seniority_allowance as ${tAlias}_seniority_allowance,
+            ${tAlias}.high_temperature_subsidy as ${tAlias}_high_temperature_subsidy,
+            ${tAlias}.transportation_allowance as ${tAlias}_transportation_allowance,
+            ${tAlias}.post_subsidy as ${tAlias}_post_subsidy,
+            ${tAlias}.allowance_deduction as ${tAlias}_allowance_deduction,
+            ${tAlias}.deduct_medical_costs as ${tAlias}_deduct_medical_costs,
+            ${tAlias}.deduct_other as ${tAlias}_deduct_other, ${tAlias}.type as ${tAlias}_type,
+            ${tAlias}.cost_center as ${tAlias}_cost_center,
+            ${tAlias}.cost_center_num as ${tAlias}_cost_center_num,
+            ${tAlias}.production_factor as ${tAlias}_production_factor,
+            ${tAlias}.quality_factor as ${tAlias}_quality_factor,
+            ${tAlias}.assessment_coefficient as ${tAlias}_assessment_coefficient,
+            ${tAlias}.service_department as ${tAlias}_service_department,
+            ${tAlias}.personal_deduct_accumulation_fund as ${tAlias}_personal_deduct_accumulation_fund,
+            ${tAlias}.company_deduct_accumulation_fund as ${tAlias}_company_deduct_accumulation_fund,
+            ${tAlias}.deduct_hydropower_house as ${tAlias}_deduct_hydropower_house,
+            ${tAlias}.deduct_income_tax as ${tAlias}_deduct_income_tax,
+            ${tAlias}.personal_deductibles as ${tAlias}_personal_deductibles,
+            ${tAlias}.company_deductibles as ${tAlias}_company_deductibles, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.id_number as ${tAlias}_id_number,
+            ${tAlias}.sub_base_pay as ${tAlias}_sub_base_pay,
+            ${tAlias}.sub_post_skill_salary as ${tAlias}_sub_post_skill_salary,
+            ${tAlias}.sub_lump_sum_wage as ${tAlias}_sub_lump_sum_wage,
+            ${tAlias}.deduct_other_before as ${tAlias}_deduct_other_before
+
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_wage_summary_file swsf
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and swsf.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <sql id="Select_Special_Criteria_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Special_Column_List"/>
+        <![CDATA[
+              ,swsf.type  from v_salary_summary swsf    where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.incomePeriod != null">
+                <![CDATA[
+                    and swsf.income_period = #{criteria.incomePeriod, jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmWageSummaryFile" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_wage_summary_file (income_period, work_card, name,
+                                               employee_category, division_contract_flag,
+                                               department, administrative_office,
+                                               team, station, bank_account,
+                                               bank_name, post_skill_salary,
+                                               target_performance_pay, allocate_performance_pay,
+                                               wages_payable_post, wages_payable_float,
+                                               wages_payable, overtime_pay,
+                                               net_payment_post, net_payment_float,
+                                               deduction_amount, net_payment,
+                                               one_child_subsidy, safety_accumulation_award,
+                                               seniority_allowance, high_temperature_subsidy,
+                                               transportation_allowance, post_subsidy,
+                                               allowance_deduction, deduct_medical_costs,
+                                               deduct_other, type, cost_center,
+                                               cost_center_num, production_factor,
+                                               quality_factor, assessment_coefficient,
+                                               service_department, personal_deduct_accumulation_fund,
+                                               company_deduct_accumulation_fund,
+                                               deduct_hydropower_house, deduct_income_tax,
+                                               personal_deductibles, company_deductibles,
+                                               create_time, create_by,
+                                               update_time, update_by, id_number,
+                                               sub_base_pay, sub_post_skill_salary,sub_lump_sum_wage,
+                                               deduct_other_before
+                                               )
+            values (#{incomePeriod,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                    #{employeeCategory,jdbcType=VARCHAR}, #{divisionContractFlag,jdbcType=BIT},
+                    #{department,jdbcType=VARCHAR}, #{administrativeOffice,jdbcType=VARCHAR},
+                    #{team,jdbcType=VARCHAR}, #{station,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR},
+                    #{bankName,jdbcType=VARCHAR}, #{postSkillSalary,jdbcType=DECIMAL},
+                    #{targetPerformancePay,jdbcType=DECIMAL}, #{allocatePerformancePay,jdbcType=DECIMAL},
+                    #{wagesPayablePost,jdbcType=DECIMAL}, #{wagesPayableFloat,jdbcType=DECIMAL},
+                    #{wagesPayable,jdbcType=DECIMAL}, #{overtimePay,jdbcType=DECIMAL},
+                    #{netPaymentPost,jdbcType=DECIMAL}, #{netPaymentFloat,jdbcType=DECIMAL},
+                    #{deductionAmount,jdbcType=DECIMAL}, #{netPayment,jdbcType=DECIMAL},
+                    #{oneChildSubsidy,jdbcType=DECIMAL}, #{safetyAccumulationAward,jdbcType=DECIMAL},
+                    #{seniorityAllowance,jdbcType=DECIMAL}, #{highTemperatureSubsidy,jdbcType=DECIMAL},
+                    #{transportationAllowance,jdbcType=DECIMAL}, #{postSubsidy,jdbcType=DECIMAL},
+                    #{allowanceDeduction,jdbcType=DECIMAL}, #{deductMedicalCosts,jdbcType=DECIMAL},
+                    #{deductOther,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR}, #{costCenter,jdbcType=VARCHAR},
+                    #{costCenterNum,jdbcType=VARCHAR}, #{productionFactor,jdbcType=DECIMAL},
+                    #{qualityFactor,jdbcType=DECIMAL}, #{assessmentCoefficient,jdbcType=DECIMAL},
+                    #{serviceDepartment,jdbcType=VARCHAR}, #{personalDeductAccumulationFund,jdbcType=DECIMAL},
+                    #{companyDeductAccumulationFund,jdbcType=DECIMAL},
+                    #{deductHydropowerHouse,jdbcType=DECIMAL}, #{deductIncomeTax,jdbcType=DECIMAL},
+                    #{personalDeductibles,jdbcType=DECIMAL}, #{companyDeductibles,jdbcType=DECIMAL},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{idNumber, jdbcType=VARCHAR} , #{subBasePay, jdbcType=DECIMAL},
+                    #{subPostSkillSalary, jdbcType=DECIMAL}, #{subLumpSumWage, jdbcType=DECIMAL},
+                    #{deductOtherBefore, jdbcType = DECIMAL}
+
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_wage_summary_file
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmWageSummaryFile">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmWageSummaryFile">
+        <![CDATA[
+            update swm_wage_summary_file
+               set income_period                     = #{incomePeriod,jdbcType=VARCHAR},
+                   work_card                         = #{workCard,jdbcType=VARCHAR},
+                   name                              = #{name,jdbcType=VARCHAR},
+                   employee_category                 = #{employeeCategory,jdbcType=VARCHAR},
+                   division_contract_flag            = #{divisionContractFlag,jdbcType=BIT},
+                   department                        = #{department,jdbcType=VARCHAR},
+                   administrative_office             = #{administrativeOffice,jdbcType=VARCHAR},
+                   team                              = #{team,jdbcType=VARCHAR},
+                   station                           = #{station,jdbcType=VARCHAR},
+                   bank_account                      = #{bankAccount,jdbcType=VARCHAR},
+                   bank_name                         = #{bankName,jdbcType=VARCHAR},
+                   post_skill_salary                 = #{postSkillSalary,jdbcType=DECIMAL},
+                   target_performance_pay            = #{targetPerformancePay,jdbcType=DECIMAL},
+                   allocate_performance_pay          = #{allocatePerformancePay,jdbcType=DECIMAL},
+                   wages_payable_post                = #{wagesPayablePost,jdbcType=DECIMAL},
+                   wages_payable_float               = #{wagesPayableFloat,jdbcType=DECIMAL},
+                   wages_payable                     = #{wagesPayable,jdbcType=DECIMAL},
+                   overtime_pay                          = #{overtimePay,jdbcType=DECIMAL},
+                   net_payment_post                  = #{netPaymentPost,jdbcType=DECIMAL},
+                   net_payment_float                 = #{netPaymentFloat,jdbcType=DECIMAL},
+                   deduction_amount                  = #{deductionAmount,jdbcType=DECIMAL},
+                   net_payment                       = #{netPayment,jdbcType=DECIMAL},
+                   one_child_subsidy                 = #{oneChildSubsidy,jdbcType=DECIMAL},
+                   safety_accumulation_award         = #{safetyAccumulationAward,jdbcType=DECIMAL},
+                   seniority_allowance               = #{seniorityAllowance,jdbcType=DECIMAL},
+                   high_temperature_subsidy          = #{highTemperatureSubsidy,jdbcType=DECIMAL},
+                   transportation_allowance          = #{transportationAllowance,jdbcType=DECIMAL},
+                   post_subsidy                      = #{postSubsidy,jdbcType=DECIMAL},
+                   allowance_deduction               = #{allowanceDeduction,jdbcType=DECIMAL},
+                   deduct_medical_costs              = #{deductMedicalCosts,jdbcType=DECIMAL},
+                   deduct_other                      = #{deductOther,jdbcType=DECIMAL},
+                   type                              = #{type,jdbcType=VARCHAR},
+                   cost_center                       = #{costCenter,jdbcType=VARCHAR},
+                   cost_center_num                   = #{costCenterNum,jdbcType=VARCHAR},
+                   production_factor                 = #{productionFactor,jdbcType=DECIMAL},
+                   quality_factor                    = #{qualityFactor,jdbcType=DECIMAL},
+                   assessment_coefficient            = #{assessmentCoefficient,jdbcType=DECIMAL},
+                   service_department                = #{serviceDepartment,jdbcType=VARCHAR},
+                   personal_deduct_accumulation_fund = #{personalDeductAccumulationFund,jdbcType=DECIMAL},
+                   company_deduct_accumulation_fund  = #{companyDeductAccumulationFund,jdbcType=DECIMAL},
+                   deduct_hydropower_house           = #{deductHydropowerHouse,jdbcType=DECIMAL},
+                   deduct_income_tax                 = #{deductIncomeTax,jdbcType=DECIMAL},
+                   personal_deductibles              = #{personalDeductibles,jdbcType=DECIMAL},
+                   company_deductibles               = #{companyDeductibles,jdbcType=DECIMAL},
+                   update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                         = #{updateBy,jdbcType=BIGINT},
+                   id_number                        = #{idNumber, jdbcType = VARCHAR},
+
+                   sub_base_pay                     = #{subBasePay, jdbcType = DECIMAL},
+                   sub_post_skill_salary            = #{subPostSkillSalary, jdbcType = DECIMAL},
+                   sub_lump_sum_wage                = #{subLumpSumWage, jdbcType = DECIMAL},
+                   deduct_other_before              = #{deductOtherBefore, jdbcType = DECIMAL}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmWageSummaryFileResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where swsf.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listStatistics" resultMap="SwmWageSummaryFileResultMap">
+        SELECT left(swsf.income_period,4) as income_period, swsf.work_card, swsf.name, sum(swsf.wages_payable_post) as wages_payable_post,
+            sum(swsf.net_payment_post) as net_payment_post,sum(swsf.wages_payable_float) as wages_payable_float,
+            sum(swsf.net_payment_float) as net_payment_float,sum(swsf.wages_payable) as wages_payable,
+            sum(swsf.net_payment) as net_payment
+        FROM v_salary_summary swsf
+        WHERE swsf.work_card like #{workCard, jdbcType=VARCHAR}
+        group by swsf.work_card,left(swsf.income_period,4),swsf.name
+        ORDER BY left(swsf.income_period,4) desc
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmWageSummaryFileResultMap">
+        <include refid="Select_Special_Criteria_Sql"/>
+
+            order by swsf.work_card
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmWageSummaryFileResultMap">
+        <include refid="Select_Special_Criteria_Sql"/>
+    </select>
+
+    <select id="listByPerson" resultMap="SwmWageSummaryFileResultMap" parameterType="java.lang.String">
+        <![CDATA[
+            select
+                            swsf.income_period, swsf.work_card, swsf.name,
+            swsf.department, swsf.administrative_office,
+             isnull(swsf.post_skill_salary, 0.00) as post_skill_salary, isnull(swsf.target_performance_pay, 0.00) as target_performance_pay,
+             isnull(swsf.allocate_performance_pay, 0.00) as allocate_performance_pay,
+            isnull(swsf.wages_payable, 0.00) as wages_payable, isnull(swsf.overtime_pay, 0.00) as overtime_pay,
+             isnull(swsf.deduction_amount, 0.00) as deduction_amount, isnull(swsf.net_payment, 0.00) as net_payment,
+           isnull(swsf.one_child_subsidy, 0.00) as one_child_subsidy, isnull(swsf.safety_accumulation_award, 0.00) as safety_accumulation_award,
+           isnull(swsf.seniority_allowance, 0.00) as seniority_allowance ,
+           isnull(swsf.high_temperature_subsidy, 0.00) as high_temperature_subsidy,isnull(swsf.transportation_allowance, 0.00)  as transportation_allowance,
+           isnull(swsf.post_subsidy, 0.00) as post_subsidy,
+           isnull(swsf.allowance_deduction, 0.00) as allowance_deduction,isnull(swsf.deduct_medical_costs, 0.00) as deduct_medical_costs,
+           isnull(swsf.deduct_other, 0.00) as deduct_other,
+         isnull(swsf.personal_deduct_accumulation_fund, 0.00) as personal_deduct_accumulation_fund,
+           isnull(swsf.company_deduct_accumulation_fund, 0.00) as company_deduct_accumulation_fund , isnull(swsf.deduct_hydropower_house, 0.00) as deduct_hydropower_house,
+           isnull(swsf.deduct_income_tax, 0.00) as deduct_income_tax ,
+           isnull(swsf.personal_deductibles, 0.00) as personal_deductibles ,isnull( swsf.company_deductibles, 0.00) as company_deductibles
+             from v_salary_summary swsf    where
+        swsf.income_period = #{incomePeriod, jdbcType = VARCHAR}
+                order by 	swsf.department,
+	swsf.administrative_office,
+	swsf.work_card
+        ]]>
+<!--            <![CDATA[-->
+<!--                     (swsf.income_period = CAST(YEAR(DATEADD(month, - 1, GETDATE())) AS char(4))-->
+<!--                + '.' + RIGHT('0' + RTRIM(CONVERT(char(2), MONTH(DATEADD(month, - 1, GETDATE())))), 2))-->
+<!--                        ]]>-->
+    </select>
+
+    <select id="listByCostCenterForSummary" resultMap="CostCenterForSummaryResultMap">
+        <![CDATA[
+             select
+								temp.income_period,
+                se.cost_center_num, se.cost_center, se.service_department, count(se.name) as count_name,
+                sum(temp.one_child_subsidy) as count_one_child_subsidy, sum(temp.safety_accumulation_award) as count_safety_accumulation_award,
+                sum(temp.seniority_allowance) as count_seniority_allowance, sum(temp.high_temperature_subsidy) as count_high_temperature_subsidy,
+                sum(temp.transportation_allowance) as count_transportation_allowance, sum(temp.overtime_pay) as count_overtime_pay,
+                sum(temp.allowance_deduction) as count_allowance_deduction, sum(temp.wages_payable) as count_wages_payable,
+                sum(temp.deduct_medical_costs) as count_deduct_medical_costs, sum(temp.deduct_hydropower_house) as count_deduct_hydropower_house,
+                sum(temp.deduct_income_tax) as count_deduct_income_tax, sum(temp.personal_deductibles) as count_personal_deductibles,
+                sum(temp.personal_deduct_accumulation_fund) as count_personal_deduct_accumulation_fund, sum(temp.deduct_other) as count_deduct_other,
+                sum(temp.net_payment) as count_net_payment, sum(temp.post_subsidy) as count_post_subsidy
+             from v_salary_summary temp join swm_employee se
+             on temp.work_card = se.work_card and se.work_flag = 1
+                ]]>
+             <if test="criteria != null">
+                    <if test="criteria.incomePeriod != null">
+                        <![CDATA[
+                            and temp.income_period = #{criteria.incomePeriod,jdbcType=VARCHAR}
+                        ]]>
+                    </if>
+</if>
+<if test="criteria == null or criteria.incomePeriod == null">
+<![CDATA[
+						 and temp.income_period = CAST(YEAR(DATEADD(month, - 1, GETDATE())) AS char(4))
+                + '.' + RIGHT('0' + RTRIM(CONVERT(char(2), MONTH(DATEADD(month, - 1, GETDATE())))), 2)
+                 ]]>
+</if>
+        <![CDATA[
+                group by temp.income_period,se.cost_center, se.cost_center_num, se.service_department
+
+
+
+
+								union
+								select '总计' as income_period, 'orderForSum' as cost_center_num, '' as cost_center, '' as service_department, count(se.name) as count_name,
+								sum(temp.one_child_subsidy) as count_one_child_subsidy, sum(temp.safety_accumulation_award) as count_safety_accumulation_award,
+                sum(temp.seniority_allowance) as count_seniority_allowance, sum(temp.high_temperature_subsidy) as count_high_temperature_subsidy,
+                sum(temp.transportation_allowance) as count_transportation_allowance, sum(temp.overtime_pay) as count_overtime_pay,
+                sum(temp.allowance_deduction) as count_allowance_deduction, sum(temp.wages_payable) as count_wages_payable,
+                sum(temp.deduct_medical_costs) as count_deduct_medical_costs, sum(temp.deduct_hydropower_house) as count_deduct_hydropower_house,
+                sum(temp.deduct_income_tax) as count_deduct_income_tax, sum(temp.personal_deductibles) as count_personal_deductibles,
+                sum(temp.personal_deduct_accumulation_fund) as count_personal_deduct_accumulation_fund, sum(temp.deduct_other) as count_deduct_other,
+                sum(temp.net_payment) as count_net_payment, sum(temp.post_subsidy) as count_post_subsidy
+								   from v_salary_summary temp join swm_employee se
+             on temp.work_card = se.work_card and se.work_flag = 1
+
+                ]]>
+                <if test="criteria != null">
+                    <if test="criteria.incomePeriod != null">
+                        <![CDATA[
+                            and temp.income_period = #{criteria.incomePeriod,jdbcType=VARCHAR}
+                        ]]>
+                    </if>
+                </if>
+                <if test="criteria == null or criteria.incomePeriod == null">
+                    <![CDATA[
+						 and temp.income_period = CAST(YEAR(DATEADD(month, - 1, GETDATE())) AS char(4))
+                + '.' + RIGHT('0' + RTRIM(CONVERT(char(2), MONTH(DATEADD(month, - 1, GETDATE())))), 2)
+                 ]]>
+                </if>
+        <![CDATA[
+				order by se.cost_center_num
+
+				 ]]>
+    </select>
+
+
+    <insert id="wageSummaryToFile" parameterType="java.lang.String">
+        <![CDATA[
+insert into swm_wage_summary_file (income_period, work_card, name,
+                                               employee_category, division_contract_flag,
+                                               department, administrative_office,
+                                               team, station, bank_account,
+                                               bank_name, post_skill_salary,
+                                               target_performance_pay, allocate_performance_pay,
+                                               wages_payable_post, wages_payable_float,
+                                               wages_payable, overtime_pay,
+                                               net_payment_post, net_payment_float,
+                                               deduction_amount, net_payment,
+                                               one_child_subsidy, safety_accumulation_award,
+                                               seniority_allowance, high_temperature_subsidy,
+                                               transportation_allowance, post_subsidy,
+                                               allowance_deduction, deduct_medical_costs,
+                                               deduct_other, type, cost_center,
+                                               cost_center_num, production_factor,
+                                               quality_factor, assessment_coefficient,
+                                               service_department, personal_deduct_accumulation_fund,
+                                               company_deduct_accumulation_fund,
+                                               deduct_hydropower_house, deduct_income_tax,
+                                               personal_deductibles, company_deductibles,
+                                               create_time, create_by,
+                                               update_time, update_by, id_number,
+                                               sub_lump_sum_wage, sub_base_pay,sub_post_skill_salary,
+                                               deduct_other_before
+                                               )
+        select temp.income_period, temp.work_card,
+            temp.employee_name, temp.employee_category,temp.division_contract_flag,
+            temp.department, temp.administrative_office,
+            temp.team, temp.station, temp.bank_account,
+            temp.bank_name, temp.post_skill_salary, temp.target_performance_pay, temp.allocate_performance_pay,
+            temp.wages_payable_post, temp.wages_payable_float,
+            temp.wages_payable, temp.overtime_pay,
+            temp.net_payment_post, temp.net_payment_float, temp.deduction_amount,
+            temp.net_payment, temp.one_child_subsidy, temp.safety_accumulation_award,
+            temp.seniority_allowance, temp.high_temperature_subsidy, temp.transportation_allowance, temp.post_subsidy,
+            temp.allowance_deduction, temp.deduct_medical_costs, temp.deduct_other, temp.type, temp.cost_center, temp.cost_center_num,
+            temp.production_factor, temp.quality_factor, temp.assessment_coefficient, temp.service_department,
+            temp.personal_deduct_accumulation_fund, temp.company_deduct_accumulation_fund,
+            temp.deduct_hydropower_house, temp.deduct_income_tax , temp.personal_deductibles, temp.company_deductibles,
+            getdate(), -1, getdate(), -1,
+             (select isnull(pe.id_number, '') from pm_employee pe join swm_employee se on pe.id = se.employee_id and pe.enabled_flag = 1
+                and se.work_flag = 1 and se.work_card = temp.work_card),
+                temp.sub_lump_sum_wage, temp.sub_base_pay, temp.sub_post_skill_salary, temp.deduct_other_before
+             from
+       (SELECT   TOP (100) PERCENT dbo.swm_post_skill_salary.income_period, dbo.swm_post_skill_salary.work_card, dbo.swm_post_skill_salary.employee_name,
+                dbo.swm_post_skill_salary.division_contract_flag, dbo.swm_post_skill_salary.department, dbo.swm_post_skill_salary.administrative_office,
+								dbo.swm_post_skill_salary.bank_account,
+                dbo.swm_post_skill_salary.bank_name, round(dbo.swm_post_skill_salary.wages_payable, 2) AS wages_payable_post, ISNULL(round(dbo.swm_floating_wage.wages_payable, 2), 0)
+                AS wages_payable_float, ISNULL(round(dbo.swm_post_skill_salary.wages_payable, 2), 0) + ISNULL(round(dbo.swm_floating_wage.wages_payable, 2), 0) AS wages_payable,
+                isnull(round(dbo.swm_post_skill_salary.overtime_pay, 2), 0) + isnull(round(dbo.swm_post_skill_salary.holiday_overtime_pay, 2), 0)
+                 + isnull(round(dbo.swm_post_skill_salary.rest_overtime_pay, 2), 0) as overtime_pay
+
+                , ISNULL(round(dbo.swm_post_skill_salary.net_payment, 2), 0) AS net_payment_post,
+                ISNULL(round(dbo.swm_floating_wage.net_payment, 2), 0) AS net_payment_float, ISNULL(round(dbo.swm_post_skill_salary.wages_payable, 2), 0)
+                + ISNULL(round(dbo.swm_floating_wage.wages_payable, 2), 0) - ISNULL(round(dbo.swm_post_skill_salary.net_payment, 2), 0)
+                 - ISNULL(round(dbo.swm_floating_wage.net_payment, 2), 0)
+                AS deduction_amount, ISNULL(round(dbo.swm_post_skill_salary.net_payment, 2), 0) + ISNULL(round(dbo.swm_floating_wage.net_payment, 2), 0) AS net_payment,
+                dbo.swm_post_skill_salary.one_child_subsidy, dbo.swm_post_skill_salary.safety_accumulation_award, dbo.swm_post_skill_salary.seniority_allowance,
+								dbo.swm_post_skill_salary.high_temperature_subsidy,
+                dbo.swm_post_skill_salary.allowance_deduction + ISNULL(dbo.swm_floating_wage.pre_tax_withheld, 0) AS allowance_deduction, dbo.swm_post_skill_salary.deduct_medical_costs,
+                dbo.swm_post_skill_salary.deduct_hydropower_house,
+                ISNULL(dbo.swm_post_skill_salary.deduct_income_tax, 0) AS deduct_income_tax, dbo.swm_post_skill_salary.personal_deductibles,
+                dbo.swm_post_skill_salary.deduct_other - ISNULL(dbo.swm_floating_wage.after_tax_withheld, 0) AS deduct_other, ISNULL(dbo.swm_employee.type, 'B')
+                AS type, dbo.swm_post_skill_salary.cost_center_num, dbo.swm_post_skill_salary.cost_center, dbo.swm_post_skill_salary.team,  dbo.swm_post_skill_salary.station,
+                dbo.swm_post_skill_salary.employee_category, dbo.swm_post_skill_salary.post_skill_salary, isnull(dbo.swm_floating_wage.target_performance_pay, 0) as target_performance_pay,ISNULL(dbo.swm_floating_wage.monthly_performance_salary, 0) AS monthly_performance_salary,
+                ISNULL(dbo.swm_floating_wage.allocate_performance_pay, 0) AS allocate_performance_pay, dbo.swm_post_skill_salary.post_subsidy, dbo.swm_floating_wage.production_factor,
+                dbo.swm_floating_wage.quality_factor, dbo.swm_floating_wage.assessment_coefficient, dbo.swm_post_skill_salary.company_deductibles, dbo.swm_post_skill_salary.service_department,
+                dbo.swm_post_skill_salary.personal_deduct_accumulation_fund, dbo.swm_post_skill_salary.company_deduct_accumulation_fund, dbo.swm_post_skill_salary.transportation_allowance,
+                dbo.swm_employee.lump_sum_wage as sub_lump_sum_wage, dbo.swm_employee.base_pay as sub_base_pay, case when   dbo.swm_post_skill_salary.station = '保安班长' or  dbo.swm_post_skill_salary.station = '保安队长'
+                or  dbo.swm_post_skill_salary.station = '保安员' or  dbo.swm_post_skill_salary.station = '驾驶员' then dbo.swm_employee.post_skill_salary  + dbo.swm_employee.base_pay
+                else dbo.swm_employee.post_skill_salary end as sub_post_skill_salary,
+                ISNULL(dbo.swm_post_skill_salary.deduct_other, 0) as deduct_other_before
+FROM      dbo.swm_employee  JOIN
+                dbo.swm_post_skill_salary ON dbo.swm_employee.work_card = dbo.swm_post_skill_salary.work_card and  dbo.swm_post_skill_salary.income_period = #{incomePeriod, jdbcType = VARCHAR}
+								AND dbo.swm_post_skill_salary.frozen_flag = 1
+								and dbo.swm_post_skill_salary.enabled_flag = 1
+								LEFT  JOIN
+                dbo.swm_floating_wage ON dbo.swm_employee.work_card = dbo.swm_floating_wage.work_card AND
+                dbo.swm_floating_wage.income_period = #{incomePeriod, jdbcType = VARCHAR} and dbo.swm_floating_wage.frozen_flag = 1
+                and dbo.swm_floating_wage.enabled_flag = 1
+                ) as temp
+                where temp.income_period not in  (select distinct swsf.income_period from swm_wage_summary_file swsf)
+        ]]>
+    </insert>
+
+
+
+    <select id="getGrantDetail" resultMap="SwmWageSummaryFileResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_wage_summary_file swsf join swm_employee se on swsf.work_card  = se.work_card and se.employee_id = #{employeeId, jdbcType = BIGINT}
+              and left(swsf.income_period, 4) = #{year, jdbcType=VARCHAR}
+
+            and swsf.income_period  in (select distinct  spss.income_period from swm_post_skill_salary spss, swm_floating_wage sfw  where spss.grant_flag = 1 and sfw.grant_flag = 1
+            and sfw.income_period = spss.income_period and sfw.enabled_flag = 1 and spss.enabled_flag = 1
+            )
+            ORDER BY
+	swsf.income_period
+
+        ]]>
+    </select>
+
+
+</mapper>

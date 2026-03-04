@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmPersonalIncomeTaxDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmPersonalIncomeTax">
+        <id column="id" property="id" />
+        <result column="income_period" property="incomePeriod" />
+        <result column="tax_period" property="taxPeriod" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="month_income" property="monthIncome" />
+        <result column="amount_income" property="amountIncome" />
+        <result column="amount_social_insurance_deduct" property="amountSocialInsuranceDeduct" />
+        <result column="amount_accumulation_fund_deduct" property="amountAccumulationFundDeduct" />
+        <result column="amount_special_additional_deduct" property="amountSpecialAdditionalDeduct" />
+        <result column="amount_starting_point_deduct" property="amountStartingPointDeduct" />
+        <result column="amount_deduct_expenses" property="amountDeductExpenses" />
+        <result column="amount_taxable_income" property="amountTaxableIncome" />
+        <result column="tax_rate" property="taxRate" />
+        <result column="quick_calculation_deduction" property="quickCalculationDeduction" />
+        <result column="amount_tax_due" property="amountTaxDue" />
+        <result column="amount_tax_paid" property="amountTaxPaid" />
+        <result column="amount_tax_refund" property="amountTaxRefund" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="se_id" property="seId"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="amount_flag" property="amountFlag"/>
+    </resultMap>
+
+    <resultMap id="SwmPersonalIncomeTaxResultMap" type="com.sunten.hrms.swm.domain.SwmPersonalIncomeTax" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            spit.id, spit.income_period, spit.tax_period, spit.work_card, spit.employee_name,
+            spit.month_income, spit.amount_income, spit.amount_social_insurance_deduct,
+            spit.amount_accumulation_fund_deduct, spit.amount_special_additional_deduct,
+            spit.amount_starting_point_deduct, spit.amount_deduct_expenses, spit.amount_taxable_income,
+            spit.tax_rate, spit.quick_calculation_deduction, spit.amount_tax_due, spit.amount_tax_paid,
+            spit.amount_tax_refund, spit.create_time, spit.create_by, spit.update_time, spit.update_by, spit.se_id,
+            spit.enabled_flag, spit.amount_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.income_period as ${tAlias}_income_period,
+            ${tAlias}.tax_period as ${tAlias}_tax_period, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.month_income as ${tAlias}_month_income,
+            ${tAlias}.amount_income as ${tAlias}_amount_income,
+            ${tAlias}.amount_social_insurance_deduct as ${tAlias}_amount_social_insurance_deduct,
+            ${tAlias}.amount_accumulation_fund_deduct as ${tAlias}_amount_accumulation_fund_deduct,
+            ${tAlias}.amount_special_additional_deduct as ${tAlias}_amount_special_additional_deduct,
+            ${tAlias}.amount_starting_point_deduct as ${tAlias}_amount_starting_point_deduct,
+            ${tAlias}.amount_deduct_expenses as ${tAlias}_amount_deduct_expenses,
+            ${tAlias}.amount_taxable_income as ${tAlias}_amount_taxable_income,
+            ${tAlias}.tax_rate as ${tAlias}_tax_rate,
+            ${tAlias}.quick_calculation_deduction as ${tAlias}_quick_calculation_deduction,
+            ${tAlias}.amount_tax_due as ${tAlias}_amount_tax_due,
+            ${tAlias}.amount_tax_paid as ${tAlias}_amount_tax_paid,
+            ${tAlias}.amount_tax_refund as ${tAlias}_amount_tax_refund,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.se_id as ${tAlias}_se_id,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.amount_flag as ${tAlias}_amount_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_personal_income_tax spit
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.incomePeriod != null">
+                <![CDATA[
+                    and spit.income_period = #{criteria.incomePeriod,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and spit.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.amountFlag != null">
+                <![CDATA[
+                    and spit.amount_flag = #{criteria.amountFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTax" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_personal_income_tax (income_period, tax_period,
+                                                 work_card, employee_name,
+                                                 month_income, amount_income,
+                                                 amount_social_insurance_deduct,
+                                                 amount_accumulation_fund_deduct,
+                                                 amount_special_additional_deduct,
+                                                 amount_starting_point_deduct, amount_deduct_expenses,
+                                                 amount_taxable_income, tax_rate,
+                                                 quick_calculation_deduction, amount_tax_due,
+                                                 amount_tax_paid, amount_tax_refund,
+                                                 create_time, create_by,
+                                                 update_time, update_by, se_id, enabled_flag)
+            values (#{incomePeriod,jdbcType=VARCHAR}, #{taxPeriod,jdbcType=VARCHAR},
+                    #{workCard,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+                    #{monthIncome,jdbcType=DECIMAL}, #{amountIncome,jdbcType=DECIMAL},
+                    #{amountSocialInsuranceDeduct,jdbcType=DECIMAL},
+                    #{amountAccumulationFundDeduct,jdbcType=DECIMAL},
+                    #{amountSpecialAdditionalDeduct,jdbcType=DECIMAL},
+                    #{amountStartingPointDeduct,jdbcType=DECIMAL}, #{amountDeductExpenses,jdbcType=DECIMAL},
+                    #{amountTaxableIncome,jdbcType=DECIMAL}, #{taxRate,jdbcType=DECIMAL},
+                    #{quickCalculationDeduction,jdbcType=DECIMAL}, #{amountTaxDue,jdbcType=DECIMAL},
+                    #{amountTaxPaid,jdbcType=DECIMAL}, #{amountTaxRefund,jdbcType=DECIMAL},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{seId, jdbcType= BIGINT},
+                    #{enabledFlag, jdbcType = BIT})
+        ]]>
+    </insert>
+
+    <select id="selectTop2Period" resultType="java.lang.String">
+        <![CDATA[
+            select top 1 spit.income_period from swm_personal_income_tax spit where spit.enabled_flag = 1 order by spit.id desc
+        ]]>
+    </select>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_personal_income_tax
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTax">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteByIncomePeriod">
+         <![CDATA[
+            update swm_personal_income_tax set enabled_flag = 0 where income_period = #{incomePeriod, jdbcType = VARCHAR}
+            and enabled_flag = 1 and amount_flag = #{amountFlag, jdbcType = BIT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmPersonalIncomeTax">
+        <![CDATA[
+            update swm_personal_income_tax
+               set income_period                    = #{incomePeriod,jdbcType=VARCHAR},
+                   tax_period                       = #{taxPeriod,jdbcType=VARCHAR},
+                   work_card                        = #{workCard,jdbcType=VARCHAR},
+                   employee_name                    = #{employeeName,jdbcType=VARCHAR},
+                   month_income                     = #{monthIncome,jdbcType=DECIMAL},
+                   amount_income                    = #{amountIncome,jdbcType=DECIMAL},
+                   amount_social_insurance_deduct   = #{amountSocialInsuranceDeduct,jdbcType=DECIMAL},
+                   amount_accumulation_fund_deduct  = #{amountAccumulationFundDeduct,jdbcType=DECIMAL},
+                   amount_special_additional_deduct = #{amountSpecialAdditionalDeduct,jdbcType=DECIMAL},
+                   amount_starting_point_deduct     = #{amountStartingPointDeduct,jdbcType=DECIMAL},
+                   amount_deduct_expenses           = #{amountDeductExpenses,jdbcType=DECIMAL},
+                   amount_taxable_income            = #{amountTaxableIncome,jdbcType=DECIMAL},
+                   tax_rate                         = #{taxRate,jdbcType=DECIMAL},
+                   quick_calculation_deduction      = #{quickCalculationDeduction,jdbcType=DECIMAL},
+                   amount_tax_due                   = #{amountTaxDue,jdbcType=DECIMAL},
+                   amount_tax_paid                  = #{amountTaxPaid,jdbcType=DECIMAL},
+                   amount_tax_refund                = #{amountTaxRefund,jdbcType=DECIMAL},
+                   update_time                      = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                        = #{updateBy,jdbcType=BIGINT},
+                   se_id                            = #{seId, jdbcType=BIGINT},
+                   enabled_flag                     = #{enabledFlag, jdbcType = BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmPersonalIncomeTaxResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where spit.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getTaxListByUserId" resultMap="SwmPersonalIncomeTaxResultMap" parameterType="java.lang.Long">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_personal_income_tax spit
+              join swm_employee se on spit.se_id = se.id and se.work_flag = 1 and exists (
+                select 1 from pm_employee pe join fnd_user fu on fu.employee_id = pe.id and pe.enabled_flag = 1 and
+                fu.enabled_flag = 1 and fu.id = #{userId, jdbcType = BIGINT} and pe.id = se.employee_id
+              ) and spit.enabled_flag = 1
+              order by spit.income_period
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmPersonalIncomeTaxResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmPersonalIncomeTaxResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="interfaceToMainWithNotAmount" parameterType="java.lang.Long">
+        <![CDATA[
+            insert into swm_personal_income_tax(
+            month_income, amount_income, work_card,employee_name,amount_taxable_income,
+            tax_rate,quick_calculation_deduction,amount_tax_due,amount_tax_refund,
+            create_time,
+            create_by,
+            update_time,
+            update_by,
+            se_id, enabled_flag, income_period, tax_period, amount_flag
+            )
+            select
+            spiti.month_income, spiti.amount_income, RIGHT ( CAST ( '000000' + rtrim( spiti.work_card ) AS VARCHAR ), 6 ),
+            spiti.employee_name,spiti.amount_taxable_income,
+            spiti.tax_rate,spiti.quick_calculation_deduction,spiti.amount_tax_due,spiti.amount_tax_refund,
+            spiti.create_time,
+            spiti.create_by,
+            spiti.update_time,
+            spiti.update_by,
+            (SELECT
+					isnull( se.id, - 1 )
+				FROM
+					swm_employee se
+				WHERE
+					se.employee_id = spiti.employee_id
+					AND se.work_flag = 1
+					), 1, spiti.income_period, spiti.tax_period, 0
+            FROM
+            swm_personal_income_tax_interface spiti
+            WHERE
+            spiti.group_id = #{groupId, jdbcType = BIGINT}
+            AND spiti.employee_id != - 1
+            AND spiti.data_status = 'T'
+        ]]>
+    </insert>
+
+    <insert id="interfaceToMain" parameterType="java.lang.Long">
+    <![CDATA[
+INSERT INTO swm_personal_income_tax (
+amount_deduct_expenses,
+income_period,
+tax_period,
+work_card,
+employee_name,
+month_income,
+amount_income,
+amount_social_insurance_deduct,
+amount_accumulation_fund_deduct,
+amount_special_additional_deduct,
+amount_starting_point_deduct,
+amount_taxable_income,
+tax_rate,
+quick_calculation_deduction,
+amount_tax_due,
+amount_tax_paid,
+amount_tax_refund,
+create_time,
+create_by,
+update_time,
+update_by,
+se_id,
+enabled_flag
+)
+select
+(isnull(round(tempx.amount_social_insurance_deduct, 2), 0) + isnull(round(tempx.amount_accumulation_fund_deduct, 2),0) +
+isnull(round(tempx.amount_special_additional_deduct, 2), 0) + isnull(round(tempx.amount_starting_point_deduct,2), 0)),
+tempx.income_period,
+tempx.tax_period,
+tempx.work_card,
+tempx.employee_name,
+tempx.month_income,
+tempx.amount_income,
+isnull(tempx.amount_social_insurance_deduct, 0),
+isnull(tempx.amount_accumulation_fund_deduct, 0),
+isnull(tempx.amount_special_additional_deduct, 0),
+isnull(tempx.amount_starting_point_deduct, 0),
+tempx.amount_taxable_income,
+tempx.tax_rate,
+tempx.quick_calculation_deduction,
+tempx.amount_tax_due,
+tempx.amount_tax_paid,
+tempx.amount_tax_refund,
+tempx.create_time,
+tempx.create_by,
+tempx.update_time,
+tempx.update_by,
+tempx.se_id,
+1
+
+from
+(SELECT
+    spiti.income_period as income_period,
+	spiti.tax_period as tax_period,
+	RIGHT ( CAST ( '000000' + rtrim( spiti.work_card ) AS VARCHAR ), 6 ) as work_card,
+	spiti.employee_name as employee_name,
+	spiti.month_income as month_income,
+	spiti.amount_income as amount_income,
+	isnull(spiti.current_basic_pension_insurance,0) + isnull(spiti.current_basic_medical, 0) + isnull(spiti.current_unemployment, 0) +
+	case when CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) = 12 and CAST(RIGHT(spiti.tax_period, 2) as INT) = 1 then 0 else
+	isnull((
+	SELECT
+		isnull(temp.amount_social_insurance_deduct, 0)
+	FROM
+		swm_personal_income_tax temp
+	WHERE
+		temp.income_period = (
+		case when CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) = 1 then  convert(varchar(4), cast(LEFT(spiti.income_period, 4) as int) - 1) + '.12'
+				else LEFT(spiti.income_period, 4) + '.' + case when CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) < 11 then '0' + convert(varchar(1), CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) - 1)
+				else convert(varchar(2), CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) - 1)  end end
+				)
+				AND temp.enabled_flag = 1 And temp.amount_flag = 1
+				AND RIGHT ( CAST ( '000000' + rtrim( temp.work_card ) AS VARCHAR ), 6 ) = RIGHT ( CAST ( '000000' + rtrim( spiti.work_card ) AS VARCHAR ), 6 )
+			),0) end as amount_social_insurance_deduct,
+			spiti.current_housing_accumulation_fund +
+			 case when CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) = 12 and CAST(RIGHT(spiti.tax_period, 2) as INT) = 1 then 0 else
+			 isnull((
+			SELECT
+				isnull(temp.amount_accumulation_fund_deduct, 0)
+			FROM
+				swm_personal_income_tax temp
+			WHERE
+				temp.income_period = (
+						case when CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) = 1 then  convert(varchar(4), cast(LEFT(spiti.income_period, 4) as int) - 1) + '.12'
+				else LEFT(spiti.income_period, 4) + '.' + case when CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) < 11 then '0' + convert(varchar(1), CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) - 1)
+				else convert(varchar(2), CAST ( RIGHT ( spiti.income_period, 2 ) AS INT ) - 1)  end end
+						)
+						and temp.enabled_flag  = 1 and temp.amount_flag = 1
+						AND RIGHT ( CAST ( '000000' + rtrim( temp.work_card ) AS VARCHAR ), 6 ) = RIGHT ( CAST ( '000000' + rtrim( spiti.work_card ) AS VARCHAR ), 6 )
+					),0) end as amount_accumulation_fund_deduct,
+					isnull(round(spiti.deduct_sum_child_education,2), 0) + isnull(round(spiti.deduct_sum_education_continue,2),0) +
+					isnull(round(spiti.deduct_sum_house_loan,2), 0) + isnull(round(spiti.deduct_sum_housing_rental,2), 0) +
+					isnull(round(spiti.deduct_sum_support_elderly,2), 0) + isnull(round(spiti.deduct_sum_three_child,2), 0)
+					as amount_special_additional_deduct,
+					isnull(spiti.amount_deduct_expenses, 0) as amount_starting_point_deduct,
+					isnull(spiti.amount_taxable_income, 0) as amount_taxable_income,
+					spiti.tax_rate as tax_rate,
+					spiti.quick_calculation_deduction as quick_calculation_deduction,
+					spiti.amount_tax_due as amount_tax_due ,
+					spiti.amount_tax_paid as amount_tax_paid,
+					spiti.amount_tax_refund as amount_tax_refund,
+					spiti.create_time as create_time,
+					spiti.create_by as create_by,
+					spiti.update_time as update_time,
+					spiti.update_by as update_by,
+				(SELECT
+					isnull( se.id, - 1 )
+				FROM
+					swm_employee se
+				WHERE
+					se.employee_id = spiti.employee_id
+					AND se.work_flag = 1
+					) as se_id
+				FROM
+					swm_personal_income_tax_interface spiti
+				WHERE
+					spiti.group_id = #{groupId, jdbcType = BIGINT}
+				AND spiti.employee_id != - 1
+AND spiti.data_status = 'T'
+) as  tempx
+    ]]>
+    </insert>
+
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.KqCrjsjLsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.KqCrjsjLs">
+        <id column="date8" property="date8" />
+        <id column="kh" property="kh" />
+        <id column="mjkzqbh" property="mjkzqbh" />
+        <id column="time8" property="time8" />
+        <result column="ID" property="id" />
+        <result column="syqk" property="syqk" />
+        <result column="crjqk" property="crjqk" />
+        <result column="mjjbh" property="mjjbh" />
+        <result column="acstosql" property="acstosql" />
+    </resultMap>
+
+    <resultMap id="KqCrjsjLsResultMap" type="com.sunten.hrms.ac.domain.KqCrjsjLs" autoMapping="true">
+        <id column="date8" property="date8" />
+        <id column="kh" property="kh" />
+        <id column="mjkzqbh" property="mjkzqbh" />
+        <id column="time8" property="time8" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            KCL.date8, KCL.ID, KCL.syqk, KCL.kh, KCL.crjqk, KCL.mjjbh, KCL.mjkzqbh, KCL.time8, KCL.acstosql
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.date8 as ${tAlias}_date8, ${tAlias}.ID as ${tAlias}_ID, ${tAlias}.syqk as ${tAlias}_syqk,
+            ${tAlias}.kh as ${tAlias}_kh, ${tAlias}.crjqk as ${tAlias}_crjqk,
+            ${tAlias}.mjjbh as ${tAlias}_mjjbh, ${tAlias}.mjkzqbh as ${tAlias}_mjkzqbh,
+            ${tAlias}.time8 as ${tAlias}_time8, ${tAlias}.acstosql as ${tAlias}_acstosql
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from KQ_CRJSJ_LS KCL
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and KCL.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+<!--    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.KqCrjsjLs">-->
+<!--        <![CDATA[-->
+<!--            insert into KQ_CRJSJ_LS (date8, kh, mjkzqbh,-->
+<!--                                     time8, ID, syqk,-->
+<!--                                     crjqk, mjjbh, acstosql)-->
+<!--            values (#{date8,jdbcType=TIMESTAMP}, #{kh,jdbcType=VARCHAR}, #{mjkzqbh,jdbcType=VARCHAR},-->
+<!--                    #{time8,jdbcType=TIMESTAMP}, #{id,jdbcType=INTEGER}, #{syqk,jdbcType=VARCHAR},-->
+<!--                    #{crjqk,jdbcType=VARCHAR}, #{mjjbh,jdbcType=INTEGER}, #{acstosql,jdbcType=BIT})-->
+<!--        ]]>-->
+<!--    </insert>-->
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from KQ_CRJSJ_LS
+             where date8 = #{date8,jdbcType=TIMESTAMP}
+               and kh = #{kh,jdbcType=VARCHAR}
+               and mjkzqbh = #{mjkzqbh,jdbcType=VARCHAR}
+               and time8 = #{time8,jdbcType=TIMESTAMP}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.KqCrjsjLs">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.KqCrjsjLs">
+        <![CDATA[
+            update KQ_CRJSJ_LS
+               set ID       = #{id,jdbcType=INTEGER},
+                   syqk     = #{syqk,jdbcType=VARCHAR},
+                   crjqk    = #{crjqk,jdbcType=VARCHAR},
+                   mjjbh    = #{mjjbh,jdbcType=INTEGER},
+                   acstosql = #{acstosql,jdbcType=BIT}
+             where date8 = #{date8,jdbcType=TIMESTAMP}
+               and kh = #{kh,jdbcType=VARCHAR}
+               and mjkzqbh = #{mjkzqbh,jdbcType=VARCHAR}
+               and time8 = #{time8,jdbcType=TIMESTAMP}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KqCrjsjLsResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where KCL.date8 = #{date8,jdbcType=TIMESTAMP}
+               and KCL.kh = #{kh,jdbcType=VARCHAR}
+               and KCL.mjkzqbh = #{mjkzqbh,jdbcType=VARCHAR}
+               and KCL.time8 = #{time8,jdbcType=TIMESTAMP}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KqCrjsjLsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by date8, kh, mjkzqbh, time8
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KqCrjsjLsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmEmployeeDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmEmployee">
+        <id column="id" property="id" />
+        <result column="work_card" property="workCard" />
+        <result column="name" property="name" />
+        <result column="bank_account" property="bankAccount" />
+        <result column="bank_name" property="bankName" />
+        <result column="department" property="department" />
+        <result column="administrative_office" property="administrativeOffice" />
+        <result column="station" property="station" />
+        <result column="employee_category" property="employeeCategory" />
+        <result column="rank" property="rank" />
+        <result column="technical_rank" property="technicalRank" />
+        <result column="skill_level" property="skillLevel" />
+        <result column="category" property="category" />
+        <result column="job" property="job" />
+        <result column="position" property="position" />
+        <result column="title" property="title" />
+        <result column="education" property="education" />
+        <result column="entry_time" property="entryTime" />
+        <result column="division_contract_flag" property="divisionContractFlag" />
+        <result column="lump_sum_wage" property="lumpSumWage" />
+        <result column="generation_differentiation_flag" property="generationDifferentiationFlag" />
+        <result column="base_pay" property="basePay" />
+        <result column="post_skill_salary" property="postSkillSalary" />
+        <result column="target_performance_pay" property="targetPerformancePay" />
+        <result column="accessment_form" property="accessmentForm" />
+        <result column="cost_center" property="costCenter" />
+        <result column="cost_center_num" property="costCenterNum" />
+        <result column="service_department" property="serviceDepartment" />
+        <result column="squad_leader_allowance" property="squadLeaderAllowance" />
+        <result column="post_subsidy" property="postSubsidy" />
+        <result column="seniority_allowance" property="seniorityAllowance" />
+        <result column="one_child_subsidy" property="oneChildSubsidy" />
+        <result column="high_temperature_subsidy" property="highTemperatureSubsidy" />
+        <result column="safety_accumulation_award" property="safetyAccumulationAward" />
+        <result column="personal_deductibles" property="personalDeductibles" />
+        <result column="company_deductibles" property="companyDeductibles" />
+        <result column="personal_deduct_accumulation_fund" property="personalDeductAccumulationFund" />
+        <result column="company_deduct_accumulation_fund" property="companyDeductAccumulationFund" />
+        <result column="transportation_allowance" property="transportationAllowance" />
+        <result column="work_flag" property="workFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="attribute6" property="attribute6" />
+        <result column="attribute7" property="attribute7" />
+        <result column="attribute8" property="attribute8" />
+        <result column="attribute9" property="attribute9" />
+        <result column="attribute10" property="attribute10" />
+        <result column="employee_id" property="employeeId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="team" property="team"/>
+        <result column="manager_flag" property="managerFlag"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <resultMap id="SwmEmployeeResultMap" type="com.sunten.hrms.swm.domain.SwmEmployee" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <resultMap id="SwmDeptResultMap" type="com.sunten.hrms.swm.domain.SwmDept" autoMapping="true"/>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            se.id, se.work_card, se.name, se.bank_account, se.bank_name, se.department,
+            se.administrative_office, se.station, se.employee_category, se.rank, se.technical_rank,
+            se.skill_level, se.category, se.job, se.position, se.title, se.education, se.entry_time,
+            se.division_contract_flag, se.lump_sum_wage, se.generation_differentiation_flag, se.base_pay,
+            se.post_skill_salary, se.target_performance_pay, se.accessment_form, se.cost_center,
+            se.cost_center_num, se.service_department, se.squad_leader_allowance, se.post_subsidy,
+            se.seniority_allowance, se.one_child_subsidy, se.high_temperature_subsidy,
+            se.safety_accumulation_award, se.personal_deductibles, se.company_deductibles,
+            se.personal_deduct_accumulation_fund, se.company_deduct_accumulation_fund,
+            se.transportation_allowance, se.work_flag, se.attribute1, se.attribute2, se.attribute3,
+            se.attribute4, se.attribute5, se.attribute6, se.attribute7, se.attribute8, se.attribute9,
+            se.attribute10, se.employee_id, se.create_time, se.create_by, se.update_time, se.update_by,
+            se.team, se.manager_flag, se.type
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.bank_account as ${tAlias}_bank_account,
+            ${tAlias}.bank_name as ${tAlias}_bank_name, ${tAlias}.department as ${tAlias}_department,
+            ${tAlias}.administrative_office as ${tAlias}_administrative_office,
+            ${tAlias}.station as ${tAlias}_station, ${tAlias}.employee_category as ${tAlias}_employee_category,
+            ${tAlias}.rank as ${tAlias}_rank, ${tAlias}.technical_rank as ${tAlias}_technical_rank,
+            ${tAlias}.skill_level as ${tAlias}_skill_level, ${tAlias}.category as ${tAlias}_category,
+            ${tAlias}.job as ${tAlias}_job, ${tAlias}.position as ${tAlias}_position,
+            ${tAlias}.title as ${tAlias}_title, ${tAlias}.education as ${tAlias}_education,
+            ${tAlias}.entry_time as ${tAlias}_entry_time,
+            ${tAlias}.division_contract_flag as ${tAlias}_division_contract_flag,
+            ${tAlias}.lump_sum_wage as ${tAlias}_lump_sum_wage,
+            ${tAlias}.generation_differentiation_flag as ${tAlias}_generation_differentiation_flag,
+            ${tAlias}.base_pay as ${tAlias}_base_pay,
+            ${tAlias}.post_skill_salary as ${tAlias}_post_skill_salary,
+            ${tAlias}.target_performance_pay as ${tAlias}_target_performance_pay,
+            ${tAlias}.accessment_form as ${tAlias}_accessment_form,
+            ${tAlias}.cost_center as ${tAlias}_cost_center,
+            ${tAlias}.cost_center_num as ${tAlias}_cost_center_num,
+            ${tAlias}.service_department as ${tAlias}_service_department,
+            ${tAlias}.squad_leader_allowance as ${tAlias}_squad_leader_allowance,
+            ${tAlias}.post_subsidy as ${tAlias}_post_subsidy,
+            ${tAlias}.seniority_allowance as ${tAlias}_seniority_allowance,
+            ${tAlias}.one_child_subsidy as ${tAlias}_one_child_subsidy,
+            ${tAlias}.high_temperature_subsidy as ${tAlias}_high_temperature_subsidy,
+            ${tAlias}.safety_accumulation_award as ${tAlias}_safety_accumulation_award,
+            ${tAlias}.personal_deductibles as ${tAlias}_personal_deductibles,
+            ${tAlias}.company_deductibles as ${tAlias}_company_deductibles,
+            ${tAlias}.personal_deduct_accumulation_fund as ${tAlias}_personal_deduct_accumulation_fund,
+            ${tAlias}.company_deduct_accumulation_fund as ${tAlias}_company_deduct_accumulation_fund,
+            ${tAlias}.transportation_allowance as ${tAlias}_transportation_allowance,
+            ${tAlias}.work_flag as ${tAlias}_work_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.attribute6 as ${tAlias}_attribute6, ${tAlias}.attribute7 as ${tAlias}_attribute7,
+            ${tAlias}.attribute8 as ${tAlias}_attribute8, ${tAlias}.attribute9 as ${tAlias}_attribute9,
+            ${tAlias}.attribute10 as ${tAlias}_attribute10, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.team as ${tAlias}_team,  ${tAlias}.manager_flag as ${tAlias}_manager_flag,
+            ${tAlias}.type as ${tAlias}_type
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        ,
+        (select isnull(pe.name, '')  from fnd_user fu join pm_employee pe on
+        fu.employee_id = pe.id
+        and fu.id = se.update_by
+        where fu.enabled_flag  =1
+        and pe.enabled_flag = 1) as update_by_str
+        from swm_employee se
+        left join pm_employee pe on se.work_card=pe.work_card and pe.enabled_flag=1
+	    left join pm_employee_job pej on pej.employee_id=pe.id and pej.enabled_flag=1 and pej.job_main_flag = 1
+	    left join fnd_dept fd on fd.id=pej.dept_id and fd.enabled_flag=1
+        ]]>
+    </sql>
+
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and pej.dept_id in ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="criteria.employeeId != null">
+            <![CDATA[
+                    and (pe.id like #{criteria.employeeId, jdbcType = VARCHAR} )
+             ]]>
+            </if>
+            <if test="criteria.nameOrWorkCard != null">
+            <![CDATA[
+                    and (se.work_card like #{criteria.nameOrWorkCard, jdbcType = VARCHAR} or se.name like #{criteria.nameOrWorkCard, jdbcType = VARCHAR} )
+             ]]>
+            </if>
+            <if test="criteria.managerFlag != null">
+            <![CDATA[
+                    and se.manager_flag = #{criteria.managerFlag, jdbcType = BIT}
+             ]]>
+            </if>
+            <if test="criteria.workFlag != null">
+            <![CDATA[
+                    and se.work_flag = #{criteria.workFlag, jdbcType = BIT}
+            ]]>
+            </if>
+            <if test="criteria.department != null">
+                <![CDATA[
+                      and se.department = #{criteria.department, jdbcType = VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.administrativeOffice != null">
+                <![CDATA[
+                      and se.administrative_office = #{criteria.administrativeOffice, jdbcType = VARCHAR}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+
+    <sql id = "Criteria_Query_Sql">
+
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmEmployee" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_employee (work_card, name, bank_account,
+                                      bank_name, department,
+                                      administrative_office, station,
+                                      employee_category, rank,
+                                      technical_rank, skill_level,
+                                      category, job, position,
+                                      title, education, entry_time,
+                                      division_contract_flag, lump_sum_wage,
+                                      generation_differentiation_flag, base_pay,
+                                      post_skill_salary, target_performance_pay,
+                                      accessment_form, cost_center,
+                                      cost_center_num, service_department,
+                                      squad_leader_allowance, post_subsidy,
+                                      seniority_allowance, one_child_subsidy,
+                                      high_temperature_subsidy, safety_accumulation_award,
+                                      personal_deductibles, company_deductibles,
+                                      personal_deduct_accumulation_fund,
+                                      company_deduct_accumulation_fund,
+                                      transportation_allowance, work_flag,
+                                      attribute1, attribute2,
+                                      attribute3, attribute4,
+                                      attribute5, attribute6,
+                                      attribute7, attribute8,
+                                      attribute9, attribute10,
+                                      employee_id, create_time,
+                                      create_by, update_time, update_by, team,
+                                      manager_flag,type
+                                      )
+            values (#{workCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR},
+                    #{bankName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR},
+                    #{administrativeOffice,jdbcType=VARCHAR}, #{station,jdbcType=VARCHAR},
+                    #{employeeCategory,jdbcType=VARCHAR}, #{rank,jdbcType=VARCHAR},
+                    #{technicalRank,jdbcType=VARCHAR}, #{skillLevel,jdbcType=VARCHAR},
+                    #{category,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
+                    #{title,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{entryTime,jdbcType=DATE},
+                    #{divisionContractFlag,jdbcType=BIT}, #{lumpSumWage,jdbcType=DECIMAL},
+                    #{generationDifferentiationFlag,jdbcType=BIT}, #{basePay,jdbcType=DECIMAL},
+                    #{postSkillSalary,jdbcType=DECIMAL}, #{targetPerformancePay,jdbcType=DECIMAL},
+                    #{accessmentForm,jdbcType=VARCHAR}, #{costCenter,jdbcType=VARCHAR},
+                    #{costCenterNum,jdbcType=VARCHAR}, #{serviceDepartment,jdbcType=VARCHAR},
+                    #{squadLeaderAllowance,jdbcType=DECIMAL}, #{postSubsidy,jdbcType=DECIMAL},
+                    #{seniorityAllowance,jdbcType=DECIMAL}, #{oneChildSubsidy,jdbcType=DECIMAL},
+                    #{highTemperatureSubsidy,jdbcType=DECIMAL}, #{safetyAccumulationAward,jdbcType=DECIMAL},
+                    #{personalDeductibles,jdbcType=DECIMAL}, #{companyDeductibles,jdbcType=DECIMAL},
+                    #{personalDeductAccumulationFund,jdbcType=DECIMAL},
+                    #{companyDeductAccumulationFund,jdbcType=DECIMAL},
+                    #{transportationAllowance,jdbcType=DECIMAL}, #{workFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=DECIMAL}, #{attribute2,jdbcType=DECIMAL},
+                    #{attribute3,jdbcType=DECIMAL}, #{attribute4,jdbcType=DECIMAL},
+                    #{attribute5,jdbcType=DECIMAL}, #{attribute6,jdbcType=DECIMAL},
+                    #{attribute7,jdbcType=DECIMAL}, #{attribute8,jdbcType=DECIMAL},
+                    #{attribute9,jdbcType=DECIMAL}, #{attribute10,jdbcType=DECIMAL},
+                    #{employeeId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{team, jdbcType=VARCHAR}
+                    , #{managerFlag, jdbcType= BIT}, #{type, jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <insert id="insertUserRoleBySwmEmp" parameterType="com.sunten.hrms.swm.domain.SwmEmployee">
+        <![CDATA[
+        insert into fnd_users_roles (user_id, role_id, create_time,
+                                         create_by, update_time, update_by)
+        values((select top 1 fu.id from fnd_user fu
+        join swm_employee se on fu.employee_id = se.employee_id and se.work_flag = 1
+        where se.id = #{id, jdbcType = BIGINT} and fu.enabled_flag = 1
+        )
+        ,(select fr.id from fnd_role fr where fr.permission = #{permission, jdbcType = VARCHAR}),
+        GETDATE(), #{userId, jdbcType = BIGINT}, getdate(), #{userId, jdbcType = BIGINT})
+    ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_employee
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployee">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateByWorkFlag" parameterType="com.sunten.hrms.swm.domain.SwmEmployee">
+        <![CDATA[
+           update swm_employee
+              set work_flag  = #{workFlag,jdbcType=BIT},
+              update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByManagerFlag" parameterType="com.sunten.hrms.swm.domain.SwmEmployee">
+        <![CDATA[
+           update swm_employee
+              set manager_flag  = #{managerFlag,jdbcType=BIT},
+              update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                         = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployee">
+        <![CDATA[
+            update swm_employee
+               set work_card                         = #{workCard,jdbcType=VARCHAR},
+                   name                              = #{name,jdbcType=VARCHAR},
+                   bank_account                      = #{bankAccount,jdbcType=VARCHAR},
+                   bank_name                         = #{bankName,jdbcType=VARCHAR},
+                   department                        = #{department,jdbcType=VARCHAR},
+                   administrative_office             = #{administrativeOffice,jdbcType=VARCHAR},
+                   station                           = #{station,jdbcType=VARCHAR},
+                   employee_category                 = #{employeeCategory,jdbcType=VARCHAR},
+                   rank                              = #{rank,jdbcType=VARCHAR},
+                   technical_rank                    = #{technicalRank,jdbcType=VARCHAR},
+                   skill_level                       = #{skillLevel,jdbcType=VARCHAR},
+                   category                          = #{category,jdbcType=VARCHAR},
+                   job                               = #{job,jdbcType=VARCHAR},
+                   position                          = #{position,jdbcType=VARCHAR},
+                   title                             = #{title,jdbcType=VARCHAR},
+                   education                         = #{education,jdbcType=VARCHAR},
+                   entry_time                        = #{entryTime,jdbcType=DATE},
+                   division_contract_flag            = #{divisionContractFlag,jdbcType=BIT},
+                   lump_sum_wage                     = #{lumpSumWage,jdbcType=DECIMAL},
+                   generation_differentiation_flag   = #{generationDifferentiationFlag,jdbcType=BIT},
+                   base_pay                          = #{basePay,jdbcType=DECIMAL},
+                   post_skill_salary                 = #{postSkillSalary,jdbcType=DECIMAL},
+                   target_performance_pay            = #{targetPerformancePay,jdbcType=DECIMAL},
+                   accessment_form                   = #{accessmentForm,jdbcType=VARCHAR},
+                   cost_center                       = #{costCenter,jdbcType=VARCHAR},
+                   cost_center_num                   = #{costCenterNum,jdbcType=VARCHAR},
+                   service_department                = #{serviceDepartment,jdbcType=VARCHAR},
+                   squad_leader_allowance            = #{squadLeaderAllowance,jdbcType=DECIMAL},
+                   post_subsidy                      = #{postSubsidy,jdbcType=DECIMAL},
+                   seniority_allowance               = #{seniorityAllowance,jdbcType=DECIMAL},
+                   one_child_subsidy                 = #{oneChildSubsidy,jdbcType=DECIMAL},
+                   high_temperature_subsidy          = #{highTemperatureSubsidy,jdbcType=DECIMAL},
+                   safety_accumulation_award         = #{safetyAccumulationAward,jdbcType=DECIMAL},
+                   personal_deductibles              = #{personalDeductibles,jdbcType=DECIMAL},
+                   company_deductibles               = #{companyDeductibles,jdbcType=DECIMAL},
+                   personal_deduct_accumulation_fund = #{personalDeductAccumulationFund,jdbcType=DECIMAL},
+                   company_deduct_accumulation_fund  = #{companyDeductAccumulationFund,jdbcType=DECIMAL},
+                   transportation_allowance          = #{transportationAllowance,jdbcType=DECIMAL},
+                   work_flag                         = #{workFlag,jdbcType=BIT},
+                   attribute1                        = #{attribute1,jdbcType=DECIMAL},
+                   attribute2                        = #{attribute2,jdbcType=DECIMAL},
+                   attribute3                        = #{attribute3,jdbcType=DECIMAL},
+                   attribute4                        = #{attribute4,jdbcType=DECIMAL},
+                   attribute5                        = #{attribute5,jdbcType=DECIMAL},
+                   attribute6                        = #{attribute6,jdbcType=DECIMAL},
+                   attribute7                        = #{attribute7,jdbcType=DECIMAL},
+                   attribute8                        = #{attribute8,jdbcType=DECIMAL},
+                   attribute9                        = #{attribute9,jdbcType=DECIMAL},
+                   attribute10                       = #{attribute10,jdbcType=DECIMAL},
+                   employee_id                       = #{employeeId,jdbcType=BIGINT},
+                   update_time                       = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                         = #{updateBy,jdbcType=BIGINT},
+                   team                              = #{team, jdbcType=VARCHAR},
+                   manager_flag                      = #{managerFlag, jdbcType = BIT},
+                   type                              = #{type, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where se.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="getByEmpId" resultMap="SwmEmployeeResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where se.employee_id = #{empId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllHaveAuthByCriteriaPage" resultMap="SwmEmployeeResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_employee se
+              where EXISTS  (select temp.* from swm_employee temp where temp.id = se.id and  temp.id in
+	(select DISTINCT sed.se_id  from swm_emp_dept sed where  1 = 1
+                 ]]>
+        <if test="criteria != null">
+            <if test="criteria.nameOrWorkcard != null">
+                <![CDATA[
+                    and (se.name  like #{criteria.nameOrWorkcard, jdbcType=VARCHAR} or se.work_card like #{criteria.nameOrWorkcard,  jdbcType=VARCHAR})
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and sed.enabled_flag = 1
+                ]]>
+            </if>
+            <if test="criteria.workCard != null">
+                <![CDATA[
+                    and se.work_card = #{criteria.workCard, jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.type != null">
+                <![CDATA[
+                    and sed.type = #{criteria.type, jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.seId != null">
+                <![CDATA[
+                    and se.id = #{criteria.seId, jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.department != null">
+                <![CDATA[
+                           and   se.department                        = #{criteria.department,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.administrativeOffice != null">
+                <![CDATA[
+                    and se.administrative_office             = #{criteria.administrativeOffice,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+        <![CDATA[
+               ))
+        ]]>
+    </select>
+
+
+    <select id="listAllByCriteriaPage" resultMap="SwmEmployeeResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="distinctByDepartment" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.department from swm_employee se  where se.department is not null and se.department <> ''
+              union select ''
+             order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByAdministrativeOffice" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.administrative_office from swm_employee se
+            where 1 = 1 and se.administrative_office is not null and se.administrative_office <> ''
+        ]]>
+        <if test="department != null and department != ''">
+            and se.department = #{department,jdbcType=VARCHAR}
+        </if>
+        <![CDATA[
+         union select ''
+            order by 1
+          ]]>
+    </select>
+
+    <select id="distinctByTeam" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.team from swm_employee se where 1 = 1
+            and se.team is not null and se.team <> ''
+        ]]>
+        <if test="office != null and office != ''">
+            and se.administrative_office = #{office,jdbcType=VARCHAR}
+        </if>
+
+        <![CDATA[
+         union select ''
+            order by 1
+          ]]>
+    </select>
+
+    <select id="distinctByStation" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.station from swm_employee se where se.station is not null and se.station <> ''
+              union select ''
+             order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByEmployeeCategory" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.employee_category from swm_employee se   where se.employee_category is not null and se.employee_category <> ''
+              union select ''
+              order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByRank" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.rank from swm_employee se where se.rank is not null and se.rank <> ''
+              union select ''
+              order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByTechnicalRank" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.technical_rank from swm_employee se  where se.technical_rank is not null and se.technical_rank <> ''
+               union select ''
+              order by 1
+        ]]>
+    </select>
+
+    <select id="distinctBySkillLevel" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.skill_level from swm_employee se  where se.skill_level is not null and se.skill_level <> ''
+               union select ''
+              order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByCategory" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.category from swm_employee se  where se.category is not null and se.category <> ''
+               union select ''
+              order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByJob" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.job from swm_employee se  where se.job is not null and se.job <> ''
+              union select ''
+             order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByPosition" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.position from swm_employee se   where se.position is not null and se.position <> ''
+              union select ''
+             order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByTitle" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.title from swm_employee se  where se.title is not null and se.title <> ''
+               union select ''
+              order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByEducation" resultType="java.lang.String">
+        <![CDATA[
+            select distinct  se.education from swm_employee se  where se.education is not null and se.education <> ''
+                union select ''
+               order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByDept" resultMap="SwmDeptResultMap">
+        <![CDATA[
+            select DISTINCT se.department as department, se.administrative_office as administrativeOffice  from swm_employee se where se.work_flag = 1
+
+             order by 1
+        ]]>
+    </select>
+
+    <select id="distinctByServiceDepartment" resultType="java.lang.String">
+        <![CDATA[
+            select DISTINCT service_department from swm_employee where work_flag = 1 and service_department is not null
+        ]]>
+    </select>
+
+    <select id="getSwmEmpByEmpId" resultMap="SwmEmployeeResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+             from swm_employee se join pm_employee pe on pe.id = se.employee_id
+            where
+              pe.enabled_flag = 1 and pe.leave_flag = 0
+             and  pe.id = #{employeeId,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <update id="updateSeniorityAllowanceMonthly">
+        <![CDATA[
+            update swm_employee set seniority_allowance =
+				case when (datediff(month,entry_time,convert(datetime,convert(varchar(7), dateadd(mm, -1, getdate()), 120) + '-01')))/12*20 > 400 then 400 else  (datediff(month,entry_time,convert(datetime,convert(varchar(7), dateadd(mm, -1, getdate()), 120) +'-01')))/12*20 end
+				where work_flag = 1 and employee_category='02' and (administrative_office is null or administrative_office <> '设备管理室')
+        ]]>
+    </update>
+
+    <update id="interfaceToMain" parameterType="java.lang.Long">
+        <![CDATA[
+            update se set
+                lump_sum_wage = case when sei.lump_sum_wage is not null then sei.lump_sum_wage else se.lump_sum_wage end,
+                post_skill_salary = case when sei.post_skill_salary is not null then sei.post_skill_salary else se.post_skill_salary end,
+                target_performance_pay = case when sei.target_performance_pay is not null then sei.target_performance_pay else se.target_performance_pay end,
+                base_pay = case when sei.base_pay is not null then sei.base_pay else se.base_pay end,
+                personal_deductibles = case when sei.personal_deductibles is not null then sei.personal_deductibles else se.personal_deductibles end,
+                company_deductibles = case when sei.company_deductibles is not null then sei.company_deductibles else se.company_deductibles end,
+                personal_deduct_accumulation_fund = case when sei.personal_deduct_accumulation_fund is not null then sei.personal_deduct_accumulation_fund else se.personal_deduct_accumulation_fund end,
+                company_deduct_accumulation_fund = case when sei.company_deduct_accumulation_fund is not null then sei.company_deduct_accumulation_fund else se.company_deduct_accumulation_fund end,
+                high_temperature_subsidy = case when sei.high_temperature_subsidy is not null then sei.high_temperature_subsidy else se.high_temperature_subsidy end,
+                post_subsidy = case when sei.post_subsidy is not null then sei.post_subsidy else se.post_subsidy end,
+                one_child_subsidy = case when sei.one_child_subsidy is not null then sei.one_child_subsidy else se.one_child_subsidy end,
+                transportation_allowance = case when sei.transportation_allowance is not null then sei.transportation_allowance else se.transportation_allowance end,
+                seniority_allowance = case when sei.seniority_allowance is not null then sei.seniority_allowance else se.seniority_allowance end,
+                safety_accumulation_award = case when sei.safety_accumulation_award is not null then sei.safety_accumulation_award else se.safety_accumulation_award end,
+                update_by = sei.update_by,
+                update_time = sei.update_time
+                from swm_employee se join swm_employee_interface sei on se.employee_id = sei.employee_id  AND se.work_flag = 1 AND sei.data_status='T'
+                and sei.group_id = #{groupId, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <select id="getTransforFromSalary" resultType="com.sunten.hrms.swm.vo.JobTransferSalaryVo">
+        <![CDATA[
+                select isnull(lump_sum_wage, 0) + isnull(base_pay, 0) + isnull(post_skill_salary, 0) + isnull(target_performance_pay, 0) as from_salary,
+                case when LEN(
+                    case when isnull(lump_sum_wage, 0) = 0 then '' else '包干工资:' + convert(varchar(14), convert(decimal(12,2), lump_sum_wage)) + ',' end +
+                case when isnull(base_pay, 0) = 0 then '' else '基本工资:' + convert(varchar(14), convert(decimal(12,2), base_pay)) + ',' end +
+                case when isnull(post_skill_salary, 0) = 0 then '' else '岗位技能工资:' + convert(varchar(14), convert(decimal(12,2), post_skill_salary)) + ',' end +
+                case when isnull(target_performance_pay, 0) = 0 then '' else '目标绩效工资:' + convert(varchar(14), convert(decimal(12,2), target_performance_pay)) + ',' end
+                ) > 0 then
+                LEFT(
+                    (
+                    case when isnull(lump_sum_wage, 0) = 0 then '' else '包干工资:' + convert(varchar(14), convert(decimal(12,2), lump_sum_wage)) + ',' end +
+                case when isnull(base_pay, 0) = 0 then '' else '基本工资:' + convert(varchar(14), convert(decimal(12,2), base_pay)) + ',' end +
+                case when isnull(post_skill_salary, 0) = 0 then '' else '岗位技能工资:' + convert(varchar(14), convert(decimal(12,2), post_skill_salary)) + ',' end +
+                case when isnull(target_performance_pay, 0) = 0 then '' else '目标绩效工资:' + convert(varchar(14), convert(decimal(12,2), target_performance_pay)) + ',' end
+                    ), (LEN(
+                    case when isnull(lump_sum_wage, 0) = 0 then '' else '包干工资:' + convert(varchar(14), convert(decimal(12,2), lump_sum_wage)) + ',' end +
+                case when isnull(base_pay, 0) = 0 then '' else '基本工资:' + convert(varchar(14), convert(decimal(12,2), base_pay)) + ',' end +
+                case when isnull(post_skill_salary, 0) = 0 then '' else '岗位技能工资:' + convert(varchar(14), convert(decimal(12,2), post_skill_salary)) + ',' end +
+                case when isnull(target_performance_pay, 0) = 0 then '' else '目标绩效工资:' + convert(varchar(14), convert(decimal(12,2), target_performance_pay)) + ',' end
+                    ) - 1)
+                ) ELSE '' END AS from_salary_str
+
+             from swm_employee where employee_id = #{employeeId, jdbcType = BIGINT} and work_flag = 1
+        ]]>
+    </select>
+
+    <select id="getSalaryStatus" resultType="java.lang.Integer">
+        <![CDATA[
+          SELECT CASE
+         WHEN EXISTS (SELECT 1
+                 FROM swm_floating_wage sfw
+                WHERE sfw.enabled_flag = 1
+                  AND sfw.frozen_flag = 0
+               UNION ALL
+               SELECT 1
+                 FROM swm_post_skill_salary spss
+                WHERE spss.enabled_flag = 1
+                  AND spss.frozen_flag = 0) THEN
+          1
+         ELSE
+          0
+       END
+        ]]>
+    </select>
+
+    <select id="getEmployeeByEmployeeid" resultMap="SwmEmployeeResultMap">
+        <![CDATA[
+            select
+                se.id, se.work_card, se.name, se.bank_account, se.bank_name, se.department,
+                se.administrative_office, se.station, se.employee_category, se.rank, se.technical_rank,
+                se.skill_level, se.category, se.job, se.position, se.title, se.education, se.entry_time,
+                se.division_contract_flag, se.lump_sum_wage, se.generation_differentiation_flag, se.base_pay,
+                se.post_skill_salary, se.target_performance_pay, se.accessment_form, se.cost_center,
+                se.cost_center_num, se.service_department, se.squad_leader_allowance, se.post_subsidy,
+                se.seniority_allowance, se.one_child_subsidy, se.high_temperature_subsidy,
+                se.safety_accumulation_award, se.personal_deductibles, se.company_deductibles,
+                se.personal_deduct_accumulation_fund, se.company_deduct_accumulation_fund,
+                se.transportation_allowance, se.work_flag, se.attribute1, se.attribute2, se.attribute3,
+                se.attribute4, se.attribute5, se.attribute6, se.attribute7, se.attribute8, se.attribute9,
+                se.attribute10, se.employee_id, se.create_time, se.create_by, se.update_time, se.update_by,
+                se.team, se.manager_flag, se.type
+            from swm_employee se left join pm_employee pe on pe.work_card=se.work_card
+            where pe.id = #{employeeid,jdbcType=BIGINT} and pe.enabled_flag=1
+        ]]>
+    </select>
+
+    <select id="autoUpdateEducationTittle" statementType="CALLABLE" resultType="int">
+        <![CDATA[
+            {call msp_swm_auto_update_education_tittle()}
+        ]]>
+    </select>
+
+</mapper>

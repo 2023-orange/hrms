@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sunten.erp.fnd.dao.ErpFndUserDao">
+	<resultMap type="com.sunten.erp.fnd.domain.ErpFndUser"
+		id="rsLstFndUser">
+		<id column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="encrypted_user_password" property="encryptedUserPassword" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="description" property="description" />
+		<result column="employee_id" property="employeeId" />
+		<result column="email_address" property="emailAddress" />
+		<result column="fax" property="fax" />
+		<result column="customer_id" property="customerId" />
+		<result column="supplier_id" property="supplierId" />
+		<result column="web_password" property="webPassword" />
+		<result column="user_guid" property="userGuid" />
+		<result column="gcn_code_combination_id" property="gcnCodeCombinationId" />
+		<result column="person_party_id" property="personPartyId" />
+	</resultMap>
+
+	<sql id="fuColumns"> 	
+		<![CDATA[
+			fu.user_id, fu.user_name, fu.last_update_date, fu.last_updated_by,
+			fu.creation_date, fu.created_by, fu.last_update_login,
+			fu.encrypted_foundation_password, fu.encrypted_user_password,
+			fu.session_number, fu.start_date, fu.end_date, fu.description,
+			fu.last_logon_date, fu.password_date, fu.password_accesses_left,
+			fu.password_lifespan_accesses, fu.password_lifespan_days,
+			fu.employee_id, fu.email_address, fu.fax, fu.customer_id,
+			fu.supplier_id, fu.web_password, fu.user_guid,
+			fu.gcn_code_combination_id, fu.person_party_id
+		]]>
+	</sql>
+
+	<select id="selectFndUserByName" parameterType="String"
+		resultMap="rsLstFndUser">
+		<![CDATA[
+			SELECT 
+		]]>
+		<include refid="fuColumns" />
+		<![CDATA[
+			  FROM fnd_user fu
+			 WHERE fu.user_name LIKE UPPER(#{userName})
+		]]>
+	</select>
+
+	<select id="selectFndUserByNamePaging" resultMap="rsLstFndUser">
+		<![CDATA[
+			SELECT *
+			  FROM (SELECT t.*, ROWNUM rownum_
+			          FROM (SELECT 
+		]]>
+		<include refid="fuColumns" />
+		<![CDATA[
+			                    FROM fnd_user fu
+			                   WHERE fu.user_name LIKE UPPER(#{userName})
+			                ORDER BY ${sort} ${order}) t)
+			 WHERE rownum_ > #{startRow} AND rownum_ <= #{endRow}
+		]]>
+	</select>
+
+	<select id="countFndUserByName" parameterType="String"
+		resultType="java.lang.Integer">
+		<![CDATA[
+		SELECT COUNT (1)
+		  FROM fnd_user
+		 WHERE user_name LIKE UPPER(#{userName} )
+		]]>
+	</select>
+
+	<select id="validateLogin" resultType="java.lang.String">
+		<![CDATA[
+		SELECT fnd_web_sec.validate_login (#{userName}, #{pass})
+		  FROM DUAL
+		]]>
+	</select>
+</mapper>

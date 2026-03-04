@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndUpdateHistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndUpdateHistory">
+        <id column="id" property="id" />
+        <result column="table_name" property="tableName" />
+        <result column="column_name" property="columnName" />
+        <result column="table_id" property="tableId" />
+        <result column="old_value" property="oldValue" />
+        <result column="new_value" property="newValue" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="FndUpdateHistoryResultMap" type="com.sunten.hrms.fnd.domain.FndUpdateHistory" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fuh.id, fuh.table_name, fuh.column_name, fuh.table_id, fuh.old_value, fuh.new_value, fuh.create_by,
+            fuh.create_time, fuh.update_by, fuh.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.table_name as ${tAlias}_table_name,
+            ${tAlias}.column_name as ${tAlias}_column_name, ${tAlias}.table_id as ${tAlias}_table_id,
+            ${tAlias}.old_value as ${tAlias}_old_value, ${tAlias}.new_value as ${tAlias}_new_value,
+            ${tAlias}.create_by as ${tAlias}_create_by, ${tAlias}.create_time as ${tAlias}_create_time,
+            ${tAlias}.update_by as ${tAlias}_update_by, ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_update_history fuh
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and fuh.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndUpdateHistory" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_update_history (table_name, column_name, table_id,
+                                            old_value, new_value, create_by,
+                                            create_time, update_by,
+                                            update_time)
+            values (#{tableName,jdbcType=VARCHAR}, #{columnName,jdbcType=VARCHAR}, #{tableId,jdbcType=BIGINT},
+                    #{oldValue,jdbcType=VARCHAR}, #{newValue,jdbcType=VARCHAR}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_update_history
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndUpdateHistory">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndUpdateHistory">
+        <![CDATA[
+            update fnd_update_history
+               set table_name  = #{tableName,jdbcType=VARCHAR},
+                   column_name = #{columnName,jdbcType=VARCHAR},
+                   table_id    = #{tableId,jdbcType=BIGINT},
+                   old_value   = #{oldValue,jdbcType=VARCHAR},
+                   new_value   = #{newValue,jdbcType=VARCHAR},
+                   update_by   = #{updateBy,jdbcType=BIGINT},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndUpdateHistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fuh.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndUpdateHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndUpdateHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

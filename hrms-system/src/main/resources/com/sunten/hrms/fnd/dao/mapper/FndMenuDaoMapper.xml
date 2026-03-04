@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndMenuDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndMenu">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="component" property="component" />
+        <result column="pid" property="pid" />
+        <result column="sort" property="sort" />
+        <result column="icon" property="icon" />
+        <result column="path" property="path" />
+        <result column="component_name" property="componentName" />
+        <result column="permission" property="permission" />
+        <result column="type" property="type" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="i_frame_flag" property="iFrameFlag" />
+        <result column="cache_flag" property="cacheFlag" />
+        <result column="hidden_flag" property="hiddenFlag" />
+        <result column="blank_flag" property="blankFlag" />
+        <result column="send_token_flag" property="sendTokenFlag" />
+    </resultMap>
+
+    <resultMap id="FndMenuResultMap" type="com.sunten.hrms.fnd.domain.FndMenu" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fm.id, fm.name, fm.component, fm.pid, fm.sort, fm.icon, fm.path, fm.component_name,
+            fm.permission, fm.type, fm.create_time, fm.create_by, fm.update_time, fm.update_by,
+            fm.i_frame_flag, fm.cache_flag, fm.hidden_flag, fm.blank_flag, fm.send_token_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.name as ${tAlias}_name,
+            ${tAlias}.component as ${tAlias}_component, ${tAlias}.pid as ${tAlias}_pid,
+            ${tAlias}.sort as ${tAlias}_sort, ${tAlias}.icon as ${tAlias}_icon,
+            ${tAlias}.path as ${tAlias}_path, ${tAlias}.component_name as ${tAlias}_component_name,
+            ${tAlias}.permission as ${tAlias}_permission, ${tAlias}.type as ${tAlias}_type,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.i_frame_flag as ${tAlias}_i_frame_flag, ${tAlias}.cache_flag as ${tAlias}_cache_flag,
+            ${tAlias}.hidden_flag as ${tAlias}_hidden_flag, ${tAlias}.blank_flag as ${tAlias}_blank_flag,
+            ${tAlias}.send_token_flag as ${tAlias}_send_token_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_menu fm
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.blurry != null">
+                <![CDATA[
+               and (fm.name like #{criteria.blurry,jdbcType=VARCHAR}
+                  or fm.path like #{criteria.blurry,jdbcType=VARCHAR}
+                  or fm.component like #{criteria.blurry,jdbcType=VARCHAR})
+                ]]>
+            </if>
+            <if test="criteria.startTime != null">
+                <![CDATA[
+               and fm.create_time >= #{criteria.startTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+            <if test="criteria.endTime != null">
+                <![CDATA[
+               and fm.create_time <= #{criteria.endTime,jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndMenu" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_menu (name, component, pid,
+                                  sort, icon, path,
+                                  component_name, permission, type,
+                                  create_time, create_by,
+                                  update_time, update_by,
+                                  i_frame_flag, cache_flag, hidden_flag,
+                                  blank_flag, send_token_flag)
+            values (#{name,jdbcType=VARCHAR}, #{component,jdbcType=VARCHAR}, #{pid,jdbcType=BIGINT},
+                    #{sort,jdbcType=BIGINT}, #{icon,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR},
+                    #{componentName,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{iFrameFlag,jdbcType=BIT}, #{cacheFlag,jdbcType=BIT}, #{hiddenFlag,jdbcType=BIT},
+                    #{blankFlag,jdbcType=BIT}, #{sendTokenFlag,jdbcType=BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_menu
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndMenu">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndMenu">
+        <![CDATA[
+            update fnd_menu
+               set name            = #{name,jdbcType=VARCHAR},
+                   component       = #{component,jdbcType=VARCHAR},
+                   pid             = #{pid,jdbcType=BIGINT},
+                   sort            = #{sort,jdbcType=BIGINT},
+                   icon            = #{icon,jdbcType=VARCHAR},
+                   path            = #{path,jdbcType=VARCHAR},
+                   component_name  = #{componentName,jdbcType=VARCHAR},
+                   permission      = #{permission,jdbcType=VARCHAR},
+                   type            = #{type,jdbcType=INTEGER},
+                   update_time     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by       = #{updateBy,jdbcType=BIGINT},
+                   i_frame_flag    = #{iFrameFlag,jdbcType=BIT},
+                   cache_flag      = #{cacheFlag,jdbcType=BIT},
+                   hidden_flag     = #{hiddenFlag,jdbcType=BIT},
+                   blank_flag      = #{blankFlag,jdbcType=BIT},
+                   send_token_flag = #{sendTokenFlag,jdbcType=BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndMenuResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fm.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndMenuResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+			 order by fm.sort asc
+		]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndMenuResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByName" resultMap="FndMenuResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+			 where fm.name = #{name,jdbcType=VARCHAR}
+		]]>
+    </select>
+
+    <select id="getByComponentName" resultMap="FndMenuResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+			 where fm.component_name = #{name,jdbcType=VARCHAR}
+		]]>
+    </select>
+
+    <select id="listByPid" resultMap="FndMenuResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+			 where fm.pid = #{pid,jdbcType=BIGINT}
+			 order by fm.sort asc
+		]]>
+    </select>
+
+    <select id="listByRolesIdExType" resultMap="FndMenuResultMap">
+        <![CDATA[
+		    select
+		]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+			  from fnd_menu fm
+			  left outer join fnd_roles_menus frm
+			    on fm.id = frm.menu_id
+			  left outer join fnd_role fr
+			    on frm.role_id = fr.id
+			 where fr.id = #{roleId,jdbcType=BIGINT}
+		]]>
+        <if test="typeId != null">
+            <![CDATA[
+			   and (fm.type not in (#{typeId,jdbcType=INTEGER}))
+		    ]]>
+        </if>
+        <![CDATA[
+			 order by fm.sort asc
+		]]>
+    </select>
+
+    <select id="listByRolesIdsAndType" resultMap="FndMenuResultMap">
+        <![CDATA[
+		    select
+		]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+			  from fnd_menu fm
+			  left outer join fnd_roles_menus frm
+			    on fm.id = frm.menu_id
+			  left outer join fnd_role fr
+			    on frm.role_id = fr.id
+			 where 1 = 1
+		]]>
+        <choose>
+            <when test="roleIds != null and roleIds.size > 0">
+                <foreach collection="roleIds" item="item" index="index" open=" and fr.id IN (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+            </when>
+			<otherwise>
+                <![CDATA[ and 1 = 0  ]]>
+            </otherwise>
+        </choose>
+        <if test="typeId != null">
+            <![CDATA[
+			   and (fm.type not in (#{typeId,jdbcType=INTEGER}))
+		    ]]>
+        </if>
+        <![CDATA[
+			 order by fm.type,fm.sort asc
+		]]>
+    </select>
+</mapper>

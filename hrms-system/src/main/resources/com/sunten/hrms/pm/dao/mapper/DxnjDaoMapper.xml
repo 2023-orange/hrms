@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.DxnjDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.Dxnj">
+        <id column="ID" property="id" />
+        <result column="ND" property="nd" />
+        <result column="GPH" property="gph" />
+        <result column="XM" property="xm" />
+        <result column="BMMC" property="bmmc" />
+        <result column="KSMC" property="ksmc" />
+        <result column="RZSJ" property="rzsj" />
+        <result column="GL" property="gl" />
+        <result column="NJTS" property="njts" />
+        <result column="YXJTS" property="yxjts" />
+        <result column="SYXJTS" property="syxjts" />
+        <result column="JHXJSJ" property="jhxjsj" />
+        <result column="SJXJSJ" property="sjxjsj" />
+        <result column="BZ" property="bz" />
+        <result column="duration_annual_leave" property="durationAnnualLeave" />
+        <result column="ZHXGR" property="zhxgr" />
+        <result column="ZHXGSJ" property="zhxgsj" />
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="real_annual_leave" property="realAnnualLeave"/>
+        <result column="team" property="team"/>
+    </resultMap>
+
+    <resultMap id="DxnjResultMap" type="com.sunten.hrms.pm.domain.Dxnj" autoMapping="true">
+        <id column="ID" property="id" />
+    </resultMap>
+
+    <resultMap id="UsedAnnualLeaveResultMap" type="com.sunten.hrms.pm.domain.PmUsedAnnualLeave" autoMapping="true"/>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            D.ID
+            ,D.ND
+            ,D.GPH
+            ,D.XM
+            , isnull(D.BMMC, fdev.ext_dept_name) as BMMC
+            , isnull(D.KSMC, fdev.ext_department_name) as KSMC
+            , isnull(D.team, fdev.ext_team_name) as team
+            , peen.entry_time as RZSJ
+            , isnull(D.company_age, pe.company_age)  as GSSL
+            , isnull(D.worked_years, pe.worked_years) as SBGL
+            , isnull(D.NJTS, pe.paid_annual_leave) as NJTS
+            ,D.BZ
+            ,D.ZHXGR
+            ,D.ZHXGSJ
+            ,D.duration_annual_leave
+            ,D.create_by,
+            D.create_time,
+            D.real_annual_leave,
+            D.YXJTS,
+            D.SYXJTS,
+            pe.ten_year_date as ten_year_date,
+            pe.twenty_year_date as twenty_year_date,
+            0 as check_flag
+
+
+        ]]>
+    </sql>
+
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.ND as ${tAlias}_ND, ${tAlias}.GPH as ${tAlias}_GPH, ${tAlias}.XM as ${tAlias}_XM,
+            ${tAlias}.BMMC as ${tAlias}_BMMC, ${tAlias}.KSMC as ${tAlias}_KSMC, ${tAlias}.team as ${tAlias}_team
+            ${tAlias}.RZSJ as ${tAlias}_RZSJ, ${tAlias}.GL as ${tAlias}_GL, ${tAlias}.NJTS as ${tAlias}_NJTS,
+            ${tAlias}.YXJTS as ${tAlias}_YXJTS, ${tAlias}.SYXJTS as ${tAlias}_SYXJTS,
+            ${tAlias}.JHXJSJ as ${tAlias}_JHXJSJ, ${tAlias}.SJXJSJ as ${tAlias}_SJXJSJ,
+            ${tAlias}.BZ as ${tAlias}_BZ, ${tAlias}.duration_annual_leave as ${tAlias}_duration_annual_leave,
+            ${tAlias}.ID as ${tAlias}_ID, ${tAlias}.ZHXGR as ${tAlias}_ZHXGR,
+            ${tAlias}.ZHXGSJ as ${tAlias}_ZHXGSJ,
+             ${tAlias}.create_time as ${tAlias}_create_time,
+              ${tAlias}.create_by as ${tAlias}_create_by,
+              ${tAlias}.real_annual_leave as ${tAlias}_real_annual_leave,
+              ${tAlias}.ten_year_date as ${tAlias}_ten_year_date,
+              ${tAlias}.twenty_year_date as ${tAlias}_twenty_year_date
+        ]]>
+    </sql>
+
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from DXNJ D
+              join pm_employee pe on D.GPH = pe.work_card  collate Chinese_PRC_90_CI_AI  and pe.enabled_flag = 1
+              left outer join pm_employee_job pej
+              on pe.id = pej.employee_id
+              and pej.job_main_flag = 1
+              and pej.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+		 outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = pe.id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                  FROM  pm_employee_job pejt
+                                 WHERE pejt.employee_id  = pe.id
+                                 and pejt.job_main_flag = 1 and pejt.enabled_flag = 1
+                                 and pejt.dept_id in
+                                    ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                    #{item, jdbcType=BIGINT}
+                ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+<!--            <if test="criteria.employeeId != null">-->
+<!--                <![CDATA[ and  pe.id = #{criteria.employeeId,jdbcType=BIGINT}]]>-->
+<!--            </if>-->
+            <if test="criteria.year != null">
+                <![CDATA[
+                            and D.ND = #{criteria.year, jdbcType = INTEGER}
+                        ]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.Dxnj" useGeneratedKeys="true" keyProperty="ID">
+        <![CDATA[
+            insert into DXNJ (ND, GPH, XM,
+                              BMMC, KSMC, team, RZSJ,
+                              GL, NJTS, YXJTS,
+                              SYXJTS, JHXJSJ, SJXJSJ,
+                              BZ, duration_annual_leave, ZHXGR,
+                              ZHXGSJ, create_time, create_by, real_annual_leave)
+            values (#{nd,jdbcType=INTEGER}, #{gph,jdbcType=VARCHAR}, #{xm,jdbcType=VARCHAR},
+                    #{bmmc,jdbcType=VARCHAR}, #{ksmc,jdbcType=VARCHAR}, #{team, jdbcType = VARCHAR}, #{rzsj,jdbcType=TIMESTAMP},
+                    #{gl,jdbcType=INTEGER}, #{njts,jdbcType=DOUBLE}, #{yxjts,jdbcType=DOUBLE},
+                    #{syxjts,jdbcType=DOUBLE}, #{jhxjsj,jdbcType=VARCHAR}, #{sjxjsj,jdbcType=VARCHAR},
+                    #{bz,jdbcType=VARCHAR}, #{durationAnnualLeave,jdbcType=DOUBLE}, #{zhxgr,jdbcType=VARCHAR},
+                    #{zhxgsj,jdbcType=TIMESTAMP},  #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}
+                    , #{realAnnualLeave, jdbcType = DOUBLE})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from DXNJ
+             where ID = #{id,jdbcType=INTEGER}
+        ]]>
+    </sql>
+
+    <insert id="autoInsertDXNJEveryDay">
+        <![CDATA[
+            insert into DXNJ(ND, GPH, XM, create_time, create_by)
+                              select year(getdate()),
+                              pe_t.work_card , pe_t.name,
+                              getdate(), -1
+                              from
+                               pm_employee pe_t where not  exists (
+                                select 1 from
+                                  pm_employee pe join DXNJ d on d.gph = pe.work_card collate Chinese_PRC_90_CI_AI and pe.enabled_flag = 1
+                              and pe.leave_flag = 0 and pe_t.id = pe.id and d.ND = year(getdate())
+                               )
+                               and pe_t.enabled_flag = 1 and pe_t.leave_flag = 0
+        ]]>
+    </insert>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.Dxnj">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.Dxnj">
+        <![CDATA[
+            update DXNJ
+               set ND                    = #{nd,jdbcType=INTEGER},
+                   GPH                   = #{gph,jdbcType=VARCHAR},
+                   XM                    = #{xm,jdbcType=VARCHAR},
+                   BMMC                  = #{bmmc,jdbcType=VARCHAR},
+                   KSMC                  = #{ksmc,jdbcType=VARCHAR},
+                   team                  = #{team, jdbcType = VARCHAR},
+                   RZSJ                  = #{rzsj,jdbcType=TIMESTAMP},
+                   GL                    = #{gl,jdbcType=INTEGER},
+                   NJTS                  = #{njts,jdbcType=DOUBLE},
+                   YXJTS                 = #{yxjts,jdbcType=DOUBLE},
+                   SYXJTS                = #{syxjts,jdbcType=DOUBLE},
+                   JHXJSJ                = #{jhxjsj,jdbcType=VARCHAR},
+                   SJXJSJ                = #{sjxjsj,jdbcType=VARCHAR},
+                   BZ                    = #{bz,jdbcType=VARCHAR},
+                   duration_annual_leave = #{durationAnnualLeave,jdbcType=DOUBLE},
+                   ZHXGR                 = #{zhxgr,jdbcType=VARCHAR},
+                   ZHXGSJ                = #{zhxgsj,jdbcType=TIMESTAMP}
+             where ID = #{id,jdbcType=INTEGER}
+        ]]>
+    </update>
+
+    <update id="updateDurationAnnualLeave" parameterType="com.sunten.hrms.pm.domain.Dxnj">
+        <![CDATA[
+            update DXNJ
+            set duration_annual_leave = #{durationAnnualLeave,jdbcType=DOUBLE},
+            BZ = #{bz,jdbcType=VARCHAR},
+            ZHXGR = #{zhxgr,jdbcType=VARCHAR},
+            ZHXGSJ = #{zhxgsj,jdbcType=TIMESTAMP}
+            where ID = #{id,jdbcType=INTEGER}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="DxnjResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where D.ID = #{id,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="DxnjResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by D.ID
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="DxnjResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getYXJTSFromOA" parameterType="java.util.HashSet" resultMap="UsedAnnualLeaveResultMap">
+        <![CDATA[
+     SELECT
+		DATE_FORMAT(starttime, '%Y') as year
+		,username as work_card, IFNULL (SUM(ifnull(Number,0)),0)  AS used_annual_leave
+		FROM
+		v_req_hrleave_not_cancel
+		where  1 = 1
+		]]>
+		<if test="workCards != null and workCards.size > 0">
+            <![CDATA[ and username in  ]]>
+            <foreach collection="workCards" item="item" index="index" open=" (" separator="," close=")">
+                <![CDATA[
+                            #{item, jdbcType=VARCHAR}
+                        ]]>
+            </foreach>
+        </if>
+		 <![CDATA[
+		and   LeaveType = '年假'
+		group by username,
+		DATE_FORMAT(starttime, '%Y')
+        ]]>
+    </select>
+
+    <select id="getOaForTest" resultMap="UsedAnnualLeaveResultMap">
+        <![CDATA[
+         SELECT
+		DATE_FORMAT(starttime, '%Y') as year
+		,username as work_card, IFNULL (SUM(ifnull(Number,0)),0)  AS used_annual_leave
+		FROM
+		v_req_hrleave_not_cancel
+		where  1 = 1
+
+			and   LeaveType = '年假'
+		group by username,
+		DATE_FORMAT(starttime, '%Y') order by work_card
+		 ]]>
+    </select>
+
+    <!-- 每年最后一天晚上归档一次, 方便记录   -->
+    <update id="dxnjToFile">
+        <![CDATA[
+            update D
+            set
+            BMMC = fdev.ext_dept_name,
+            KSMC = fdev.ext_department_name,
+            team = fdev.ext_team_name,
+            RZSJ = peen.entry_time,
+            company_age = pe.company_age,
+            worked_years = pe.worked_years,
+            NJTS = pe.paid_annual_leave,
+            real_annual_leave = pe.paid_annual_leave + isnull(D.duration_annual_leave, 0)
+           from DXNJ D
+              join pm_employee pe on D.GPH = pe.work_card  collate Chinese_PRC_90_CI_AI  and pe.enabled_flag = 1
+              left outer join pm_employee_job pej
+              on pe.id = pej.employee_id
+              and pej.job_main_flag = 1
+              and pej.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+		 outer apply (
+               select top(1) peen_ap.* from pm_employee_entry peen_ap
+               where peen_ap.employee_id = pe.id
+                       AND peen_ap.enabled_flag = 1
+               ) peen
+               where D.ND = year(getdate())
+        ]]>
+    </update>
+
+    <!--  更新当年临时工的带薪年假为0  -->
+    <update id="updateTempEmployeeDXNJ">
+        <![CDATA[
+            update dx set NJTS = 0  from dxnj dx join pm_employee pe on
+            dx.GPH = pe.work_card  collate Chinese_PRC_90_CI_AI and pe.enabled_flag = 1 and pe.leave_flag = 0
+            and pe.employee_type = '临时员工'
+            and dx.ND = year(getdate())
+        ]]>
+    </update>
+
+    <select id="getDxnjListForTest" resultMap="BaseResultMap">
+        <![CDATA[
+            select [ID]
+      ,[ND]
+      ,[GPH]
+      ,[XM]
+      ,[BMMC]
+      ,[KSMC]
+      ,[RZSJ]
+      ,[GL]
+      ,[NJTS]
+      ,[YXJTS]
+      ,[SYXJTS]
+      ,[JHXJSJ]
+      ,[SJXJSJ]
+      ,[BZ]
+      ,[ZHXGR]
+      ,[ZHXGSJ]
+      ,[duration_annual_leave]
+      ,[create_time]
+      ,[create_by]
+      ,[real_annual_leave]
+      ,[company_age]
+      ,[worked_years]
+      ,[team]
+       from dxnj where ND = #{ND, jdbcType = INTEGER}
+        ]]>
+    </select>
+
+    <update id="updateDxnjForTest">
+        <![CDATA[
+            update dxnj
+            set YXJTS = #{yxjts,jdbcType=DOUBLE},
+             SYXJTS                = isnull(NJTS, 0) -  #{yxjts,jdbcType=DOUBLE}
+             where GPH = #{gph, jdbcType = VARCHAR}
+             and ND = #{ND, jdbcType = BIGINT}
+             and ND != 2022
+        ]]>
+    </update>
+</mapper>

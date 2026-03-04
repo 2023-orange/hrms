@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmEmployeeHistoryDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmEmployeeHistory">
+        <id column="id" property="id" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="post_skill_salary" property="postSkillSalary" />
+        <result column="target_performance_pay" property="targetPerformancePay" />
+        <result column="division_contract_flag" property="divisionContractFlag" />
+        <result column="lump_sum_wage" property="lumpSumWage"/>
+        <result column="base_pay" property="basePay"/>
+        <result column="post_subsidy" property="postSubsidy"/>
+        <result column="seniority_allowance" property="seniorityAllowance"/>
+        <result column="personal_deductibles" property="personalDeductibles"/>
+        <result column="company_deductibles" property="companyDeductibles"/>
+        <result column="personal_deduct_accumulation_fund" property="personalDeductAccumulationFund"/>
+        <result column="company_deduct_accumulation_fund" property="companyDeductAccumulationFund"/>
+        <result column="range_change" property="rangeChange" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="remarks" property="remarks"/>
+        <result column="se_id" property="seId"/>
+    </resultMap>
+
+    <resultMap id="SwmEmployeeHistoryResultMap" type="com.sunten.hrms.swm.domain.SwmEmployeeHistory" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            seh.id, seh.work_card, seh.employee_name, seh.post_skill_salary, seh.target_performance_pay,
+            seh.division_contract_flag, seh.range_change, seh.attribute1, seh.attribute2, seh.attribute3,
+            seh.attribute4, seh.attribute5, seh.create_time, seh.create_by, seh.update_time, seh.update_by,
+            seh.remarks,seh.se_id, seh.lump_sum_wage, seh.base_pay, seh.lump_sum_wage, seh.post_subsidy,
+            seh.seniority_allowance, seh.personal_deductibles, seh.company_deductibles, seh.personal_deduct_accumulation_fund,
+            seh.company_deduct_accumulation_fund
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.work_card as ${tAlias}_work_card,
+            ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.post_skill_salary as ${tAlias}_post_skill_salary,
+            ${tAlias}.target_performance_pay as ${tAlias}_target_performance_pay,
+            ${tAlias}.division_contract_flag as ${tAlias}_division_contract_flag,
+            ${tAlias}.range_change as ${tAlias}_range_change, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.remarks as ${tAlias}_remarks, ${tAlias}.seId as ${tAlias}_se_id,
+             ${tAlias}.lump_sum_wage as ${tAlias}_lump_sum_wage, ${tAlias}.base_pay as ${tAlias}_base_pay,
+             ${tAlias}.post_subsidy as ${tAlias}_post_subsidy,
+             ${tAlias}.seniority_allowance as ${tAlias}_seniority_allowance,
+             ${tAlias}.personal_deductibles as ${tAlias}_personal_deductibles,
+             ${tAlias}.company_deductibles as ${tAlias}_company_deductibles,
+             ${tAlias}.personal_deduct_accumulation_fund as ${tAlias}_personal_deduct_accumulation_fund,
+             ${tAlias}.company_deduct_accumulation_fund as ${tAlias}_company_deduct_accumulation_fund
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_employee_history seh
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.seId != null">
+            <![CDATA[
+                and seh.se_id = #{criteria.seId,jdbcType = BIGINT}
+            ]]>
+        </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeHistory" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_employee_history (work_card, employee_name,
+                                              post_skill_salary, target_performance_pay,
+                                              division_contract_flag, range_change,
+                                              attribute1, attribute2,
+                                              attribute3, attribute4,
+                                              attribute5, create_time,
+                                              create_by, update_time, update_by, remarks, se_id,
+                                              lump_sum_wage, base_pay,
+                                              post_subsidy, seniority_allowance,
+                                              personal_deductibles, company_deductibles,
+                                              personal_deduct_accumulation_fund,
+                                              company_deduct_accumulation_fund
+                                              )
+            values (#{workCard,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+                    #{postSkillSalary,jdbcType=DECIMAL}, #{targetPerformancePay,jdbcType=DECIMAL},
+                    #{divisionContractFlag,jdbcType=BIT}, #{rangeChange,jdbcType=DECIMAL},
+                    #{attribute1,jdbcType=DECIMAL}, #{attribute2,jdbcType=DECIMAL},
+                    #{attribute3,jdbcType=DECIMAL}, #{attribute4,jdbcType=DECIMAL},
+                    #{attribute5,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{remarks, jdbcType= VARCHAR},
+                    #{seId, jdbcType=BIGINT}, #{lumpSumWage, jdbcType = DECIMAL}, #{basePay, jdbcType = DECIMAL},
+                    #{postSubsidy, jdbcType = DECIMAL}, #{seniorityAllowance, jdbcType = DECIMAL},
+                    #{personalDeductibles, jdbcType = DECIMAL}, #{companyDeductibles, jdbcType = DECIMAL},
+                    #{personalDeductAccumulationFund, jdbcType = DECIMAL}, #{companyDeductAccumulationFund, jdbcType = DECIMAL}
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_employee_history
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeHistory">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmEmployeeHistory">
+        <![CDATA[
+            update swm_employee_history
+               set work_card              = #{workCard,jdbcType=VARCHAR},
+                   employee_name          = #{employeeName,jdbcType=VARCHAR},
+                   post_skill_salary      = #{postSkillSalary,jdbcType=DECIMAL},
+                   target_performance_pay = #{targetPerformancePay,jdbcType=DECIMAL},
+                   division_contract_flag = #{divisionContractFlag,jdbcType=BIT},
+                   range_change           = #{rangeChange,jdbcType=DECIMAL},
+                   attribute1             = #{attribute1,jdbcType=DECIMAL},
+                   attribute2             = #{attribute2,jdbcType=DECIMAL},
+                   attribute3             = #{attribute3,jdbcType=DECIMAL},
+                   attribute4             = #{attribute4,jdbcType=DECIMAL},
+                   attribute5             = #{attribute5,jdbcType=DECIMAL},
+                   update_time            = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by              = #{updateBy,jdbcType=BIGINT},
+                   remarks                = #{remarks, jdbcType=VARCHAR},
+                   se_id                  = #{seId, jdbcType=BIGINT},
+                  lump_sum_wage  =  #{lumpSumWage, jdbcType = DECIMAL},
+                  base_pay = #{basePay, jdbcType = DECIMAL}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmEmployeeHistoryResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where seh.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmEmployeeHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            and seh.range_change <> 0  order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmEmployeeHistoryResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getSwmEmployeeHistoryByWorkCard" resultMap="SwmEmployeeHistoryResultMap">
+        <![CDATA[
+            select seh.id, seh.work_card, seh.employee_name, seh.post_skill_salary,
+                seh.target_performance_pay, seh.division_contract_flag, seh.range_change,
+                seh.attribute1, seh.attribute2, seh.attribute3, seh.attribute4, seh.attribute5,
+                seh.create_time, seh.create_by, seh.update_time, seh.update_by, seh.remarks,
+                seh.se_id, seh.lump_sum_wage, seh.base_pay, seh.lump_sum_wage, seh.base_pay,
+                seh.post_subsidy, seh.seniority_allowance, seh.personal_deductibles,
+                seh.company_deductibles, seh.personal_deduct_accumulation_fund,
+                seh.company_deduct_accumulation_fund
+            from swm_employee_history seh
+            where seh.work_card = #{workCard, jdbcType = VARCHAR}
+            order by seh.create_time desc
+        ]]>
+    </select>
+</mapper>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.td.dao.TdPlanResultInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.td.domain.TdPlanResultInterface">
+        <id column="id" property="id" />
+        <result column="work_card" property="workCard" />
+        <result column="plan_id" property="planId" />
+        <result column="attendance" property="attendance" />
+        <result column="duration" property="duration" />
+        <result column="grade" property="grade" />
+        <result column="evaluate" property="evaluate" />
+        <result column="need_flag" property="needFlag" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="group_id" property="groupId" />
+        <result column="name" property="name" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="employee_id" property="employeeId"/>
+        <result column="match_implement_flag" property="matchImplementFlag"/>
+        <result column="check_method" property="checkMethod"/>
+    </resultMap>
+
+    <resultMap id="TdPlanResultInterfaceResultMap" type="com.sunten.hrms.td.domain.TdPlanResultInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            tpri.work_card, tpri.plan_id, tpri.attendance, tpri.duration, tpri.grade, tpri.evaluate,
+            tpri.need_flag, tpri.enabled_flag, tpri.operation_code, tpri.error_msg, tpri.data_status,
+            tpri.group_id, tpri.name, tpri.id, tpri.create_time, tpri.create_by, tpri.update_time,
+            tpri.update_by, tpri.employee_id, tpri.score_line, tpri.match_implement_flag, tpri.remarks,
+            tpri.check_method
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.plan_id as ${tAlias}_plan_id,
+            ${tAlias}.attendance as ${tAlias}_attendance, ${tAlias}.duration as ${tAlias}_duration,
+            ${tAlias}.grade as ${tAlias}_grade, ${tAlias}.evaluate as ${tAlias}_evaluate,
+            ${tAlias}.need_flag as ${tAlias}_need_flag, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status, ${tAlias}.group_id as ${tAlias}_group_id,
+            ${tAlias}.name as ${tAlias}_name, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.employee_id as ${tAlias}_employee_id, ${tAlias}.score_line as ${tAlias}_score_line,
+            ${tAlias}.match_implement_flag as ${tAlias}_match_implement_flag,
+            ${tAlias}.remarks as ${tAlias}_remarks,        ${tAlias}.check_method as ${tAlias}_check_method
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from td_plan_result_interface tpri
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and tpri.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and tpri.enabled_flag = #{criteria.enabledFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.planId != null">
+                <![CDATA[
+                    and tpri.plan_id = #{criteria.planId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.checkMethod != null">
+                <![CDATA[
+                    and tpri.check_method = #{criteria.checkMethod,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.td.domain.TdPlanResultInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into td_plan_result_interface (work_card, plan_id, attendance,
+                                                  duration, grade, evaluate,
+                                                  need_flag, enabled_flag, operation_code,
+                                                  error_msg, data_status, group_id,
+                                                  name, create_time, create_by,
+                                                  update_time, update_by, employee_id, score_line,
+                                                  match_implement_flag,
+                                                  remarks,check_method
+                                                  )
+            values (#{workCard,jdbcType=VARCHAR}, #{planId,jdbcType=BIGINT}, #{attendance,jdbcType=VARCHAR},
+                    #{duration,jdbcType=DOUBLE}, #{grade,jdbcType=DOUBLE}, #{evaluate,jdbcType=VARCHAR},
+                    #{needFlag,jdbcType=BIT}, #{enabledFlag,jdbcType=BIT}, #{operationCode,jdbcType=CHAR},
+                    #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR}, #{groupId,jdbcType=BIGINT},
+                    #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{employeeId, jdbcType = BIGINT},
+                    #{scoreLine, jdbcType=DOUBLE}, #{matchImplementFlag, jdbcType = BIT},
+                    #{remarks, jdbcType = VARCHAR}, #{checkMethod, jdbcType = VARCHAR}
+                    )
+        ]]>
+    </insert>
+
+    <insert id="insertByInterface" parameterType="com.sunten.hrms.td.domain.TdPlanResultInterface">
+           <![CDATA[
+        insert into td_plan_result_interface (work_card, plan_id, attendance,
+                                                  duration, grade, evaluate,
+                                                  need_flag, enabled_flag, employee_id, operation_code,
+                                                  error_msg, data_status, group_id,
+                                                  name, create_time, create_by,
+                                                  update_time, update_by, score_line, match_implement_flag, remarks, check_method)
+
+                select  case when  #{workCard,jdbcType=VARCHAR} is null then null else
+                 right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) end ,
+                #{planId, jdbcType = BIGINT}, #{attendance, jdbcType = VARCHAR},
+                #{duration, jdbcType = DOUBLE}, #{grade, jdbcType = DOUBLE}, #{evaluate, jdbcType = DOUBLE},
+                #{needFlag, jdbcType = BIT}, 1,
+                isnull((select pe.id from pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1 and pe.leave_flag = 0 ), -1),
+            'C',
+            '', 'T',
+            #{groupId, jdbcType = BIGINT}, #{name, jdbcType = VARCHAR}, getdate(), #{createBy, jdbcType= BIGINT},
+            getdate(), #{updateBy, jdbcType = BIGINT}, #{scoreLine, jdbcType = DOUBLE},
+
+                    case when isnull((select pe.id from pm_employee pe where right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1 and pe.leave_flag = 0 ), -1) = -1 then 0
+            else case when exists (select tpe.employee_id from
+            td_plan_employee tpe join td_plan_implement tpi on tpe.plan_implement_id = tpi.id and tpi.plan_id = #{planId, jdbcType = BIGINT}
+            and tpe.enabled_flag = 1 and tpe.type = 'employee' and tpi.enabled_flag = 1 and tpi.approval_status = '已完成' join pm_employee pe on  tpe.employee_id = pe.id and
+            pe.enabled_flag = 1 and pe.leave_flag = 0 and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)
+            ) then 1  else 0 end end,
+            #{remarks, jdbcType = VARCHAR},
+            #{checkMethod, jdbcType = VARCHAR}
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from td_plan_result_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.td.domain.TdPlanResultInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.td.domain.TdPlanResultInterface">
+        <![CDATA[
+            update td_plan_result_interface
+               set work_card      = #{workCard,jdbcType=VARCHAR},
+                   plan_id        = #{planId,jdbcType=BIGINT},
+                   attendance     = #{attendance,jdbcType=VARCHAR},
+                   duration       = #{duration,jdbcType=DOUBLE},
+                   grade          = #{grade,jdbcType=DOUBLE},
+                   evaluate       = #{evaluate,jdbcType=VARCHAR},
+                   need_flag      = #{needFlag,jdbcType=BIT},
+                   enabled_flag   = #{enabledFlag,jdbcType=BIT},
+                   operation_code = #{operationCode,jdbcType=CHAR},
+                   error_msg      = #{errorMsg,jdbcType=VARCHAR},
+                   data_status    = #{dataStatus,jdbcType=CHAR},
+                   group_id       = #{groupId,jdbcType=BIGINT},
+                   name           = #{name,jdbcType=VARCHAR},
+                   update_time    = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by      = #{updateBy,jdbcType=BIGINT},
+                   employee_id    = #{employeeId, jdbcType = BIGINT},
+                   score_line = #{scoreLine, jdbcType = DOUBLE},
+                   match_implement_flag = #{matchImplementFlag, jdbcType = BIT},
+                   remarks = #{remarks, jdbcType = VARCHAR},
+                   check_method = #{checkMethod, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="TdPlanResultInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where tpri.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="TdPlanResultInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="TdPlanResultInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+</mapper>

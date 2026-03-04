@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmConsolationMoneyInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface">
+        <id column="id" property="id" />
+        <result column="group_id" property="groupId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="consolation_money_type" property="consolationMoneyType" />
+        <result column="application_date" property="applicationDate" />
+        <result column="application_money" property="applicationMoney" />
+        <result column="relatives_died" property="relativesDied" />
+        <result column="released_money" property="releasedMoney" />
+        <result column="released_flag" property="releasedFlag" />
+        <result column="released_time" property="releasedTime" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="date" property="date"/>
+        <result column="child_name" property="childName"/>
+        <result column="remarks" property="remarks"/>
+    </resultMap>
+
+    <resultMap id="SwmConsolationMoneyInterfaceResultMap" type="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            scmi.group_id, scmi.employee_id, scmi.work_card, scmi.employee_name, scmi.operation_code,
+            scmi.error_msg, scmi.data_status, scmi.consolation_money_type, scmi.application_date,
+            scmi.application_money, scmi.relatives_died, scmi.released_money, scmi.released_flag,
+            scmi.released_time, scmi.enabled_flag, scmi.id, scmi.create_time, scmi.create_by, scmi.update_time,
+            scmi.update_by, scmi.date, scmi.child_name, scmi.remarks
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.group_id as ${tAlias}_group_id, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.operation_code as ${tAlias}_operation_code, ${tAlias}.error_msg as ${tAlias}_error_msg,
+            ${tAlias}.data_status as ${tAlias}_data_status,
+            ${tAlias}.consolation_money_type as ${tAlias}_consolation_money_type,
+            ${tAlias}.application_date as ${tAlias}_application_date,
+            ${tAlias}.application_money as ${tAlias}_application_money,
+            ${tAlias}.relatives_died as ${tAlias}_relatives_died,
+            ${tAlias}.released_money as ${tAlias}_released_money,
+            ${tAlias}.released_flag as ${tAlias}_released_flag,
+            ${tAlias}.released_time as ${tAlias}_released_time,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+                ${tAlias}.date as ${tAlias}_date,
+                 ${tAlias}.child_name as ${tAlias}_child_name,
+                       ${tAlias}.remarks as ${tAlias}_remarks
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from swm_consolation_money_interface scmi
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and scmi.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_consolation_money_interface (group_id, employee_id, work_card,
+                                                         employee_name, operation_code,
+                                                         error_msg, data_status,
+                                                         consolation_money_type, application_date,
+                                                         application_money, relatives_died,
+                                                         released_money, released_flag,
+                                                         released_time, enabled_flag,
+                                                         create_time, create_by,
+                                                         update_time, update_by, date,
+                                                         pay_start_date, pay_end_date, child_name,
+                                                         remarks
+                                                         )
+            values (#{groupId,jdbcType=BIGINT}, #{employeeId,jdbcType=BIGINT}, #{workCard,jdbcType=VARCHAR},
+                    #{employeeName,jdbcType=VARCHAR}, #{operationCode,jdbcType=CHAR},
+                    #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR},
+                    #{consolationMoneyType,jdbcType=VARCHAR}, #{applicationDate,jdbcType=DATE},
+                    #{applicationMoney,jdbcType=DECIMAL}, #{relativesDied,jdbcType=VARCHAR},
+                    #{releasedMoney,jdbcType=DECIMAL}, #{releasedFlag,jdbcType=BIT},
+                    #{releasedTime,jdbcType=DATE}, #{enabledFlag,jdbcType=BIT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{date, jdbcType=DATE}, #{payStartDate, jdbcType = DATE},
+                    #{payEndDate, jdbcType = DATE}, #{childName, jdbcType = VARCHAR},
+                    #{remarks, jdbcType = VARCHAR}
+                    )
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_consolation_money_interface
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface">
+        <![CDATA[
+            update swm_consolation_money_interface
+               set group_id               = #{groupId,jdbcType=BIGINT},
+                   employee_id            = #{employeeId,jdbcType=BIGINT},
+                   work_card              = #{workCard,jdbcType=VARCHAR},
+                   employee_name          = #{employeeName,jdbcType=VARCHAR},
+                   operation_code         = #{operationCode,jdbcType=CHAR},
+                   error_msg              = #{errorMsg,jdbcType=VARCHAR},
+                   data_status            = #{dataStatus,jdbcType=CHAR},
+                   consolation_money_type = #{consolationMoneyType,jdbcType=VARCHAR},
+                   application_date       = #{applicationDate,jdbcType=DATE},
+                   application_money      = #{applicationMoney,jdbcType=DECIMAL},
+                   relatives_died         = #{relativesDied,jdbcType=VARCHAR},
+                   released_money         = #{releasedMoney,jdbcType=DECIMAL},
+                   released_flag          = #{releasedFlag,jdbcType=BIT},
+                   released_time          = #{releasedTime,jdbcType=DATE},
+                   enabled_flag           = #{enabledFlag,jdbcType=BIT},
+                   update_time            = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by              = #{updateBy,jdbcType=BIGINT},
+                   date                   = #{date, jdbcType=DATE},
+                   child_name             = #{childName, jdbcType = VARCHAR}
+                   remarks                = #{remarks, jdbcType = VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmConsolationMoneyInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where scmi.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmConsolationMoneyInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmConsolationMoneyInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <insert id="importOldestConsolationMoney" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface">
+         <![CDATA[
+            insert into swm_consolation_money_interface(
+                group_id, employee_id, work_card,
+                employee_name, operation_code,
+                error_msg, data_status,
+                consolation_money_type,
+                application_money, relatives_died,
+                released_money, released_flag,
+                released_time, enabled_flag,
+                create_time, create_by,
+                update_time, update_by,
+                date, child_name, remarks
+            )
+            select #{groupId, jdbcType = BIGINT},
+             isnull((select pe.id from pm_employee pe where pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1 ), -1),
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6),
+            #{employeeName, jdbcType = VARCHAR},
+            'C',
+            case when isnull((select pe.id from pm_employee pe where pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1),-1) = -1 then '系统中没有该人员' else '' end ,
+            case when isnull((select pe.id from pm_employee pe where pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1), -1) = -1 then 'F' else 'T' end,
+            #{consolationMoneyType, jdbcType = VARCHAR},
+            #{applicationMoney, jdbcType = DECIMAL},
+            #{relativesDied, jdbcType = VARCHAR},
+            #{releasedMoney,jdbcType=DECIMAL}, 1,
+            #{releasedTime,jdbcType=DATE}, 1,
+            getdate(), #{createBy,jdbcType=BIGINT},
+            getdate(), #{updateBy,jdbcType=BIGINT},
+             #{date, jdbcType=DATE}, #{childName, jdbcType = VARCHAR},
+              #{remarks, jdbcType = VARCHAR}
+        ]]>
+    </insert>
+
+
+    <insert id = "importReleasedConsolationMoney" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface">
+        <![CDATA[
+             insert into swm_consolation_money_interface(
+                group_id, employee_id, work_card,
+                employee_name, operation_code,
+                error_msg, data_status,
+                consolation_money_type, application_date,
+                application_money, relatives_died,
+                released_money, released_flag,
+                released_time, enabled_flag,
+                create_time, create_by,
+                update_time, update_by,
+                date, child_name
+            )
+            select
+            #{groupId, jdbcType = BIGINT},
+            isnull((select pe.id from pm_employee pe where pe.enabled_flag = 1
+            and pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)), -1),
+
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6),
+
+            #{employeeName, jdbcType = VARCHAR},
+
+            'U',
+            case when  isnull((select pe.id from pm_employee pe where pe.enabled_flag = 1
+            and pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)), -1) = -1
+            then '当前慰问金数据中不存在该员工' else case
+             when exists (select 1 from swm_consolation_money scm
+              join pm_employee pe on pe.id = scm.employee_id and  pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)
+            and scm.consolation_money_type = #{consolationMoneyType, jdbcType = VARCHAR} and
+              CONVERT(VARCHAR(10),scm.application_date,110) = CONVERT(VARCHAR(10), #{applicationDate, jdbcType = DATE},110)
+              and scm.application_money = #{applicationMoney, jdbcType = DECIMAL} )
+             then '' else '没找到对应的慰问金（需匹配申请日期、申请金额以及类别）' end end,
+              case when isnull((select pe.id from pm_employee pe where pe.enabled_flag = 1
+            and pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)), -1) = -1 then 'F' else case
+             when exists (select 1 from swm_consolation_money scm
+              join pm_employee pe on pe.id = scm.employee_id and  pe.name = #{employeeName, jdbcType = VARCHAR}
+            and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =
+            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)
+            and scm.consolation_money_type = #{consolationMoneyType, jdbcType = VARCHAR} and
+              CONVERT(VARCHAR(10),scm.application_date,110) = CONVERT(VARCHAR(10), #{applicationDate, jdbcType = DATE},110)
+              and scm.application_money = #{applicationMoney, jdbcType = DECIMAL} )
+             then 'T' else 'F' end end,
+               #{consolationMoneyType, jdbcType = VARCHAR},
+               #{applicationDate, jdbcType = DATE},
+               #{applicationMoney, jdbcType = DECIMAL},
+                #{relativesDied, jdbcType = VARCHAR},
+                #{releasedMoney,jdbcType=DECIMAL}, 1,
+                #{releasedTime,jdbcType=DATE}, 1,
+                getdate(), #{createBy,jdbcType=BIGINT},
+                getdate(), #{updateBy,jdbcType=BIGINT},
+                #{date, jdbcType=DATE}, #{childName}
+        ]]>
+    </insert>
+
+<!--    <insert id="importConsolationMoney" parameterType="com.sunten.hrms.swm.domain.SwmConsolationMoneyInterface">-->
+<!--        <![CDATA[-->
+<!--            insert into swm_consolation_money_interface(-->
+<!--                group_id, employee_id, work_card,-->
+<!--                employee_name, operation_code,-->
+<!--                error_msg, data_status,-->
+<!--                consolation_money_type, application_date,-->
+<!--                application_money, relatives_died,-->
+<!--                released_money, released_flag,-->
+<!--                released_time, enabled_flag,-->
+<!--                create_time, create_by,-->
+<!--                update_time, update_by-->
+<!--            )-->
+<!--            select #{groupId, jdbcType = BIGINT}, isnull(pe.id, -1) ,-->
+<!--            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6),-->
+<!--            #{employeeName, jdbcType = VARCHAR},-->
+<!--            case when exists (select 1 from swm_consolation_money scm join pm_employee pe_t where scm.enabled_flag = 1 and scm.employee_id = pe_t.id and pe_t.enabled_flag = 1 and-->
+<!--                pe_t.name = #{name, jdbcType = VARCHAR} and right(cast('000000'+rtrim(pe_t.work_card) as varchar),6) = right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)-->
+<!--                and scm.consolation_money_type = #{consolationMoneyType, jdbcType = VARCHAR} and CONVERT(VARCHAR(10),scm.application_date,110) = CONVERT(VARCHAR(10),#{applicationDate, jdbcType = DATE},110)-->
+<!--            ) then 'U' else 'C' end,-->
+<!--           case when exists (select 1 from swm_consolation_money scm join pm_employee pe_t where scm.enabled_flag = 1 and scm.employee_id = pe_t.id and pe_t.enabled_flag = 1 and-->
+<!--                pe_t.name = #{name, jdbcType = VARCHAR} and right(cast('000000'+rtrim(pe_t.work_card) as varchar),6) = right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6)-->
+<!--                and scm.consolation_money_type = #{consolationMoneyType, jdbcType = VARCHAR} and CONVERT(VARCHAR(10),scm.application_date,110) = CONVERT(VARCHAR(10),#{applicationDate, jdbcType = DATE},110)-->
+<!--            ) then 'U' else case when isnull(pe.id, -1) = -1 then  end-->
+
+
+<!--            from pm_employee pe where pe.name = #{name, jdbcType = VARCHAR} and right(cast('000000'+rtrim(pe.work_card) as varchar),6) =-->
+<!--            right(cast('000000'+rtrim(#{workCard,jdbcType=VARCHAR}) as varchar),6) and pe.enabled_flag = 1)-->
+
+<!--        ]]>-->
+<!--    </insert>-->
+
+</mapper>

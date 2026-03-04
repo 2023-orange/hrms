@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmPhotoDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmPhoto">
+        <result column="GPH" property="workCard" />
+        <result column="XM" property="name" />
+        <result column="PHOTO" property="photo" />
+        <result column="id" property="employeeId" />
+        <result column="image_size" property="imageSize"></result>
+    </resultMap>
+
+
+    <select id="listAllByCriteria" resultMap="BaseResultMap">
+            <![CDATA[
+               select photo.GPH,photo.XM,photo.PHOTO, pe.id, datalength(photo.PHOTO) as image_size from Photo photo join pm_employee pe on
+                RIGHT ( cast( '000000' + rtrim( pe.work_card collate Chinese_PRC_90_CI_AI) AS VARCHAR ), 6 )
+                = RIGHT ( cast( '000000' + rtrim( photo.GPH collate Chinese_PRC_90_CI_AI) AS VARCHAR ), 6 )
+                and pe.enabled_flag = 1
+        ]]>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.workCard != null">
+                <![CDATA[
+               and GPH = #{criteria.workCard,jdbcType=BIGINT}
+                ]]>
+            </if>
+        </if>
+    </select>
+
+</mapper>

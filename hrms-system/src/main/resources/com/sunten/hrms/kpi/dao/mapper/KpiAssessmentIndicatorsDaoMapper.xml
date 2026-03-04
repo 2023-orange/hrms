@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiAssessmentIndicatorsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicators">
+        <id column="id" property="id" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="year" property="year" />
+        <result column="serial_number" property="serialNumber" />
+        <result column="kpi_annual_id" property="kpiAnnualId" />
+        <result column="assessed_department_id" property="assessedDepartmentId" />
+        <result column="assessed_department_name" property="assessedDepartmentName" />
+        <result column="examine_type" property="examineType" />
+        <result column="target_dimension" property="targetDimension" />
+        <result column="key_performance_indicator" property="keyPerformanceIndicator" />
+        <result column="define" property="define" />
+        <result column="weight" property="weight" />
+        <result column="threshold" property="threshold" />
+        <result column="target_value" property="targetValue" />
+        <result column="challenge_value" property="challengeValue" />
+        <result column="examine_department_id" property="examineDepartmentId" />
+        <result column="examine_department_name" property="examineDepartmentName" />
+        <result column="examine_employee_id" property="examineEmployeeId" />
+        <result column="examine_employee_name" property="examineEmployeeName" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by_flag" property="createByFlag" />
+        <result column="create_by_name" property="createByName" />
+        <result column="data_accuracy" property="dataAccuracy" />
+        <result column="data_type" property="dataType" />
+        <result column="examine_employee_work_card" property="examineEmployeeWorkCard" />
+        <result column="parent_department" property="parentDepartment" />
+    </resultMap>
+
+    <resultMap id="KpiAssessmentIndicatorsResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicators" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <parameterMap id="mspMap" type="java.util.Map">
+        <parameter property="digit" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="currnetSerialNumber" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="year" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="currnetSerialNumberOutput" mode="OUT" jdbcType="BIGINT"/>
+    </parameterMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            kai.id, kai.attribute1, kai.attribute2, kai.attribute3, kai.attribute4, kai.attribute5,
+            kai.serial_number, kai.kpi_annual_id, kai.assessed_department_id, kai.assessed_department_name, kai.examine_type,
+            kai.target_dimension, kai.key_performance_indicator, kai.define, kai.weight, kai.threshold,
+            kai.target_value, kai.challenge_value, kai.examine_department_id, kai.examine_employee_id,
+            kai.examine_department_name, kai.examine_employee_name,
+            kai.create_time, kai.create_by, kai.update_time, kai.update_by, kai.year,
+            kai.enabled_flag, kai.data_type, kai.data_accuracy, ka.examine_status,kai.examine_employee_work_card
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.serial_number as ${tAlias}_serial_number,
+            ${tAlias}.kpi_annual_id as ${tAlias}_kpi_annual_id,
+            ${tAlias}.assessed_department_id as ${tAlias}_assessed_department_id,
+            ${tAlias}.assessed_department_name as ${tAlias}_assessed_department_name,
+            ${tAlias}.examine_type as ${tAlias}_examine_type,
+            ${tAlias}.target_dimension as ${tAlias}_target_dimension,
+            ${tAlias}.key_performance_indicator as ${tAlias}_key_performance_indicator,
+            ${tAlias}.define as ${tAlias}_define, ${tAlias}.weight as ${tAlias}_weight,
+            ${tAlias}.threshold as ${tAlias}_threshold, ${tAlias}.target_value as ${tAlias}_target_value,
+            ${tAlias}.challenge_value as ${tAlias}_challenge_value,
+            ${tAlias}.examine_department_id as ${tAlias}_examine_department_id,
+            ${tAlias}.examine_employee_id as ${tAlias}_examine_employee_id,
+            ${tAlias}.examine_department_name as ${tAlias}_examine_department_name,
+            ${tAlias}.examine_employee_name as ${tAlias}_examine_employee_name,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.data_accuracy as ${tAlias}_data_accuracy,
+            ${tAlias}.data_type as ${tAlias}_data_type,
+            ${tAlias}.year as ${tAlias}_year,
+            ${tAlias}.examine_employee_work_card as ${tAlias}_examine_employee_work_card
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_assessment_indicators kai
+              left join kpi_annual ka on kai.kpi_annual_id = ka.id
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_With_Flag_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,fdev.ext_dept_name AS assessed_dept_name
+            ,fdev.ext_department_name AS assessed_department
+            ,fdev.ext_team_name AS assessed_team
+            ,(select CASE WHEN exists (select 1 from fnd_user fu where  kai.create_by = fu.id and fu.employee_id = #{criteria.currentEmployeeId,jdbcType=BIGINT}) THEN 1 ELSE 0 END) as create_by_flag
+            ,(select pe.name from fnd_user fu,pm_employee pe where  kai.create_by = fu.id and pe.id = fu.employee_id
+            and fu.id = kai.create_by ) as create_by_name
+            ,(select a.dept_name from kpi_department_tree a join kpi_department_tree b on a.dept_id = b.parent_id and a.year=b.year
+            where b.id = kai.assessed_department_id ) as parent_department
+              from kpi_assessment_indicators kai
+              left join kpi_annual ka on kai.kpi_annual_id = ka.id
+              left join pm_employee pe on pe.id = kai.examine_employee_id and pe.enabled_flag = 1
+              left join fnd_user fu on fu.id = kai.create_by and fu.enabled_flag = 1
+              left join kpi_department_tree kdt on kdt.id = kai.assessed_department_id
+              left join fnd_dept_ext_v fdev ON kdt.dept_id = fdev.id AND fdev.enabled_flag = 1 AND fdev.deleted_flag = 0
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_With_Flag_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and kai.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+            <if test="criteria.year">
+                <![CDATA[
+                    and kai.year = #{criteria.year,jdbcType=VARCHAR}
+                ]]>
+            </if>
+
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+            AND (kai.examine_employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+            OR fu.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+            )
+                ]]>
+            </if>
+            <![CDATA[
+            AND (kai.examine_employee_id = #{criteria.currentEmployeeId,jdbcType=BIGINT}
+            OR fu.employee_id = #{criteria.currentEmployeeId,jdbcType=BIGINT}
+                OR ((select CASE WHEN examine_status in ('初稿制定中','初稿定稿','终稿定稿') THEN 1 ELSE 0 END from kpi_annual where year=#{criteria.year,jdbcType=VARCHAR}) = 1
+                and kai.examine_department_id in (SELECT kdt.id
+                                                      FROM pm_employee_job pej_t left join kpi_department_tree kdt on pej_t.dept_id = kdt.dept_id
+                                                     WHERE kdt.assessment_department_flag =1
+                                                       AND pej_t.enabled_flag = 1
+                                                       AND pej_t.job_main_flag = 1
+                                                       AND pej_t.employee_id =#{criteria.currentEmployeeId,jdbcType=BIGINT} ))
+                ]]>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ or  (kai.examine_department_id IN(select kdt.id from kpi_department_tree kdt where kdt.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ ) ]]>
+
+                <![CDATA[ ) ]]>
+            </if>
+            <if test="criteria.deptIds == null or criteria.deptIds.size == 0">
+                <![CDATA[ OR 1 = 1]]>
+            </if>
+            <![CDATA[ ) ]]>
+        </if>
+    </sql>
+
+    <sql id="Select_Assessed_Indicators">
+        <include refid="Base_Column_With_Flag_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and kai.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+            <if test="criteria.year">
+                <![CDATA[
+                    and kai.year = #{criteria.year,jdbcType=VARCHAR}
+                ]]>
+            </if>
+
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+            AND (fu.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+            )
+                ]]>
+            </if>
+            <![CDATA[
+                AND ( fu.employee_id = #{criteria.currentEmployeeId,jdbcType=BIGINT}
+                 or ((select CASE WHEN examine_status in ('初稿定稿','终稿定稿') THEN 1 ELSE 0 END from kpi_annual where year=#{criteria.year,jdbcType=VARCHAR}) = 1
+                and kai.assessed_department_id in (SELECT kdt.id
+                                                      FROM pm_employee_job pej_t left join kpi_department_tree kdt on pej_t.dept_id = kdt.dept_id
+                                                     WHERE kdt.assessed_department_flag =1
+                                                       AND pej_t.enabled_flag = 1
+                                                       AND pej_t.job_main_flag = 1
+                                                       AND pej_t.employee_id =#{criteria.currentEmployeeId,jdbcType=BIGINT} ))
+                ]]>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ or  (kai.assessed_department_id IN(select kdt.id from kpi_department_tree kdt where kdt.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ ) ]]>
+                <![CDATA[ ) ]]>
+            </if>
+            <if test="criteria.deptIds == null or criteria.deptIds.size == 0">
+                <![CDATA[ OR 1 = 1]]>
+            </if>
+
+            <![CDATA[ ) ]]>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicators" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into kpi_assessment_indicators (attribute1, attribute2,
+                                                   attribute3, attribute4,
+                                                   attribute5, serial_number,
+                                                   kpi_annual_id, assessed_department_id,assessed_department_name,
+                                                   examine_type, target_dimension,
+                                                   key_performance_indicator, define,
+                                                   weight, threshold, target_value,
+                                                   challenge_value,
+                                                   examine_department_id,
+                                                   examine_employee_id,
+                                                   examine_department_name,
+                                                   examine_employee_name,
+                                                   create_time, create_by,
+                                                   update_time, update_by, year, enabled_flag,data_accuracy,data_type,examine_employee_work_card)
+            values (#{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{serialNumber,jdbcType=BIGINT},
+                    #{kpiAnnualId,jdbcType=BIGINT}, #{assessedDepartmentId,jdbcType=BIGINT},#{assessedDepartmentName,jdbcType=VARCHAR},
+                    #{examineType,jdbcType=VARCHAR}, #{targetDimension,jdbcType=VARCHAR},
+                    #{keyPerformanceIndicator,jdbcType=VARCHAR}, #{define,jdbcType=VARCHAR},
+                    #{weight,jdbcType=VARCHAR}, #{threshold,jdbcType=VARCHAR}, #{targetValue,jdbcType=VARCHAR},
+                    #{challengeValue,jdbcType=VARCHAR},
+                    #{examineDepartmentId,jdbcType=BIGINT},
+                    #{examineEmployeeId,jdbcType=BIGINT},
+                    #{examineDepartmentName,jdbcType=VARCHAR},
+                    #{examineEmployeeName,jdbcType=VARCHAR},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{year,jdbcType=VARCHAR}, 1,
+                    #{dataAccuracy,jdbcType=VARCHAR},#{dataType,jdbcType=VARCHAR},#{examineEmployeeWorkCard,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_assessment_indicators
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicators">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicators">
+        <![CDATA[
+            update kpi_assessment_indicators
+               set attribute1                = #{attribute1,jdbcType=VARCHAR},
+                   attribute2                = #{attribute2,jdbcType=VARCHAR},
+                   attribute3                = #{attribute3,jdbcType=VARCHAR},
+                   attribute4                = #{attribute4,jdbcType=VARCHAR},
+                   attribute5                = #{attribute5,jdbcType=VARCHAR},
+                   serial_number             = #{serialNumber,jdbcType=BIGINT},
+                   kpi_annual_id             = #{kpiAnnualId,jdbcType=BIGINT},
+                   assessed_department_id    = #{assessedDepartmentId,jdbcType=BIGINT},
+                   assessed_department_name    = #{assessedDepartmentName,jdbcType=VARCHAR},
+                   examine_type              = #{examineType,jdbcType=VARCHAR},
+                   target_dimension          = #{targetDimension,jdbcType=VARCHAR},
+                   key_performance_indicator = #{keyPerformanceIndicator,jdbcType=VARCHAR},
+                   define                    = #{define,jdbcType=VARCHAR},
+                   weight                    = #{weight,jdbcType=VARCHAR},
+                   threshold                 = #{threshold,jdbcType=VARCHAR},
+                   target_value              = #{targetValue,jdbcType=VARCHAR},
+                   challenge_value           = #{challengeValue,jdbcType=VARCHAR},
+                   examine_department_id     = #{examineDepartmentId,jdbcType=BIGINT},
+                   examine_employee_id       = #{examineEmployeeId,jdbcType=BIGINT},
+                   examine_department_name     = #{examineDepartmentName,jdbcType=VARCHAR},
+                   examine_employee_name       = #{examineEmployeeName,jdbcType=VARCHAR},
+                   update_time               = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                 = #{updateBy,jdbcType=BIGINT},
+                   year                      = #{year,jdbcType=VARCHAR},
+                   enabled_flag              = #{enabledFlag,jdbcType=BIT},
+                   data_accuracy             = #{dataAccuracy,jdbcType=VARCHAR},
+                   data_type                 = #{dataType,jdbcType=VARCHAR},
+                   examine_employee_work_card   = #{examineEmployeeWorkCard,jdbcType=VARCHAR}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiAssessmentIndicatorsResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where kai.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiAssessmentIndicatorsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiAssessmentIndicatorsResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAssessedIndicators" resultMap="KpiAssessmentIndicatorsResultMap">
+        <include refid="Select_Assessed_Indicators"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAssessedIndicatorsPage" resultMap="KpiAssessmentIndicatorsResultMap">
+        <include refid="Select_Assessed_Indicators"/>
+    </select>
+
+    <select id="getMaxYear" resultType="java.lang.Integer">
+        SELECT MAX(YEAR) FROM kpi_assessment_indicators and enabled_flag = 1
+    </select>
+
+    <select id="getMaxSerialNumberByYear" resultType="java.lang.Integer">
+        select MAX(serial_number) from kpi_assessment_indicators where year = #{year,jdbcType = BIGINT} and enabled_flag = 1
+    </select>
+
+    <select id="createSerialNumber" parameterMap="mspMap" statementType="CALLABLE" resultType="java.lang.Long">
+        <![CDATA[
+            {call msp_create_serialNumber(?,?,?,?)}
+        ]]>
+    </select>
+
+    <select id="getAssessmentIndicatorsAddFlag" resultType="java.lang.Boolean">
+        <![CDATA[
+            select 1 where exists( select 1 from kpi_department_tree kdt
+              join pm_employee_job pej on kdt.admin_job_id = pej.job_id and pej.enabled_flag=1
+              join pm_employee pe on pe.id = pej.employee_id and pe.leave_flag = 0
+              left join kpi_department_tree_employee kdte on kdt.id= kdte.department_tree_id
+              left join pm_employee a on a.id = kdte.employee_id and a.leave_flag = 0
+              where pe.work_card = #{workCard,jdbcType = VARCHAR} or a.work_card = #{workCard,jdbcType = VARCHAR})
+        ]]>
+    </select>
+    <select id="getTreeListInfo" resultType="java.util.HashMap">
+        SELECT
+            kdt.id,
+            kdt.year,
+            kdt.dept_id,
+            kdt.dept_name,
+            kdt.parent_id,
+            ( SELECT TOP 1 dept_name FROM kpi_department_tree WHERE dept_id = kdt.parent_id ORDER BY year DESC) AS parentName,
+            kdt.admin_job_id,
+            pe.name,
+            pej.job_name,
+            CONVERT(VARCHAR, DATEFROMPARTS(#{year}, 1, 1), 120) + '至' + CONVERT(VARCHAR, DATEFROMPARTS(#{year}, 12, DAY(EOMONTH(#{year}))), 120) AS DateRange
+        FROM
+            kpi_department_tree AS kdt
+                INNER JOIN pm_employee_job pej ON pej.job_id = kdt.admin_job_id
+                INNER JOIN pm_employee pe ON pe.id = pej.employee_id
+        WHERE
+            kdt.assessed_department_flag= 1
+          AND kdt.year = #{year}
+          AND kdt.dept_level LIKE '%科室%'
+          AND pej.enabled_flag = 1
+          AND pe.leave_flag = 0
+          AND pe.enabled_flag= 1
+    </select>
+    <select id="getKpiAssessmentIndicators" resultType="java.util.HashMap">
+        SELECT
+            kai.id,
+            kai.year,
+            kai.serial_number,
+            kai.kpi_annual_id,
+            kai.assessed_department_name,
+            kai.assessed_department_id,
+            kai.examine_type,
+            kai.target_dimension,
+            kai.key_performance_indicator,
+            kai.define,
+            kai.weight,
+            kai.threshold,
+            kai.target_value,
+            kai.challenge_value,
+            kai.examine_department_id,
+            kai.examine_department_name,
+            kai.examine_employee_name,
+            kai.examine_employee_work_card,
+            kai.examine_employee_id,
+            kai.data_type,
+            kai.target_dimension
+        FROM
+            kpi_assessment_indicators AS kai
+        WHERE
+            year = #{year}
+          AND enabled_flag = 1
+          AND examine_type LIKE #{contextType}
+          AND assessed_department_id = #{Id}
+        GROUP BY
+            kai.target_dimension,
+            kai.id,
+            kai.year,
+            kai.serial_number,
+            kai.kpi_annual_id,
+            kai.assessed_department_name,
+            kai.assessed_department_id,
+            kai.examine_type,
+            kai.target_dimension,
+            kai.key_performance_indicator,
+            kai.define,
+            kai.weight,
+            kai.threshold,
+            kai.target_value,
+            kai.challenge_value,
+            kai.examine_department_id,
+            kai.examine_department_name,
+            kai.examine_employee_name,
+            kai.examine_employee_work_card,
+            kai.examine_employee_id,
+            kai.data_type
+    </select>
+
+    <select id="getTreeListInfoByManger" resultType="java.util.HashMap">
+        SELECT
+            kdt.id,
+            kdt.year,
+            kdt.dept_id,
+            kdt.dept_name,
+            kdt.parent_id,
+            ( SELECT TOP 1 dept_name FROM kpi_department_tree WHERE dept_id = kdt.parent_id ORDER BY year DESC) AS parentName,
+            kdt.admin_job_id,
+            pe.name,
+            pej.job_name,
+            CONVERT(VARCHAR, DATEFROMPARTS(#{year}, 1, 1), 120) + '至' + CONVERT(VARCHAR, DATEFROMPARTS(#{year}, 12, DAY(EOMONTH(#{year}))), 120) AS DateRange
+        FROM
+            kpi_department_tree AS kdt
+                INNER JOIN pm_employee_job pej ON pej.job_id = kdt.admin_job_id
+                INNER JOIN pm_employee pe ON pe.id = pej.employee_id
+        WHERE
+            kdt.assessed_department_flag= 1
+          AND kdt.year = #{year}
+          AND kdt.dept_level LIKE '%部%'
+          AND pej.enabled_flag = 1
+          AND pe.leave_flag = 0
+          AND pe.enabled_flag= 1
+    </select>
+    <select id="getSuperAssessmentIndicators" resultType="java.util.HashMap">
+        SELECT
+            kai.id,
+            kai.year,
+            kai.serial_number,
+            kai.kpi_annual_id,
+            kai.assessed_department_name,
+            kai.assessed_department_id,
+            kai.examine_type,
+            kai.target_dimension,
+            kai.key_performance_indicator,
+            kai.define,
+            kai.weight,
+            kai.threshold,
+            kai.target_value,
+            kai.challenge_value,
+            kai.examine_department_id,
+            kai.examine_department_name,
+            kai.examine_employee_name,
+            kai.examine_employee_work_card,
+            kai.examine_employee_id,
+            kai.target_dimension
+        FROM
+            kpi_assessment_indicators AS kai
+        WHERE
+            year = #{year}
+          AND enabled_flag = 1
+          AND examine_type = #{contextType}
+          AND assessed_department_id = #{Id}
+        GROUP BY
+            kai.target_dimension,
+            kai.id,
+            kai.year,
+            kai.serial_number,
+            kai.kpi_annual_id,
+            kai.assessed_department_name,
+            kai.assessed_department_id,
+            kai.examine_type,
+            kai.target_dimension,
+            kai.key_performance_indicator,
+            kai.define,
+            kai.weight,
+            kai.threshold,
+            kai.target_value,
+            kai.challenge_value,
+            kai.examine_department_id,
+            kai.examine_department_name,
+            kai.examine_employee_name,
+            kai.examine_employee_work_card,
+            kai.examine_employee_id,
+            kai.data_type
+    </select>
+
+    <select id="getResidueWeight" resultType="java.lang.Double">
+        select 100 - isnull(sum(CAST(weight AS float)),0) as residue_weight
+        from kpi_assessment_indicators where assessed_department_id = #{id}
+        and enabled_flag = 1 and examine_type='KPI'
+    </select>
+
+</mapper>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.ac.dao.AcCalendarLineDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.ac.domain.AcCalendarLine">
+        <id column="id" property="id" />
+        <result column="calendar_header_id" property="calendarHeaderId" />
+        <result column="now_date" property="nowDate" />
+        <result column="week" property="week" />
+        <result column="day_off_flag" property="dayOffFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="AcCalendarLineResultMap" type="com.sunten.hrms.ac.domain.AcCalendarLine" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            acl.id, acl.calendar_header_id, acl.now_date, acl.week, acl.day_off_flag, acl.attribute1,
+            acl.attribute2, acl.attribute3, acl.enabled_flag, acl.create_by, acl.create_time, acl.update_by,
+            acl.update_time
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.calendar_header_id as ${tAlias}_calendar_header_id,
+            ${tAlias}.now_date as ${tAlias}_now_date, ${tAlias}.week as ${tAlias}_week,
+            ${tAlias}.day_off_flag as ${tAlias}_day_off_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.update_time as ${tAlias}_update_time
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from ac_calendar_line acl
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabled != null">
+                <![CDATA[
+                    and acl.enabled_flag = #{criteria.enabled,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.calendarHeaderId != null">
+                <![CDATA[
+                    and acl.calendar_header_id = #{criteria.calendarHeaderId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.beginDate != null">
+                <if test="criteria.endDate != null">
+                <![CDATA[
+                    and (acl.now_date >= #{criteria.beginDate,jdbcType=DATE} and
+                        acl.now_date <= #{criteria.endDate,jdbcType=DATE})
+                ]]>
+                </if>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.ac.domain.AcCalendarLine" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ac_calendar_line (calendar_header_id, now_date, week,
+                                          day_off_flag, attribute1, attribute2,
+                                          attribute3, enabled_flag, create_by,
+                                          create_time, update_by,
+                                          update_time)
+            values (#{calendarHeaderId,jdbcType=BIGINT}, #{nowDate,jdbcType=DATE}, #{week,jdbcType=VARCHAR},
+                    #{dayOffFlag,jdbcType=BIT}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT}, #{createBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+
+    <insert id="insertCollection" parameterType="java.util.List">
+        <![CDATA[
+            insert into ac_calendar_line (calendar_header_id, now_date, week,
+                                          day_off_flag, attribute1, attribute2,
+                                          attribute3, enabled_flag, create_by,
+                                          create_time, update_by,
+                                          update_time) values
+        ]]>
+        <foreach collection="list" item="item" index="index" separator=",">
+            <![CDATA[
+            (#{item.calendarHeaderId,jdbcType=BIGINT}, #{item.nowDate,jdbcType=DATE}, #{item.week,jdbcType=VARCHAR},
+                    #{item.dayOffFlag,jdbcType=BIT}, #{item.attribute1,jdbcType=VARCHAR}, #{item.attribute2,jdbcType=VARCHAR},
+                    #{item.attribute3,jdbcType=VARCHAR}, #{item.enabledFlag,jdbcType=BIT}, #{item.createBy,jdbcType=BIGINT},
+                    #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=BIGINT},
+                    #{item.updateTime,jdbcType=TIMESTAMP})
+            ]]>
+        </foreach>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from ac_calendar_line
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.ac.domain.AcCalendarLine">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="deleteByEnabled">
+        <![CDATA[
+        update ac_calendar_line set enabled_flag = 0,
+                update_by        = #{updateBy,jdbcType=BIGINT},
+                update_time      = #{updateTime,jdbcType=TIMESTAMP}
+            where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.ac.domain.AcCalendarLine">
+        <![CDATA[
+            update ac_calendar_line
+               set calendar_header_id = #{calendarHeaderId,jdbcType=BIGINT},
+                   now_date           = #{nowDate,jdbcType=DATE},
+                   week               = #{week,jdbcType=VARCHAR},
+                   day_off_flag       = #{dayOffFlag,jdbcType=BIT},
+                   attribute1         = #{attribute1,jdbcType=VARCHAR},
+                   attribute2         = #{attribute2,jdbcType=VARCHAR},
+                   attribute3         = #{attribute3,jdbcType=VARCHAR},
+                   enabled_flag       = #{enabledFlag,jdbcType=BIT},
+                   update_by          = #{updateBy,jdbcType=BIGINT},
+                   update_time        = #{updateTime,jdbcType=TIMESTAMP}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="AcCalendarLineResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where acl.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="AcCalendarLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="AcCalendarLineResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByYear" resultMap="AcCalendarLineResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            from ac_calendar_line acl
+            where YEAR(acl.now_date) = #{ year ,jdbcType=INTEGER}
+            and acl.calendar_header_id = #{ headerId, jdbcType = BIGINT}
+         ]]>
+    </select>
+
+    <select id="listDefaultCalendarLineByDate" resultMap="AcCalendarLineResultMap">
+        <![CDATA[
+            select acl.* from ac_calendar_line acl, ac_calendar_header ach
+            where acl.calendar_header_id = ach.id
+            and ach.enabled_flag = 1
+            and ach.default_flag = 1
+            and acl.now_date between #{dateFrom, jdbcType=DATE} and #{dateTo, jdbcType=DATE}
+            order by acl.id
+        ]]>
+    </select>
+
+
+    <select id="listDefaultCalendarLineByDateWithoutDayOff" resultMap="AcCalendarLineResultMap">
+        <![CDATA[
+            select acl.* from ac_calendar_line acl, ac_calendar_header ach
+            where acl.calendar_header_id = ach.id
+            and ach.enabled_flag = 1
+            and ach.default_flag = 1
+            and acl.now_date between #{dateFrom, jdbcType=DATE} and #{dateTo, jdbcType=DATE}
+            and acl.day_off_flag = 0
+            order by acl.id
+        ]]>
+    </select>
+
+</mapper>

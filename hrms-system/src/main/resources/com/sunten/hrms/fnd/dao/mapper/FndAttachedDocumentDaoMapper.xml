@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.fnd.dao.FndAttachedDocumentDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.fnd.domain.FndAttachedDocument">
+        <id column="id" property="id" />
+        <result column="real_name" property="realName" />
+        <result column="path" property="path" />
+        <result column="avater_size" property="avaterSize" />
+        <result column="source" property="source" />
+        <result column="source_id" property="sourceId" />
+        <result column="type" property="type" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <resultMap id="FndAttachedDocumentResultMap" type="com.sunten.hrms.fnd.domain.FndAttachedDocument" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            fad.real_name, fad.path, fad.avater_size, fad.source, fad.source_id, fad.type, fad.id,
+            fad.enabled_flag, fad.update_time, fad.update_by, fad.create_time, fad.create_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.real_name as ${tAlias}_real_name, ${tAlias}.path as ${tAlias}_path,
+            ${tAlias}.avater_size as ${tAlias}_avater_size, ${tAlias}.source as ${tAlias}_source,
+            ${tAlias}.source_id as ${tAlias}_source_id, ${tAlias}.type as ${tAlias}_type,
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from fnd_attached_document fad
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.source != null">
+                <![CDATA[
+               and fad.source like #{criteria.source,jdbcType=VARCHAR}
+            ]]>
+            </if>
+            <if test="criteria.sourceId != null">
+                <![CDATA[
+               and fad.source_id = #{criteria.sourceId,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test="criteria.type != null">
+                <![CDATA[
+               and fad.type like #{criteria.type,jdbcType=VARCHAR}
+            ]]>
+            </if>
+            <if test="criteria.id != null">
+                <![CDATA[
+               and fad.id = #{criteria.id,jdbcType=BIGINT}
+            ]]>
+            </if>
+            <if test="criteria.realName != null">
+                <![CDATA[
+               and fad.real_name like #{criteria.realName,jdbcType=VARCHAR}
+            ]]>
+            </if>
+            <if test="criteria.path != null">
+                <![CDATA[
+               and fad.path like #{criteria.path,jdbcType=VARCHAR}
+            ]]>
+            </if>
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+               and fad.enabled_flag like #{criteria.enabledFlag,jdbcType=BIT}
+            ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.fnd.domain.FndAttachedDocument" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into fnd_attached_document (real_name, path, avater_size,
+                                               source, source_id, type,
+                                               enabled_flag, update_time, update_by,
+                                               create_time, create_by)
+            values (#{realName,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{avaterSize,jdbcType=VARCHAR},
+                    #{source,jdbcType=VARCHAR}, #{sourceId,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR},
+                    #{enabledFlag,jdbcType=BIT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from fnd_attached_document
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.fnd.domain.FndAttachedDocument">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.fnd.domain.FndAttachedDocument">
+        <![CDATA[
+            update fnd_attached_document
+               set real_name   = #{realName,jdbcType=VARCHAR},
+                   path        = #{path,jdbcType=VARCHAR},
+                   avater_size = #{avaterSize,jdbcType=VARCHAR},
+                   source      = #{source,jdbcType=VARCHAR},
+                   source_id   = #{sourceId,jdbcType=BIGINT},
+                   type        = #{type,jdbcType=VARCHAR},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="FndAttachedDocumentResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where fad.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="FndAttachedDocumentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="FndAttachedDocumentResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <update id="updateEnabledFlag" parameterType="com.sunten.hrms.fnd.domain.FndAttachedDocument">
+        <![CDATA[
+            update fnd_attached_document
+               set enabled_flag = #{enabledFlag,jdbcType=BIT},
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+</mapper>

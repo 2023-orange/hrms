@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmTrialAssessDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmTrialAssess">
+        <id column="id" property="id" />
+        <result column="employee_id" property="employeeId" />
+        <result column="begin_date" property="beginDate" />
+        <result column="end_date" property="endDate" />
+        <result column="attendance_grade" property="attendanceGrade" />
+        <result column="work_attitude_grade" property="workAttitudeGrade" />
+        <result column="work_ifficiency_grade" property="workIfficiencyGrade" />
+        <result column="capacity_and_skill" property="capacityAndSkill" />
+        <result column="compliance_and_cooperation" property="complianceAndCooperation" />
+        <result column="total_grade" property="totalGrade" />
+        <result column="last_evaluate" property="lastEvaluate" />
+        <result column="trail_result" property="trailResult" />
+        <result column="job_name" property="jobName" />
+        <result column="category" property="category" />
+        <result column="job_class" property="jobClass" />
+        <result column="lump_sum_wage" property="lumpSumWage" />
+        <result column="base_salary" property="baseSalary" />
+        <result column="performance_salary" property="performanceSalary" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="submit_flag" property="submitFlag" />
+        <result column="approval_node" property="approvalNode" />
+        <result column="approval_employee" property="approvalEmployee" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="sell_job" property="sellJob" />
+        <result column="approval_base_salary" property="approvalBaseSalary" />
+        <result column="approval_performance_salary" property="approvalPerformanceSalary" />
+        <result column="approval_lump_sum_wage" property="approvalLumpSumWage" />
+        <result column="admin_flag" property="adminFlag" />
+        <result column="salary_proposal" property="salaryProposal" />
+        <result column="salary_change_range" property="salaryChangeRange" />
+        <result column="salary_idea" property="salaryIdea" />
+        <result column="current_node" property="currentNode" />
+        <result column="leader_by" property="leaderBy" />
+        <result column="eligible_file" property="eligibleFile" />
+        <result column="file_degree" property="fileDegree" />
+        <result column="last_file_time" property="lastFileTime" />
+        <result column="job_type" property="jobType" />
+        <result column="entry_id" property="entryId" />
+    </resultMap>
+
+    <resultMap id="PmTrialAssessResultMap" type="com.sunten.hrms.pm.domain.PmTrialAssess" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="pmEmployee"
+                     javaType="com.sunten.hrms.pm.domain.PmEmployee"
+                     resultMap="com.sunten.hrms.pm.dao.PmEmployeeDao.PmEmployeeResultMap"
+                     columnPrefix="pe_" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pta.employee_id as pe_id, pta.begin_date, pta.end_date, pta.attendance_grade, pta.work_attitude_grade,
+            pta.work_ifficiency_grade, pta.capacity_and_skill, pta.compliance_and_cooperation, pta.total_grade,
+            pta.last_evaluate, pta.trail_result, pta.job_name, pta.category, pta.job_class, pta.lump_sum_wage,
+            pta.base_salary, pta.performance_salary, pta.oa_order, pta.approval_date, pta.enabled_flag,
+            pta.submit_flag, pta.approval_node, pta.approval_employee, pta.approval_result,pta.id, pta.create_time, pta.create_by,
+            pta.update_time, pta.update_by,pta.sell_job,pta.approval_base_salary,pta.approval_performance_salary,
+            pta.approval_lump_sum_wage,pta.admin_flag,pta.salary_proposal,pta.salary_change_range,pta.salary_idea,
+            pta.current_node,pta.leader_by,pta.eligible_file,pta.file_degree,pta.last_file_time,pta.job_type,pta.entry_id
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.employee_id as ${tAlias}_pe_id, ${tAlias}.begin_date as ${tAlias}_begin_date,
+            ${tAlias}.end_date as ${tAlias}_end_date, ${tAlias}.attendance_grade as ${tAlias}_attendance_grade,
+            ${tAlias}.work_attitude_grade as ${tAlias}_work_attitude_grade,
+            ${tAlias}.work_ifficiency_grade as ${tAlias}_work_ifficiency_grade,
+            ${tAlias}.capacity_and_skill as ${tAlias}_capacity_and_skill,
+            ${tAlias}.compliance_and_cooperation as ${tAlias}_compliance_and_cooperation,
+            ${tAlias}.total_grade as ${tAlias}_total_grade, ${tAlias}.last_evaluate as ${tAlias}_last_evaluate,
+            ${tAlias}.trail_result as ${tAlias}_trail_result, ${tAlias}.job_name as ${tAlias}_job_name,
+            ${tAlias}.category as ${tAlias}_category, ${tAlias}.job_class as ${tAlias}_job_class,
+            ${tAlias}.lump_sum_wage as ${tAlias}_lump_sum_wage, ${tAlias}.base_salary as ${tAlias}_base_salary,
+            ${tAlias}.performance_salary as ${tAlias}_performance_salary,
+            ${tAlias}.oa_order as ${tAlias}_oa_order, ${tAlias}.approval_date as ${tAlias}_approval_date,
+            ${tAlias}.enabled_flag as ${tAlias}_enabled_flag, ${tAlias}.submit_flag as ${tAlias}_submit_flag,
+            ${tAlias}.approval_node as ${tAlias}_approval_node,
+            ${tAlias}.approval_employee as ${tAlias}_approval_employee, ${tAlias}.approval_result as ${tAlias}_approval_result,
+            ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.sell_job as ${tAlias}_sell_job, ${tAlias}.approval_base_salary as ${tAlias}_approval_base_salary,
+            ${tAlias}.approval_performance_salary as ${tAlias}_approval_performance_salary,
+            ${tAlias}.approval_lump_sum_wage as ${tAlias}_approval_lump_sum_wage,
+            ${tAlias}.admin_flag as ${tAlias}_admin_flag,${tAlias}.salary_proposal as ${tAlias}_salary_proposal,
+            ${tAlias}.salary_change_range as ${tAlias}_salary_change_range,
+            ${tAlias}.salary_idea as ${tAlias}_salary_idea,
+            ${tAlias}.current_node as ${tAlias}_current_node, ${tAlias}.leader_by as ${tAlias}_leader_by,
+            ${tAlias}.eligible_file as ${tAlias}_eligible_file, ${tAlias}.file_degree as ${tAlias}_file_degree,
+            ${tAlias}.last_file_time as ${tAlias}_last_file_time,
+            ${tAlias}.job_type as ${tAlias}_job_type,
+            ${tAlias}.entry_id as ${tAlias}_entry_id
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[ ,fdev.ext_dept_name AS pe_dept_name,
+                   fdev.ext_department_name AS pe_department,
+                   fdev.ext_team_name AS pe_team,
+        ]]>
+        <bind name="tAlias" value="'pe'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_pej'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_pej_fj'"/>
+        <include refid="com.sunten.hrms.fnd.dao.FndJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,]]>
+        <bind name="tAlias" value="'pe_peen'"/>
+        <include refid="com.sunten.hrms.pm.dao.PmEmployeeEntryDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_trial_assess pta
+              join pm_employee pe
+              on pta.employee_id = pe.id
+              left outer join pm_employee_job pe_pej
+              on pe.id = pe_pej.employee_id
+              and pe_pej.job_main_flag = 1
+              and pe_pej.enabled_flag = 1
+              left outer join fnd_dept_ext_v fdev
+              on pe_pej.dept_id = fdev.id
+              and fdev.enabled_flag = 1
+              and fdev.deleted_flag = 0
+              left outer join fnd_job pe_pej_fj
+              on pe_pej.job_id = pe_pej_fj.id
+              and pe_pej_fj.enabled_flag = 1
+              and pe_pej_fj.deleted_flag = 1
+              left outer join pm_employee_entry pe_peen
+              on pe.id = pe_peen.employee_id
+              and pe_peen.enabled_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[
+                    and exists (SELECT 1
+                                      FROM pm_employee_job pej_t
+                                     WHERE pej_t.employee_id = pe.ID
+                                       AND pej_t.enabled_flag = 1
+                                       AND pej_t.job_main_flag = 1
+                                       AND pej_t.dept_id IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+                <![CDATA[ ) ]]>
+            </if>
+            <if test="criteria.employeeId != null">
+                <![CDATA[
+                    and pta.employee_id = #{criteria.employeeId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.submitFlag != null">
+                <![CDATA[
+                    and pta.submit_flag = #{criteria.submitFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.value != null">
+                <choose>
+                    <when test="criteria.column == 'approval_date' or criteria.column == 'begin_date' or criteria.column == 'end_date'">
+                        <![CDATA[
+                          and pta.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=TIMESTAMP}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'attendance_grade' or criteria.column == 'work_attitude_grade' or criteria.column == 'work_ifficiency_grade' or criteria.column == 'capacity_and_skill' or criteria.column == 'compliance_and_cooperation' or criteria.column == 'total_grade'">
+                        <![CDATA[
+                          and pta.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=INT}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'name' or criteria.column == 'work_card'">
+                        <![CDATA[
+                          and pe.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </when>
+                    <when test="criteria.column == 'dept_name' or criteria.column == 'department' or criteria.column == 'team'">
+                        <![CDATA[
+                          and exists (
+                            select 1 from pm_employee_job pej,fnd_dept fd
+                            where pej.dept_id = fd.id
+                            AND pej.enabled_flag = 1
+                            AND pej.job_main_flag = 1
+                            and pej.employee_id = pe.id
+                            and fd.dept_name ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                          )
+                        ]]>
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                          and pta.${criteria.column} ${criteria.symbol} #{criteria.value,jdbcType=VARCHAR}
+                        ]]>
+                    </otherwise>
+                </choose>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmTrialAssess" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_trial_assess (employee_id, begin_date, end_date,
+                                         attendance_grade, work_attitude_grade,
+                                         work_ifficiency_grade, capacity_and_skill,
+                                         compliance_and_cooperation, total_grade,
+                                         last_evaluate, trail_result,
+                                         job_name, category, job_class,
+                                         lump_sum_wage, base_salary,
+                                         performance_salary, oa_order,
+                                         approval_date, enabled_flag, submit_flag,
+                                         approval_node, approval_employee,approval_result,
+                                         sell_job,approval_base_salary,approval_performance_salary,
+                                         approval_lump_sum_wage,admin_flag,salary_proposal,salary_change_range,salary_idea,
+                                         current_node,leader_by,eligible_file,file_degree,last_file_time,job_type,
+                                         entry_id,
+                                         create_time, create_by,
+                                         update_time, update_by)
+            values (#{pmEmployee.id,jdbcType=BIGINT}, #{beginDate,jdbcType=DATE}, #{endDate,jdbcType=DATE},
+                    #{attendanceGrade,jdbcType=INTEGER}, #{workAttitudeGrade,jdbcType=INTEGER},
+                    #{workIfficiencyGrade,jdbcType=INTEGER}, #{capacityAndSkill,jdbcType=INTEGER},
+                    #{complianceAndCooperation,jdbcType=INTEGER}, #{totalGrade,jdbcType=INTEGER},
+                    #{lastEvaluate,jdbcType=VARCHAR}, #{trailResult,jdbcType=VARCHAR},
+                    #{jobName,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{jobClass,jdbcType=VARCHAR},
+                    #{lumpSumWage,jdbcType=DECIMAL}, #{baseSalary,jdbcType=DECIMAL},
+                    #{performanceSalary,jdbcType=DECIMAL}, #{oaOrder,jdbcType=VARCHAR},
+                    #{approvalDate,jdbcType=TIMESTAMP}, #{enabledFlag,jdbcType=BIT}, #{submitFlag,jdbcType=BIT},
+                    #{approvalNode,jdbcType=VARCHAR}, #{approvalEmployee,jdbcType=VARCHAR},
+                    #{approvalResult,jdbcType=VARCHAR},
+                    #{sellJob,jdbcType=BIT},
+                    #{approvalBaseSalary,jdbcType=DECIMAL},
+                    #{approvalPerformanceSalary,jdbcType=DECIMAL},
+                    #{approvalLumpSumWage,jdbcType=DECIMAL},
+                    #{adminFlag,jdbcType=BIT},#{salaryProposal,jdbcType=VARCHAR},#{salaryChangeRange,jdbcType=DECIMAL},
+                    #{salaryIdea,jdbcType=DECIMAL},
+                    #{currentNode,jdbcType=VARCHAR},#{leaderBy,jdbcType=BIGINT},#{eligibleFile,jdbcType=BIT},
+                    #{fileDegree,jdbcType=INTEGER},#{lastFileTime,jdbcType=TIMESTAMP},
+                    #{jobType,jdbcType=VARCHAR},#{entryId,jdbcType=BIGINT},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_trial_assess
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmTrialAssess">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmTrialAssess">
+        <![CDATA[
+            update pm_trial_assess
+               set employee_id                = #{pmEmployee.id,jdbcType=BIGINT},
+                   begin_date                 = #{beginDate,jdbcType=DATE},
+                   end_date                   = #{endDate,jdbcType=DATE},
+                   attendance_grade           = #{attendanceGrade,jdbcType=INTEGER},
+                   work_attitude_grade        = #{workAttitudeGrade,jdbcType=INTEGER},
+                   work_ifficiency_grade      = #{workIfficiencyGrade,jdbcType=INTEGER},
+                   capacity_and_skill         = #{capacityAndSkill,jdbcType=INTEGER},
+                   compliance_and_cooperation = #{complianceAndCooperation,jdbcType=INTEGER},
+                   total_grade                = #{totalGrade,jdbcType=INTEGER},
+                   last_evaluate              = #{lastEvaluate,jdbcType=VARCHAR},
+                   trail_result               = #{trailResult,jdbcType=VARCHAR},
+                   job_name                   = #{jobName,jdbcType=VARCHAR},
+                   category                   = #{category,jdbcType=VARCHAR},
+                   job_class                  = #{jobClass,jdbcType=VARCHAR},
+                   oa_order                   = #{oaOrder,jdbcType=VARCHAR},
+                   approval_date              = #{approvalDate,jdbcType=TIMESTAMP},
+                   enabled_flag               = #{enabledFlag,jdbcType=BIT},
+                   submit_flag                = #{submitFlag,jdbcType=BIT},
+                   approval_node              = #{approvalNode,jdbcType=VARCHAR},
+                   approval_employee          = #{approvalEmployee,jdbcType=VARCHAR},
+                   approval_result            = #{approvalResult,jdbcType=VARCHAR},
+                   sell_job                   = #{sellJob,jdbcType=BIT},
+                   approval_base_salary       = #{approvalBaseSalary,jdbcType=DECIMAL},
+                   approval_performance_salary     = #{approvalPerformanceSalary,jdbcType=DECIMAL},
+                   approval_lump_sum_wage          = #{approvalLumpSumWage,jdbcType=DECIMAL},
+                   admin_flag          = #{adminFlag,jdbcType=BIT},
+                   salary_proposal          = #{salaryProposal,jdbcType=VARCHAR},
+                   salary_change_range          = #{salaryChangeRange,jdbcType=DECIMAL},
+                   salary_idea          = #{salaryIdea,jdbcType=DECIMAL},
+                   current_node          = #{currentNode,jdbcType=VARCHAR},
+                   leader_by          = #{leaderBy,jdbcType=BIGINT},
+                   eligible_file          = #{eligibleFile,jdbcType=BIT},
+                   file_degree          = #{fileDegree,jdbcType=INTEGER},
+                   last_file_time          = #{lastFileTime,jdbcType=TIMESTAMP},
+                   job_type          = #{jobType,jdbcType=VARCHAR},
+                   entry_id          = #{entryId,jdbcType=BIGINT},
+                   update_time                = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                  = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmTrialAssessResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pta.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmTrialAssessResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmTrialAssessResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="getByReqCode" resultMap="PmTrialAssessResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pta.oa_order = #{reqCode,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <update id="updateByApprovalEnd" parameterType="com.sunten.hrms.pm.domain.PmTrialAssess">
+        <![CDATA[
+        update pm_trial_assess
+        set approval_date              = #{updateTime,jdbcType=TIMESTAMP},
+            approval_result            = #{approvalResult,jdbcType=VARCHAR},
+            update_time                = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                  = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByApprovalUnderwar" parameterType="com.sunten.hrms.pm.domain.PmTrialAssess">
+        <![CDATA[
+        update pm_trial_assess
+        set ]]>
+        <if test="approvalBaseSalary != null and approvalBaseSalary != ''">
+            <![CDATA[  approval_base_salary          = #{approvalBaseSalary,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="approvalPerformanceSalary != null and approvalPerformanceSalary != ''">
+            <![CDATA[ approval_performance_salary    = #{approvalPerformanceSalary,jdbcType=DECIMAL},]]>
+        </if>
+        <if test="approvalLumpSumWage != null and approvalLumpSumWage != ''">
+            <![CDATA[ approval_lump_sum_wage    = #{approvalLumpSumWage,jdbcType=DECIMAL},]]>
+        </if>
+        <![CDATA[
+            approval_node              = #{approvalNode,jdbcType=VARCHAR},
+            approval_employee          = #{approvalEmployee,jdbcType=VARCHAR},
+            update_time                = #{updateTime,jdbcType=TIMESTAMP},
+            update_by                  = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateBySubmitWorkSummary" parameterType="com.sunten.hrms.pm.domain.PmTrialAssess">
+        <![CDATA[
+        update pm_trial_assess
+        set current_node          = #{currentNode,jdbcType=VARCHAR},
+            eligible_file      = #{eligibleFile,jdbcType=BIT},
+            file_degree        = #{fileDegree,jdbcType=INTEGER},
+            last_file_time     = #{updateTime,jdbcType=TIMESTAMP},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP},
+            update_by          = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByRebackWorkSummary" parameterType="com.sunten.hrms.pm.domain.PmTrialAssess">
+        <![CDATA[
+        update pm_trial_assess
+        set current_node          = #{currentNode,jdbcType=VARCHAR},
+            eligible_file      = #{eligibleFile,jdbcType=BIT},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP},
+            update_by          = #{updateBy,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="listByEmployeeId" resultMap="BaseResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            from pm_trial_assess pta
+            where (pta.approval_result is null or pta.approval_result = 'pass')
+            and pta.employee_id = #{employeeId}
+        ]]>
+    </select>
+</mapper>

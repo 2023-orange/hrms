@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiAssessmentIndicatorsInterfaceDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsInterface">
+        <result column="id" property="id" />
+        <result column="kpi_annual_id" property="kpiAnnualId" />
+        <result column="year" property="year" />
+        <result column="serial_number" property="serialNumber" />
+        <result column="assessed_department_name" property="assessedDepartmentName" />
+        <result column="assessed_department_id" property="assessedDepartmentId" />
+        <result column="examine_type" property="examineType" />
+        <result column="target_dimension" property="targetDimension" />
+        <result column="key_performance_indicator" property="keyPerformanceIndicator" />
+        <result column="define" property="define" />
+        <result column="weight" property="weight" />
+        <result column="threshold" property="threshold" />
+        <result column="target_value" property="targetValue" />
+        <result column="challenge_value" property="challengeValue" />
+        <result column="examine_department_id" property="examineDepartmentId" />
+        <result column="examine_department_name" property="examineDepartmentName" />
+        <result column="examine_employee_name" property="examineEmployeeName" />
+        <result column="examine_employee_work_card" property="examineEmployeeWorkCard" />
+        <result column="examine_employee_id" property="examineEmployeeId" />
+        <result column="data_accuracy" property="dataAccuracy" />
+        <result column="data_type" property="dataType" />
+        <result column="group_id" property="groupId" />
+        <result column="operation_code" property="operationCode" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="data_status" property="dataStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="parent_department" property="parentDepartment" />
+    </resultMap>
+
+    <resultMap id="KpiAssessmentIndicatorsInterfaceResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsInterface" autoMapping="true">
+    </resultMap>
+
+    <parameterMap id="mspMap" type="java.util.Map">
+        <parameter property="groupId" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="resultStr" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            kaii.id, kaii.kpi_annual_id,kaii.year,kaii.serial_number, kaii.assessed_department_name, kaii.assessed_department_id, kaii.examine_type,
+            kaii.target_dimension, kaii.key_performance_indicator, kaii.define, kaii.weight, kaii.threshold,
+            kaii.target_value, kaii.challenge_value, kaii.examine_department_id, kaii.examine_department_name,
+            kaii.examine_employee_name, kaii.examine_employee_work_card, kaii.examine_employee_id,
+            kaii.data_accuracy, kaii.data_type, kaii.group_id, kaii.operation_code, kaii.error_msg,
+            kaii.data_status, kaii.create_time, kaii.create_by, kaii.update_time, kaii.update_by ,kaii.parent_department
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.kpi_annual_id as ${tAlias}_kpi_annual_id,
+            ${tAlias}.year as ${tAlias}_year,
+            ${tAlias}.serial_number as ${tAlias}_serial_number,
+            ${tAlias}.assessed_department_name as ${tAlias}_assessed_department_name,
+            ${tAlias}.assessed_department_id as ${tAlias}_assessed_department_id,
+            ${tAlias}.examine_type as ${tAlias}_examine_type,
+            ${tAlias}.target_dimension as ${tAlias}_target_dimension,
+            ${tAlias}.key_performance_indicator as ${tAlias}_key_performance_indicator,
+            ${tAlias}.define as ${tAlias}_define, ${tAlias}.weight as ${tAlias}_weight,
+            ${tAlias}.threshold as ${tAlias}_threshold, ${tAlias}.target_value as ${tAlias}_target_value,
+            ${tAlias}.challenge_value as ${tAlias}_challenge_value,
+            ${tAlias}.examine_department_id as ${tAlias}_examine_department_id,
+            ${tAlias}.examine_department_name as ${tAlias}_examine_department_name,
+            ${tAlias}.examine_employee_name as ${tAlias}_examine_employee_name,
+            ${tAlias}.examine_employee_work_card as ${tAlias}_examine_employee_work_card,
+            ${tAlias}.examine_employee_id as ${tAlias}_examine_employee_id,
+            ${tAlias}.data_accuracy as ${tAlias}_data_accuracy, ${tAlias}.data_type as ${tAlias}_data_type,
+            ${tAlias}.group_id as ${tAlias}_group_id, ${tAlias}.operation_code as ${tAlias}_operation_code,
+            ${tAlias}.error_msg as ${tAlias}_error_msg, ${tAlias}.data_status as ${tAlias}_data_status,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.parent_department as ${tAlias}_parent_department
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_assessment_indicators_interface kaii
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.groupId != null">
+                <![CDATA[
+                    and kaii.group_id = #{criteria.groupId,jdbcType=BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.dataStatus != null">
+                <![CDATA[
+                    and kaii.data_status = #{criteria.dataStatus,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsInterface">
+        <![CDATA[
+            insert into kpi_assessment_indicators_interface (kpi_annual_id,year,serial_number, assessed_department_name,
+                                                             assessed_department_id, examine_type,
+                                                             target_dimension, key_performance_indicator,
+                                                             define, weight, threshold,
+                                                             target_value, challenge_value,
+                                                             examine_department_id, examine_department_name,
+                                                             examine_employee_name, examine_employee_work_card,
+                                                             examine_employee_id, data_accuracy,
+                                                             data_type, group_id, operation_code,
+                                                             error_msg, data_status, create_time,
+                                                             create_by, update_time, update_by,parent_department)
+            values (#{kpiAnnualId,jdbcType=BIGINT}, #{year,jdbcType=VARCHAR},#{serialNumber,jdbcType=BIGINT}, #{assessedDepartmentName,jdbcType=VARCHAR},
+                    #{assessedDepartmentId,jdbcType=BIGINT}, #{examineType,jdbcType=VARCHAR},
+                    #{targetDimension,jdbcType=VARCHAR}, #{keyPerformanceIndicator,jdbcType=VARCHAR},
+                    #{define,jdbcType=VARCHAR}, #{weight,jdbcType=VARCHAR}, #{threshold,jdbcType=VARCHAR},
+                    #{targetValue,jdbcType=VARCHAR}, #{challengeValue,jdbcType=VARCHAR},
+                    #{examineDepartmentId,jdbcType=BIGINT}, #{examineDepartmentName,jdbcType=VARCHAR},
+                    #{examineEmployeeName,jdbcType=VARCHAR}, #{examineEmployeeWorkCard,jdbcType=VARCHAR},
+                    #{examineEmployeeId,jdbcType=BIGINT}, #{dataAccuracy,jdbcType=VARCHAR},
+                    #{dataType,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, #{operationCode,jdbcType=CHAR},
+                    #{errorMsg,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{parentDepartment,jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_assessment_indicators_interface
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsInterface">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentIndicatorsInterface">
+        <![CDATA[
+            update kpi_assessment_indicators_interface
+               set
+                   kpi_annual_id              = #{kpiAnnualId,jdbcType=BIGINT},
+                   year                       = #{year,jdbcType=VARCHAR},
+                   serial_number              = #{serialNumber,jdbcType=BIGINT},
+                   assessed_department_name   = #{assessedDepartmentName,jdbcType=VARCHAR},
+                   assessed_department_id     = #{assessedDepartmentId,jdbcType=BIGINT},
+                   examine_type               = #{examineType,jdbcType=VARCHAR},
+                   target_dimension           = #{targetDimension,jdbcType=VARCHAR},
+                   key_performance_indicator  = #{keyPerformanceIndicator,jdbcType=VARCHAR},
+                   define                     = #{define,jdbcType=VARCHAR},
+                   weight                     = #{weight,jdbcType=VARCHAR},
+                   threshold                  = #{threshold,jdbcType=VARCHAR},
+                   target_value               = #{targetValue,jdbcType=VARCHAR},
+                   challenge_value            = #{challengeValue,jdbcType=VARCHAR},
+                   examine_department_id      = #{examineDepartmentId,jdbcType=BIGINT},
+                   examine_department_name    = #{examineDepartmentName,jdbcType=VARCHAR},
+                   examine_employee_name      = #{examineEmployeeName,jdbcType=VARCHAR},
+                   examine_employee_work_card = #{examineEmployeeWorkCard,jdbcType=VARCHAR},
+                   examine_employee_id        = #{examineEmployeeId,jdbcType=BIGINT},
+                   data_accuracy              = #{dataAccuracy,jdbcType=VARCHAR},
+                   data_type                  = #{dataType,jdbcType=VARCHAR},
+                   group_id                   = #{groupId,jdbcType=BIGINT},
+                   operation_code             = #{operationCode,jdbcType=CHAR},
+                   error_msg                  = #{errorMsg,jdbcType=VARCHAR},
+                   data_status                = #{dataStatus,jdbcType=CHAR},
+                   update_time                = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                  = #{updateBy,jdbcType=BIGINT},
+                   parent_department          = #{parentDepartment,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiAssessmentIndicatorsInterfaceResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiAssessmentIndicatorsInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiAssessmentIndicatorsInterfaceResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="checkKpiAssessmentIndicatorsInterface" parameterMap="mspMap" statementType="CALLABLE">
+        <![CDATA[
+            {call check_kpi_assessment_indicators_interface(?,?)}
+        ]]>
+    </select>
+
+
+    <select id="insertKpiAssessmentIndicatorsInterfaceToMain" parameterMap="mspMap" statementType="CALLABLE">
+        <![CDATA[
+            {call insert_kpi_assessment_indicators_interface_to_main(?,?)}
+        ]]>
+    </select>
+
+</mapper>

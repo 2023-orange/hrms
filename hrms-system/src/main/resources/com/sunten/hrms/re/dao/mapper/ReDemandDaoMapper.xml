@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.re.dao.ReDemandDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.re.domain.ReDemand">
+        <id column="id" property="id" />
+        <result column="demand_code" property="demandCode" />
+        <result column="dept_name" property="deptName" />
+        <result column="office_name" property="officeName" />
+        <result column="team" property="team"/>
+        <result column="dept_id" property="deptId" />
+        <result column="demand_class" property="demandClass" />
+        <result column="past_quantity" property="pastQuantity" />
+        <result column="current_status" property="currentStatus" />
+        <result column="recruitment_source" property="recruitmentSource" />
+        <result column="demand_reason" property="demandReason" />
+        <result column="demand_by" property="demandBy" />
+        <result column="repeal_flag" property="repealFlag" />
+        <result column="repeal_date" property="repealDate" />
+        <result column="repeal_reason" property="repealReason" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="demand_status" property="demandStatus" />
+        <result column="status_describes" property="statusDescribes" />
+        <result column="re_remake" property="reRemake" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="demand_reason_type" property="demandReasonType" />
+        <result column="real_demand_status" property="realDemandStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="current_node" property="currentNode"/>
+        <result column="number" property="number"/>
+        <result column="dept_first_count" property="deptFirstCount"/>
+        <result column="dept_second_count" property="deptSecondCount"/>
+        <result column="dept_third_count" property="deptThirdCount"/>
+        <result column="dept_current_count" property="deptCurrentCount"/>
+        <result column="temp_begin_date" property="tempBeginDate"/>
+        <result column="temp_end_date" property="tempEndDate"/>
+        <result column="after_complete_edit_flag" property="afterCompleteEditFlag"/>
+        <result column="agree_num" property="agreeNum"/>
+    </resultMap>
+
+    <resultMap id="ReDemandResultMap" type="com.sunten.hrms.re.domain.ReDemand">
+        <id column="id" property="id" />
+        <result column="demand_code" property="demandCode" />
+        <result column="dept_name" property="deptName" />
+        <result column="office_name" property="officeName" />
+        <result column="team" property="team"/>
+        <result column="dept_id" property="deptId" />
+        <result column="demand_class" property="demandClass" />
+        <result column="past_quantity" property="pastQuantity" />
+        <result column="current_status" property="currentStatus" />
+        <result column="recruitment_source" property="recruitmentSource" />
+        <result column="demand_reason" property="demandReason" />
+        <result column="demand_by" property="demandBy" />
+        <result column="repeal_flag" property="repealFlag" />
+        <result column="repeal_date" property="repealDate" />
+        <result column="repeal_reason" property="repealReason" />
+        <result column="approval_result" property="approvalResult" />
+        <result column="oa_order" property="oaOrder" />
+        <result column="approval_date" property="approvalDate" />
+        <result column="demand_status" property="demandStatus" />
+        <result column="status_describes" property="statusDescribes" />
+        <result column="re_remake" property="reRemake" />
+        <result column="enabled_flag" property="enabledFlag" />
+        <result column="demand_reason_type" property="demandReasonType" />
+        <result column="real_demand_status" property="realDemandStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="current_node" property="currentNode"/>
+        <result column="current_person" property="currentPerson"/>
+        <result column="demand_by_str" property="demandByStr"/>
+        <result column="have_sub_need_flag" property="haveSubNeedFlag"/>
+        <result column="number" property="number"/>
+        <result column="dept_first_count" property="deptFirstCount"/>
+        <result column="dept_second_count" property="deptSecondCount"/>
+        <result column="dept_third_count" property="deptThirdCount"/>
+        <result column="temp_begin_date" property="tempBeginDate"/>
+        <result column="temp_end_date" property="tempEndDate"/>
+        <result column="all_pass_flag" property="allPassFlag"/>
+        <result column="temp_work_flag" property="tempWorkFlag"/>
+        <result column="after_complete_edit_flag" property="afterCompleteEditFlag"/>
+        <result column="dept_current_count" property="deptCurrentCount"/>
+        <result column="agree_num" property="agreeNum"/>
+        <result column="residual_demand" property="residualDemand"/>
+        <collection property="reDemandTrackings" ofType="com.sunten.hrms.re.domain.ReDemandTracking">
+            <id column="rdt_id" property="id"/>
+            <result column="rdt_demand_id" property="demandId"/>
+            <result column="rdt_re_content" property="reContent"/>
+            <result column="rdt_edit_by" property="editBy"/>
+            <result column="rdt_update_time" property="updateTime"/>
+        </collection>
+        <collection property="reDemandAgreeNumList" ofType="com.sunten.hrms.re.domain.ReDemandAgreeNum">
+            <id column="rdan_id" property="id"/>
+            <result column="rdan_jobName" property="jobName"/>
+            <result column="rdan_agree_num" property="agreeNum"/>
+            <result column="rdan_job_second_count" property="jobSecondCount"/>
+            <result column="rdan_job_third_count" property="jobThirdCount"/>
+            <result column="rdan_job_current_count" property="jobCurrentCount"/>
+            <result column="rdan_create_by" property="createBy"/>
+            <result column="rdan_create_time" property="createTime"/>
+            <result column="rdan_demand_id" property="demandId"/>
+            <result column="rdan_edit_by" property="editBy"/>
+        </collection>
+        <collection property="demandJobList" ofType="com.sunten.hrms.re.domain.ReDemandJob">
+            <id column="rdj_id" property="id" />
+            <result column="rdj_demand_id" property="demandId" />
+            <result column="rdj_job_name" property="jobName" />
+            <result column="rdj_job_id" property="jobId"/>
+            <result column="rdj_quantity" property="quantity" />
+            <result column="rdj_base_condition" property="baseCondition" />
+            <result column="rdj_special_flag" property="specialFlag" />
+            <result column="rdj_special_midecal" property="specialMidecal" />
+            <result column="rdj_need_flag" property="needFlag" />
+            <result column="rdj_enabled_flag" property="enabledFlag" />
+            <result column="rdj_create_time" property="createTime" />
+            <result column="rdj_create_by" property="createBy" />
+            <result column="rdj_update_time" property="updateTime" />
+            <result column="rdj_update_by" property="updateBy" />
+            <result column="rdj_real_flag" property="realFlag"/>
+            <result column="rdj_show_box" property="showBox"/>
+            <result column="rdj_job_name_by_id" property="jobNameById"/>
+            <result column="rdj_risk_factors" property="riskFactors"/>
+            <result column="rdj_team_mes" property="teamMes"/>
+            <result column="rdj_job_first_count" property="jobFirstCount"/>
+            <result column="rdj_job_second_count" property="jobSecondCount"/>
+            <result column="rdj_job_third_count" property="jobThirdCount"/>
+            <result column="rdj_job_current_count" property="jobCurrentCount"/>
+            <result column="rdj_agree_num" property="agreeNum"/>
+            <result column="rdj_in_used_quantity" property="inUsedQuantity"/>
+            <result column="rdj_pass_quantity" property="passQuantity"/>
+            <result column="rdj_job_class" property="jobClass"/>
+            <result column="rdj_add_before_approval_flag" property="addBeforeApprovalFlag"/>
+            <collection property="demandJobDescribesList" ofType="com.sunten.hrms.re.domain.ReDemandJobDescribes">
+                <id column="rdjd_id" property="id" />
+                <result column="rdjd_demand_job_id" property="demandJobId" />
+                <result column="rdjd_job_name" property="jobName" />
+                <result column="rdjd_dept_name" property="deptName" />
+                <result column="rdjd_directly_under" property="directlyUnder" />
+                <result column="rdjd_job_describes" property="jobDescribes" />
+                <result column="rdjd_job_content" property="jobContent" />
+                <result column="rdjd_work_qualification" property="workQualification" />
+                <result column="rdjd_check_flag" property="checkFlag" />
+                <result column="rdjd_enabled_flag" property="enabledFlag" />
+                <result column="rdjd_create_time" property="createTime" />
+                <result column="rdjd_create_by" property="createBy" />
+                <result column="rdjd_update_time" property="updateTime" />
+                <result column="rdjd_update_by" property="updateBy" />
+                <result column="rdjd_education" property="education" />
+                <result column="rdjd_sex" property="sex"/>
+                <result column="rdjd_age" property="age"/>
+                <result column="rdjd_work_age" property="workAge"/>
+                <result column="rdjd_work_experence_age" property="workExperenceAge"/>
+                <result column="rdjd_necessary_certificates" property="necessaryCertificates"/>
+                <result column="rdjd_other_skills_requirements" property="otherSkillsRequirements"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+        rd.demand_code, rd.dept_name, rd.office_name, rd.team, rd.dept_id, rd.demand_class, rd.past_quantity,
+            rd.current_status, rd.recruitment_source, rd.demand_reason,
+            rd.demand_by, rd.repeal_flag,
+            rd.repeal_date, rd.repeal_reason, rd.approval_result, rd.oa_order, rd.approval_date,
+            rd.demand_status, rd.status_describes, rd.re_remake, rd.enabled_flag, rd.demand_reason_type,
+            rd.real_demand_status, rd.id, rd.create_time, rd.create_by, rd.update_time, rd.update_by,
+            rd.current_node, rd.current_person, rd.number, rd.dept_first_count, rd.dept_second_count,
+            rd.dept_third_count,
+             rd.dept_current_count,
+             rd.temp_begin_date, rd.temp_end_date, rd.after_complete_edit_flag,rd.agree_num
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+        ${tAlias}.demand_code as ${tAlias}_demand_code, ${tAlias}.dept_name as ${tAlias}_dept_name,
+        ${tAlias}.office_name as ${tAlias}_office_name, ${tAlias}.team as ${tAlias}_team, ${tAlias}.dept_id as ${tAlias}_dept_id,
+        ${tAlias}.demand_class as ${tAlias}_demand_class,
+        ${tAlias}.past_quantity as ${tAlias}_past_quantity,
+        ${tAlias}.current_status as ${tAlias}_current_status,
+        ${tAlias}.recruitment_source as ${tAlias}_recruitment_source,
+        ${tAlias}.demand_reason as ${tAlias}_demand_reason, ${tAlias}.demand_by as ${tAlias}_demand_by,
+        ${tAlias}.repeal_flag as ${tAlias}_repeal_flag, ${tAlias}.repeal_date as ${tAlias}_repeal_date,
+        ${tAlias}.repeal_reason as ${tAlias}_repeal_reason,
+        ${tAlias}.approval_result as ${tAlias}_approval_result, ${tAlias}.oa_order as ${tAlias}_oa_order,
+        ${tAlias}.approval_date as ${tAlias}_approval_date,
+        ${tAlias}.demand_status as ${tAlias}_demand_status,
+        ${tAlias}.status_describes as ${tAlias}_status_describes,
+        ${tAlias}.re_remake as ${tAlias}_re_remake, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+        ${tAlias}.demand_reason_type as ${tAlias}_demand_reason_type,
+        ${tAlias}.real_demand_status as ${tAlias}_real_demand_status, ${tAlias}.id as ${tAlias}_id,
+        ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+        ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+        ${tAlias}.current_node as ${tAlias}_current_node,
+        ${tAlias}.number as ${tAlias}_number,
+        ${tAlias}.dept_first_count as ${tAlias}_dept_first_count,
+        ${tAlias}.dept_second_count as ${tAlias}_dept_second_count,
+        ${tAlias}.dept_third_count as ${tAlias}_dept_third_count,
+        ${tAlias}.dept_current_count as ${tAlias}_dept_current_count,
+        ${tAlias}.agree_num as ${tAlias}_agree_num,
+        ${tAlias}.temp_begin_date as ${tAlias}_temp_begin_date,
+        ${tAlias}.temp_end_date as ${tAlias}_temp_end_date,
+        ${tAlias}.after_complete_edit_flag as ${tAlias}_after_complete_edit_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+                ,
+                pe.name as demand_by_str,
+                (
+                    SELECT
+                    CASE
+                    WHEN EXISTS
+                    (select 1 from re_demand_job rdj where rdj.demand_id = rd.id and rd.enabled_flag = 1 and rdj.need_flag = 1 ) then 1 else 0 end
+                ) AS have_sub_need_flag,
+                case when exists (select 1 from re_demand_job rdj where rdj.demand_id = rd.id and rdj.enabled_flag = 1 and isnull(rdj.pass_quantity, 0) < rdj.quantity)
+                then 0 else 1 end as all_pass_flag,
+                case when exists (select 1 from re_demand rdt where rdt.id = rd.id and left(rdt.demand_code, 1) = 'L' and rdt.real_demand_status = 'complete'
+                and getdate() <= rdt.temp_end_date) then 1 else 0 end as  temp_work_flag,
+                (select  sum( isnull(rdj.agree_num,0) )  -  SUM( isnull(pass_quantity,0) )
+                from  re_demand  rd2 join re_demand_job rdj on rd2.id = rdj.demand_id
+                                                                  where  rdj.enabled_flag  = 1
+--                 (select  rd2.agree_num  -  (select  SUM( isnull(pass_quantity,0) )  from  re_demand_job   where  enabled_flag  = 1 and  demand_id=  rd2.id  GROUP BY  demand_id)
+--                 from  re_demand  rd2
+                and  rd2.demand_code  = rd.demand_code and rd2.enabled_flag=1) as residual_demand
+            from re_demand rd  join pm_employee pe on pe.id = rd.demand_by and pe.enabled_flag = 1
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.enabledFlag != null">
+                <![CDATA[
+                    and rd.enabled_flag  = #{criteria.enabledFlag, jdbcType = BIT}
+                ]]>
+            </if>
+            <if test="criteria.demandBy != null">
+                <![CDATA[
+                    and rd.demand_by  = #{criteria.demandBy, jdbcType = BIGINT}
+                ]]>
+            </if>
+            <if test="criteria.deptIds != null and criteria.deptIds.size > 0">
+                <![CDATA[ and exists (SELECT 1
+                                      FROM fnd_dept fd
+                                     WHERE fd.enabled_flag = 1
+                                     and fd.deleted_flag = 0
+                                     and fd.id = rd.dept_id
+                                     and fd.id
+                                   IN ]]>
+                <foreach collection="criteria.deptIds" item="item" index="index" open=" (" separator="," close=")">
+                    <![CDATA[
+                        #{item, jdbcType=BIGINT}
+                    ]]>
+                </foreach>
+                <![CDATA[ )]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.re.domain.ReDemand" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+        insert into re_demand (current_node,demand_code, dept_id, demand_class,
+                               past_quantity, current_status,
+                               recruitment_source, demand_reason,
+                               repeal_flag, repeal_date,
+                               repeal_reason, approval_result,
+                               oa_order, approval_date,
+                               demand_status, status_describes,
+                               re_remake, enabled_flag,
+                               demand_reason_type, real_demand_status,
+                               create_time, create_by,
+                               update_time, update_by,
+                               dept_name,
+                               office_name,
+                               team,
+                               demand_by, number, dept_first_count, dept_second_count, dept_third_count,
+                               dept_current_count,
+                               temp_begin_date, temp_end_date, after_complete_edit_flag,agree_num
+
+        )
+        select
+            #{currentNode, jdbcType=VARCHAR},
+            #{demandCode,jdbcType=VARCHAR}, #{deptId,jdbcType=BIGINT}, #{demandClass,jdbcType=VARCHAR},
+            #{pastQuantity,jdbcType=VARCHAR}, #{currentStatus,jdbcType=VARCHAR},
+            #{recruitmentSource,jdbcType=VARCHAR}, #{demandReason,jdbcType=VARCHAR},
+            #{repealFlag,jdbcType=BIT}, #{repealDate,jdbcType=TIMESTAMP},
+            #{repealReason,jdbcType=VARCHAR}, #{approvalResult,jdbcType=VARCHAR},
+            #{oaOrder,jdbcType=VARCHAR}, #{approvalDate,jdbcType=TIMESTAMP},
+            #{demandStatus,jdbcType=VARCHAR}, #{statusDescribes,jdbcType=VARCHAR},
+            #{reRemake,jdbcType=VARCHAR}, #{enabledFlag,jdbcType=BIT},
+            #{demandReasonType,jdbcType=VARCHAR}, #{realDemandStatus,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+            #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+            (select temp.dept_name from fnd_dept temp where fd.ext_dept_id = temp.id) as dept_name,
+            (select temp.dept_name from fnd_dept temp where fd.ext_department_id = temp.id) as depart_name,
+            (select temp.dept_name from fnd_dept temp where fd.ext_team_id = temp.id) as team,
+            (select top 1 pe.id from fnd_user fu join pm_employee pe on fu.id = #{createBy,jdbcType=BIGINT} and fu.employee_id = pe.id
+             where pe.enabled_flag = 1 and fu.enabled_flag = 1
+            ) as demand_by,
+            #{number, jdbcType = BIGINT}, #{deptFirstCount, jdbcType = INTEGER}, #{deptSecondCount, jdbcType = INTEGER},
+            #{deptThirdCount, jdbcType = INTEGER}, #{deptCurrentCount, jdbcType = INTEGER} ,
+            #{tempBeginDate, jdbcType = DATE}, #{tempEndDate, jdbcType = DATE},
+            #{afterCompleteEditFlag, jdbcType = BIT},#{agreeNum,jdbcType=INTEGER}
+        from fnd_dept fd where fd.enabled_flag = 1 and fd.deleted_flag = 0
+                           and fd.id =  #{deptId,jdbcType=BIGINT}
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+        delete
+        from re_demand
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.re.domain.ReDemand">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="disabledByEnabled">
+        <![CDATA[
+        update re_demand set enabled_flag = 0 where id = #{id, jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.re.domain.ReDemand">
+        <![CDATA[
+        update re_demand
+        set
+            current_node = #{currentNode,jdbcType = VARCHAR},
+            demand_code        = #{demandCode,jdbcType=VARCHAR},
+            dept_name          = #{deptName,jdbcType=VARCHAR},
+            office_name        = #{officeName,jdbcType=VARCHAR},
+            team               = #{team, jdbcType = VARCHAR},
+            dept_id            = #{deptId,jdbcType=BIGINT},
+            demand_class       = #{demandClass,jdbcType=VARCHAR},
+            past_quantity      = #{pastQuantity,jdbcType=VARCHAR},
+            current_status     = #{currentStatus,jdbcType=VARCHAR},
+            recruitment_source = #{recruitmentSource,jdbcType=VARCHAR},
+            demand_reason      = #{demandReason,jdbcType=VARCHAR},
+            demand_by          = #{demandBy,jdbcType=BIGINT},
+            repeal_flag        = #{repealFlag,jdbcType=BIT},
+            repeal_date        = #{repealDate,jdbcType=TIMESTAMP},
+            repeal_reason      = #{repealReason,jdbcType=VARCHAR},
+            approval_result    = #{approvalResult,jdbcType=VARCHAR},
+            oa_order           = #{oaOrder,jdbcType=VARCHAR},
+            approval_date      = #{approvalDate,jdbcType=TIMESTAMP},
+            demand_status      = #{demandStatus,jdbcType=VARCHAR},
+            status_describes   = #{statusDescribes,jdbcType=VARCHAR},
+            re_remake          = #{reRemake,jdbcType=VARCHAR},
+            enabled_flag       = #{enabledFlag,jdbcType=BIT},
+            demand_reason_type = #{demandReasonType,jdbcType=VARCHAR},
+            real_demand_status = #{realDemandStatus,jdbcType=VARCHAR},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP},
+            update_by          = #{updateBy,jdbcType=BIGINT},
+            number             = #{number, jdbcType = BIGINT},
+            dept_first_count   = #{deptFirstCount, jdbcType = INTEGER},
+            dept_second_count  = #{deptSecondCount, jdbcType = INTEGER},
+            dept_third_count   = #{deptThirdCount, jdbcType = INTEGER},
+            dept_current_count = #{deptCurrentCount, jdbcType = INTEGER},
+            agree_num          = #{agreeNum, jdbcType = INTEGER},
+            temp_begin_date    = #{tempBeginDate, jdbcType = DATE},
+            temp_end_date      = #{tempEndDate, jdbcType = DATE}
+        where   id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateOaReqAndCurrentNode" parameterType="com.sunten.hrms.re.domain.ReDemand">
+        <![CDATA[
+        update re_demand
+        set current_node = #{currentNode,jdbcType = VARCHAR},
+            current_person =  #{currentPerson, jdbcType = VARCHAR},
+            oa_order           = #{oaOrder,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateByValue" parameterType="com.sunten.hrms.re.domain.ReDemand">
+        <![CDATA[
+            update re_demand
+               set
+               update_time = getdate()
+                  ]]>
+        <if test="deptName != null">
+            <![CDATA[
+                  ,  dept_name          = #{deptName,jdbcType=VARCHAR}
+
+
+                    ]]>
+        </if>
+        <if test="officeName != null">
+            <![CDATA[
+        ,office_name        = #{officeName,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="team != null">
+            <![CDATA[
+        ,team        = #{team,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="deptId != null">
+            <![CDATA[
+        ,dept_id            = #{deptId,jdbcType=BIGINT}
+                    ]]>
+        </if>
+        <if test="demandClass != null">
+            <![CDATA[
+        ,demand_class       = #{demandClass,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="currentStatus != null">
+            <![CDATA[
+        ,current_status     = #{currentStatus,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="recruitmentSource != null">
+            <![CDATA[
+        ,recruitment_source = #{recruitmentSource,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="demandReason != null">
+            <![CDATA[
+        ,demand_reason      = #{demandReason,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="demandBy != null">
+            <![CDATA[
+        ,demand_by          = #{demandBy,jdbcType=BIGINT}
+                    ]]>
+        </if>
+        <if test="repealFlag != null">
+            <![CDATA[
+         ,repeal_flag        = #{repealFlag,jdbcType=BIT}
+                    ]]>
+        </if>
+        <if test="repealDate != null">
+            <![CDATA[
+        ,repeal_date        = #{repealDate,jdbcType=TIMESTAMP}
+                    ]]>
+        </if>
+        <if test="repealReason != null">
+            <![CDATA[
+        ,repeal_reason      = #{repealReason,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="approvalResult != null">
+            <![CDATA[
+        ,approval_result    = #{approvalResult,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="oaOrder != null">
+            <![CDATA[
+        ,oa_order           = #{oaOrder,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="approvalDate != null">
+            <![CDATA[
+        ,approval_date      = #{approvalDate,jdbcType=TIMESTAMP}
+                    ]]>
+        </if>
+        <if test="demandStatus != null">
+            <![CDATA[
+        ,demand_status      = #{demandStatus,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="reRemake != null">
+            <![CDATA[
+        ,re_remake          = #{reRemake,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+
+        <if test="statusDescribes != null">
+            <![CDATA[
+        ,status_describes   = #{statusDescribes,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="demandReasonType != null">
+            <![CDATA[
+        ,demand_reason_type = #{demandReasonType,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="realDemandStatus != null">
+            <![CDATA[
+        ,real_demand_status = #{realDemandStatus,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="currentNode != null">
+            <![CDATA[
+        ,current_node = #{currentNode,jdbcType=VARCHAR}
+                    ]]>
+        </if>
+        <if test="currentPerson != null">
+            <![CDATA[
+           ,current_person = #{currentPerson,jdbcType=VARCHAR}
+             ]]>
+        </if>
+        <if test="deptFirstCount != null">
+            <![CDATA[
+           ,dept_first_count = #{deptFirstCount,jdbcType=INTEGER}
+             ]]>
+        </if>
+        <if test="deptSecondCount != null">
+            <![CDATA[
+           ,dept_second_count = #{deptSecondCount,jdbcType=INTEGER}
+             ]]>
+        </if>
+        <if test="deptThirdCount != null">
+            <![CDATA[
+           ,dept_third_count = #{deptThirdCount,jdbcType=INTEGER}
+             ]]>
+        </if>
+        <if test="deptCurrentCount != null">
+            <![CDATA[
+           ,dept_current_count = #{deptCurrentCount,jdbcType=INTEGER}
+             ]]>
+        </if>
+        <if test="agreeNum != null">
+            <![CDATA[
+           ,agree_num = #{agreeNum,jdbcType=INTEGER}
+             ]]>
+        </if>
+        <if test="tempBeginDate != null">
+            <![CDATA[
+           ,temp_begin_date = #{tempBeginDate,jdbcType=DATE}
+             ]]>
+        </if>
+        <if test="tempEndDate != null">
+            <![CDATA[
+           ,temp_end_date = #{tempEndDate,jdbcType=DATE}
+             ]]>
+        </if>
+        <![CDATA[
+            where 1 = 1 and oa_order = #{oaOrder,jdbcType=VARCHAR}
+                  ]]>
+        <if test="id != null">
+            <![CDATA[
+          and id = #{id,jdbcType=BIGINT}
+             ]]>
+        </if>
+
+    </update>
+
+    <select id="getByKey" resultMap="ReDemandResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rd.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="ReDemandResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="ReDemandResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by (case when  SUBSTRING(demand_code,1,1)  = 'L' then  SUBSTRING(demand_code,2,100)+0 else (demand_code+0) end )  DESC
+        ]]>
+    </select>
+
+    <select id="getDemandAndDemandJobWithOrder" resultMap="ReDemandResultMap">
+        <![CDATA[
+             select temp.*,
+        ]]>
+        <bind name="tAlias" value="'rdjd'"/>
+        <include refid="com.sunten.hrms.re.dao.ReDemandJobDescribesDao.Base_Column_With_Param_List"/>
+        <![CDATA[ from (select  ]]>
+
+        <include refid="Base_Column_List"/>
+        <![CDATA[ , ]]>
+        <bind name="tAlias" value="'rdj'"/>
+        <include refid="com.sunten.hrms.re.dao.ReDemandJobDao.Base_Column_With_Param_List"/>
+        <![CDATA[ ,rdt.id as rdt_id, rdt.demand_id as rdt_demand_id, rdt.re_content as rdt_re_content, rdt.update_time as rdt_update_time,
+            rdt.edit_by as rdt_edit_by,
+            rdan.id as rdan_id,
+            rdan.jobName as rdan_jobName,
+			rdan.agree_num as rdan_agree_num,
+			rdan.job_second_count as rdan_job_second_count,
+			rdan.job_third_count as rdan_job_third_count,
+			rdan.job_current_count as rdan_job_current_count,
+			rdan.create_time as rdan_create_time,
+			rdan.demand_id as rdan_demand_id,
+			rdan.edit_by as rdan_edit_by]]>
+        <![CDATA[
+        ,(select top 1 job_class from fnd_job fd where fd.id = rdj.job_id and fd.enabled_flag = 1 and fd.deleted_flag = 0 ) as rdj_job_class
+       FROM
+	re_demand rd
+	LEFT JOIN re_demand_job rdj ON rd.id = rdj.demand_id and rdj.enabled_flag =1
+	LEFT JOIN re_demand_tracking rdt on rd.id = rdt.demand_id and rdt.enabled_flag = 1
+	LEFT JOIN re_demand_agree_num rdan ON rd.id = rdan.demand_id and rdan.agree_num is not null
+WHERE
+	rd.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.oaOrder != null">
+                <![CDATA[
+                    and rd.oa_order = #{criteria.oaOrder, jdbcType = VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.id != null">
+                <![CDATA[
+                    and rd.id = #{criteria.id, jdbcType = BIGINT}
+                ]]>
+            </if>
+        </if>
+        <![CDATA[ ) temp  left join re_demand_job_describes rdjd on rdjd.demand_job_id = temp.rdj_id and rdjd.enabled_flag = 1  ]]>
+    </select>
+
+    <select id="getLastRemand" resultMap="ReDemandResultMap" parameterType="java.lang.String">
+        <![CDATA[
+            select top 1
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            from  re_demand rd where rd.demand_class = #{type, jdbcType=VARCHAR}
+            and rd.enabled_flag = 1
+             ]]>
+        <if test="type == '正式工'">
+            <![CDATA[
+            and year(getdate()) = left(rd.demand_code, 4)
+             ]]>
+        </if>
+        <if test="type == '临时工'">
+            <![CDATA[
+       and  'L' + convert(varchar(4), YEAR (
+	getdate())) = LEFT ( rd.demand_code, 5 )
+            ]]>
+        </if>
+        <![CDATA[
+           order by rd.id desc
+        ]]>
+    </select>
+
+    <select id="checkDemandJobExistNotPassByDemandId" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+      <![CDATA[
+        select case when exists (
+            select 1 from re_demand rd join re_demand_job rdj on rd.id = rdj.demand_id
+                and rd.enabled_flag = 1 and rdj.enabled_flag = 1
+                and isnull(rdj.pass_quantity, 0) < rdj.quantity
+                and rd.id = #{id, jdbcType = BIGINT}
+        ) then 1 else 0 end
+        ]]>
+    </select>
+
+    <update id="updateStatusDescribesAfterCheck" parameterType="java.lang.Long">
+        <![CDATA[
+        update re_demand
+        set status_describes = '已达成'
+        where enabled_flag = 1
+          and id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <update id="updateAfterCompleteEditFlag">
+                <![CDATA[
+        update re_demand
+        set after_complete_edit_flag = #{afterCompleteEditFlag, jdbcType = BIT}
+        where
+            id = #{id, jdbcType = BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByDemandCode" resultMap="ReDemandResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rd.real_demand_status = 'complete'
+             and rd.enabled_flag = 1
+             and rd.demand_code = #{demandCode,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <select id="getDemandByPass" resultMap="ReDemandResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where rd.real_demand_status = 'complete'
+             and rd.enabled_flag = 1
+        ]]>
+    </select>
+</mapper>

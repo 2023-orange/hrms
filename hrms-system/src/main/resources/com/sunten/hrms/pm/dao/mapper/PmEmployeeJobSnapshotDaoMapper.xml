@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.pm.dao.PmEmployeeJobSnapshotDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeJobSnapshot">
+        <id column="id" property="id" />
+        <result column="date" property="date" />
+        <result column="employee_id" property="employeeId" />
+        <result column="job_id" property="jobId" />
+        <result column="dept_id" property="deptId" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="work_attendance_flag" property="workAttendanceFlag" />
+        <result column="workshop_attendance_flag" property="workshopAttendanceFlag" />
+    </resultMap>
+
+    <resultMap id="PmEmployeeJobSnapshotResultMap" type="com.sunten.hrms.pm.domain.PmEmployeeJobSnapshot" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="fndDeptSnapshot"
+                     javaType="com.sunten.hrms.fnd.domain.FndDeptSnapshot"
+                     resultMap="com.sunten.hrms.fnd.dao.FndDeptSnapshotDao.FndDeptSnapshotResultMap"
+                     columnPrefix="fds_"
+        />
+        <association property="attendance"
+                     javaType="com.sunten.hrms.ac.domain.AcDeptAttendance"
+                     resultMap="com.sunten.hrms.ac.dao.AcDeptAttendanceDao.AcDeptAttendanceResultMap"
+                     columnPrefix="ada_"
+        />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            pejs.date, pejs.employee_id, pejs.job_id, pejs.dept_id, pejs.attribute1, pejs.attribute2,
+            pejs.attribute3, pejs.attribute4, pejs.attribute5, pejs.id, pejs.create_time, pejs.create_by,
+            pejs.update_time, pejs.update_by, pejs.work_attendance_flag, pejs.workshop_attendance_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.date as ${tAlias}_date, ${tAlias}.employee_id as ${tAlias}_employee_id,
+            ${tAlias}.job_id as ${tAlias}_job_id, ${tAlias}.dept_id as ${tAlias}_dept_id,
+            ${tAlias}.attribute1 as ${tAlias}_attribute1, ${tAlias}.attribute2 as ${tAlias}_attribute2,
+            ${tAlias}.attribute3 as ${tAlias}_attribute3, ${tAlias}.attribute4 as ${tAlias}_attribute4,
+            ${tAlias}.attribute5 as ${tAlias}_attribute5, ${tAlias}.id as ${tAlias}_id,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+            ${tAlias}.work_attendance_flag as ${tAlias}_work_attendance_flag,${tAlias}.workshop_attendance_flag as ${tAlias}_workshop_attendance_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from pm_employee_job_snapshot pejs
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+        <if test="criteria != null">
+        <if test="criteria.date != null">
+            <![CDATA[
+                and pejs.date = #{criteria.date,jdbcType=DATE}
+            ]]>
+        </if>
+        <if test="criteria.workshopAttendanceFlag">
+            <![CDATA[
+            and pejs.workshop_attendance_flag = #{criteria.workshopAttendanceFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="criteria.workAttendanceFlag">
+            <![CDATA[
+            and pejs.work_attendance_flag = #{criteria.workAttendanceFlag,jdbcType=BIT}
+            ]]>
+        </if>
+        <if test="criteria.dateFrom != null and criteria.dateTo != null">
+            <![CDATA[
+                and (pejs.date <= #{criteria.dateTo, jdbcType=DATE} AND pejs.date >= #{criteria.dateFrom, jdbcType=DATE})
+            ]]>
+        </if>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobSnapshot" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_job_snapshot (date, employee_id, job_id,
+                                                  dept_id, attribute1, attribute2,
+                                                  attribute3, attribute4,
+                                                  attribute5, create_time,
+                                                  create_by, update_time, update_by)
+            values (#{date,jdbcType=DATE}, #{employeeId,jdbcType=BIGINT}, #{jobId,jdbcType=BIGINT},
+                    #{deptId,jdbcType=BIGINT}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}
+                    , #{work_attendance_flag, jdbcType=BIT} , #{workshop_attendance_flag, jdbcType=BIT}
+                    )
+        ]]>
+    </insert>
+
+    <insert id="insertSnapShot" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobSnapshot" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into pm_employee_job_snapshot (date, employee_id, job_id,
+                                                  dept_id, attribute1, attribute2,
+                                                  attribute3, attribute4,
+                                                  attribute5, create_time,
+                                                  create_by, update_time, update_by,
+                                                  work_attendance_flag,workshop_attendance_flag
+                                                  )
+            select #{date,jdbcType=DATE}, pej.employee_id, pej.job_id, pej.dept_id, '' ,'' ,'' ,'' ,'', #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT},
+                    pe.work_attendance_flag, pe.workshop_attendance_flag
+                    from pm_employee_job pej, pm_employee pe where  pej.enabled_flag = 1 and pej.job_main_flag = 1
+                    and pe.leave_flag = 0 and pe.enabled_flag = 1
+                    and pej.employee_id = pe.id
+        ]]>
+    </insert>
+
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from pm_employee_job_snapshot
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobSnapshot">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.pm.domain.PmEmployeeJobSnapshot">
+        <![CDATA[
+            update pm_employee_job_snapshot
+               set date        = #{date,jdbcType=DATE},
+                   employee_id = #{employeeId,jdbcType=BIGINT},
+                   job_id      = #{jobId,jdbcType=BIGINT},
+                   dept_id     = #{deptId,jdbcType=BIGINT},
+                   attribute1  = #{attribute1,jdbcType=VARCHAR},
+                   attribute2  = #{attribute2,jdbcType=VARCHAR},
+                   attribute3  = #{attribute3,jdbcType=VARCHAR},
+                   attribute4  = #{attribute4,jdbcType=VARCHAR},
+                   attribute5  = #{attribute5,jdbcType=VARCHAR},
+                   update_time = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by   = #{updateBy,jdbcType=BIGINT},
+                   work_attendance_flag = #{workAttendanceFlag,jdbcType =BIT},
+                   workshop_attendance_flag = #{workshopAttendanceFlag, jdbcType = BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="PmEmployeeJobSnapshotResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where pejs.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="PmEmployeeJobSnapshotResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="PmEmployeeJobSnapshotResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="countByDate" resultType="Integer">
+        <![CDATA[
+            select count(*) from pm_employee_job_snapshot pejs where DateDiff(dd,pejs.date,getdate())=0
+        ]]>
+    </select>
+
+    <select id="listAllWithAttendanceByDate" resultMap="PmEmployeeJobSnapshotResultMap">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+            ,
+        ]]>
+        <bind name="tAlias" value="'fds'" />
+        <include refid="com.sunten.hrms.fnd.dao.FndDeptSnapshotDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+            ,
+        ]]>
+        <bind name="tAlias" value="'ada'" />
+        <include refid="com.sunten.hrms.ac.dao.AcDeptAttendanceDao.Base_Column_With_Param_List"/>
+        <![CDATA[
+              from pm_employee_job_snapshot pejs, fnd_dept_snapshot fds, ac_dept_attendance ada
+              where pejs.dept_id = fds.dept_id
+              and fds.attendance_id = ada.id
+              and pejs.date = fds.date
+              and work_attendance_flag = 1
+              and workshop_attendance_flag = 0
+              and pejs.date between #{dateFrom,jdbcType=DATE}
+              and #{dateTo,jdbcType=DATE}
+        ]]>
+    </select>
+
+
+</mapper>

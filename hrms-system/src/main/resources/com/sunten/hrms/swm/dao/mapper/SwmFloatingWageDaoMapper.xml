@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.swm.dao.SwmFloatingWageDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.swm.domain.SwmFloatingWage">
+        <id column="id" property="id" />
+        <result column="income_period" property="incomePeriod" />
+        <result column="work_card" property="workCard" />
+        <result column="employee_name" property="employeeName" />
+        <result column="employee_category" property="employeeCategory" />
+        <result column="division_contract_flag" property="divisionContractFlag" />
+        <result column="generation_differentiation_flag" property="generationDifferentiationFlag" />
+        <result column="department" property="department" />
+        <result column="administrative_office" property="administrativeOffice" />
+        <result column="distribution_method" property="distributionMethod" />
+        <result column="bank_account" property="bankAccount" />
+        <result column="bank_name" property="bankName" />
+        <result column="accessment_form" property="accessmentForm" />
+        <result column="target_performance_pay" property="targetPerformancePay" />
+        <result column="production_factor" property="productionFactor" />
+        <result column="quality_factor" property="qualityFactor" />
+        <result column="assessment_coefficient" property="assessmentCoefficient" />
+        <result column="monthly_performance_salary" property="monthlyPerformanceSalary" />
+        <result column="allocate_performance_pay" property="allocatePerformancePay" />
+        <result column="pre_tax_withheld" property="preTaxWithheld" />
+        <result column="wages_payable" property="wagesPayable" />
+        <result column="after_tax_withheld" property="afterTaxWithheld" />
+        <result column="net_payment" property="netPayment" />
+        <result column="commit_flag" property="commitFlag" />
+        <result column="frozen_flag" property="frozenFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="se_id" property="seId"/>
+        <result column="enabled_flag" property="enabledFlag"/>
+        <result column="grant_flag" property="grantFlag"/>
+    </resultMap>
+
+    <resultMap id="SwmFloatingWageResultMap" type="com.sunten.hrms.swm.domain.SwmFloatingWage" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <parameterMap id="mspMap" type="java.util.Map">
+        <parameter property="period" mode="IN" jdbcType="VARCHAR"/>
+        <parameter property="userId" mode="IN" jdbcType="BIGINT"/>
+        <parameter property="resultStr" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            sfw.id, sfw.income_period, sfw.work_card, sfw.employee_name, sfw.employee_category,
+            sfw.division_contract_flag, sfw.generation_differentiation_flag, sfw.department,
+            sfw.administrative_office, sfw.distribution_method, sfw.bank_account, sfw.bank_name,
+            sfw.accessment_form, sfw.target_performance_pay, sfw.production_factor, sfw.quality_factor,
+            sfw.assessment_coefficient, round(sfw.monthly_performance_salary,2) as monthly_performance_salary, round(sfw.allocate_performance_pay,2) as allocate_performance_pay,
+            round(sfw.pre_tax_withheld,2) as pre_tax_withheld, round(sfw.wages_payable,2) as wages_payable, round(sfw.after_tax_withheld,2) as after_tax_withheld, round(sfw.net_payment,2) as net_payment, sfw.commit_flag,
+            sfw.frozen_flag, sfw.attribute1, sfw.attribute2, sfw.attribute3, sfw.attribute4, sfw.attribute5,
+            sfw.create_time, sfw.create_by, sfw.update_time, sfw.update_by, sfw.se_id, sfw.enabled_flag, sfw.grant_flag
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.income_period as ${tAlias}_income_period,
+            ${tAlias}.work_card as ${tAlias}_work_card, ${tAlias}.employee_name as ${tAlias}_employee_name,
+            ${tAlias}.employee_category as ${tAlias}_employee_category,
+            ${tAlias}.division_contract_flag as ${tAlias}_division_contract_flag,
+            ${tAlias}.generation_differentiation_flag as ${tAlias}_generation_differentiation_flag,
+            ${tAlias}.department as ${tAlias}_department,
+            ${tAlias}.administrative_office as ${tAlias}_administrative_office,
+            ${tAlias}.distribution_method as ${tAlias}_distribution_method,
+            ${tAlias}.bank_account as ${tAlias}_bank_account, ${tAlias}.bank_name as ${tAlias}_bank_name,
+            ${tAlias}.accessment_form as ${tAlias}_accessment_form,
+            ${tAlias}.target_performance_pay as ${tAlias}_target_performance_pay,
+            ${tAlias}.production_factor as ${tAlias}_production_factor,
+            ${tAlias}.quality_factor as ${tAlias}_quality_factor,
+            ${tAlias}.assessment_coefficient as ${tAlias}_assessment_coefficient,
+            ${tAlias}.monthly_performance_salary as ${tAlias}_monthly_performance_salary,
+            ${tAlias}.allocate_performance_pay as ${tAlias}_allocate_performance_pay,
+            ${tAlias}.pre_tax_withheld as ${tAlias}_pre_tax_withheld,
+            ${tAlias}.wages_payable as ${tAlias}_wages_payable,
+            ${tAlias}.after_tax_withheld as ${tAlias}_after_tax_withheld,
+            ${tAlias}.net_payment as ${tAlias}_net_payment, ${tAlias}.commit_flag as ${tAlias}_commit_flag,
+            ${tAlias}.frozen_flag as ${tAlias}_frozen_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by,
+             ${tAlias}.se_id as ${tAlias}_se_id, ${tAlias}.enabled_flag as ${tAlias}_enabled_flag,
+             ${tAlias}.grant_flag as ${tAlias}_grant_flag
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+                   ,
+        (select isnull(pe.name, '')  from fnd_user fu join pm_employee pe on
+        fu.employee_id = pe.id
+        and fu.id = sfw.update_by
+        where fu.enabled_flag  =1
+        and pe.enabled_flag = 1) as update_by_str
+              from swm_floating_wage sfw
+
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1 and sfw.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.employeeCategory != null">
+                <![CDATA[
+                    and sfw.employee_category = #{criteria.employeeCategory, jdbcType = VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.grantFlag != null">
+                <![CDATA[
+                    and sfw.grant_flag = #{criteria.grantFlag, jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.frozenFlag != null">
+                <![CDATA[
+                    and sfw.frozen_flag = #{criteria.frozenFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.period != null">
+                <![CDATA[
+                    and sfw.income_period = #{criteria.period,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.administrativeOffice != null">
+                <![CDATA[
+                    and sfw.administrative_office = #{criteria.administrativeOffice,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.department != null">
+                <![CDATA[
+                    and sfw.department = #{criteria.department,jdbcType=VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.generationDifferentiationFlag != null">
+                <![CDATA[
+                    and sfw.generation_differentiation_flag = #{criteria.generationDifferentiationFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.swmEmpDepts != null and criteria.swmEmpDepts.size > 0">
+                and (
+
+                <foreach collection="criteria.swmEmpDepts" item="item" index="index" separator="or">
+                    (sfw.department = #{item.department, jdbcType = VARCHAR}
+                    <if test="item.administrativeOffice != null">
+                        <![CDATA[
+                            and sfw.administrative_office = #{item.administrativeOffice, jdbcType = VARCHAR}
+                      ]]>
+                    </if>
+
+                    )
+                </foreach>
+                <![CDATA[)]]>
+            </if>
+            <include refid="com.sunten.hrms.fnd.dao.FndDynamicQueryTemplateDao.dynamic_query_template_sql"/>
+        </if>
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWage" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into swm_floating_wage (income_period, work_card,
+                                           employee_name, employee_category,
+                                           division_contract_flag, generation_differentiation_flag,
+                                           department, administrative_office,
+                                           distribution_method, bank_account,
+                                           bank_name, accessment_form,
+                                           target_performance_pay, production_factor,
+                                           quality_factor, assessment_coefficient,
+                                           monthly_performance_salary, allocate_performance_pay,
+                                           pre_tax_withheld, wages_payable,
+                                           after_tax_withheld, net_payment,
+                                           commit_flag, frozen_flag, attribute1,
+                                           attribute2, attribute3,
+                                           attribute4, attribute5,
+                                           create_time, create_by,
+                                           update_time, update_by, se_id, enabled_flag, grant_flag)
+            values (#{incomePeriod,jdbcType=VARCHAR}, #{workCard,jdbcType=VARCHAR},
+                    #{employeeName,jdbcType=VARCHAR}, #{employeeCategory,jdbcType=VARCHAR},
+                    #{divisionContractFlag,jdbcType=BIT}, #{generationDifferentiationFlag,jdbcType=BIT},
+                    #{department,jdbcType=VARCHAR}, #{administrativeOffice,jdbcType=VARCHAR},
+                    #{distributionMethod,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR},
+                    #{bankName,jdbcType=VARCHAR}, #{accessmentForm,jdbcType=VARCHAR},
+                    #{targetPerformancePay,jdbcType=DECIMAL}, #{productionFactor,jdbcType=DECIMAL},
+                    #{qualityFactor,jdbcType=DECIMAL}, #{assessmentCoefficient,jdbcType=DECIMAL},
+                    #{monthlyPerformanceSalary,jdbcType=DECIMAL}, #{allocatePerformancePay,jdbcType=DECIMAL},
+                    #{preTaxWithheld,jdbcType=DECIMAL}, #{wagesPayable,jdbcType=DECIMAL},
+                    #{afterTaxWithheld,jdbcType=DECIMAL}, #{netPayment,jdbcType=DECIMAL},
+                    #{commitFlag,jdbcType=BIT}, #{frozenFlag,jdbcType=BIT}, #{attribute1,jdbcType=DECIMAL},
+                    #{attribute2,jdbcType=DECIMAL}, #{attribute3,jdbcType=DECIMAL},
+                    #{attribute4,jdbcType=DECIMAL}, #{attribute5,jdbcType=DECIMAL},
+                    #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+                    #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{seId, jdbcType=BIGINT}, #{enabledFlag, jdbcType = BIT},
+                    #{grantFlag, jdbcType=BIT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from swm_floating_wage
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="removeByPeriod">
+        <![CDATA[
+            update swm_floating_wage set enabled_flag = 0,
+                   update_time  = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by    = #{updateBy,jdbcType=BIGINT}
+              where income_period = #{incomePeriod, jdbcType = VARCHAR} and frozen_flag = 0
+            and enabled_flag = 1
+        ]]>
+    </update>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWage">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateGrantFlagByLimit" parameterType="java.lang.Long">
+        <![CDATA[
+            update  swm_floating_wage  set grant_flag = 1, frozen_flag = 1
+              where grant_flag = 0 and enabled_flag = 1
+                and convert(bigint, left(income_period,4) + right(income_period,2))  <= #{updateLimit,jdbcType=BIGINT}
+                ]]>
+    </update>
+
+    <update id="updateFlozenFlagByLimit" parameterType="java.lang.Long">
+        <![CDATA[
+            update  swm_floating_wage  set frozen_flag = 1
+              where frozen_flag = 0 and enabled_flag = 1
+                    and convert(bigint, left(income_period,4) + right(income_period,2))  <= #{updateLimit,jdbcType=BIGINT}
+                ]]>
+    </update>
+
+    <update id="updateFlozenFlag" parameterType="java.lang.String">
+        <![CDATA[
+            update swm_floating_wage set frozen_flag = 1
+            where frozen_flag = 0 and enabled_flag = 1
+            and income_period = #{incomePeriod, jdbcType = VARCHAR}
+]]>
+    </update>
+
+    <select id="checkIsFlozenWithPeriodList" resultType="java.lang.Integer" parameterType="java.util.List">
+        <![CDATA[  select count(1) from swm_floating_wage sfw where sfw.enabled_flag = 1 and sfw.frozen_flag = 1
+        and sfw.income_period in
+         (]]>
+        <foreach collection="periodList" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        <![CDATA[)]]>
+    </select>
+
+    <select id="getFloatNewestPeriod" resultType="java.lang.String">
+        <![CDATA[
+         select top 1 income_period from swm_floating_wage where frozen_flag = 0 order by id desc
+]]>
+    </select>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWage">
+        <![CDATA[
+            update swm_floating_wage
+               set income_period                   = #{incomePeriod,jdbcType=VARCHAR},
+                   work_card                       = #{workCard,jdbcType=VARCHAR},
+                   employee_name                   = #{employeeName,jdbcType=VARCHAR},
+                   employee_category               = #{employeeCategory,jdbcType=VARCHAR},
+                   division_contract_flag          = #{divisionContractFlag,jdbcType=BIT},
+                   generation_differentiation_flag = #{generationDifferentiationFlag,jdbcType=BIT},
+                   department                      = #{department,jdbcType=VARCHAR},
+                   administrative_office           = #{administrativeOffice,jdbcType=VARCHAR},
+                   distribution_method             = #{distributionMethod,jdbcType=VARCHAR},
+                   bank_account                    = #{bankAccount,jdbcType=VARCHAR},
+                   bank_name                       = #{bankName,jdbcType=VARCHAR},
+                   accessment_form                 = #{accessmentForm,jdbcType=VARCHAR},
+                   target_performance_pay          = #{targetPerformancePay,jdbcType=DECIMAL},
+                   production_factor               = #{productionFactor,jdbcType=DECIMAL},
+                   quality_factor                  = #{qualityFactor,jdbcType=DECIMAL},
+                   assessment_coefficient          = #{assessmentCoefficient,jdbcType=DECIMAL},
+                   monthly_performance_salary      = #{monthlyPerformanceSalary,jdbcType=DECIMAL},
+                   allocate_performance_pay        = #{allocatePerformancePay,jdbcType=DECIMAL},
+                   pre_tax_withheld                = #{preTaxWithheld,jdbcType=DECIMAL},
+                   wages_payable                   = #{wagesPayable,jdbcType=DECIMAL},
+                   after_tax_withheld              = #{afterTaxWithheld,jdbcType=DECIMAL},
+                   net_payment                     = #{netPayment,jdbcType=DECIMAL},
+                   commit_flag                     = #{commitFlag,jdbcType=BIT},
+                   frozen_flag                     = #{frozenFlag,jdbcType=BIT},
+                   attribute1                      = #{attribute1,jdbcType=DECIMAL},
+                   attribute2                      = #{attribute2,jdbcType=DECIMAL},
+                   attribute3                      = #{attribute3,jdbcType=DECIMAL},
+                   attribute4                      = #{attribute4,jdbcType=DECIMAL},
+                   attribute5                      = #{attribute5,jdbcType=DECIMAL},
+                   update_time                     = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by                       = #{updateBy,jdbcType=BIGINT},
+                   se_id                           = #{seId, jdbcType=BIGINT},
+                   enabled_flag                    = #{enabledFlag, jdbcType=BIT},
+                   grant_flag                      = #{grantFlag, jdbcType=BIT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="SwmFloatingWageResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where sfw.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+
+    <select id="countByQuery" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from swm_floating_wage sfw
+            where 1 = 1 and sfw.enabled_flag = 1
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.grantFlag != null">
+                <![CDATA[
+                    and sfw.grant_flag = #{criteria.grantFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.frozenFlag != null">
+                <![CDATA[
+                    and sfw.frozen_flag = #{criteria.frozenFlag,jdbcType=BIT}
+                ]]>
+            </if>
+            <if test="criteria.period != null">
+                <![CDATA[
+                    and sfw.income_period = #{criteria.period,jdbcType=VARCHAR}
+                ]]>
+            </if>
+        </if>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="SwmFloatingWageResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by sfw.work_card, sfw.income_period
+        ]]>
+    </select>
+
+    <select id="listForSecondListByCriteria" resultMap="SwmFloatingWageResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by sfw.department, sfw.administrative_office, sfw.work_card
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="SwmFloatingWageResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="generateFloatingWageByMsp" parameterMap="mspMap" statementType="CALLABLE">
+        <![CDATA[
+            {call msp_create_floationg_wage(?,?,?)}
+        ]]>
+    </select>
+
+    <select id="getTopPeriod" resultType="java.lang.String">
+        <![CDATA[
+            select top 1 sfw.income_period from swm_floating_wage sfw where sfw.enabled_flag = 1  order by id desc
+        ]]>
+    </select>
+
+    <update id="updateFloatWageAfterEdit">
+        <![CDATA[
+        update swm_floating_wage set monthly_performance_salary = case when production_factor * quality_factor < 0.9 then
+        round(target_performance_pay * 0.9 * isnull(assessment_coefficient,1),2)
+        else round(target_performance_pay * production_factor * quality_factor * isnull(assessment_coefficient,1),2) end,
+
+        allocate_performance_pay = case when production_factor * quality_factor < 0.9 then
+        round(target_performance_pay * 0.9 * isnull(assessment_coefficient,1),2)
+        else  round(target_performance_pay * production_factor * quality_factor * isnull(assessment_coefficient,1),2) end,
+
+        wages_payable = case when production_factor * quality_factor < 0.9 then
+        round(target_performance_pay * 0.9 * isnull(assessment_coefficient,1) + pre_tax_withheld,2)
+        else round(target_performance_pay * production_factor * quality_factor * isnull(assessment_coefficient,1)+pre_tax_withheld,2) end,
+
+        net_payment=case when production_factor * quality_factor < 0.9 then round(target_performance_pay * 0.9 * isnull(assessment_coefficient,1)+pre_tax_withheld + after_tax_withheld,2)
+        else round(target_performance_pay * production_factor * quality_factor * isnull(assessment_coefficient,1) + pre_tax_withheld + after_tax_withheld,2) end
+        where enabled_flag = 1 and frozen_flag = 0
+        ]]>
+        <if test="criteria != null">
+            <if test="criteria.period != null">
+                <![CDATA[
+                    and income_period = #{criteria.period, jdbcType = VARCHAR}
+                ]]>
+            </if>
+            <if test="criteria.id != null">
+                <![CDATA[
+                    and id = #{criteria.id, jdbcType = BIGINT}
+                ]]>
+            </if>
+        </if>
+    </update>
+<!--    wages_payable = isnull(sfwi.allocate_performance_pay, 0) + isnull(pre_tax_withheld, 0),-->
+
+<!--    net_payment = isnull(sfwi.allocate_performance_pay, 0) + isnull(pre_tax_withheld, 0) + isnull(after_tax_withheld, 0),-->
+
+    <update id="interfaceToMain"  parameterType="java.lang.Long">
+        <![CDATA[
+            UPDATE sfw
+            SET
+            allocate_performance_pay =
+            case when sfwi.allocate_performance_pay is not null then sfwi.allocate_performance_pay else sfw.allocate_performance_pay end,
+            pre_tax_withheld =
+            case when sfwi.pre_tax_withheld is not null then sfwi.pre_tax_withheld else sfw.pre_tax_withheld end,
+            after_tax_withheld =
+            case when sfwi.after_tax_withheld is not null then sfwi.after_tax_withheld else sfw.after_tax_withheld end,
+            production_factor =
+            case when sfwi.production_factor is not null then sfwi.production_factor else sfw.production_factor end,
+            quality_factor =
+            case when sfwi.quality_factor is not null then sfwi.quality_factor else sfw.quality_factor end,
+            assessment_coefficient =
+            case when sfwi.assessment_coefficient is not null then sfwi.assessment_coefficient else sfw.assessment_coefficient end,
+            update_time = getDate(),
+            update_by = sfwi.update_by,
+            commit_flag = case when sfwi.allocate_performance_pay is not null then 1 else sfw.commit_flag end,
+            commit_time = case when sfwi.allocate_performance_pay is not null then getdate() else sfw.commit_time end
+            FROM
+            swm_floating_wage_interface sfwi join swm_floating_wage sfw
+            on
+            sfwi.group_id = #{groupId, jdbcType = BIGINT}
+            AND RIGHT ( cast( '000000' + rtrim( sfw.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( sfwi.work_card ) AS VARCHAR ), 6 )
+            AND sfwi.employee_id != - 1
+            AND sfwi.data_status = 'T'
+            AND sfwi.income_period = sfw.income_period
+            and isnull(sfw.frozen_flag, 0) = 0
+        ]]>
+    </update>
+
+<!--    wages_payable = case when sfw.production_factor * sfw.quality_factor < 0.9 then-->
+<!--    round(sfw.target_performance_pay * 0.9 * isnull(sfw.assessment_coefficient,1) + sfw.pre_tax_withheld,2)-->
+<!--    else round(sfw.target_performance_pay * sfw.production_factor * sfw.quality_factor * isnull(sfw.assessment_coefficient,1)+sfw.pre_tax_withheld,2) end,-->
+<!--    net_payment=case when sfw.production_factor * sfw.quality_factor < 0.9 then round(sfw.target_performance_pay * 0.9 * isnull(sfw.assessment_coefficient,1)+sfw.pre_tax_withheld + sfw.after_tax_withheld,2)-->
+<!--    else round(sfw.target_performance_pay * sfw.production_factor * sfw.quality_factor * isnull(sfw.assessment_coefficient,1) + sfw.pre_tax_withheld + sfw.after_tax_withheld,2) end-->
+    <update id="updateWageAndNetAfterImportExcel" parameterType="java.lang.Long">
+        <![CDATA[
+            UPDATE sfw
+            set
+            wages_payable = sfw.allocate_performance_pay + sfw.pre_tax_withheld,
+            net_payment = sfw.allocate_performance_pay  + sfw.pre_tax_withheld + sfw.after_tax_withheld
+            from
+             swm_floating_wage_interface sfwi join swm_floating_wage sfw
+            on
+            sfwi.group_id = #{groupId, jdbcType = BIGINT}
+            AND RIGHT ( cast( '000000' + rtrim( sfw.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( sfwi.work_card ) AS VARCHAR ), 6 )
+            AND sfwi.employee_id != - 1
+            AND sfwi.data_status = 'T'
+            AND sfwi.income_period = sfw.income_period
+        ]]>
+    </update>
+
+    <select id="checkFrozenFlagByPeriod" parameterType="java.lang.String" resultType="java.lang.Integer">
+        <![CDATA[
+            select count(1) from swm_floating_wage sfw where sfw.enabled_flag = 1 and sfw.frozen_flag = 1 and sfw.income_period
+            = #{incomePeriod, jdbcType = VARCHAR}
+        ]]>
+    </select>
+
+    <select id="checkFloatingWageBeforAutoUpdate" resultType="java.lang.Boolean">
+        <![CDATA[
+            select case when exists (select 1 from swm_floating_wage where income_period = #{incomePeriod, jdbcType = VARCHAR}
+            and frozen_flag = 0 and grant_flag = 0 and enabled_flag = 1
+            ) then 1 else 0 end
+        ]]>
+    </select>
+
+    <update id="updateAllocatePerformancePay" parameterType="com.sunten.hrms.swm.domain.SwmFloatingWage">
+        <![CDATA[
+            update sfw
+            set allocate_performance_pay = #{allocatePerformancePay, jdbcType = DECIMAL},
+            wages_payable = #{allocatePerformancePay, jdbcType = DECIMAL} + sfw.pre_tax_withheld,
+            net_payment = #{allocatePerformancePay, jdbcType = DECIMAL}  + sfw.pre_tax_withheld + sfw.after_tax_withheld,
+            commit_flag = 1,
+            commit_time = getdate()
+            from swm_floating_wage sfw
+            where
+            id = #{id, jdbcType = BIGINT}
+            and enabled_flag = 1
+            and frozen_flag = 0
+        ]]>
+    </update>
+
+    <select id="checkFloatingWageIsExist" parameterType="java.lang.String" resultType="java.lang.Boolean">
+        <![CDATA[
+            select case when exists (select 1 from swm_floating_wage sfw where sfw.enabled_flag = 1 and sfw.income_period = #{incomePeriod, jdbcType = VARCHAR}) then 1 else 0 end
+        ]]>
+    </select>
+
+    <update id="updateMonthlyPerformanceSalary" parameterType="java.lang.Long">
+        <![CDATA[
+            UPDATE sfw
+            set
+            monthly_performance_salary = sfw.target_performance_pay * sfw.production_factor * sfw.quality_factor * sfw.assessment_coefficient
+            from
+             swm_floating_wage_interface sfwi join swm_floating_wage sfw
+            on
+            sfwi.group_id = #{groupId, jdbcType = BIGINT}
+            AND RIGHT ( cast( '000000' + rtrim( sfw.work_card ) AS VARCHAR ), 6 ) = RIGHT ( cast( '000000' + rtrim( sfwi.work_card ) AS VARCHAR ), 6 )
+            AND sfwi.employee_id != - 1
+            AND sfwi.data_status = 'T'
+            AND sfwi.income_period = sfw.income_period
+        ]]>
+    </update>
+
+</mapper>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunten.hrms.kpi.dao.KpiAssessmentDimensionDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentDimension">
+        <id column="id" property="id" />
+        <result column="assessment_dimension" property="assessmentDimension" />
+        <result column="enable_flag" property="enableFlag" />
+        <result column="attribute1" property="attribute1" />
+        <result column="attribute2" property="attribute2" />
+        <result column="attribute3" property="attribute3" />
+        <result column="attribute4" property="attribute4" />
+        <result column="attribute5" property="attribute5" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+
+    <resultMap id="KpiAssessmentDimensionResultMap" type="com.sunten.hrms.kpi.domain.KpiAssessmentDimension" autoMapping="true">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        <![CDATA[
+            kad.id, kad.assessment_dimension, kad.enable_flag, kad.attribute1, kad.attribute2, kad.attribute3,
+            kad.attribute4, kad.attribute5, kad.create_time, kad.create_by, kad.update_time, kad.update_by
+        ]]>
+    </sql>
+
+    <!-- 带参数通用查询结果列 -->
+    <sql id="Base_Column_With_Param_List">
+        <![CDATA[
+            ${tAlias}.id as ${tAlias}_id, ${tAlias}.assessment_dimension as ${tAlias}_assessment_dimension,
+            ${tAlias}.enable_flag as ${tAlias}_enable_flag, ${tAlias}.attribute1 as ${tAlias}_attribute1,
+            ${tAlias}.attribute2 as ${tAlias}_attribute2, ${tAlias}.attribute3 as ${tAlias}_attribute3,
+            ${tAlias}.attribute4 as ${tAlias}_attribute4, ${tAlias}.attribute5 as ${tAlias}_attribute5,
+            ${tAlias}.create_time as ${tAlias}_create_time, ${tAlias}.create_by as ${tAlias}_create_by,
+            ${tAlias}.update_time as ${tAlias}_update_time, ${tAlias}.update_by as ${tAlias}_update_by
+        ]]>
+    </sql>
+
+    <sql id="Base_Column_Query_Sql">
+        <![CDATA[
+            select
+        ]]>
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+              from kpi_assessment_dimension kad
+        ]]>
+    </sql>
+
+    <sql id="Select_All_Criteria_Sql">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where 1 = 1
+        ]]>
+<!--        <if test="criteria != null">-->
+<!--        <if test="criteria.xxxx != null">-->
+<!--            <![CDATA[-->
+<!--                and kad.xxxxx like #{criteria.xxxx,jdbcType=xxxx}-->
+<!--            ]]>-->
+<!--        </if>-->
+<!--        </if>-->
+    </sql>
+
+    <insert id="insertAllColumn" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentDimension" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into kpi_assessment_dimension (assessment_dimension, enable_flag,
+                                                  attribute1, attribute2,
+                                                  attribute3, attribute4,
+                                                  attribute5, create_time,
+                                                  create_by, update_time, update_by)
+            values (#{assessmentDimension,jdbcType=VARCHAR}, #{enableFlag,jdbcType=BIT},
+                    #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+                    #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR},
+                    #{attribute5,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                    #{createBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+        ]]>
+    </insert>
+
+    <sql id="Delete_Sql">
+        <![CDATA[
+            delete
+              from kpi_assessment_dimension
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </sql>
+
+    <delete id="deleteByKey">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <delete id="deleteByEntityKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentDimension">
+        <include refid="Delete_Sql"/>
+    </delete>
+
+    <update id="updateAllColumnByKey" parameterType="com.sunten.hrms.kpi.domain.KpiAssessmentDimension">
+        <![CDATA[
+            update kpi_assessment_dimension
+               set assessment_dimension = #{assessmentDimension,jdbcType=VARCHAR},
+                   enable_flag          = #{enableFlag,jdbcType=BIT},
+                   attribute1           = #{attribute1,jdbcType=VARCHAR},
+                   attribute2           = #{attribute2,jdbcType=VARCHAR},
+                   attribute3           = #{attribute3,jdbcType=VARCHAR},
+                   attribute4           = #{attribute4,jdbcType=VARCHAR},
+                   attribute5           = #{attribute5,jdbcType=VARCHAR},
+                   update_time          = #{updateTime,jdbcType=TIMESTAMP},
+                   update_by            = #{updateBy,jdbcType=BIGINT}
+             where id = #{id,jdbcType=BIGINT}
+        ]]>
+    </update>
+
+    <select id="getByKey" resultMap="KpiAssessmentDimensionResultMap">
+        <include refid="Base_Column_Query_Sql"/>
+        <![CDATA[
+             where kad.id = #{id,jdbcType=BIGINT}
+        ]]>
+    </select>
+
+    <select id="listAllByCriteria" resultMap="KpiAssessmentDimensionResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            order by id
+        ]]>
+    </select>
+
+    <select id="listAllByCriteriaPage" resultMap="KpiAssessmentDimensionResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+    </select>
+
+    <select id="listAllByEnableFlag" resultMap="KpiAssessmentDimensionResultMap">
+        <include refid="Select_All_Criteria_Sql"/>
+        <![CDATA[
+            and enable_flag = 1
+        ]]>
+    </select>
+
+</mapper>
